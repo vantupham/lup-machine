@@ -23,7 +23,7 @@ export function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-rule bg-surface/90 backdrop-blur">
+      <header className="border-b border-rule bg-surface/90 backdrop-blur print:hidden">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
           <NavLink to="/" className="group flex items-baseline gap-2">
             <span className="font-display text-2xl font-bold tracking-tight">
@@ -70,11 +70,11 @@ export function Layout() {
         </div>
       </header>
 
-      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
+      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 print:p-0">
         <Outlet />
       </main>
 
-      <footer className="border-t border-rule py-6 text-center font-mono text-xs text-muted">
+      <footer className="border-t border-rule py-6 text-center font-mono text-xs text-muted print:hidden">
         <p>{t('footer.privacy')}</p>
         {offline !== 'off' && (
           <p role="status" className={`mt-1 ${offline === 'error' ? 'text-warning' : offline === 'ready' ? 'text-accent' : ''}`} data-testid="offline-status">

@@ -4,7 +4,7 @@ import { lessonShortcut } from './lesson-3-shortcut';
 import { lessonPlantDisease } from './lesson-4-plant-disease';
 import type { Lesson } from './types';
 
-export type { Lesson, LessonStep, QuizQuestion } from './types';
+export type { Lesson, LessonStep, QuizQuestion, WorksheetRecord } from './types';
 
 export const LESSONS: readonly Lesson[] = [lessonPixels, lessonTraining, lessonShortcut, lessonPlantDisease];
 

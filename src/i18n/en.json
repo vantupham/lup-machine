@@ -504,5 +504,25 @@
   "credit": {
     "photo": "Photo:",
     "changed": "cropped and resized"
+  },
+  "worksheet": {
+    "link": "Printable worksheet",
+    "title": "Worksheet",
+    "keyTitle": "Teacher answer key",
+    "version": "Worksheet version",
+    "student": "Student sheet",
+    "teacher": "Teacher version (with answers)",
+    "print": "Print worksheet",
+    "hint": "Click \"Print worksheet\" and choose a printer, or choose \"Save as PDF\" to share with students. The sheet always prints on white, A4 paper.",
+    "name": "Name:",
+    "class": "Class:",
+    "date": "Date:",
+    "step": "Step {{n}}.",
+    "myPrediction": "My prediction (write BEFORE doing it):",
+    "observed": "What I observed:",
+    "actualPredicted": "Actual ↓ / Predicted →",
+    "reflect": "What did I learn from this lesson?",
+    "footer": "LUP Machine – vantupham.github.io/lup-machine · Lesson content licensed CC BY 4.0.",
+    "sampleNote": "Italic values in the tables are sample results from the verification run with MobileNetV2 (default settings). Students' machines may differ slightly, especially ±1 image in the confusion matrix."
   }
 }

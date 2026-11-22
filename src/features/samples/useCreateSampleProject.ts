@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { parsePhotoManifest, PHOTO_DATASETS, type PhotoDatasetId } from '@/core/datasets/photo';
+import type { AnyDatasetId } from '@/core/datasets/catalog';
 import { generateDataset, SAMPLE_DATASETS, type SampleDatasetId } from '@/core/datasets/synthetic';
 import { MODEL_INPUT_SIZE } from '@/core/image/preprocess';
 import type { NewSampleInput } from '@/storage/repositories/dataset-repository';
 import { useDatasetRepository, useProjectRepository } from '@/storage/repository-context';
 import { renderShape } from './render-shape.browser';
 
-export type AnyDatasetId = SampleDatasetId | PhotoDatasetId;
+export type { AnyDatasetId };
 
 export type CreateState =
   | { readonly phase: 'idle' }

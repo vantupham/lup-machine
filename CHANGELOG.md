@@ -4,6 +4,14 @@
 
 ## [Chưa phát hành]
 
+### Thêm (phiếu bài tập in được)
+
+- Mỗi bài học có "Phiếu bài tập in được" (`#/lessons/<id>/phieu-bai-tap`), sinh tự động từ nội dung bài nên luôn khớp với bài: ô họ tên / lớp / ngày, mỗi câu dự đoán có chỗ ghi "Em dự đoán (viết TRƯỚC khi làm)" và "Kết quả em quan sát được", câu hỏi trắc nghiệm có ô đánh dấu, phần tự rút ra bài học.
+- Bài có thể khai báo khung ghi kết quả riêng cho từng bước (ô điền, bảng, ma trận nhầm lẫn trống có tên lớp, dòng kẻ). Bài 4 có bảng điểm theo epoch, ma trận nhầm lẫn 3×3, bảng ngưỡng tin cậy.
+- "Bản giáo viên (có đáp án)": đáp án câu dự đoán, đáp án đúng và giải thích của câu hỏi, tổng kết, ghi chú có số liệu đã kiểm chứng.
+- Bản giáo viên điền sẵn số liệu mẫu từ lần chạy kiểm chứng vào các bảng (bài 4: điểm theo epoch, ma trận nhầm lẫn, ngưỡng tin cậy) và gợi ý đáp án cho câu hỏi mở. Số liệu được kiểm thử đơn vị kiểm tra tính nhất quán (mỗi hàng ma trận đủ 6 ảnh, đường chéo khớp điểm Kiểm tra, ngưỡng 50% trả lời đủ 18 ảnh…) và E2E đối chiếu với lần chạy MobileNet thật (mỗi ô lệch tối đa 1 ảnh).
+- Bản in khổ A4, luôn nền trắng chữ đen kể cả khi máy đang ở chế độ tối, ẩn thanh điều hướng; in được khi mất mạng hoặc lưu thành PDF. Kiểm chứng bằng E2E xuất PDF thật (bài 4: 4 trang mỗi bản).
+
 ### Thêm (bài học 4)
 
 - Bài "AI làm bác sĩ cây trồng" (lớp 8–12, 45 phút) dùng bộ ảnh lá đậu thật: dữ liệu thật khó hơn hình vẽ, quá khớp (học lâu hơn không giúp), lỗi nào nguy hiểm nhất với nông dân (ma trận nhầm lẫn, recall), mô hình nhìn vào đâu, ngưỡng tin cậy để AI biết nói "không chắc", và cách cải thiện dữ liệu.

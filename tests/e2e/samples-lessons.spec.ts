@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { lessonPlantDisease } from '../../src/content/lessons/lesson-4-plant-disease';
 
 /** Kiểm chứng bằng MobileNetV2 thật rằng nội dung bài học nói đúng với những gì học sinh sẽ thấy. */
 
@@ -116,6 +117,16 @@ test('bài 4 "AI làm bác sĩ cây trồng": mọi khẳng định của bài �
   console.warn('[bài 4] nhầm lẫn', JSON.stringify(off));
   expect(off.rustAsSpot).toBe(Math.max(...Object.values(off)));
   expect(off.spotAsHealthy + off.rustAsHealthy).toBeLessThanOrEqual(1);
+
+  // Số liệu mẫu in trên bản giáo viên phải khớp lần chạy thật (mỗi ô lệch tối đa 1 ảnh giữa các máy).
+  const key = lessonPlantDisease.steps.flatMap((st) => st.record ?? []).find((r) => r.kind === 'confusion');
+  const names = ['Lá khỏe', 'Bệnh đốm góc', 'Bệnh gỉ sắt'];
+  if (key?.kind !== 'confusion' || !key.answers) throw new Error('bài 4 thiếu ma trận mẫu');
+  for (const [i, actual] of names.entries()) {
+    for (const [j, predicted] of names.entries()) {
+      expect(Math.abs((await count(actual, predicted)) - key.answers[i]![j]!), `${actual} → ${predicted}`).toBeLessThanOrEqual(1);
+    }
+  }
 
   // Bước 6: ngưỡng 90% — trả lời ít hơn (khoảng một nửa) nhưng đúng nhiều hơn.
   await page.getByRole('slider', { name: /ngưỡng/i }).fill('0.9');
