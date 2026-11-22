@@ -14,6 +14,8 @@ const BATCH_SIZE = 8;
 export interface FeatureExtractor {
   readonly modelId: string;
   extract(images: readonly RgbaImage[], onProgress?: (done: number) => void): Promise<Float32Array[]>;
+  /** Kích hoạt 7×7×1280 trước khi lấy trung bình (dùng cho bản đồ "mô hình nhìn vào đâu"). */
+  extractSpatial(images: readonly RgbaImage[]): Promise<Float32Array[]>;
   dispose(): void;
 }
 
@@ -27,6 +29,17 @@ function toBatchTensor(images: readonly RgbaImage[]): tf.Tensor4D {
     buffer.set(rgbaToModelInput(img), i * size);
   });
   return tf.tensor4d(buffer, [images.length, MODEL_INPUT_SIZE, MODEL_INPUT_SIZE, 3]);
+}
+
+async function extractSpatialBatch(model: LayersModel, images: readonly RgbaImage[]): Promise<Float32Array[]> {
+  const output = tf.tidy(() => model.predict(toBatchTensor(images)) as tf.Tensor4D);
+  try {
+    const flat = (await output.data()) as Float32Array;
+    const size = flat.length / images.length;
+    return images.map((_, i) => flat.slice(i * size, (i + 1) * size));
+  } finally {
+    output.dispose();
+  }
 }
 
 async function extractBatch(model: LayersModel, images: readonly RgbaImage[]): Promise<Float32Array[]> {
@@ -58,6 +71,13 @@ export async function createFeatureExtractor(source: string | tf.io.IOHandler): 
         results.push(...(await extractBatch(model, images.slice(start, start + BATCH_SIZE))));
         onProgress?.(results.length);
         await tf.nextFrame(); // nhường luồng cho giao diện cập nhật
+      }
+      return results;
+    },
+    async extractSpatial(images) {
+      const results: Float32Array[] = [];
+      for (let start = 0; start < images.length; start += BATCH_SIZE) {
+        results.push(...(await extractSpatialBatch(model, images.slice(start, start + BATCH_SIZE))));
       }
       return results;
     },

@@ -69,10 +69,23 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   const testScore = Number((await page.getByTestId('score-test').textContent())?.replace(',', '.').replace(/[^\d.]/g, ''));
   expect(testScore).toBeGreaterThanOrEqual(75);
 
+  // Giai đoạn 2a: giải thích dự đoán với kích hoạt 7×7 thật, ranh giới 2D, ngưỡng tin cậy.
+  await map.getByRole('button').first().click();
+  const heatmap = page.getByTestId('cam-heatmap');
+  await expect(heatmap).toBeVisible({ timeout: 30_000 });
+  await expect(heatmap.locator('rect')).toHaveCount(49);
+  const cellValues = await heatmap.locator('rect').evaluateAll((rects) => rects.map((r) => Number(r.getAttribute('data-value'))));
+  expect(new Set(cellValues.map((v) => v.toFixed(4))).size).toBeGreaterThan(1); // bản đồ thật không đồng đều
+  await page.getByRole('checkbox', { name: /Hiện ranh giới quyết định/ }).check();
+  await expect(page.getByTestId('decision-grid').locator('rect')).toHaveCount(48 * 48);
+  await expect(page.getByTestId('threshold-summary')).toContainText('Trả lời');
+
   const shots = process.env.SCREENSHOT_DIR;
   if (shots) {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.getByRole('region', { name: '③ Biểu diễn' }).screenshot({ path: `${shots}/represent.png` });
+    await page.getByTestId('selected-detail').screenshot({ path: `${shots}/explainer.png` });
+    await page.getByRole('region', { name: 'Ngưỡng tin cậy' }).screenshot({ path: `${shots}/threshold.png` });
     await page.getByRole('region', { name: '④ Huấn luyện' }).screenshot({ path: `${shots}/train.png` });
     await page.getByRole('region', { name: '⑤ Đánh giá' }).screenshot({ path: `${shots}/evaluate.png` });
   }

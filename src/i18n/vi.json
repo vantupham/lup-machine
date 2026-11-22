@@ -334,6 +334,51 @@
       "replaying": "Đang xem lại lần {{n}}.",
       "saveError": "Không lưu được vào nhật ký: {{message}}",
       "na": "—"
+    },
+    "explain": {
+      "title": "Vì sao mô hình đoán như vậy?",
+      "needModel": "Hãy huấn luyện ở bước ④ để xem giải thích.",
+      "probabilities": "Xác suất mô hình tính cho từng lớp",
+      "heatmapTitle": "Mô hình nhìn vào đâu?",
+      "heatmapFor": "Bằng chứng cho lớp",
+      "heatmapLegend": "Đỏ: vùng ủng hộ lớp này · Xanh: vùng chống lại",
+      "heatmapBadge": "Xấp xỉ về vị trí",
+      "heatmapBadgeHint": "Giá trị mỗi ô được tính chính xác, nhưng mỗi ô của lưới 7×7 thực ra \"nhìn\" một vùng rộng hơn ô vuông 32×32 điểm ảnh được tô.",
+      "heatmapHowTitle": "Hình này được tạo thế nào?",
+      "heatmapHowBody": "MobileNetV2 chia ảnh thành lưới 7 × 7 ô, mỗi ô có 1.280 con số. Với lớp đang chọn, mỗi ô được tính điểm = Σ (trọng số của lớp × con số của ô). Trung bình điểm của 49 ô cộng với độ lệch b đúng bằng logit của lớp đó — nên bản đồ cho biết chính xác mỗi ô góp bao nhiêu vào quyết định (phương pháp CAM, trùng với Grad-CAM cho mô hình này).",
+      "heatmapCheck": "Kiểm tra: trung bình 49 ô ({{mean}}) + b ({{bias}}) = {{sum}} ≈ logit {{logit}}",
+      "loading": "Đang tính bản đồ…",
+      "error": "Không tính được bản đồ: {{message}}",
+      "pathTitle": "Đường đi phép tính",
+      "pathLead": "logit = Σ (đặc trưng × trọng số) + b, rồi softmax biến các logit thành xác suất.",
+      "feature": "Đặc trưng #{{k}}",
+      "others": "{{count}} đặc trưng còn lại",
+      "bias": "Độ lệch b",
+      "logit": "logit của lớp \"{{name}}\"",
+      "softmaxTitle": "Softmax: logit → xác suất",
+      "softmaxRow": "e^{{logit}} / tổng = {{prob}}",
+      "pathExact": "Chính xác",
+      "pathExactHint": "Mọi con số là giá trị thật của mô hình đang chọn ở epoch hiện tại."
+    },
+    "threshold": {
+      "title": "Ngưỡng tin cậy",
+      "lead": "Chỉ chấp nhận câu trả lời khi mô hình đủ chắc chắn; còn lại mô hình trả lời \"Không chắc chắn\".",
+      "label": "Ngưỡng: {{percent}}%",
+      "summary": "Trả lời {{answered}}/{{total}} ảnh ({{coverage}}%) · đúng {{accuracy}} trong số đã trả lời",
+      "noneAnswered": "Không có ảnh nào đạt ngưỡng.",
+      "chart": "Tỉ lệ trả lời và độ chính xác theo ngưỡng",
+      "coverage": "Tỉ lệ dám trả lời",
+      "accuracy": "Độ chính xác khi trả lời",
+      "tradeoff": "Ngưỡng càng cao, mô hình trả lời ít hơn nhưng thường đúng hơn. Trong thực tế (ví dụ y tế), ảnh \"không chắc chắn\" nên được chuyển cho người kiểm tra.",
+      "axis": "ngưỡng 0% → 95%"
+    },
+    "boundary": {
+      "toggle": "Hiện ranh giới quyết định",
+      "badge": "Chính xác cho mô hình 2D",
+      "badgeHint": "Đây là một mô hình phụ chỉ học trên 2 trục của bản đồ, nên ranh giới vẽ ra đúng là ranh giới của nó.",
+      "note": "Mô hình phụ học trên 2 trục đạt {{acc2d}}% trên tập Dạy, còn mô hình chính (1.280 chiều) đạt {{accFull}}%. Chênh lệch cho thấy bản đồ 2D đã bỏ mất bao nhiêu thông tin.",
+      "noteNoMain": "Mô hình phụ học trên 2 trục đạt {{acc2d}}% trên tập Dạy.",
+      "needClasses": "Cần ít nhất 2 lớp có ảnh Dạy để vẽ ranh giới."
     }
   },
   "samples": {

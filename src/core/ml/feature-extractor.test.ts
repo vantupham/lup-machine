@@ -4,6 +4,8 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-cpu';
 import type { RgbaImage } from '@/core/image/preprocess';
 import { createFeatureExtractor, FEATURE_DIM, type FeatureExtractor } from './feature-extractor';
+import { SPATIAL_SHAPE } from './feature-model';
+import { globalAveragePool } from './explain';
 
 const MODEL_DIR = join(process.cwd(), 'public', 'models', 'mobilenet-v2-035');
 
@@ -71,6 +73,15 @@ describe('Trích đặc trưng bằng MobileNetV2 (mô hình thật, backend CPU
     await extractor.extract([stripes(), stripes(), stripes()], (done) => progress.push(done));
     expect(progress.at(-1)).toBe(3);
     expect(tf.memory().numTensors).toBe(before);
+  }, 60_000);
+
+  test('kích hoạt không gian 7×7×1280; lấy trung bình ra đúng vector đặc trưng', async () => {
+    const image = stripes();
+    const [spatial] = await extractor.extractSpatial([image]);
+    const [vector] = await extractor.extract([image]);
+    expect(spatial).toHaveLength(SPATIAL_SHAPE.height * SPATIAL_SHAPE.width * SPATIAL_SHAPE.channels);
+    const pooled = globalAveragePool(spatial!, SPATIAL_SHAPE);
+    pooled.forEach((v, i) => expect(v).toBeCloseTo(vector![i]!, 4));
   }, 60_000);
 
   test('từ chối ảnh không đúng 224×224', async () => {

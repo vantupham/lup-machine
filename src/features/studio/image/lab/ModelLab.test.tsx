@@ -35,6 +35,14 @@ vi.mock('../feature-loader.browser', () => ({
       onProgress?.(images.length);
       return images.map((img) => fakeVector(img.data[0]!, img.data[1]!));
     },
+    // 49 ô giống hệt nhau → trung bình không gian đúng bằng vector đặc trưng (nhất quán với extract).
+    extractSpatial: async (images: { data: Uint8ClampedArray }[]) =>
+      images.map((img) => {
+        const v = fakeVector(img.data[0]!, img.data[1]!);
+        const out = new Float32Array(49 * 1280);
+        for (let cell = 0; cell < 49; cell++) out.set(v, cell * 1280);
+        return out;
+      }),
   })),
 }));
 
@@ -143,7 +151,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await extractAll();
     await trainToEnd();
     expect(screen.getByText('Kết quả tại epoch 50')).toBeInTheDocument();
-    fireEvent.change(screen.getByRole('slider'), { target: { value: '0' } });
+    fireEvent.change(screen.getByRole('slider', { name: /phát lại/i }), { target: { value: '0' } });
     expect(await screen.findByText('Kết quả tại epoch 0')).toBeInTheDocument();
     expect(screen.getByText('Phát lại: epoch 0')).toBeInTheDocument();
   });
@@ -265,6 +273,65 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     expect(await screen.findByText('Dữ liệu đã thay đổi')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Chạy lại lần 1' })).toBeNull();
     expect(screen.getByText('Hãy huấn luyện ở bước ④ trước.')).toBeInTheDocument();
+  });
+
+  test('chưa huấn luyện: phần giải thích nhắc huấn luyện trước', async () => {
+    await seed();
+    open();
+    await extractAll();
+    const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
+    await userEvent.click(within(map).getAllByRole('button')[0]!);
+    expect(await screen.findByText('Hãy huấn luyện ở bước ④ để xem giải thích.')).toBeInTheDocument();
+  });
+
+  test('giải thích dự đoán: xác suất, bản đồ CAM 7×7 và (Chuyên sâu) đường đi phép tính khớp logit', async () => {
+    useModeStore.setState({ mode: 'expert' });
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
+    await userEvent.click(within(map).getAllByRole('button', { name: /ảnh lớp nhựa, ngăn kiểm tra/i })[0]!);
+    const explainer = await screen.findByTestId('explainer');
+    expect(within(explainer).getByTestId('prob-0').textContent).toMatch(/%$/);
+
+    const heatmap = await within(explainer).findByTestId('cam-heatmap');
+    expect(heatmap.querySelectorAll('rect')).toHaveLength(49);
+    expect(within(explainer).getByRole('button', { name: /● Nhựa/ })).toHaveAttribute('aria-pressed', 'true');
+
+    // Đẳng thức hiển thị: trung bình 49 ô + b = logit (cùng một số ở hai vế)
+    const check = within(explainer).getByTestId('cam-check').textContent!;
+    const [, sum, logit] = /= (-?[\d,.]+) ≈ logit (-?[\d,.]+)/.exec(check)!;
+    const num = (s: string) => Number(s.replace(',', '.'));
+    expect(sum).toBe(logit);
+    expect(num(within(explainer).getByTestId('path-logit').textContent!)).toBeCloseTo(num(logit!), 3);
+
+    await userEvent.click(within(explainer).getByRole('button', { name: /▲ Giấy/ }));
+    expect(within(explainer).getByRole('button', { name: /▲ Giấy/ })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('ranh giới quyết định 2D: bật thì vẽ lưới và so sánh với mô hình chính', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    await userEvent.click(screen.getByRole('checkbox', { name: /hiện ranh giới quyết định/i }));
+    expect(await screen.findByTestId('decision-grid')).toBeInTheDocument();
+    expect(screen.getByTestId('decision-grid').querySelectorAll('rect')).toHaveLength(48 * 48);
+    expect(screen.getByTestId('boundary-note')).toHaveTextContent(/2 trục đạt 100% .* mô hình chính .* đạt 100%/);
+    await userEvent.click(screen.getByRole('checkbox', { name: /hiện ranh giới quyết định/i }));
+    expect(screen.queryByTestId('decision-grid')).toBeNull();
+  });
+
+  test('ngưỡng tin cậy: ngưỡng cao hơn thì trả lời ít hơn', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    expect(screen.getByTestId('threshold-summary')).toHaveTextContent('Trả lời 4/4 ảnh (100%)');
+    fireEvent.change(screen.getByRole('slider', { name: /ngưỡng/i }), { target: { value: '0.95' } });
+    expect(screen.getByRole('slider', { name: /ngưỡng/i })).toHaveValue('0.95');
+    expect(screen.getByTestId('threshold-summary').textContent).not.toBe('Trả lời 4/4 ảnh (100%) · đúng 100% trong số đã trả lời');
   });
 
   test('chỉ có 1 lớp có ảnh Dạy thì chưa huấn luyện được', async () => {

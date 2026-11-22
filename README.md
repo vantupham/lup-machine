@@ -39,6 +39,13 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 - [x] 3 bộ dữ liệu mẫu tổng hợp (không ảnh người thật, không bản quyền), gồm bộ "bẫy nền" dạy hiện tượng học lối tắt
 - [x] 3 bài học tương tác: Máy tính nhìn ảnh thế nào? · Dạy máy phân biệt hình · AI học nhầm điều gì? Xem [lộ trình đầy đủ](docs/ke-hoach/Phuong-an-xay-dung-website.md#10-lộ-trình-phát-triển).
 
+**Giai đoạn 2 – Mở nắp sâu hơn (đang làm).** Đã có:
+
+- [x] Bản đồ "mô hình nhìn vào đâu" (CAM / Grad-CAM) và đường đi phép tính từ đặc trưng đến xác suất
+- [x] Ranh giới quyết định chính xác trên bản đồ 2D
+- [x] Ngưỡng tin cậy
+- [ ] Bản đồ đặc trưng các tầng CNN, bản đồ che khuất, UMAP, chạy ngoại tuyến (PWA)
+
 ## Yêu cầu
 
 - **Người dùng:** Chrome hoặc Edge bản mới trên máy tính. Firefox và Safari dùng được phần lớn tính năng.

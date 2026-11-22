@@ -334,6 +334,51 @@
       "replaying": "Viewing run {{n}} again.",
       "saveError": "Could not save to the log: {{message}}",
       "na": "—"
+    },
+    "explain": {
+      "title": "Why did the model predict this?",
+      "needModel": "Train in step ④ to see explanations.",
+      "probabilities": "Probability the model computes for each class",
+      "heatmapTitle": "Where does the model look?",
+      "heatmapFor": "Evidence for class",
+      "heatmapLegend": "Red: regions supporting this class · Blue: regions against it",
+      "heatmapBadge": "Approximate location",
+      "heatmapBadgeHint": "Each cell's value is exact, but each cell of the 7×7 grid actually \"sees\" a larger area than the 32×32-pixel square shaded.",
+      "heatmapHowTitle": "How was this made?",
+      "heatmapHowBody": "MobileNetV2 divides the image into a 7 × 7 grid; each cell has 1,280 numbers. For the selected class, each cell's score = Σ (class weight × cell number). The mean of the 49 cell scores plus the bias b equals that class's logit exactly — so the map shows exactly how much each cell contributes (the CAM method, identical to Grad-CAM for this model).",
+      "heatmapCheck": "Check: mean of 49 cells ({{mean}}) + b ({{bias}}) = {{sum}} ≈ logit {{logit}}",
+      "loading": "Computing map…",
+      "error": "Could not compute the map: {{message}}",
+      "pathTitle": "The calculation path",
+      "pathLead": "logit = Σ (feature × weight) + b, then softmax turns logits into probabilities.",
+      "feature": "Feature #{{k}}",
+      "others": "{{count}} other features",
+      "bias": "Bias b",
+      "logit": "logit of class \"{{name}}\"",
+      "softmaxTitle": "Softmax: logits → probabilities",
+      "softmaxRow": "e^{{logit}} / sum = {{prob}}",
+      "pathExact": "Exact",
+      "pathExactHint": "Every number is the real value of the selected model at the current epoch."
+    },
+    "threshold": {
+      "title": "Confidence threshold",
+      "lead": "Accept an answer only when the model is confident enough; otherwise it answers \"Not sure\".",
+      "label": "Threshold: {{percent}}%",
+      "summary": "Answered {{answered}}/{{total}} images ({{coverage}}%) · {{accuracy}} correct among answered",
+      "noneAnswered": "No image reaches the threshold.",
+      "chart": "Answer rate and accuracy by threshold",
+      "coverage": "Answer rate",
+      "accuracy": "Accuracy when answering",
+      "tradeoff": "A higher threshold means fewer answers but usually more correct ones. In practice (e.g. medicine), \"not sure\" images should go to a human.",
+      "axis": "threshold 0% → 95%"
+    },
+    "boundary": {
+      "toggle": "Show decision boundary",
+      "badge": "Exact for the 2D model",
+      "badgeHint": "This is a helper model trained only on the map's 2 axes, so the boundary drawn is exactly its boundary.",
+      "note": "The helper model on 2 axes reaches {{acc2d}}% on Train, while the main model (1,280 dimensions) reaches {{accFull}}%. The gap shows how much information the 2D map loses.",
+      "noteNoMain": "The helper model on 2 axes reaches {{acc2d}}% on Train.",
+      "needClasses": "At least 2 classes need Train images to draw a boundary."
     }
   },
   "samples": {

@@ -7,6 +7,7 @@ import { useModeStore } from '@/ui/mode-store';
 import { useObjectUrl } from '../useObjectUrl';
 import { markerFor } from './class-style';
 import type { SamplePrediction } from './lab-data';
+import { ThresholdPanel } from './ThresholdPanel';
 
 /** Chênh lệch điểm Dạy − Kiểm tra vượt ngưỡng này thì cảnh báo quá khớp. */
 export const OVERFIT_GAP = 0.15;
@@ -42,6 +43,12 @@ export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions
             <p role="alert" className="border-l-4 border-warning pl-3 text-sm">{t('project.evaluate.overfit')}</p>
           )}
           <ConfusionPanel classes={classes} samplesBySplit={samplesBySplit} predictions={predictions} defaultSplit={snapshot.test ? 'test' : 'train'} />
+          <ThresholdPanel
+            predictions={samplesBySplit[snapshot.test ? 'test' : 'train'].flatMap((s) => {
+              const p = predictions.get(s.id);
+              return p ? [p] : [];
+            })}
+          />
         </>
       )}
     </section>
