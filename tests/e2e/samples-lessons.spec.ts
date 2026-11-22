@@ -73,3 +73,58 @@ test('bộ "Tròn, vuông, tam giác": ảnh vẽ đúng và mô hình học đ�
   test.info().annotations.push({ type: 'scores', description: `kiểm tra: ${testScore}%` });
   expect(testScore).toBeGreaterThanOrEqual(60);
 });
+
+test('bài 4 "AI làm bác sĩ cây trồng": mọi khẳng định của bài đúng với MobileNet thật', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  const pct = async (id: string) => Number((await page.getByTestId(id).textContent())?.replace(',', '.').replace(/[^\d.]/g, ''));
+
+  await page.goto('./#/lessons/bac-si-cay-trong');
+  await expect(page.getByRole('heading', { level: 1, name: 'AI làm bác sĩ cây trồng' })).toBeVisible();
+  await page.getByRole('button', { name: 'Tạo dự án mẫu cho bài này' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: /Bác sĩ lá đậu/ })).toBeVisible({ timeout: 30_000 });
+  await page.getByRole('button', { name: /Biến ảnh thành vector \(90 ảnh/ }).click();
+  await expect(page.getByText('Tất cả ảnh đã có vector đặc trưng.')).toBeVisible({ timeout: 120_000 });
+  await page.getByRole('button', { name: 'Bắt đầu huấn luyện' }).click();
+  await expect(page.getByText('Xong 50 epoch.')).toBeVisible({ timeout: 60_000 });
+
+  // Bước 3: quá khớp — Dạy ~100%, Kiểm tra quanh 70–80%, có cảnh báo; học lâu hơn không giúp.
+  const finalTest = await pct('score-test');
+  console.warn(`[bài 4] Dạy ${await pct('score-train')}% / Kiểm tra ${finalTest}%`);
+  expect(await pct('score-train')).toBeGreaterThanOrEqual(95);
+  expect(finalTest).toBeGreaterThanOrEqual(60);
+  expect(finalTest).toBeLessThanOrEqual(85);
+  await expect(page.getByRole('alert').filter({ hasText: /quá khớp/i })).toBeVisible();
+  const slider = page.getByRole('slider', { name: /phát lại/i });
+  await slider.fill('10');
+  const earlyTest = await pct('score-test');
+  await slider.fill('50');
+  expect(Math.abs(finalTest - earlyTest)).toBeLessThanOrEqual(12);
+
+  // Bước 4: lỗi hay gặp nhất là gỉ sắt → đốm góc; lá bệnh hầu như không bị đoán là khỏe.
+  const count = async (actual: string, predicted: string) =>
+    Number((await page.getByRole('button', { name: `ảnh lớp ${actual} bị đoán là ${predicted}`, exact: false }).getAttribute('aria-label'))?.split(' ')[0]);
+  const off = {
+    rustAsSpot: await count('Bệnh gỉ sắt', 'Bệnh đốm góc'),
+    spotAsRust: await count('Bệnh đốm góc', 'Bệnh gỉ sắt'),
+    healthyAsSpot: await count('Lá khỏe', 'Bệnh đốm góc'),
+    healthyAsRust: await count('Lá khỏe', 'Bệnh gỉ sắt'),
+    spotAsHealthy: await count('Bệnh đốm góc', 'Lá khỏe'),
+    rustAsHealthy: await count('Bệnh gỉ sắt', 'Lá khỏe'),
+  };
+  console.warn('[bài 4] nhầm lẫn', JSON.stringify(off));
+  expect(off.rustAsSpot).toBe(Math.max(...Object.values(off)));
+  expect(off.spotAsHealthy + off.rustAsHealthy).toBeLessThanOrEqual(1);
+
+  // Bước 6: ngưỡng 90% — trả lời ít hơn (khoảng một nửa) nhưng đúng nhiều hơn.
+  await page.getByRole('slider', { name: /ngưỡng/i }).fill('0.9');
+  const summary = (await page.getByTestId('threshold-summary').textContent())!;
+  const [, answered, total, accuracy] = /Trả lời (\d+)\/(\d+) ảnh .* đúng (\d+)%/.exec(summary)!;
+  console.warn(`[bài 4] ngưỡng 90%: ${summary}`);
+  expect(Number(answered)).toBeLessThan(Number(total));
+  expect(Number(answered)).toBeGreaterThanOrEqual(Number(total) / 3);
+  expect(Number(accuracy)).toBeGreaterThan(finalTest);
+
+  expect(errors).toEqual([]);
+});
