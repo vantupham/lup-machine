@@ -44,6 +44,8 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  const fallbacks: string[] = [];
+  page.on('console', (m) => m.text().includes('Web Worker') && fallbacks.push(m.text()));
   await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
 
   await page.goto('./#/studio');
@@ -56,8 +58,18 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   await page.getByRole('button', { name: /Tự chia Dạy/ }).click();
   await expect(page.getByText('Đã chia lại: 16 ảnh Dạy, 4 ảnh Kiểm tra.')).toBeVisible();
 
+  // Đo khoảng "đứng hình" dài nhất của luồng giao diện trong lúc MobileNet làm việc.
+  await page.evaluate(() => {
+    const w = window as unknown as { longestTask: number };
+    w.longestTask = 0;
+    new PerformanceObserver((list) => list.getEntries().forEach((e) => (w.longestTask = Math.max(w.longestTask, e.duration)))).observe({ type: 'longtask', buffered: false });
+  });
   await page.getByRole('button', { name: /Biến ảnh thành vector \(20 ảnh/ }).click();
   await expect(page.getByText('Tất cả ảnh đã có vector đặc trưng.')).toBeVisible({ timeout: 90_000 });
+  const longestTask = await page.evaluate(() => (window as unknown as { longestTask: number }).longestTask);
+  console.warn(`[worker] khoảng đứng hình dài nhất của giao diện khi trích đặc trưng: ${Math.round(longestTask)} ms`);
+  // MobileNet chạy trong Web Worker, không phải luồng giao diện.
+  expect(page.workers().some((w) => w.url().includes('feature-worker'))).toBe(true);
   const map = page.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
   await expect(map.getByRole('button')).toHaveCount(20);
 
@@ -125,4 +137,5 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   }
 
   expect(errors).toEqual([]);
+  expect(fallbacks).toEqual([]); // không phải lùi về luồng chính
 });
