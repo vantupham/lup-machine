@@ -38,6 +38,14 @@ export interface SampleRecord {
   readonly createdAt: string;
 }
 
+/** Vector đặc trưng đã trích (cache): mỗi ảnh chỉ trích một lần cho mỗi mô hình. */
+export interface FeatureRecord {
+  readonly sampleId: string;
+  readonly modelId: string;
+  readonly projectId: string;
+  readonly vector: ArrayBuffer;
+}
+
 export const DEFAULT_DB_NAME = 'lup-machine';
 
 /** Cơ sở dữ liệu IndexedDB cục bộ. Dữ liệu chỉ nằm trên máy người dùng. */
@@ -45,6 +53,7 @@ export class LupDatabase extends Dexie {
   projects!: EntityTable<ProjectRecord, 'id'>;
   classes!: EntityTable<ClassRecord, 'id'>;
   samples!: EntityTable<SampleRecord, 'id'>;
+  features!: Dexie.Table<FeatureRecord, [string, string]>;
 
   constructor(name: string = DEFAULT_DB_NAME) {
     super(name);
@@ -55,6 +64,12 @@ export class LupDatabase extends Dexie {
       projects: 'id, updatedAt',
       classes: 'id, projectId',
       samples: 'id, projectId, classId',
+    });
+    this.version(3).stores({
+      projects: 'id, updatedAt',
+      classes: 'id, projectId',
+      samples: 'id, projectId, classId',
+      features: '[sampleId+modelId], sampleId, projectId',
     });
   }
 }

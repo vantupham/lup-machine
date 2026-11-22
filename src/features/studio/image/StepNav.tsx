@@ -4,7 +4,7 @@ const STEPS = ['data', 'check', 'represent', 'train', 'evaluate', 'use'] as cons
 export type StepId = (typeof STEPS)[number];
 
 /** Các bước đã có trong phiên bản hiện tại. */
-const AVAILABLE: ReadonlySet<StepId> = new Set(['data', 'check']);
+const AVAILABLE: ReadonlySet<StepId> = new Set(['data', 'check', 'represent', 'train', 'evaluate']);
 
 export function StepNav() {
   const { t } = useTranslation();

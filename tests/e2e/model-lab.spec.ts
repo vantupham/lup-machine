@@ -1,0 +1,81 @@
+import { expect, test, type Page } from '@playwright/test';
+
+const IMAGES_PER_CLASS = 10;
+
+/** Sinh ảnh PNG trong trình duyệt: lớp "warm" = nền đỏ/cam có hình tròn, lớp "cool" = nền xanh có sọc. */
+async function makeImages(page: Page, kind: 'warm' | 'cool', count: number): Promise<Buffer[]> {
+  const list = await page.evaluate(
+    ({ kind, count }) =>
+      Array.from({ length: count }, (_, i) => {
+        const c = document.createElement('canvas');
+        c.width = 320;
+        c.height = 240;
+        const ctx = c.getContext('2d')!;
+        if (kind === 'warm') {
+          ctx.fillStyle = `rgb(${200 + i * 5}, ${60 + i * 8}, 30)`;
+          ctx.fillRect(0, 0, 320, 240);
+          ctx.fillStyle = '#fff3';
+          ctx.beginPath();
+          ctx.arc(80 + i * 15, 120, 40 + i * 3, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillStyle = `rgb(20, ${80 + i * 6}, ${200 + i * 5})`;
+          ctx.fillRect(0, 0, 320, 240);
+          ctx.fillStyle = '#0004';
+          for (let x = i * 3; x < 320; x += 24) ctx.fillRect(x, 0, 10, 240);
+        }
+        return c.toDataURL('image/png').split(',')[1]!;
+      }),
+    { kind, count },
+  );
+  return list.map((b64) => Buffer.from(b64, 'base64'));
+}
+
+async function upload(page: Page, className: string, buffers: Buffer[]) {
+  const panel = page.getByRole('article', { name: className });
+  const chooser = page.waitForEvent('filechooser');
+  await panel.getByRole('button', { name: 'Tải ảnh lên' }).click();
+  await (await chooser).setFiles(buffers.map((buffer, i) => ({ name: `${className}-${i}.png`, mimeType: 'image/png', buffer })));
+  await expect(page.getByText(new RegExp(`Đã thêm ${buffers.length} ảnh vào lớp "${className}"`))).toBeVisible();
+}
+
+test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu diễn → huấn luyện → đánh giá', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+
+  await page.goto('./#/studio');
+  await page.getByLabel('Tên dự án').fill('Ấm và lạnh');
+  await page.getByRole('button', { name: 'Tạo dự án' }).click();
+  await page.getByRole('link', { name: 'Mở Ấm và lạnh' }).click();
+
+  await upload(page, 'Lớp 1', await makeImages(page, 'warm', IMAGES_PER_CLASS));
+  await upload(page, 'Lớp 2', await makeImages(page, 'cool', IMAGES_PER_CLASS));
+  await page.getByRole('button', { name: /Tự chia Dạy/ }).click();
+  await expect(page.getByText('Đã chia lại: 16 ảnh Dạy, 4 ảnh Kiểm tra.')).toBeVisible();
+
+  await page.getByRole('button', { name: /Biến ảnh thành vector \(20 ảnh/ }).click();
+  await expect(page.getByText('Tất cả ảnh đã có vector đặc trưng.')).toBeVisible({ timeout: 90_000 });
+  const map = page.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
+  await expect(map.getByRole('button')).toHaveCount(20);
+
+  await map.getByRole('button').first().click();
+  await expect(page.getByTestId('feature-strip').locator('rect')).toHaveCount(1280);
+
+  await page.getByRole('button', { name: 'Bắt đầu huấn luyện' }).click();
+  await expect(page.getByText('Xong 50 epoch.')).toBeVisible({ timeout: 60_000 });
+  const testScore = Number((await page.getByTestId('score-test').textContent())?.replace(/[^\d]/g, ''));
+  expect(testScore).toBeGreaterThanOrEqual(75);
+
+  const shots = process.env.SCREENSHOT_DIR;
+  if (shots) {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.getByRole('region', { name: '③ Biểu diễn' }).screenshot({ path: `${shots}/represent.png` });
+    await page.getByRole('region', { name: '④ Huấn luyện' }).screenshot({ path: `${shots}/train.png` });
+    await page.getByRole('region', { name: '⑤ Đánh giá' }).screenshot({ path: `${shots}/evaluate.png` });
+  }
+
+  expect(errors).toEqual([]);
+});

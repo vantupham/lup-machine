@@ -49,6 +49,8 @@ export default defineConfig({
   build: {
     target: 'es2022',
     sourcemap: true,
+    // Chunk lớn nhất là backend WebGL của TensorFlow.js (~530 kB, ~84 kB gzip), chỉ tải khi trích đặc trưng.
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         // Tách thư viện ít thay đổi thành chunk riêng để trình duyệt cache lâu dài.

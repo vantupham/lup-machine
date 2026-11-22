@@ -29,6 +29,12 @@ export interface DatasetRepository {
   deleteSample(sampleId: string): Promise<void>;
   countSamples(projectId: string): Promise<SplitCounts>;
   deleteProjectData(projectId: string): Promise<void>;
+  listFeatures(projectId: string, modelId: string): Promise<Map<string, Float32Array>>;
+  putFeatures(
+    projectId: string,
+    modelId: string,
+    items: readonly { sampleId: string; vector: Float32Array }[],
+  ): Promise<void>;
 }
 
 const defaultDeps: RepositoryDeps = {
@@ -82,8 +88,10 @@ export function createDexieDatasetRepository(
     },
 
     async deleteClass(classId) {
-      await db.transaction('rw', db.classes, db.samples, async () => {
-        await db.samples.where('classId').equals(classId).delete();
+      await db.transaction('rw', [db.classes, db.samples, db.features], async () => {
+        const sampleIds = (await db.samples.where('classId').equals(classId).primaryKeys()) as string[];
+        await db.features.where('sampleId').anyOf(sampleIds).delete();
+        await db.samples.bulkDelete(sampleIds);
         await db.classes.delete(classId);
       });
     },
@@ -110,7 +118,10 @@ export function createDexieDatasetRepository(
     },
 
     async deleteSample(sampleId) {
-      await db.samples.delete(sampleId);
+      await db.transaction('rw', db.samples, db.features, async () => {
+        await db.features.where('sampleId').equals(sampleId).delete();
+        await db.samples.delete(sampleId);
+      });
     },
 
     async countSamples(projectId) {
@@ -127,10 +138,29 @@ export function createDexieDatasetRepository(
     },
 
     async deleteProjectData(projectId) {
-      await db.transaction('rw', db.classes, db.samples, async () => {
+      await db.transaction('rw', [db.classes, db.samples, db.features], async () => {
+        await db.features.where('projectId').equals(projectId).delete();
         await db.samples.where('projectId').equals(projectId).delete();
         await db.classes.where('projectId').equals(projectId).delete();
       });
+    },
+
+    async listFeatures(projectId, modelId) {
+      const records = await db.features.where('projectId').equals(projectId).toArray();
+      return new Map(
+        records.filter((r) => r.modelId === modelId).map((r) => [r.sampleId, new Float32Array(r.vector)]),
+      );
+    },
+
+    async putFeatures(projectId, modelId, items) {
+      await db.features.bulkPut(
+        items.map(({ sampleId, vector }) => ({
+          sampleId,
+          modelId,
+          projectId,
+          vector: vector.buffer.slice(vector.byteOffset, vector.byteOffset + vector.byteLength) as ArrayBuffer,
+        })),
+      );
     },
   };
 }

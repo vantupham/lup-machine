@@ -14,9 +14,10 @@ import { WebcamCapture } from './WebcamCapture';
 import { useProjectData } from './useProjectData';
 import { useImageUpload } from './useImageUpload';
 import { decodeStoredImage, videoFrameToStoredImage } from './image-codec.browser';
+import { CLASS_MARKERS } from './lab/class-style';
+import { ModelLab } from './lab/ModelLab';
 
 /** Lớp phân biệt bằng cả ký hiệu, không chỉ màu (thân thiện người mù màu). */
-export const CLASS_MARKERS = ['●', '▲', '■', '◆', '★', '✚', '⬟', '⬢'] as const;
 export const SPLIT_SEED = 42;
 const TEST_RATIO = 0.2;
 
@@ -170,6 +171,8 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         </section>
         <QualityPanel classes={classes} counts={counts} markers={CLASS_MARKERS} />
       </div>
+
+      <ModelLab projectId={projectId} classes={classes} samples={samples} />
 
       {inspecting && (
         <PixelInspector

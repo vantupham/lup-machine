@@ -114,10 +114,38 @@ describe('Mẫu (sample)', () => {
     expect(await repo.listSamples(PROJECT)).toHaveLength(0);
   });
 
+  test('lưu và đọc vector đặc trưng theo mô hình', async () => {
+    const c = await repo.addClass(PROJECT, 'A');
+    const [s1, s2] = await repo.addSamples([sampleFor(c.id), sampleFor(c.id)]);
+    await repo.putFeatures(PROJECT, 'm1', [{ sampleId: s1!.id, vector: Float32Array.from([1, 2, 3]) }]);
+    const features = await repo.listFeatures(PROJECT, 'm1');
+    expect(features.size).toBe(1);
+    expect(Array.from(features.get(s1!.id)!)).toEqual([1, 2, 3]);
+    expect(features.has(s2!.id)).toBe(false);
+    expect((await repo.listFeatures(PROJECT, 'm2')).size).toBe(0);
+  });
+
+  test('xóa ảnh / xóa lớp thì xóa luôn vector đặc trưng', async () => {
+    const a = await repo.addClass(PROJECT, 'A');
+    const b = await repo.addClass(PROJECT, 'B');
+    const [s1, s2] = await repo.addSamples([sampleFor(a.id), sampleFor(b.id)]);
+    const vector = Float32Array.from([1]);
+    await repo.putFeatures(PROJECT, 'm1', [
+      { sampleId: s1!.id, vector },
+      { sampleId: s2!.id, vector },
+    ]);
+    await repo.deleteSample(s1!.id);
+    expect([...(await repo.listFeatures(PROJECT, 'm1')).keys()]).toEqual([s2!.id]);
+    await repo.deleteClass(b.id);
+    expect((await repo.listFeatures(PROJECT, 'm1')).size).toBe(0);
+  });
+
   test('xóa toàn bộ dữ liệu của một dự án', async () => {
     const c = await repo.addClass(PROJECT, 'A');
-    await repo.addSamples([sampleFor(c.id)]);
+    const [s] = await repo.addSamples([sampleFor(c.id)]);
+    await repo.putFeatures(PROJECT, 'm1', [{ sampleId: s!.id, vector: Float32Array.from([1]) }]);
     await repo.deleteProjectData(PROJECT);
+    expect((await repo.listFeatures(PROJECT, 'm1')).size).toBe(0);
     expect(await repo.listClasses(PROJECT)).toHaveLength(0);
     expect(await repo.listSamples(PROJECT)).toHaveLength(0);
   });

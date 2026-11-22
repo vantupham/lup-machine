@@ -1,0 +1,138 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { EpochSnapshot, TrainOptions } from '@/core/ml/softmax-regression';
+import { useModeStore } from '@/ui/mode-store';
+import { LineChart } from './LineChart';
+import type { TrainingReadiness } from './lab-data';
+import type { TrainingSpeed, TrainingStatus } from './useTraining';
+
+export const DEFAULT_TRAIN_OPTIONS: TrainOptions = { epochs: 50, learningRate: 0.001, batchSize: 16, seed: 42 };
+const LIMITS = { epochs: [1, 500], learningRate: [0.00001, 1], batchSize: [1, 256] } as const;
+const SPEEDS: readonly TrainingSpeed[] = ['normal', 'slow', 'step'];
+
+interface TrainSectionProps {
+  readonly readiness: TrainingReadiness;
+  readonly numClasses: number;
+  readonly snapshots: readonly EpochSnapshot[];
+  readonly status: TrainingStatus;
+  readonly selectedEpoch: number | null;
+  readonly onSelectEpoch: (epoch: number) => void;
+  readonly onStart: (options: TrainOptions, speed: TrainingSpeed) => void;
+  readonly onStep: () => void;
+  readonly onFinish: () => void;
+}
+
+function isValid(o: TrainOptions): boolean {
+  const inRange = (v: number, [lo, hi]: readonly [number, number]) => Number.isFinite(v) && v >= lo && v <= hi;
+  return (
+    Number.isInteger(o.epochs) && inRange(o.epochs, LIMITS.epochs) && inRange(o.learningRate, LIMITS.learningRate) &&
+    Number.isInteger(o.batchSize) && inRange(o.batchSize, LIMITS.batchSize)
+  );
+}
+
+export function TrainSection(props: TrainSectionProps) {
+  const { t } = useTranslation();
+  const mode = useModeStore((s) => s.mode);
+  const [options, setOptions] = useState<TrainOptions>(DEFAULT_TRAIN_OPTIONS);
+  const [speed, setSpeed] = useState<TrainingSpeed>('normal');
+  const { readiness, snapshots, status } = props;
+  const isActive = status === 'running' || status === 'waiting-step';
+  const valid = isValid(options);
+  const last = snapshots.at(-1);
+
+  return (
+    <section aria-labelledby="train-title" className="space-y-4">
+      <div>
+        <h2 id="train-title" className="text-2xl font-semibold">{t('project.train.title')}</h2>
+        <p className="max-w-3xl text-sm text-muted">
+          {mode === 'expert' ? t('project.train.leadExpert', { classes: props.numClasses }) : t('project.train.leadExplore')}
+        </p>
+      </div>
+
+      {readiness.readiness !== 'ready' ? (
+        <p className="text-sm text-warning">{t(readiness.readiness === 'need-features' ? 'project.train.needFeatures' : 'project.train.needClasses')}</p>
+      ) : (
+        <div className="flex flex-wrap items-end gap-4">
+          <fieldset className="flex gap-1 text-sm">
+            <legend className="mb-1 text-xs text-muted">{t('project.train.speed')}</legend>
+            {SPEEDS.map((s) => (
+              <label key={s} className={`cursor-pointer rounded border px-2 py-1 ${speed === s ? 'border-primary' : 'border-rule'}`}>
+                <input type="radio" name="speed" className="sr-only" checked={speed === s} onChange={() => setSpeed(s)} disabled={isActive} />
+                {t(`project.train.speeds.${s}`)}
+              </label>
+            ))}
+          </fieldset>
+          {mode === 'expert' && <OptionInputs options={options} onChange={setOptions} disabled={isActive} />}
+          <button type="button" className="btn btn-primary" disabled={isActive || !valid} onClick={() => props.onStart(options, speed)}>
+            {snapshots.length > 0 ? t('project.train.restart') : t('project.train.start')}
+          </button>
+          {status === 'waiting-step' && (
+            <>
+              <button type="button" className="btn btn-ghost" onClick={props.onStep}>{t('project.train.next')} →</button>
+              <button type="button" className="btn btn-ghost" onClick={props.onFinish}>{t('project.train.finish')}</button>
+            </>
+          )}
+          {!valid && <p role="alert" className="text-sm text-danger">{t('project.train.invalid')}</p>}
+        </div>
+      )}
+
+      {last && (
+        <p role="status" className="font-mono text-sm">
+          {isActive ? t('project.train.running', { epoch: last.epoch, total: options.epochs }) : t('project.train.done', { total: last.epoch })}
+        </p>
+      )}
+      {snapshots.length > 0 && <Charts {...props} />}
+    </section>
+  );
+}
+
+function OptionInputs({ options, onChange, disabled }: { options: TrainOptions; onChange: (o: TrainOptions) => void; disabled: boolean }) {
+  const { t } = useTranslation();
+  const field = (key: 'epochs' | 'learningRate' | 'batchSize', step: string) => (
+    <label className="flex flex-col text-xs text-muted">
+      {t(`project.train.${key}`)}
+      <input
+        type="number"
+        step={step}
+        min={LIMITS[key][0]}
+        max={LIMITS[key][1]}
+        value={options[key]}
+        disabled={disabled}
+        onChange={(e) => onChange({ ...options, [key]: Number(e.target.value) })}
+        className="w-24 rounded border border-rule bg-paper px-2 py-1 font-mono text-sm text-ink"
+      />
+    </label>
+  );
+  return (
+    <>
+      {field('epochs', '1')}
+      {field('learningRate', '0.0001')}
+      {field('batchSize', '1')}
+    </>
+  );
+}
+
+function Charts({ snapshots, selectedEpoch, onSelectEpoch }: TrainSectionProps) {
+  const { t } = useTranslation();
+  const maxEpoch = snapshots.at(-1)?.epoch ?? 0;
+  const hasTest = snapshots.some((s) => s.test);
+  const series = (pick: (s: EpochSnapshot) => number | null) => [
+    { label: t('project.train.seriesTrain'), color: '#0072B2', values: snapshots.map(pick) },
+    ...(hasTest ? [{ label: t('project.train.seriesTest'), color: '#D55E00', dashed: true, values: snapshots.map((s) => (s.test ? pick({ ...s, train: s.test }) : null)) }] : []),
+  ];
+
+  return (
+    <div className="space-y-3">
+      <div className="grid gap-6 md:grid-cols-2">
+        <LineChart title={t('project.train.chartAccuracy')} series={series((s) => s.train.accuracy * 100)} maxX={maxEpoch} yMax={100} markerX={selectedEpoch} />
+        <LineChart title={t('project.train.chartLoss')} series={series((s) => s.train.loss)} maxX={maxEpoch} markerX={selectedEpoch} />
+      </div>
+      <label className="block text-sm">
+        <span className="font-medium">{t('project.train.replay', { epoch: selectedEpoch ?? maxEpoch })}</span>
+        <input type="range" min={0} max={maxEpoch} value={selectedEpoch ?? maxEpoch} onChange={(e) => onSelectEpoch(Number(e.target.value))} className="mt-1 block w-full" />
+        <span className="text-xs text-muted">{t('project.train.replayHint')}</span>
+      </label>
+      <p className="text-xs text-muted">ⓘ {t('project.train.notSaved')}</p>
+    </div>
+  );
+}

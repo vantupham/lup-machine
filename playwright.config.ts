@@ -8,6 +8,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
+  // Mỗi trình duyệt chạy MobileNet tốn nhiều CPU; trên máy CI (2 nhân) chạy lần lượt để tránh quá tải.
+  workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL: `http://localhost:${PORT}/lup-machine/`,

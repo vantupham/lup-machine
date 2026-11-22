@@ -32,8 +32,10 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 - [x] Thu ảnh bằng tải tệp và webcam; mỗi lớp có ngăn Dạy / Kiểm tra; tự chia 80/20 có seed
 - [x] Trợ lý kiểm tra dữ liệu hiển thị trực tiếp, có gợi ý sửa
 - [x] Kính hiển vi điểm ảnh: giá trị RGB thật và giá trị sau chuẩn hóa mà mô hình nhận
-- [ ] Biểu diễn: trích đặc trưng MobileNetV2, bản đồ dữ liệu 2D (PCA)
-- [ ] Huấn luyện chậm có phát lại, đánh giá trên tập Kiểm tra, ma trận nhầm lẫn bấm được Xem [lộ trình đầy đủ](docs/ke-hoach/Phuong-an-xay-dung-website.md#10-lộ-trình-phát-triển).
+- [x] Biểu diễn: trích đặc trưng MobileNetV2 (lưu đệm), xem 1.280 con số của mỗi ảnh, bản đồ dữ liệu 2D (PCA), ảnh Dạy giống nhất
+- [x] Huấn luyện bình thường / chậm / từng bước, biểu đồ loss và độ chính xác, phát lại từng epoch
+- [x] Đánh giá: điểm Dạy và Kiểm tra, cảnh báo quá khớp, ma trận nhầm lẫn bấm được, precision / recall
+- [ ] Nhật ký thí nghiệm, bộ dữ liệu mẫu, bài học Xem [lộ trình đầy đủ](docs/ke-hoach/Phuong-an-xay-dung-website.md#10-lộ-trình-phát-triển).
 
 ## Yêu cầu
 
