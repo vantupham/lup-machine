@@ -37,6 +37,7 @@ export const lessonTraining: Lesson = {
         answer:
           'Thường các chấm cùng lớp sẽ gom lại thành cụm, vì ảnh giống nhau có vector giống nhau. Nhưng bản đồ chỉ giữ một phần thông tin (xem dòng "giữ được …%"), nên có thể vẫn thấy vài chỗ chồng lên nhau.',
       },
+      record: [{ kind: 'fields', title: 'Em ghi lại', fields: ['Bản đồ giữ được bao nhiêu % biến thiên:'], answers: ['60,4%'] }],
     },
     {
       title: '④ Huấn luyện từng bước',
@@ -47,25 +48,69 @@ export const lessonTraining: Lesson = {
       predict: {
         question: 'Ở epoch 0 (trước khi học), với 3 lớp, độ chính xác sẽ khoảng bao nhiêu?',
         answer:
-          'Khoảng 33% — giống như đoán bừa 1 trong 3. Con số thực tế có thể lệch một chút vì các trọng số ban đầu là ngẫu nhiên.',
+          'Khoảng 33% nếu đoán bừa 1 trong 3. Nhưng trọng số ban đầu là ngẫu nhiên và tập Kiểm tra chỉ có 18 ảnh, nên con số thật có thể lệch khá xa, ví dụ 22% hay 44%. Điều quan trọng là nó thấp, rồi tăng nhanh sau vài epoch.',
       },
+      record: [
+        {
+          kind: 'table',
+          title: 'Kéo thanh "Phát lại" tới từng epoch và ghi điểm',
+          columns: ['Epoch', 'Điểm Dạy (%)', 'Điểm Kiểm tra (%)'],
+          rows: ['0', '5', '50'],
+          answers: [
+            ['44,4', '22,2'],
+            ['98,1', '77,8'],
+            ['100', '100'],
+          ],
+        },
+      ],
     },
     {
       title: '⑤ Đánh giá',
       body: [
         'So sánh "Điểm trên bài đã học" và "Điểm trên bài chưa học".',
-        'Trong Ma trận nhầm lẫn, tìm ô ngoài đường chéo có số lớn nhất và bấm vào để xem các ảnh bị nhầm. Kéo thanh Phát lại về epoch 0 rồi kéo dần lên để thấy mô hình tiến bộ.',
+        'Ở epoch cuối, mô hình có thể đã đúng hết: mọi ô ngoài đường chéo của Ma trận nhầm lẫn đều bằng 0. Kéo thanh Phát lại về epoch 5, lúc mô hình còn nhầm: tìm ô ngoài đường chéo có số lớn nhất và bấm vào để xem các ảnh bị nhầm.',
+        'Kéo dần thanh Phát lại lên epoch 50 để thấy các ô ngoài đường chéo giảm dần về 0.',
       ],
       predict: {
         question: 'Điểm trên tập Kiểm tra thường cao hơn hay thấp hơn tập Dạy?',
         answer: 'Thường thấp hơn hoặc bằng, vì đó là những ảnh mô hình chưa từng thấy. Chênh lệch quá lớn là dấu hiệu "quá khớp".',
       },
+      record: [
+        {
+          kind: 'confusion',
+          title: 'Chép ma trận nhầm lẫn trên tập Kiểm tra ở epoch 5 (số ảnh)',
+          // hàng = lớp thật (tròn, vuông, tam giác), cột = lớp mô hình đoán
+          answers: [
+            [6, 0, 0],
+            [0, 3, 3],
+            [0, 1, 5],
+          ],
+        },
+        {
+          kind: 'fields',
+          title: 'Em rút ra',
+          fields: ['Ô ngoài đường chéo lớn nhất (ở epoch 5):'],
+          answers: ['Hình vuông bị đoán là Tam giác (3 ảnh)'],
+        },
+      ],
     },
     {
       title: 'Thí nghiệm nhỏ',
       body: [
         'Chuyển sang chế độ Chuyên sâu, đặt Số epoch = 3 rồi huấn luyện lại. Trong Nhật ký thí nghiệm, đánh dấu "So sánh" cho cả hai lần chạy.',
         'Ghi lại: số epoch ảnh hưởng thế nào đến điểm Kiểm tra?',
+      ],
+      record: [
+        {
+          kind: 'table',
+          title: 'So sánh hai lần chạy trong Nhật ký thí nghiệm',
+          columns: ['Số epoch', 'Điểm Dạy (%)', 'Điểm Kiểm tra (%)'],
+          rows: ['50', '3'],
+          answers: [
+            ['100', '100'],
+            ['94,4', '72,2'],
+          ],
+        },
       ],
     },
   ],
@@ -107,5 +152,6 @@ export const lessonTraining: Lesson = {
     'Bài dài 2 tiết: tiết 1 đến hết bước ③, tiết 2 từ bước ④.',
     'Kết quả huấn luyện tái lập được (seed cố định): cả lớp làm cùng bộ dữ liệu sẽ ra cùng con số hoặc chỉ lệch rất nhỏ giữa các máy, tiện cho việc so sánh.',
     'Học sinh THPT có thể dùng chế độ Chuyên sâu để xem công thức W·x + b và bảng precision / recall.',
+    'Đã kiểm chứng với MobileNetV2: epoch 0 Dạy 44,4% / Kiểm tra 22,2%; epoch 5 98,1% / 77,8% (nhầm 3 vuông → tam giác, 1 tam giác → vuông); epoch 50 đạt 100% / 100%. Chạy 3 epoch: 94,4% / 72,2%.',
   ],
 };

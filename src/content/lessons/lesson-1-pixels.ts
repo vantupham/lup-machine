@@ -35,6 +35,25 @@ export const lessonPixels: Lesson = {
         question: 'Một điểm ảnh màu trắng sẽ có 3 con số khoảng bao nhiêu? Còn màu đen?',
         answer: 'Trắng ≈ (255, 255, 255): cả ba màu đều sáng nhất. Đen ≈ (0, 0, 0): không có ánh sáng. Đỏ tươi ≈ (255, 0, 0).',
       },
+      record: [
+        {
+          kind: 'fields',
+          title: 'Ảnh em soi',
+          fields: ['Ảnh thứ mấy trong lớp "Hình tròn":'],
+          answers: ['1 (ảnh đầu tiên; mỗi ảnh có màu khác nhau, nên số của học sinh có thể khác)'],
+        },
+        {
+          kind: 'table',
+          title: 'Ghi 3 con số ở mỗi vùng',
+          columns: ['Vùng', 'Đỏ', 'Xanh lá', 'Xanh dương'],
+          rows: ['Nền', 'Hình tròn'],
+          // ảnh đầu tiên: nền ở điểm (2, 2), hình tròn ở tâm (98, 136)
+          answers: [
+            ['237', '232', '228'],
+            ['204', '46', '81'],
+          ],
+        },
+      ],
     },
     {
       title: 'Đếm các con số',
@@ -45,6 +64,7 @@ export const lessonPixels: Lesson = {
         question: 'Một ảnh có tất cả bao nhiêu con số?',
         answer: '224 × 224 × 3 = 150.528 con số. Đây chính là thứ duy nhất máy tính nhận được từ bức ảnh.',
       },
+      record: [{ kind: 'fields', title: 'Em tính', fields: ['224 × 224 × 3 ='], answers: ['150.528 con số'] }],
     },
     {
       title: 'Thảo luận',
