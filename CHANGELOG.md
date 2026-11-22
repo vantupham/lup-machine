@@ -4,6 +4,12 @@
 
 ## [Chưa phát hành]
 
+### Thêm (bài học 4)
+
+- Bài "AI làm bác sĩ cây trồng" (lớp 8–12, 45 phút) dùng bộ ảnh lá đậu thật: dữ liệu thật khó hơn hình vẽ, quá khớp (học lâu hơn không giúp), lỗi nào nguy hiểm nhất với nông dân (ma trận nhầm lẫn, recall), mô hình nhìn vào đâu, ngưỡng tin cậy để AI biết nói "không chắc", và cách cải thiện dữ liệu.
+- Mọi khẳng định của bài được kiểm chứng bằng E2E với MobileNet thật đi đúng đường học sinh đi: Dạy 100% / Kiểm tra 72,2%, lỗi hay gặp nhất là gỉ sắt → đốm góc, không có lá bệnh bị đoán là khỏe, ngưỡng 90% trả lời 10/18 ảnh với 90% đúng.
+- Bài học nay có thể dùng cả bộ hình vẽ tổng hợp lẫn bộ ảnh thật.
+
 ### Thêm (bộ ảnh thật có giấy phép mở)
 
 - "Hoa cúc, hướng dương hay hoa hồng?": 90 ảnh Flickr (CC BY 2.0), tuyển từ tf_flowers.

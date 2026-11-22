@@ -37,7 +37,7 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 - [x] Đánh giá: điểm Dạy và Kiểm tra, cảnh báo quá khớp, ma trận nhầm lẫn bấm được, precision / recall
 - [x] Nhật ký thí nghiệm: tự lưu mỗi lần huấn luyện, so sánh, chạy lại (tái lập bằng seed), tự khôi phục khi mở lại
 - [x] 3 bộ dữ liệu mẫu tổng hợp (không ảnh người thật, không bản quyền), gồm bộ "bẫy nền" dạy hiện tượng học lối tắt
-- [x] 3 bài học tương tác: Máy tính nhìn ảnh thế nào? · Dạy máy phân biệt hình · AI học nhầm điều gì? Xem [lộ trình đầy đủ](docs/ke-hoach/Phuong-an-xay-dung-website.md#10-lộ-trình-phát-triển).
+- [x] 4 bài học tương tác: Máy tính nhìn ảnh thế nào? · Dạy máy phân biệt hình · AI học nhầm điều gì? · AI làm bác sĩ cây trồng Xem [lộ trình đầy đủ](docs/ke-hoach/Phuong-an-xay-dung-website.md#10-lộ-trình-phát-triển).
 
 **Giai đoạn 2 – Mở nắp sâu hơn (xong).** Đã có:
 

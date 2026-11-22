@@ -1,3 +1,4 @@
+import type { PhotoDatasetId } from '@/core/datasets/photo';
 import type { SampleDatasetId } from '@/core/datasets/synthetic';
 
 export interface PredictPrompt {
@@ -25,7 +26,8 @@ export interface Lesson {
   readonly minutes: number;
   readonly title: string;
   readonly summary: string;
-  readonly dataset: SampleDatasetId;
+  /** Bộ dữ liệu mẫu dùng cho bài: hình vẽ tổng hợp hoặc ảnh thật có giấy phép mở. */
+  readonly dataset: SampleDatasetId | PhotoDatasetId;
   readonly goals: readonly string[];
   readonly steps: readonly LessonStep[];
   readonly quiz: readonly QuizQuestion[];

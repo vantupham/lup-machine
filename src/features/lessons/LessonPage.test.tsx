@@ -20,7 +20,7 @@ beforeEach(async () => {
 });
 
 describe('Bài học', () => {
-  test('danh sách 3 bài học, có khối lớp và thời lượng', async () => {
+  test('danh sách các bài học, có khối lớp và thời lượng', async () => {
     open('/lessons');
     expect(screen.getByRole('heading', { level: 1, name: 'Bài học' })).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /vào bài/i })).toHaveLength(LESSONS.length);
