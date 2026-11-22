@@ -1,5 +1,6 @@
 import { PHOTO_DATASETS } from '@/core/datasets/photo';
-import { SAMPLE_DATASETS } from '@/core/datasets/synthetic';
+import { generateDataset, SAMPLE_DATASETS } from '@/core/datasets/synthetic';
+import type { WorksheetRecord } from './types';
 import { findLesson, LESSONS } from './index';
 
 describe('Nội dung bài học', () => {
@@ -76,8 +77,66 @@ describe('Nội dung bài học', () => {
     expect(Number(fields.answers[1])).toBe(m[1]![0]! + m[2]![0]!); // lá bệnh bị đoán là khỏe
   });
 
+  test.each(LESSONS.map((l) => [l.title, l] as const))('%s: số liệu mẫu của bản giáo viên đúng kích thước', (_title, lesson) => {
+    const def = [...SAMPLE_DATASETS, ...PHOTO_DATASETS].find((d) => d.id === lesson.dataset)!;
+    for (const r of lesson.steps.flatMap((st) => st.record ?? [])) {
+      if (r.kind === 'confusion' && r.answers) {
+        expect(r.answers).toHaveLength(def.classKeys.length);
+        r.answers.forEach((row) => {
+          expect(row).toHaveLength(def.classKeys.length);
+          expect(row.reduce((a, b) => a + b, 0)).toBe(def.testPerClass);
+        });
+      }
+      if (r.kind === 'table' && r.answers) {
+        expect(r.answers).toHaveLength(r.rows.length);
+        r.answers.forEach((row) => expect(row).toHaveLength(r.columns.length - 1));
+      }
+      if (r.kind === 'fields' && r.answers) expect(r.answers).toHaveLength(r.fields.length);
+    }
+  });
+
+  test('bài 1: màu mẫu khớp màu thật của ảnh đầu tiên (tính từ thông số sinh ảnh, sai số nén JPEG ±6)', () => {
+    const records = findLesson('may-tinh-nhin-anh')!.steps.flatMap((st) => st.record ?? []);
+    const table = records.find((r): r is Extract<WorksheetRecord, { kind: 'table' }> => r.kind === 'table')!;
+    const first = generateDataset(SAMPLE_DATASETS.find((d) => d.id === 'shapes-2')!)[0]!;
+    expect(first.classKey).toBe('circle');
+    const expected = [hslToRgb(first.shape.background), hslToRgb(first.shape.fill)];
+    table.answers!.forEach((row, i) => row.forEach((v, c) => expect(Math.abs(Number(v) - expected[i]![c]!)).toBeLessThanOrEqual(6)));
+    expect(JSON.stringify(records)).toContain('150.528');
+  });
+
+  test('bài 2: ma trận epoch 5 khớp điểm Kiểm tra epoch 5; ô nhầm nhiều nhất khớp ô điền', () => {
+    const records = findLesson('day-may-phan-biet-hinh')!.steps.flatMap((st) => st.record ?? []);
+    const m = (records.find((r) => r.kind === 'confusion') as Extract<WorksheetRecord, { kind: 'confusion' }>).answers!;
+    const epochs = records.find((r) => r.kind === 'table' && r.rows.includes('5')) as Extract<WorksheetRecord, { kind: 'table' }>;
+    const diag = m.reduce((a, row, i) => a + row[i]!, 0);
+    expect(Number(epochs.answers![epochs.rows.indexOf('5')]![1]!.replace(',', '.'))).toBe(Math.round((diag / 18) * 1000) / 10);
+    const fields = records.find((r) => r.kind === 'fields' && r.fields[0]!.includes('epoch 5')) as Extract<WorksheetRecord, { kind: 'fields' }>;
+    expect(fields.answers![0]).toContain(`(${m[1]![2]} ảnh)`);
+    expect(m[1]![2]).toBe(Math.max(...m.flatMap((row, i) => row.filter((_, j) => j !== i))));
+  });
+
+  test('bài 3: ma trận bẫy (đường chéo 0) khớp điểm Kiểm tra 0%', () => {
+    const records = findLesson('ai-hoc-nham')!.steps.flatMap((st) => st.record ?? []);
+    const m = (records.find((r) => r.kind === 'confusion') as Extract<WorksheetRecord, { kind: 'confusion' }>).answers!;
+    expect(m[0]![0]! + m[1]![1]!).toBe(0);
+    const fields = records.find((r) => r.kind === 'fields') as Extract<WorksheetRecord, { kind: 'fields' }>;
+    expect(fields.answers).toEqual(['100%', '0%']);
+  });
+
   test('con số trong bài 1 khớp với kích thước ảnh mô hình nhận', () => {
     expect(224 * 224 * 3).toBe(150528);
     expect(JSON.stringify(findLesson('may-tinh-nhin-anh'))).toContain('150.528');
   });
 });
+
+/** "hsl(h s% l%)" → [r, g, b] 0–255 (công thức chuẩn CSS). */
+function hslToRgb(css: string): [number, number, number] {
+  const [h, s, l] = css.match(/[\d.]+/g)!.map(Number) as [number, number, number];
+  const a = (s / 100) * Math.min(l / 100, 1 - l / 100);
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    return Math.round(255 * (l / 100 - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
+  };
+  return [f(0), f(8), f(4)];
+}

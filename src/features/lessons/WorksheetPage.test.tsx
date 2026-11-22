@@ -79,10 +79,11 @@ describe('Phiếu bài tập in được', () => {
     expect(screen.getByText(/Câu hỏi mở, mỗi ảnh một khác/)).toBeInTheDocument();
   });
 
-  test('bài không khai báo số liệu mẫu: bản giáo viên không hiện ghi chú số liệu mẫu', async () => {
-    open('/lessons/ai-hoc-nham/phieu-bai-tap');
-    await userEvent.click(screen.getByRole('button', { name: /bản giáo viên/i }));
+  test.each(LESSONS.map((l) => [l.id] as [string]))('bài %s: bản giáo viên có số liệu mẫu, bản học sinh thì không', async (id) => {
+    open(`/lessons/${id}/phieu-bai-tap`);
     expect(screen.queryByTestId('sample-data-note')).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: /bản giáo viên/i }));
+    expect(screen.getByTestId('sample-data-note')).toBeInTheDocument();
   });
 
   test('nút In gọi lệnh in của trình duyệt', async () => {

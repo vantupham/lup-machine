@@ -36,11 +36,32 @@ export const lessonShortcut: Lesson = {
         answer:
           'Hãy so sánh NỀN của ảnh: lúc Dạy, hình tròn luôn trên nền sáng, hình vuông luôn trên nền tối. Ở tập Kiểm tra thì ngược lại. Mô hình đã học "nền sáng → tròn, nền tối → vuông" — một lối tắt dễ hơn việc nhận ra hình dạng.',
       },
+      record: [
+        { kind: 'fields', title: 'Em ghi lại', fields: ['Điểm Dạy:', 'Điểm Kiểm tra:'], answers: ['100%', '0%'] },
+        {
+          kind: 'confusion',
+          title: 'Chép ma trận nhầm lẫn trên tập Kiểm tra (số ảnh)',
+          // hàng = lớp thật (tròn, vuông), cột = lớp mô hình đoán
+          answers: [
+            [0, 6],
+            [6, 0],
+          ],
+        },
+      ],
     },
     {
       title: 'Tìm bằng chứng',
       body: [
         'Trên Bản đồ dữ liệu 2D, bấm vào các chấm bị khoanh vòng đỏ. Chúng nằm gần nhóm nào? Xem "ảnh Dạy giống nhất" của chúng có cùng hình dạng hay cùng màu nền?',
+      ],
+      record: [
+        {
+          kind: 'lines',
+          title: '"Ảnh Dạy giống nhất" của một ảnh bị đoán sai thuộc lớp nào, có nền thế nào?',
+          lines: 3,
+          answer:
+            'Ảnh Dạy giống nhất của một hình tròn bị đoán sai đều là HÌNH VUÔNG có cùng màu nền tối với nó. Với máy, màu nền quan trọng hơn hình dạng: đó là bằng chứng của lối tắt.',
+        },
       ],
     },
     {
@@ -54,6 +75,18 @@ export const lessonShortcut: Lesson = {
         answer:
           'Điểm thường tăng, vì nền không còn luôn đi kèm một lớp nên mô hình phải dựa nhiều hơn vào hình dạng. Nhưng có thể vẫn chưa cao: 3 ảnh "nền ngược" so với 18 ảnh có bẫy vẫn là quá ít, và tập Kiểm tra chỉ còn 3 ảnh mỗi lớp nên điểm dao động mạnh. Muốn mô hình tốt hơn, cần thêm nhiều ảnh đa dạng hơn nữa.',
       },
+      record: [
+        {
+          kind: 'table',
+          title: 'So sánh hai lần chạy trong Nhật ký thí nghiệm',
+          columns: ['Lần chạy', 'Điểm Dạy (%)', 'Điểm Kiểm tra (%)'],
+          rows: ['Trước khi sửa', 'Sau khi sửa'],
+          answers: [
+            ['100', '0'],
+            ['97,6', '66,7'],
+          ],
+        },
+      ],
     },
     {
       title: 'Liên hệ thực tế',

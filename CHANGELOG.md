@@ -4,6 +4,16 @@
 
 ## [Chưa phát hành]
 
+### Thêm (số liệu mẫu cho bài 1–3)
+
+- Phiếu bài tập bài 1–3 có khung ghi kết quả; bản giáo viên điền sẵn số liệu mẫu đo bằng MobileNetV2 thật: bài 1 màu điểm ảnh nền và hình tròn của ảnh đầu tiên, 224 × 224 × 3 = 150.528; bài 2 tỉ lệ biến thiên bản đồ, điểm theo epoch (0 / 5 / 50), ma trận nhầm lẫn ở epoch 5, thí nghiệm 3 epoch; bài 3 điểm và ma trận lúc có bẫy, so sánh trước / sau khi sửa dữ liệu, gợi ý đáp án bước tìm bằng chứng.
+- Kiểm thử nhất quán cho mọi bài (kích thước ma trận, mỗi hàng đủ số ảnh Kiểm tra, kích thước bảng) và riêng từng bài (màu mẫu khớp thông số sinh ảnh; đường chéo khớp điểm Kiểm tra). E2E đối chiếu số liệu mẫu với lần chạy thật, và kiểm chứng đáp án bài 3: ảnh Dạy giống nhất của hình tròn bị đoán sai đều là hình vuông.
+
+### Sửa (nội dung bài 2)
+
+- Câu dự đoán epoch 0: thực tế đo được 22% / 44% chứ không "lệch một chút" so với 33% (trọng số ban đầu ngẫu nhiên, tập Kiểm tra nhỏ) — đã sửa lời giải thích.
+- Bước ⑤: ở epoch 50 mô hình đúng hết nên không có ô ngoài đường chéo để tìm; nay hướng dẫn kéo thanh Phát lại về epoch 5 (lúc còn nhầm 3 vuông → tam giác).
+
 ### Thêm (phiếu bài tập in được)
 
 - Mỗi bài học có "Phiếu bài tập in được" (`#/lessons/<id>/phieu-bai-tap`), sinh tự động từ nội dung bài nên luôn khớp với bài: ô họ tên / lớp / ngày, mỗi câu dự đoán có chỗ ghi "Em dự đoán (viết TRƯỚC khi làm)" và "Kết quả em quan sát được", câu hỏi trắc nghiệm có ô đánh dấu, phần tự rút ra bài học.
