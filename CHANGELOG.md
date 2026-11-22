@@ -4,6 +4,12 @@
 
 ## [Chưa phát hành]
 
+### Thêm (biểu tượng ứng dụng)
+
+- Biểu tượng PNG 192 và 512 px, bản maskable 512 px (nền kín khung, logo trong vùng an toàn để Android cắt tròn / bo góc) và apple-touch-icon 180 px cho iPhone / iPad khi "Thêm vào màn hình chính". Trình duyệt cũ chưa hỗ trợ biểu tượng SVG trong manifest nay cũng cài được ứng dụng.
+- `scripts/build-icons.mjs` dựng lại toàn bộ biểu tượng từ `public/favicon.svg` bằng Chromium của Playwright (không thêm thư viện).
+- Kiểm thử đọc kích thước thật trong tệp PNG so với khai báo trong manifest; E2E dùng Chromium kiểm tra ứng dụng cài đặt được (không có lỗi cài đặt), mọi biểu tượng tải được và có trong bộ nhớ ngoại tuyến.
+
 ### Thêm (số liệu mẫu cho bài 1–3)
 
 - Phiếu bài tập bài 1–3 có khung ghi kết quả; bản giáo viên điền sẵn số liệu mẫu đo bằng MobileNetV2 thật: bài 1 màu điểm ảnh nền và hình tròn của ảnh đầu tiên, 224 × 224 × 3 = 150.528; bài 2 tỉ lệ biến thiên bản đồ, điểm theo epoch (0 / 5 / 50), ma trận nhầm lẫn ở epoch 5, thí nghiệm 3 epoch; bài 3 điểm và ma trận lúc có bẫy, so sánh trước / sau khi sửa dữ liệu, gợi ý đáp án bước tìm bằng chứng.
