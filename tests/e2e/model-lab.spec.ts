@@ -48,7 +48,7 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
 
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Ấm và lạnh');
-  await page.getByRole('button', { name: 'Tạo dự án' }).click();
+  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
   await page.getByRole('link', { name: 'Mở Ấm và lạnh' }).click();
 
   await upload(page, 'Lớp 1', await makeImages(page, 'warm', IMAGES_PER_CLASS));
@@ -66,7 +66,7 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
 
   await page.getByRole('button', { name: 'Bắt đầu huấn luyện' }).click();
   await expect(page.getByText('Xong 50 epoch.')).toBeVisible({ timeout: 60_000 });
-  const testScore = Number((await page.getByTestId('score-test').textContent())?.replace(/[^\d]/g, ''));
+  const testScore = Number((await page.getByTestId('score-test').textContent())?.replace(',', '.').replace(/[^\d.]/g, ''));
   expect(testScore).toBeGreaterThanOrEqual(75);
 
   const shots = process.env.SCREENSHOT_DIR;

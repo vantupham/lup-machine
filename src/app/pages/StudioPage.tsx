@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { SampleDatasetsPanel } from '@/features/samples/SampleDatasetsPanel';
 import { useDatasetRepository, useProjectRepository } from '@/storage/repository-context';
 import type { ProjectRecord } from '@/storage/db';
 import { PROJECT_TYPES } from '@/storage/schemas/manifest';
@@ -56,6 +57,8 @@ export function StudioPage() {
         <h1 className="font-display text-4xl font-bold">{t('studio.title')}</h1>
         <p className="mt-2 max-w-2xl text-muted">{t('studio.lead')}</p>
       </header>
+
+      <SampleDatasetsPanel />
 
       <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
         <NewProjectForm onCreated={reload} />

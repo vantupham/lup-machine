@@ -36,6 +36,8 @@ export interface SampleRecord {
   readonly source: SampleSource;
   readonly image: StoredImage;
   readonly createdAt: string;
+  /** Thứ tự trong lô thêm vào. Giữ thứ tự ổn định khi nhiều ảnh cùng createdAt (dữ liệu cũ có thể thiếu). */
+  readonly seq?: number;
 }
 
 /** Vector đặc trưng đã trích (cache): mỗi ảnh chỉ trích một lần cho mỗi mô hình. */
@@ -46,6 +48,27 @@ export interface FeatureRecord {
   readonly vector: ArrayBuffer;
 }
 
+export interface EpochMetrics {
+  readonly epoch: number;
+  readonly trainLoss: number;
+  readonly trainAccuracy: number;
+  readonly testLoss: number | null;
+  readonly testAccuracy: number | null;
+}
+
+/** Một lần huấn luyện trong nhật ký thí nghiệm. Không lưu trọng số: chạy lại với cùng seed sẽ ra đúng kết quả. */
+export interface RunRecord {
+  readonly id: string;
+  readonly projectId: string;
+  readonly number: number;
+  readonly createdAt: string;
+  readonly fingerprint: string;
+  readonly options: { readonly epochs: number; readonly learningRate: number; readonly batchSize: number; readonly seed: number };
+  readonly classNames: readonly string[];
+  readonly counts: { readonly train: number; readonly test: number };
+  readonly metrics: readonly EpochMetrics[];
+}
+
 export const DEFAULT_DB_NAME = 'lup-machine';
 
 /** Cơ sở dữ liệu IndexedDB cục bộ. Dữ liệu chỉ nằm trên máy người dùng. */
@@ -54,6 +77,7 @@ export class LupDatabase extends Dexie {
   classes!: EntityTable<ClassRecord, 'id'>;
   samples!: EntityTable<SampleRecord, 'id'>;
   features!: Dexie.Table<FeatureRecord, [string, string]>;
+  runs!: EntityTable<RunRecord, 'id'>;
 
   constructor(name: string = DEFAULT_DB_NAME) {
     super(name);
@@ -70,6 +94,13 @@ export class LupDatabase extends Dexie {
       classes: 'id, projectId',
       samples: 'id, projectId, classId',
       features: '[sampleId+modelId], sampleId, projectId',
+    });
+    this.version(4).stores({
+      projects: 'id, updatedAt',
+      classes: 'id, projectId',
+      samples: 'id, projectId, classId',
+      features: '[sampleId+modelId], sampleId, projectId',
+      runs: 'id, projectId',
     });
   }
 }

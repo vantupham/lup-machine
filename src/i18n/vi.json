@@ -9,7 +9,8 @@
     "studio": "Xưởng mô hình",
     "about": "Giới thiệu & Quyền riêng tư",
     "language": "Ngôn ngữ",
-    "switchTo": "English"
+    "switchTo": "English",
+    "lessons": "Bài học"
   },
   "mode": {
     "label": "Chế độ học",
@@ -277,7 +278,7 @@
       "chartLoss": "Mất mát (loss) — càng thấp càng tốt",
       "seriesTrain": "Tập Dạy",
       "seriesTest": "Tập Kiểm tra",
-      "notSaved": "Kết quả huấn luyện chưa được lưu; tải lại trang sẽ mất.",
+      "notSaved": "Mỗi lần huấn luyện được ghi vào Nhật ký thí nghiệm bên dưới.",
       "stale": "Các lớp đã thay đổi sau lần huấn luyện trước. Hãy huấn luyện lại."
     },
     "evaluate": {
@@ -306,6 +307,84 @@
       "precisionHint": "Trong các ảnh máy đoán là lớp này, bao nhiêu phần đúng",
       "recallHint": "Trong các ảnh thật sự thuộc lớp này, máy nhận ra bao nhiêu phần",
       "na": "—"
+    },
+    "experiments": {
+      "title": "Nhật ký thí nghiệm",
+      "lead": "Mỗi lần huấn luyện được ghi lại. Chọn vài lần để so sánh, giống như nhà khoa học ghi chép thí nghiệm.",
+      "empty": "Chưa có lần huấn luyện nào.",
+      "number": "Lần",
+      "time": "Thời gian",
+      "settings": "Cài đặt",
+      "data": "Dạy / Kiểm tra",
+      "trainScore": "Điểm Dạy",
+      "testScore": "Điểm Kiểm tra",
+      "compare": "So sánh",
+      "compareLabel": "So sánh lần {{n}}",
+      "replay": "Chạy lại",
+      "replayLabel": "Chạy lại lần {{n}}",
+      "replayHint": "Chạy lại đúng cài đặt và seed này: kết quả sẽ giống hệt.",
+      "changed": "Dữ liệu đã thay đổi",
+      "changedHint": "Ảnh hoặc lớp đã thay đổi sau lần chạy này nên không chạy lại đúng được.",
+      "delete": "Xóa",
+      "deleteLabel": "Xóa lần {{n}}",
+      "chartTitle": "Điểm Kiểm tra theo epoch của các lần đã chọn",
+      "chartTitleTrain": "Điểm Dạy theo epoch của các lần đã chọn",
+      "run": "Lần {{n}}",
+      "restored": "Đã khôi phục lần {{n}} bằng cách chạy lại với cùng seed {{seed}}.",
+      "replaying": "Đang xem lại lần {{n}}.",
+      "saveError": "Không lưu được vào nhật ký: {{message}}",
+      "na": "—"
     }
+  },
+  "samples": {
+    "title": "Bắt đầu nhanh với bộ dữ liệu mẫu",
+    "lead": "Một nút bấm là có ngay dự án đủ ảnh để thử cả quy trình, không cần webcam.",
+    "items": {
+      "shapes-2": {
+        "title": "Tròn hay vuông?",
+        "description": "Hai lớp hình đơn giản, màu, cỡ, vị trí ngẫu nhiên. Hợp cho buổi đầu tiên."
+      },
+      "shapes-3": {
+        "title": "Tròn, vuông, tam giác",
+        "description": "Ba lớp hình. Xem ma trận nhầm lẫn để biết máy hay nhầm hình nào với hình nào."
+      },
+      "background-trap": {
+        "title": "Thử thách: AI học nhầm điều gì?",
+        "description": "Một bộ dữ liệu có cài bẫy. Huấn luyện rồi xem điểm Kiểm tra, sau đó tìm xem chuyện gì đã xảy ra."
+      }
+    },
+    "classes": {
+      "circle": "Hình tròn",
+      "square": "Hình vuông",
+      "triangle": "Tam giác"
+    },
+    "count": "{{images}} ảnh · {{classes}} lớp",
+    "create": "Tạo dự án mẫu",
+    "creating": "Đang vẽ ảnh {{done}}/{{total}}…",
+    "note": "Ảnh mẫu do máy vẽ ngẫu nhiên theo seed cố định: không có ảnh người thật, không vướng bản quyền, mở lại vẫn ra đúng các ảnh đó.",
+    "error": "Không tạo được dự án mẫu: {{message}}"
+  },
+  "lessons": {
+    "title": "Bài học",
+    "lead": "Các bài học tương tác dùng ngay các công cụ của LUP Machine. Mỗi bài có mục tiêu, các bước hoạt động, câu hỏi dự đoán và câu hỏi kiểm tra nhanh.",
+    "onlyVietnamese": "",
+    "grade": "Lớp {{grade}}",
+    "minutes": "{{minutes}} phút",
+    "open": "Vào bài",
+    "back": "← Tất cả bài học",
+    "notFound": "Không tìm thấy bài học này.",
+    "goals": "Mục tiêu",
+    "openProject": "Tạo dự án mẫu cho bài này",
+    "steps": "Các bước",
+    "predict": "Dự đoán trước",
+    "reveal": "Xem đáp án",
+    "quiz": "Kiểm tra nhanh",
+    "correct": "Đúng rồi!",
+    "incorrect": "Chưa đúng.",
+    "score": "Em trả lời đúng {{correct}}/{{total}} câu.",
+    "retry": "Làm lại",
+    "wrapUp": "Tổng kết",
+    "teacherNotes": "Ghi chú cho giáo viên",
+    "license": "Nội dung bài học phát hành theo giấy phép CC BY 4.0."
   }
 }

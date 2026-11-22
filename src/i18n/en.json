@@ -9,7 +9,8 @@
     "studio": "Model Studio",
     "about": "About & Privacy",
     "language": "Language",
-    "switchTo": "Tiếng Việt"
+    "switchTo": "Tiếng Việt",
+    "lessons": "Lessons"
   },
   "mode": {
     "label": "Learning mode",
@@ -277,7 +278,7 @@
       "chartLoss": "Loss — lower is better",
       "seriesTrain": "Train set",
       "seriesTest": "Test set",
-      "notSaved": "Training results are not saved yet; reloading the page loses them.",
+      "notSaved": "Each training run is recorded in the Experiment log below.",
       "stale": "Classes changed since the last training. Please train again."
     },
     "evaluate": {
@@ -306,6 +307,84 @@
       "precisionHint": "Of the images predicted as this class, the share that is correct",
       "recallHint": "Of the images that truly belong to this class, the share found",
       "na": "—"
+    },
+    "experiments": {
+      "title": "Experiment log",
+      "lead": "Every training run is recorded. Select a few to compare, like a scientist keeping lab notes.",
+      "empty": "No training runs yet.",
+      "number": "Run",
+      "time": "Time",
+      "settings": "Settings",
+      "data": "Train / Test",
+      "trainScore": "Train score",
+      "testScore": "Test score",
+      "compare": "Compare",
+      "compareLabel": "Compare run {{n}}",
+      "replay": "Re-run",
+      "replayLabel": "Re-run run {{n}}",
+      "replayHint": "Re-run with exactly these settings and seed: the result will be identical.",
+      "changed": "Data changed",
+      "changedHint": "Images or classes changed after this run, so it cannot be reproduced exactly.",
+      "delete": "Delete",
+      "deleteLabel": "Delete run {{n}}",
+      "chartTitle": "Test score per epoch for the selected runs",
+      "chartTitleTrain": "Train score per epoch for the selected runs",
+      "run": "Run {{n}}",
+      "restored": "Restored run {{n}} by re-running with the same seed {{seed}}.",
+      "replaying": "Viewing run {{n}} again.",
+      "saveError": "Could not save to the log: {{message}}",
+      "na": "—"
     }
+  },
+  "samples": {
+    "title": "Quick start with sample datasets",
+    "lead": "One click gives you a project with enough images to try the whole workflow, no webcam needed.",
+    "items": {
+      "shapes-2": {
+        "title": "Circle or square?",
+        "description": "Two simple shape classes with random colours, sizes and positions. Good for a first session."
+      },
+      "shapes-3": {
+        "title": "Circle, square, triangle",
+        "description": "Three shape classes. Use the confusion matrix to see which shapes get mixed up."
+      },
+      "background-trap": {
+        "title": "Challenge: what did the AI really learn?",
+        "description": "A dataset with a hidden trap. Train, check the Test score, then find out what happened."
+      }
+    },
+    "classes": {
+      "circle": "Circle",
+      "square": "Square",
+      "triangle": "Triangle"
+    },
+    "count": "{{images}} images · {{classes}} classes",
+    "create": "Create sample project",
+    "creating": "Drawing images {{done}}/{{total}}…",
+    "note": "Sample images are drawn by the computer from a fixed seed: no real people, no copyright issues, and the same images every time.",
+    "error": "Could not create the sample project: {{message}}"
+  },
+  "lessons": {
+    "title": "Lessons",
+    "lead": "Interactive lessons that use LUP Machine's tools directly. Each has goals, activity steps, prediction questions and a quick quiz.",
+    "onlyVietnamese": "Lesson content is currently available in Vietnamese only.",
+    "grade": "Grade {{grade}}",
+    "minutes": "{{minutes}} minutes",
+    "open": "Open lesson",
+    "back": "← All lessons",
+    "notFound": "Lesson not found.",
+    "goals": "Goals",
+    "openProject": "Create the sample project for this lesson",
+    "steps": "Steps",
+    "predict": "Predict first",
+    "reveal": "Show answer",
+    "quiz": "Quick quiz",
+    "correct": "Correct!",
+    "incorrect": "Not quite.",
+    "score": "You got {{correct}}/{{total}} right.",
+    "retry": "Try again",
+    "wrapUp": "Summary",
+    "teacherNotes": "Notes for teachers",
+    "license": "Lesson content is licensed under CC BY 4.0."
   }
 }

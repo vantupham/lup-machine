@@ -24,6 +24,8 @@ export function useTraining() {
   const generatorRef = useRef<Generator<EpochSnapshot, void, void> | null>(null);
   const timerRef = useRef<number | null>(null);
   const speedRef = useRef<TrainingSpeed>('normal');
+  const collectedRef = useRef<EpochSnapshot[]>([]);
+  const onDoneRef = useRef<((snapshots: EpochSnapshot[]) => void) | null>(null);
 
   const clearTimer = () => {
     if (timerRef.current !== null) window.clearTimeout(timerRef.current);
@@ -35,9 +37,12 @@ export function useTraining() {
     if (!next || next.done) {
       generatorRef.current = null;
       setStatus('done');
+      onDoneRef.current?.(collectedRef.current);
+      onDoneRef.current = null;
       return false;
     }
-    setSnapshots((prev) => [...prev, next.value]);
+    collectedRef.current = [...collectedRef.current, next.value];
+    setSnapshots(collectedRef.current);
     return true;
   }, []);
 
@@ -54,10 +59,17 @@ export function useTraining() {
   );
 
   const start = useCallback(
-    (data: TrainingData, options: TrainOptions, speed: TrainingSpeed) => {
+    (
+      data: TrainingData,
+      options: TrainOptions,
+      speed: TrainingSpeed,
+      onDone?: (snapshots: EpochSnapshot[]) => void,
+    ) => {
       clearTimer();
       speedRef.current = speed;
       generatorRef.current = trainSoftmax(data.train, data.test, options);
+      collectedRef.current = [];
+      onDoneRef.current = onDone ?? null;
       setSnapshots([]);
       setStatus('running');
       timerRef.current = window.setTimeout(loop, 0);

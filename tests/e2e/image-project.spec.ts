@@ -29,7 +29,7 @@ async function makeTwoColorPng(page: Page): Promise<Buffer> {
 async function createProject(page: Page, name: string): Promise<void> {
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill(name);
-  await page.getByRole('button', { name: 'Tạo dự án' }).click();
+  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
   await page.getByRole('link', { name: `Mở ${name}` }).click();
   await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
 }

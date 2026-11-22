@@ -9,7 +9,7 @@ import type { StoredImage } from '@/storage/db';
 const JPEG_QUALITY = 0.92;
 const STORED_MIME = 'image/jpeg';
 
-function createSquareCanvas(): { canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D } {
+export function createSquareCanvas(): { canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D } {
   const canvas = document.createElement('canvas');
   canvas.width = MODEL_INPUT_SIZE;
   canvas.height = MODEL_INPUT_SIZE;
@@ -18,7 +18,7 @@ function createSquareCanvas(): { canvas: HTMLCanvasElement; ctx: CanvasRendering
   return { canvas, ctx };
 }
 
-async function canvasToStoredImage(canvas: HTMLCanvasElement): Promise<StoredImage> {
+export async function canvasToStoredImage(canvas: HTMLCanvasElement): Promise<StoredImage> {
   const blob = await new Promise<Blob | null>((resolve) =>
     canvas.toBlob(resolve, STORED_MIME, JPEG_QUALITY),
   );

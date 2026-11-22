@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import i18n from '@/i18n';
 import { FEATURE_MODEL_ID } from '@/core/ml/feature-model';
@@ -63,7 +63,7 @@ async function seed({ perClass = 6, testPerClass = 2, confusingTest = false } = 
   }
 }
 
-const open = () => renderApp(`/studio/${projectId}`, repos.repository, repos.dataset);
+const open = () => renderApp(`/studio/${projectId}`, repos.repository, repos.dataset, repos.experiments);
 
 async function extractAll() {
   await userEvent.click(await screen.findByRole('button', { name: /biến ảnh thành vector \(16 ảnh/i }));
@@ -195,6 +195,75 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await trainToEnd();
     await userEvent.type(screen.getByLabelText('Tên lớp mới'), 'Kim loại{Enter}');
     expect(await screen.findByText(/các lớp đã thay đổi/i)).toBeInTheDocument();
+    expect(screen.getByText('Hãy huấn luyện ở bước ④ trước.')).toBeInTheDocument();
+  });
+
+  test('nhật ký: lưu mỗi lần huấn luyện mới, so sánh và xóa', async () => {
+    useModeStore.setState({ mode: 'expert' });
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    const log = await screen.findByRole('table', { name: 'Nhật ký thí nghiệm' });
+    expect(await within(log).findByText('#1')).toBeInTheDocument();
+
+    const epochs = screen.getByLabelText('Số epoch');
+    await userEvent.clear(epochs);
+    await userEvent.type(epochs, '3');
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện lại' }));
+    await screen.findByText('Xong 3 epoch.');
+    expect(await within(log).findByText('#2')).toBeInTheDocument();
+    expect(within(log).getByText(/3 ep · lr 0.001/)).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('checkbox', { name: 'So sánh lần 1' }));
+    await userEvent.click(screen.getByRole('checkbox', { name: 'So sánh lần 2' }));
+    expect(screen.getByRole('img', { name: /điểm kiểm tra theo epoch/i })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Xóa lần 1' }));
+    await waitFor(() => expect(within(log).queryByText('#1')).toBeNull());
+    expect(await repos.experiments.listRuns(projectId)).toHaveLength(1);
+  });
+
+  test('chạy lại một lần cũ cho đúng kết quả và không lưu trùng', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    const firstScore = screen.getByTestId('score-test').textContent;
+    await userEvent.click(await screen.findByRole('button', { name: 'Chạy lại lần 1' }));
+    expect(await screen.findByText('Đang xem lại lần 1.')).toBeInTheDocument();
+    await screen.findByText('Xong 50 epoch.', {}, { timeout: 10_000 });
+    expect(screen.getByTestId('score-test').textContent).toBe(firstScore);
+    expect(await repos.experiments.listRuns(projectId)).toHaveLength(1);
+  });
+
+  test('mở lại dự án: tự khôi phục lần chạy gần nhất bằng cùng seed', async () => {
+    await seed();
+    const view = open();
+    await extractAll();
+    await trainToEnd();
+    await waitFor(async () => expect(await repos.experiments.listRuns(projectId)).toHaveLength(1));
+    view.unmount();
+
+    open();
+    expect(await screen.findByText('Đã khôi phục lần 1 bằng cách chạy lại với cùng seed 42.')).toBeInTheDocument();
+    await screen.findByText('Xong 50 epoch.', {}, { timeout: 10_000 });
+    expect(screen.getByTestId('score-test')).toHaveTextContent('100%');
+  });
+
+  test('dữ liệu đổi sau lần chạy: không chạy lại được, không tự khôi phục', async () => {
+    await seed();
+    const view = open();
+    await extractAll();
+    await trainToEnd();
+    await waitFor(async () => expect(await repos.experiments.listRuns(projectId)).toHaveLength(1));
+    view.unmount();
+    const [first] = await repos.dataset.listSamples(projectId);
+    await repos.dataset.setSplits([{ id: first!.id, split: 'test' }]);
+
+    open();
+    expect(await screen.findByText('Dữ liệu đã thay đổi')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Chạy lại lần 1' })).toBeNull();
     expect(screen.getByText('Hãy huấn luyện ở bước ④ trước.')).toBeInTheDocument();
   });
 

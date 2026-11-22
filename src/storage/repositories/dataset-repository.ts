@@ -97,15 +97,20 @@ export function createDexieDatasetRepository(
     },
 
     async listSamples(projectId) {
-      return db.samples.where('projectId').equals(projectId).sortBy('createdAt');
+      const samples = await db.samples.where('projectId').equals(projectId).toArray();
+      return samples.sort(compareSamples);
     },
 
     async addSamples(inputs) {
       return db.transaction('rw', db.classes, db.samples, async () => {
         await assertCapacity(db, inputs);
-        const records = inputs.map(
-          (input): SampleRecord => ({ ...input, id: deps.newId(), createdAt: deps.now() }),
-        );
+        const createdAt = deps.now();
+        const nextSeq = await nextSeqByProject(db, inputs);
+        const records = inputs.map((input): SampleRecord => {
+          const seq = nextSeq.get(input.projectId) ?? 0;
+          nextSeq.set(input.projectId, seq + 1);
+          return { ...input, id: deps.newId(), createdAt, seq };
+        });
         await db.samples.bulkAdd(records);
         return records;
       });
@@ -163,6 +168,27 @@ export function createDexieDatasetRepository(
       );
     },
   };
+}
+
+/** seq tiếp theo của mỗi dự án = seq lớn nhất hiện có + 1 (tăng liên tục, không đánh lại theo lô). */
+async function nextSeqByProject(db: LupDatabase, inputs: readonly NewSampleInput[]): Promise<Map<string, number>> {
+  const result = new Map<string, number>();
+  for (const projectId of new Set(inputs.map((i) => i.projectId))) {
+    let max = -1;
+    await db.samples.where('projectId').equals(projectId).each((s) => {
+      max = Math.max(max, s.seq ?? -1);
+    });
+    result.set(projectId, max + 1);
+  }
+  return result;
+}
+
+/** Thứ tự ổn định: thời điểm thêm → số thứ tự seq → id. */
+function compareSamples(a: SampleRecord, b: SampleRecord): number {
+  if (a.createdAt !== b.createdAt) return a.createdAt < b.createdAt ? -1 : 1;
+  const bySeq = (a.seq ?? 0) - (b.seq ?? 0);
+  if (bySeq !== 0) return bySeq;
+  return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 }
 
 async function assertCapacity(db: LupDatabase, inputs: readonly NewSampleInput[]): Promise<void> {

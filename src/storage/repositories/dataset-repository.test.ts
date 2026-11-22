@@ -84,6 +84,22 @@ describe('Mẫu (sample)', () => {
     expect(new Uint8Array(samples[0]!.image.bytes)).toEqual(new Uint8Array([1, 2, 3]));
   });
 
+  test('thứ tự ảnh luôn đúng thứ tự thêm vào, kể cả khi cùng thời điểm (để kết quả tái lập giữa các máy)', async () => {
+    const fixedClock = createDexieDatasetRepository(db, {
+      now: () => '2026-11-22T00:00:00.000Z',
+      newId: () => crypto.randomUUID(),
+    });
+    const c = await fixedClock.addClass(PROJECT, 'Cùng giờ');
+    const inputs = Array.from({ length: 12 }, (_, i) => ({
+      ...sampleFor(c.id),
+      image: { ...image(), width: i + 1 },
+    }));
+    await fixedClock.addSamples(inputs);
+    await fixedClock.addSamples([{ ...sampleFor(c.id), image: { ...image(), width: 99 } }]);
+    const widths = (await fixedClock.listSamples(PROJECT)).map((s) => s.image.width);
+    expect(widths).toEqual([...Array.from({ length: 12 }, (_, i) => i + 1), 99]);
+  });
+
   test('đếm số mẫu theo lớp và theo tập', async () => {
     const a = await repo.addClass(PROJECT, 'A');
     const b = await repo.addClass(PROJECT, 'B');
