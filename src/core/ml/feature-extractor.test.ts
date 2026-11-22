@@ -4,7 +4,7 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-cpu';
 import type { RgbaImage } from '@/core/image/preprocess';
 import { createFeatureExtractor, FEATURE_DIM, type FeatureExtractor } from './feature-extractor';
-import { SPATIAL_SHAPE } from './feature-model';
+import { FEATURE_MAP_LAYERS, SPATIAL_SHAPE } from './feature-model';
 import { globalAveragePool } from './explain';
 
 const MODEL_DIR = join(process.cwd(), 'public', 'models', 'mobilenet-v2-035');
@@ -83,6 +83,26 @@ describe('Trích đặc trưng bằng MobileNetV2 (mô hình thật, backend CPU
     const pooled = globalAveragePool(spatial!, SPATIAL_SHAPE);
     pooled.forEach((v, i) => expect(v).toBeCloseTo(vector![i]!, 4));
   }, 60_000);
+
+  test('kích hoạt các tầng trung gian: kích thước giảm dần, tầng cuối trùng kích hoạt 7×7', async () => {
+    const image = stripes();
+    const names = FEATURE_MAP_LAYERS.map((l) => l.name);
+    const before = tf.memory().numTensors;
+    const layers = await extractor.extractLayers(image, names);
+    expect(layers.map((l) => l.layer)).toEqual(names);
+    expect(layers.map((l) => l.height)).toEqual([112, 56, 28, 14, 7]);
+    layers.forEach((l) => expect(l.data).toHaveLength(l.height * l.width * l.channels));
+    const [spatial] = await extractor.extractSpatial([image]);
+    const last = layers.at(-1)!;
+    last.data.forEach((v, i) => expect(v).toBeCloseTo(spatial![i]!, 4));
+    // gọi lại dùng mô hình con đã lưu đệm, không rò rỉ tensor
+    await extractor.extractLayers(image, names);
+    expect(tf.memory().numTensors).toBeLessThanOrEqual(before + 1);
+  }, 60_000);
+
+  test('từ chối tên tầng không có trong mô hình', async () => {
+    await expect(extractor.extractLayers(stripes(), ['khong_co'])).rejects.toThrow(/khong_co/);
+  });
 
   test('từ chối ảnh không đúng 224×224', async () => {
     await expect(extractor.extract([{ width: 2, height: 2, data: new Uint8ClampedArray(16) }])).rejects.toThrow(RangeError);

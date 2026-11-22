@@ -107,7 +107,12 @@
     "back": "Về trang chủ"
   },
   "footer": {
-    "privacy": "Không máy chủ · Không theo dõi · Dữ liệu ở lại trên máy"
+    "privacy": "Không máy chủ · Không theo dõi · Dữ liệu ở lại trên máy",
+    "offline": {
+      "installing": "Đang lưu sẵn ứng dụng và mô hình để dùng khi mất mạng…",
+      "ready": "✓ Đã lưu sẵn trên máy này — dùng được cả khi mất mạng",
+      "error": "Chưa lưu sẵn được để dùng khi mất mạng (ứng dụng vẫn chạy bình thường khi có mạng)"
+    }
   },
   "project": {
     "back": "← Xưởng mô hình",
@@ -379,6 +384,48 @@
       "note": "Mô hình phụ học trên 2 trục đạt {{acc2d}}% trên tập Dạy, còn mô hình chính (1.280 chiều) đạt {{accFull}}%. Chênh lệch cho thấy bản đồ 2D đã bỏ mất bao nhiêu thông tin.",
       "noteNoMain": "Mô hình phụ học trên 2 trục đạt {{acc2d}}% trên tập Dạy.",
       "needClasses": "Cần ít nhất 2 lớp có ảnh Dạy để vẽ ranh giới."
+    },
+    "occlusion": {
+      "title": "Che thử từng ô",
+      "badge": "Phép đo thật",
+      "badgeHint": "Mỗi ô là kết quả chạy lại mô hình thật trên ảnh đã bị che ô đó — không phải ước lượng.",
+      "lead": "Lần lượt che từng ô bằng màu xám rồi cho mô hình đoán lại. Ô nào che vào mà xác suất tụt mạnh thì mô hình đang dựa vào vùng đó.",
+      "run": "Đo bằng cách che từng ô ({{count}} lần)",
+      "running": "Đang chạy mô hình {{done}}/{{total}} lần…",
+      "error": "Không đo được: {{message}}",
+      "legend": "Đỏ đậm = che ô này làm xác suất giảm nhiều (vùng quan trọng). Xanh = che vào xác suất lại tăng.",
+      "summary": "Che ô hàng {{row}}, cột {{col}}: xác suất \"{{name}}\" giảm từ {{from}} xuống {{to}}.",
+      "noDrop": "Che ô nào cũng không làm xác suất \"{{name}}\" ({{prob}}) giảm — mô hình không dựa vào riêng vùng nào."
+    },
+    "featureMaps": {
+      "title": "Bên trong mạng CNN",
+      "badge": "Chính xác",
+      "badgeHint": "Mỗi ô vuông là đúng các con số mà một kênh của tầng này tính ra cho ảnh, chỉ đổi thành độ sáng (min–max theo từng kênh).",
+      "lead": "MobileNet có hơn 150 tầng. Mỗi tầng có nhiều kênh — mỗi kênh là một \"bộ lọc\" sáng lên ở nơi nó nhận ra một mẫu hình.",
+      "open": "Mở các tầng của mạng",
+      "loading": "Đang chạy mạng…",
+      "error": "Không mở được các tầng: {{message}}",
+      "layers": "Chọn tầng",
+      "layerButton": "Tầng {{n}}",
+      "shape": "{{layer}}: {{h}} × {{w}} ô × {{c}} kênh — hiển thị {{shown}} kênh hoạt động mạnh nhất",
+      "input": "Ảnh vào",
+      "channel": "Kênh {{k}}",
+      "depth": {
+        "early": "Tầng đầu (gần ảnh): ô còn nhỏ, các kênh thường phản ứng với nét, cạnh, vùng màu.",
+        "middle": "Tầng giữa: ô to hơn, các kênh phản ứng với kết cấu và bộ phận (góc, vân, đường cong).",
+        "late": "Tầng cuối: lưới 7 × 7 ô với 1280 kênh — các khái niệm trừu tượng. Lấy trung bình mỗi kênh ra chính là 1280 con số ở trên."
+      }
+    },
+    "umap": {
+      "switch": "Cách vẽ bản đồ",
+      "badge": "Xấp xỉ",
+      "badgeHint": "UMAP chỉ cố giữ quan hệ \"ai gần ai\". Khoảng cách giữa các cụm, kích thước cụm và các trục không có ý nghĩa.",
+      "lead": "UMAP sắp các ảnh sao cho ảnh nào gần nhau trong 1280 chiều thì cũng gần nhau trên bản đồ. Cụm thường rõ hơn PCA, nhưng đây là phép biến đổi phi tuyến.",
+      "loading": "Đang tính bản đồ UMAP…",
+      "error": "Không tính được UMAP: {{message}}",
+      "needMore": "Cần ít nhất {{count}} ảnh có đặc trưng để dùng UMAP.",
+      "axis": "UMAP {{n}} (không có đơn vị)",
+      "note": "UMAP với seed {{seed}}: cùng dữ liệu luôn cho cùng bản đồ. Chỉ đọc \"ai gần ai\", đừng đo khoảng cách."
     }
   },
   "samples": {

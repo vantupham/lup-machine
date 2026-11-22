@@ -107,7 +107,12 @@
     "back": "Back to home"
   },
   "footer": {
-    "privacy": "No server · No tracking · Data stays on your device"
+    "privacy": "No server · No tracking · Data stays on your device",
+    "offline": {
+      "installing": "Saving the app and model for offline use…",
+      "ready": "✓ Saved on this device — works even without internet",
+      "error": "Could not save for offline use (the app still works normally online)"
+    }
   },
   "project": {
     "back": "← Model Studio",
@@ -379,6 +384,48 @@
       "note": "The helper model on 2 axes reaches {{acc2d}}% on Train, while the main model (1,280 dimensions) reaches {{accFull}}%. The gap shows how much information the 2D map loses.",
       "noteNoMain": "The helper model on 2 axes reaches {{acc2d}}% on Train.",
       "needClasses": "At least 2 classes need Train images to draw a boundary."
+    },
+    "occlusion": {
+      "title": "Cover one cell at a time",
+      "badge": "Real measurement",
+      "badgeHint": "Each cell is the result of re-running the real model on the image with that cell covered — not an estimate.",
+      "lead": "Cover each cell in grey and let the model guess again. If covering a cell makes the probability drop sharply, the model relies on that region.",
+      "run": "Measure by covering each cell ({{count}} runs)",
+      "running": "Running the model {{done}}/{{total}} times…",
+      "error": "Could not measure: {{message}}",
+      "legend": "Deep red = covering this cell lowers the probability a lot (important region). Blue = covering it raises the probability.",
+      "summary": "Covering row {{row}}, column {{col}}: probability of \"{{name}}\" drops from {{from}} to {{to}}.",
+      "noDrop": "Covering any single cell does not lower the probability of \"{{name}}\" ({{prob}}) — the model does not rely on one region alone."
+    },
+    "featureMaps": {
+      "title": "Inside the CNN",
+      "badge": "Exact",
+      "badgeHint": "Each square shows exactly the numbers one channel of this layer computes for the image, mapped to brightness (min–max per channel).",
+      "lead": "MobileNet has over 150 layers. Each layer has many channels — each channel is a \"filter\" that lights up where it recognises a pattern.",
+      "open": "Open the network's layers",
+      "loading": "Running the network…",
+      "error": "Could not open the layers: {{message}}",
+      "layers": "Choose a layer",
+      "layerButton": "Layer {{n}}",
+      "shape": "{{layer}}: {{h}} × {{w}} cells × {{c}} channels — showing the {{shown}} most active channels",
+      "input": "Input",
+      "channel": "Channel {{k}}",
+      "depth": {
+        "early": "Early layer (close to the image): small cells; channels usually respond to strokes, edges and colour patches.",
+        "middle": "Middle layer: larger cells; channels respond to textures and parts (corners, stripes, curves).",
+        "late": "Last layer: a 7 × 7 grid with 1280 channels — abstract concepts. Averaging each channel gives exactly the 1280 numbers above."
+      }
+    },
+    "umap": {
+      "switch": "Map method",
+      "badge": "Approximate",
+      "badgeHint": "UMAP only tries to keep \"who is close to whom\". Distances between clusters, cluster sizes and the axes have no meaning.",
+      "lead": "UMAP arranges images so that images close together in 1280 dimensions stay close on the map. Clusters are often clearer than PCA, but this is a non-linear transformation.",
+      "loading": "Computing the UMAP map…",
+      "error": "Could not compute UMAP: {{message}}",
+      "needMore": "UMAP needs at least {{count}} images with features.",
+      "axis": "UMAP {{n}} (no unit)",
+      "note": "UMAP with seed {{seed}}: the same data always gives the same map. Read only \"who is close to whom\"; do not measure distances."
     }
   },
   "samples": {

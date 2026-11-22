@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ModeSwitch } from '@/ui/ModeSwitch';
+import { useOfflineStore } from '@/ui/offline';
 import { rememberLanguage, type Language } from '@/i18n';
 
 const NAV_ITEMS = [
@@ -12,6 +13,7 @@ const NAV_ITEMS = [
 
 export function Layout() {
   const { t, i18n } = useTranslation();
+  const offline = useOfflineStore((s) => s.status);
 
   const toggleLanguage = () => {
     const next: Language = i18n.language === 'vi' ? 'en' : 'vi';
@@ -73,7 +75,12 @@ export function Layout() {
       </main>
 
       <footer className="border-t border-rule py-6 text-center font-mono text-xs text-muted">
-        {t('footer.privacy')}
+        <p>{t('footer.privacy')}</p>
+        {offline !== 'off' && (
+          <p role="status" className={`mt-1 ${offline === 'error' ? 'text-warning' : offline === 'ready' ? 'text-accent' : ''}`} data-testid="offline-status">
+            {t(`footer.offline.${offline}`)}
+          </p>
+        )}
       </footer>
     </div>
   );

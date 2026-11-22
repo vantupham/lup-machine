@@ -8,6 +8,7 @@ import { createDexieDatasetRepository } from './storage/repositories/dataset-rep
 import { createDexieExperimentRepository } from './storage/repositories/experiment-repository';
 import { LupDatabase } from './storage/db';
 import { initialLanguage } from './i18n';
+import { registerServiceWorker, useOfflineStore } from './ui/offline';
 import './index.css';
 
 const rootElement = document.getElementById('root');
@@ -20,6 +21,11 @@ const repositories: Repositories = {
   dataset: createDexieDatasetRepository(db),
   experiments: createDexieExperimentRepository(db),
 };
+
+// Chạy ngoại tuyến chỉ bật ở bản build (bản dev của Vite thay đổi mã liên tục).
+if (import.meta.env.PROD) {
+  void registerServiceWorker(navigator.serviceWorker, `${import.meta.env.BASE_URL}sw.js`, useOfflineStore.getState().setStatus);
+}
 
 // HashRouter: GitHub Pages không hỗ trợ viết lại URL cho ứng dụng một trang.
 createRoot(rootElement).render(

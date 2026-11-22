@@ -3,9 +3,10 @@
  * Trọng số mô hình được đóng băng (không huấn luyện lại) — đây là "học chuyển giao".
  */
 import * as tf from '@tensorflow/tfjs-core';
-import { loadLayersModel, type LayersModel } from '@tensorflow/tfjs-layers';
+import { loadLayersModel, model as functionalModel, type LayersModel, type SymbolicTensor } from '@tensorflow/tfjs-layers';
 import { MODEL_INPUT_SIZE, rgbaToModelInput, type RgbaImage } from '@/core/image/preprocess';
 
+import type { ActivationTensor } from './feature-maps';
 import { FEATURE_DIM, FEATURE_MODEL_ID } from './feature-model';
 
 export { FEATURE_DIM, FEATURE_MODEL_ID };
@@ -16,6 +17,8 @@ export interface FeatureExtractor {
   extract(images: readonly RgbaImage[], onProgress?: (done: number) => void): Promise<Float32Array[]>;
   /** Kích hoạt 7×7×1280 trước khi lấy trung bình (dùng cho bản đồ "mô hình nhìn vào đâu"). */
   extractSpatial(images: readonly RgbaImage[]): Promise<Float32Array[]>;
+  /** Kích hoạt của các tầng trung gian (bản đồ đặc trưng) cho MỘT ảnh. */
+  extractLayers(image: RgbaImage, layerNames: readonly string[]): Promise<ActivationTensor[]>;
   dispose(): void;
 }
 
@@ -55,6 +58,35 @@ async function extractBatch(model: LayersModel, images: readonly RgbaImage[]): P
   }
 }
 
+/**
+ * Mô hình con dùng chung trọng số với mô hình gốc, có đầu ra là các tầng được yêu cầu.
+ * Không gọi dispose() riêng: trọng số thuộc về mô hình gốc.
+ */
+function buildLayerModel(model: LayersModel, layerNames: readonly string[]): LayersModel {
+  const outputs = layerNames.map((name) => {
+    const layer = model.layers.find((l) => l.name === name);
+    if (!layer) throw new Error(`Mô hình không có tầng "${name}"`);
+    return layer.output as SymbolicTensor;
+  });
+  return functionalModel({ inputs: model.inputs, outputs });
+}
+
+async function extractLayersFrom(layerModel: LayersModel, image: RgbaImage, layerNames: readonly string[]): Promise<ActivationTensor[]> {
+  const outputs = tf.tidy(() => {
+    const result = layerModel.predict(toBatchTensor([image]));
+    return (Array.isArray(result) ? result : [result]) as tf.Tensor4D[];
+  });
+  try {
+    const data = await Promise.all(outputs.map((t) => t.data() as Promise<Float32Array>));
+    return outputs.map((t, i) => {
+      const [, height, width, channels] = t.shape;
+      return { layer: layerNames[i]!, height, width, channels, data: data[i]! };
+    });
+  } finally {
+    outputs.forEach((t) => t.dispose());
+  }
+}
+
 export async function createFeatureExtractor(source: string | tf.io.IOHandler): Promise<FeatureExtractor> {
   const model = await loadLayersModel(source);
   const outputShape = model.outputs[0]?.shape;
@@ -62,6 +94,8 @@ export async function createFeatureExtractor(source: string | tf.io.IOHandler): 
     model.dispose();
     throw new Error(`Mô hình không đúng: đầu ra ${JSON.stringify(outputShape)}`);
   }
+
+  const layerModels = new Map<string, LayersModel>();
 
   return {
     modelId: FEATURE_MODEL_ID,
@@ -81,6 +115,18 @@ export async function createFeatureExtractor(source: string | tf.io.IOHandler): 
       }
       return results;
     },
-    dispose: () => model.dispose(),
+    async extractLayers(image, layerNames) {
+      const key = layerNames.join('|');
+      let layerModel = layerModels.get(key);
+      if (!layerModel) {
+        layerModel = buildLayerModel(model, layerNames);
+        layerModels.set(key, layerModel);
+      }
+      return extractLayersFrom(layerModel, image, layerNames);
+    },
+    dispose: () => {
+      layerModels.clear();
+      model.dispose();
+    },
   };
 }

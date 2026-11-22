@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { logitBreakdown } from '@/core/ml/explain';
 import { argmax } from '@/core/ml/metrics';
@@ -7,6 +8,7 @@ import { ExactBadge } from '@/ui/ExactBadge';
 import { useModeStore } from '@/ui/mode-store';
 import { CamHeatmap } from './CamHeatmap';
 import { colorFor, markerFor } from './class-style';
+import { OcclusionMap } from './OcclusionMap';
 
 const TOP_FEATURES = 5;
 
@@ -26,6 +28,8 @@ export function PredictionExplainer({ sample, vector, classes, params }: Predict
   const predicted = argmax(probs);
   const pct = (v: number) => `${(v * 100).toLocaleString(i18n.language, { maximumFractionDigits: 1 })}%`;
   const names = classes.slice(0, params.numClasses);
+  const [chosen, setChosen] = useState<number | null>(null);
+  const classIndex = chosen !== null && chosen < names.length ? chosen : predicted;
 
   return (
     <section aria-label={t('project.explain.title')} className="space-y-4 border-t border-rule pt-4" data-testid="explainer">
@@ -46,7 +50,24 @@ export function PredictionExplainer({ sample, vector, classes, params }: Predict
           ))}
         </ul>
       </div>
-      <CamHeatmap sample={sample} classes={classes} params={params} defaultClass={predicted} />
+      <div className="flex flex-wrap items-center gap-1 text-sm" role="group" aria-label={t('project.explain.heatmapFor')}>
+        <span className="text-xs text-muted">{t('project.explain.heatmapFor')}:</span>
+        {names.map((c, i) => (
+          <button
+            key={c.id}
+            type="button"
+            aria-pressed={i === classIndex}
+            onClick={() => setChosen(i)}
+            className={`rounded px-2 py-0.5 ${i === classIndex ? 'bg-ink text-paper' : 'border border-rule'}`}
+          >
+            {markerFor(i)} {c.name}
+          </button>
+        ))}
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <CamHeatmap sample={sample} params={params} classIndex={classIndex} />
+        <OcclusionMap sample={sample} params={params} classIndex={classIndex} className={names[classIndex]?.name ?? ''} />
+      </div>
       {mode === 'expert' && <CalculationPath vector={vector} params={params} logits={logits} probs={probs} classIndex={predicted} names={names} />}
     </section>
   );

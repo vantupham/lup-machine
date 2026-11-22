@@ -1,0 +1,12 @@
+{
+  "name": "LUP Machine – phòng thí nghiệm AI minh bạch",
+  "short_name": "LUP Machine",
+  "description": "Dạy và học trí tuệ nhân tạo trên trình duyệt: thấy rõ AI đã làm gì với dữ liệu của bạn. Chạy được khi mất mạng.",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5ef",
+  "theme_color": "#1b2433",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
