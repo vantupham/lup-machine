@@ -443,18 +443,40 @@
       "background-trap": {
         "title": "Thử thách: AI học nhầm điều gì?",
         "description": "Một bộ dữ liệu có cài bẫy. Huấn luyện rồi xem điểm Kiểm tra, sau đó tìm xem chuyện gì đã xảy ra."
+      },
+      "flowers-3": {
+        "title": "Hoa cúc, hướng dương hay hoa hồng?",
+        "description": "90 ảnh chụp thật: góc chụp, ánh sáng, phông nền đủ kiểu. Thấy ngay ảnh thật khác hình vẽ thế nào.",
+        "source": "Ảnh trên Flickr của nhiều tác giả, tuyển từ bộ tf_flowers của TensorFlow."
+      },
+      "beans-3": {
+        "title": "Bác sĩ lá đậu: khỏe, đốm góc hay gỉ sắt?",
+        "description": "Ảnh lá đậu chụp ngoài đồng ở Uganda để AI phát hiện bệnh cây trồng. Bài toán thật, khó hơn: các lớp trông khá giống nhau.",
+        "source": "© 2020 AIR Lab, Đại học Makerere (Uganda), bộ dữ liệu ibean."
       }
     },
     "classes": {
       "circle": "Hình tròn",
       "square": "Hình vuông",
-      "triangle": "Tam giác"
+      "triangle": "Tam giác",
+      "daisy": "Hoa cúc",
+      "sunflower": "Hướng dương",
+      "rose": "Hoa hồng",
+      "healthy": "Lá khỏe",
+      "angular-leaf-spot": "Bệnh đốm góc",
+      "bean-rust": "Bệnh gỉ sắt"
     },
     "count": "{{images}} ảnh · {{classes}} lớp",
     "create": "Tạo dự án mẫu",
     "creating": "Đang vẽ ảnh {{done}}/{{total}}…",
     "note": "Ảnh mẫu do máy vẽ ngẫu nhiên theo seed cố định: không có ảnh người thật, không vướng bản quyền, mở lại vẫn ra đúng các ảnh đó.",
-    "error": "Không tạo được dự án mẫu: {{message}}"
+    "error": "Không tạo được dự án mẫu: {{message}}",
+    "syntheticTitle": "Hình vẽ tổng hợp",
+    "photoTitle": "Ảnh thật (giấy phép mở)",
+    "photoNote": "Ảnh thật do người khác chụp và cho phép dùng lại theo giấy phép mở. Mỗi ảnh đều ghi tác giả và giấy phép (xem trong Kính hiển vi hoặc khi bấm vào ảnh trên bản đồ). Ảnh đã được cắt vuông và thu nhỏ; ảnh có người, chữ hoặc logo đã được loại bỏ khi tuyển chọn.",
+    "credits": "Ghi công từng ảnh",
+    "creditsLoading": "Đang tải danh sách…",
+    "creditsError": "Không tải được danh sách ghi công."
   },
   "lessons": {
     "title": "Bài học",
@@ -478,5 +500,9 @@
     "wrapUp": "Tổng kết",
     "teacherNotes": "Ghi chú cho giáo viên",
     "license": "Nội dung bài học phát hành theo giấy phép CC BY 4.0."
+  },
+  "credit": {
+    "photo": "Ảnh:",
+    "changed": "đã cắt vuông, thu nhỏ"
   }
 }

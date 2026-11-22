@@ -4,6 +4,21 @@
 
 ## [Chưa phát hành]
 
+### Thêm (bộ ảnh thật có giấy phép mở)
+
+- "Hoa cúc, hướng dương hay hoa hồng?": 90 ảnh Flickr (CC BY 2.0), tuyển từ tf_flowers.
+- "Bác sĩ lá đậu": 90 ảnh lá đậu chụp ngoài đồng ở Uganda (bộ ibean, MIT, AIR Lab Makerere).
+- Mỗi ảnh mang ghi công (tác giả, nguồn, giấy phép), hiển thị trong Kính hiển vi, khi bấm ảnh trên bản đồ và trong danh sách "Ghi công từng ảnh" trên thẻ.
+- Tuyển chọn tất định bằng seed; mọi ảnh đều được duyệt bằng mắt, ảnh có người, chữ, logo hoặc sai lớp bị loại (ghi trong `scripts/photo-datasets.json`); script `scripts/build-photo-datasets.py` dựng lại được.
+- Manifest được kiểm tra bằng zod: chỉ chấp nhận đường dẫn `lớp/NN.jpg`, liên kết https, đủ ghi công; tải hết ảnh trước khi tạo dự án nên lỗi mạng không để lại dự án dở dang.
+- Kiểm chứng bằng MobileNet thật (E2E): hoa đạt 88,9% điểm Kiểm tra, lá đậu 72,2% (khó hơn, đúng như mô tả trên thẻ).
+- Service worker không lưu sẵn bộ ảnh (tránh bắt mọi người tải thêm ~2,8 MB); ảnh được lưu khi dùng lần đầu, sau đó mất mạng vẫn tạo lại được dự án.
+
+### Sửa
+
+- Nút "Đo bằng cách che từng ô" và "Mở các tầng của mạng" thiếu kiểu nút.
+
+
 ### Thay đổi (hiệu năng)
 
 - MobileNet chạy trong Web Worker: giao diện không còn đứng hình khi trích đặc trưng, đo che khuất hay mở các tầng CNN. Đo bằng E2E trên Chromium: khoảng đứng hình dài nhất giảm từ ~2 000 ms xuống ~60 ms.

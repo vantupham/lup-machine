@@ -27,7 +27,7 @@ export function OcclusionMap({ sample, params, classIndex, className }: Occlusio
       </figcaption>
       <p className="max-w-md text-xs text-muted">{t('project.occlusion.lead')}</p>
       {state.status !== 'ready' && (
-        <button type="button" className="btn" onClick={run} disabled={state.status === 'running'}>
+        <button type="button" className="btn btn-ghost text-sm" onClick={run} disabled={state.status === 'running'}>
           {t('project.occlusion.run', { count: OCCLUSION_GRID * OCCLUSION_GRID })}
         </button>
       )}

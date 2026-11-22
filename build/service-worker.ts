@@ -16,6 +16,8 @@ const CACHE_PREFIX = 'lup-machine-';
 const VERSION_LENGTH = 12;
 /** Không cần khi chạy: bản đồ nguồn (gỡ lỗi, rất nặng) và tài liệu. */
 const SKIPPED_EXTENSIONS = ['.map', '.md'];
+/** Bộ ảnh mẫu (vài MB) không lưu sẵn cho mọi người: chỉ lưu khi có người dùng tới lần đầu. */
+const ON_DEMAND_PREFIX = 'datasets/';
 
 export interface PublicFile {
   readonly path: string;
@@ -32,9 +34,11 @@ export function listPublicFiles(dir: string): PublicFile[] {
     });
 }
 
-/** Danh sách tệp cần lưu sẵn: trang gốc + tệp build + tệp public, bỏ bản đồ nguồn (.map), tài liệu (.md) và chính sw.js. */
+/** Danh sách tệp cần lưu sẵn: trang gốc + tệp build + tệp public, bỏ bản đồ nguồn (.map), tài liệu (.md), bộ ảnh mẫu và chính sw.js. */
 export function precacheList(builtFiles: readonly string[], publicFiles: readonly string[]): string[] {
-  const files = [...builtFiles, ...publicFiles].filter((f) => !SKIPPED_EXTENSIONS.some((ext) => f.endsWith(ext)) && f !== SW_FILE);
+  const files = [...builtFiles, ...publicFiles].filter(
+    (f) => !SKIPPED_EXTENSIONS.some((ext) => f.endsWith(ext)) && !f.startsWith(ON_DEMAND_PREFIX) && f !== SW_FILE,
+  );
   return ['./', ...[...new Set(files)].sort()];
 }
 
@@ -75,8 +79,22 @@ self.addEventListener('fetch', (event) => {
   }
   // Mã, mô hình, ảnh: tên tệp có mã băm nên bản trong cache luôn đúng → dùng cache trước.
   // ignoreVary: thẻ <script crossorigin> gửi kèm Origin, còn bản lưu (tải lúc cài) có "Vary: Origin" → nếu không bỏ qua sẽ không khớp.
-  event.respondWith(caches.match(request, { ignoreVary: true }).then((hit) => hit || fetch(request)));
+  event.respondWith(caches.match(request, { ignoreVary: true }).then((hit) => hit || fetchAndMaybeStore(event)));
 });
+
+// Bộ ảnh mẫu: lấy từ mạng lần đầu rồi lưu lại → lần sau mất mạng vẫn tạo được dự án mẫu.
+const ON_DEMAND = new URL(${JSON.stringify(ON_DEMAND_PREFIX)}, self.registration.scope).href;
+function fetchAndMaybeStore(event) {
+  const request = event.request;
+  return fetch(request).then((response) => {
+    if (response.ok && request.url.startsWith(ON_DEMAND)) {
+      const copy = response.clone();
+      // waitUntil: giữ service worker sống tới khi ghi xong vào cache.
+      event.waitUntil(caches.open(CACHE).then((cache) => cache.put(request, copy)));
+    }
+    return response;
+  });
+}
 `;
 }
 

@@ -8,3 +8,6 @@ coverage
 Thumbs.db
 playwright-report
 test-results
+
+# Python
+__pycache__/

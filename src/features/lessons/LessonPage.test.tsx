@@ -4,6 +4,8 @@ import i18n from '@/i18n';
 import { LESSONS } from '@/content/lessons';
 import { createTestRepository, renderApp, type TestRepositories } from '../../../tests/setup/render';
 import * as renderer from '@/features/samples/render-shape.browser';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 vi.mock('@/features/samples/render-shape.browser', () => ({
   renderShape: vi.fn(async () => ({ bytes: new Uint8Array([1]).buffer, mime: 'image/jpeg', width: 224, height: 224 })),
@@ -85,11 +87,81 @@ describe('Bài học', () => {
   });
 });
 
+/** fetch giả phục vụ đúng các tệp trong public/ (manifest và ảnh JPEG thật của bộ dữ liệu). */
+function serveFromPublic(patch?: (path: string, body: Buffer) => Buffer | null) {
+  return vi.fn(async (url: string) => {
+    const path = String(url).replace(/^\/lup-machine\//, '').replace(/^\//, '');
+    const full = join(process.cwd(), 'public', path);
+    if (!existsSync(full)) return new Response('', { status: 404 });
+    const body = patch ? patch(path, readFileSync(full)) : readFileSync(full);
+    return body === null ? new Response('', { status: 404 }) : new Response(new Uint8Array(body));
+  });
+}
+
 describe('Bộ dữ liệu mẫu trong Xưởng mô hình', () => {
-  test('hiển thị 3 bộ và tạo dự án từ một bộ', async () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  test('3 bộ hình vẽ và 2 bộ ảnh thật có ghi giấy phép', async () => {
     open('/studio');
-    const panel = screen.getByRole('region', { name: /bộ dữ liệu mẫu/i });
-    expect(within(panel).getAllByRole('listitem')).toHaveLength(3);
+    expect(within(screen.getByRole('list', { name: 'Hình vẽ tổng hợp' })).getAllByRole('listitem')).toHaveLength(3);
+    const photos = screen.getByRole('list', { name: 'Ảnh thật (giấy phép mở)' });
+    expect(within(photos).getAllByRole('listitem')).toHaveLength(2);
+    expect(within(photos).getByText('CC BY 2.0')).toBeInTheDocument();
+    expect(within(photos).getByText('MIT')).toBeInTheDocument();
+  });
+
+  test('tạo dự án từ bộ ảnh thật: đủ 90 ảnh, đúng ngăn Dạy/Kiểm tra, mỗi ảnh mang ghi công', async () => {
+    vi.stubGlobal('fetch', serveFromPublic());
+    open('/studio');
+    const photos = screen.getByRole('list', { name: 'Ảnh thật (giấy phép mở)' });
+    await userEvent.click(within(photos).getAllByRole('button', { name: 'Tạo dự án mẫu' })[0]!);
+    expect(await screen.findByRole('heading', { level: 1, name: 'Hoa cúc, hướng dương hay hoa hồng?' }, { timeout: 10_000 })).toBeInTheDocument();
+    const [project] = await repos.repository.findAll();
+    const classes = await repos.dataset.listClasses(project!.id);
+    expect(classes.map((c) => c.name)).toEqual(['Hoa cúc', 'Hướng dương', 'Hoa hồng']);
+    const samples = await repos.dataset.listSamples(project!.id);
+    expect(samples).toHaveLength(90);
+    expect(samples.filter((x) => x.split === 'test')).toHaveLength(18);
+    expect(samples.every((x) => x.credit?.license === 'CC BY 2.0' && x.credit.author.length > 0)).toBe(true);
+    expect(new Uint8Array(samples[0]!.image.bytes).slice(0, 2)).toEqual(new Uint8Array([0xff, 0xd8]));
+  });
+
+  test('xem ghi công từng ảnh ngay trên thẻ (chỉ tải khi mở ra)', async () => {
+    const fetchMock = serveFromPublic();
+    vi.stubGlobal('fetch', fetchMock);
+    open('/studio');
+    const photos = screen.getByRole('list', { name: 'Ảnh thật (giấy phép mở)' });
+    expect(fetchMock).not.toHaveBeenCalled();
+    await userEvent.click(within(photos).getAllByText('Ghi công từng ảnh')[1]!);
+    const list = await within(photos).findByTestId('credits-list');
+    expect(within(list).getAllByRole('listitem')).toHaveLength(90);
+    expect(within(list).getAllByText(/AIR Lab, Makerere University/)).toHaveLength(90);
+  });
+
+  test('manifest bị sửa sai (đường dẫn lạ) hoặc thiếu ảnh: báo lỗi, không tạo dự án dở dang', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.stubGlobal('fetch', serveFromPublic((path, body) => {
+      if (path.endsWith('beans-3/manifest.json')) {
+        const m = JSON.parse(body.toString('utf8'));
+        m.images[0].file = '../../index.html';
+        return Buffer.from(JSON.stringify(m));
+      }
+      return body;
+    }));
+    open('/studio');
+    const photos = screen.getByRole('list', { name: 'Ảnh thật (giấy phép mở)' });
+    await userEvent.click(within(photos).getAllByRole('button', { name: 'Tạo dự án mẫu' })[1]!);
+    expect(await screen.findByRole('alert')).toHaveTextContent(/Không tạo được dự án mẫu/);
+
+    vi.stubGlobal('fetch', serveFromPublic((path, body) => (path.endsWith('flowers-3/rose/03.jpg') ? null : body)));
+    await userEvent.click(within(photos).getAllByRole('button', { name: 'Tạo dự án mẫu' })[0]!);
+    expect(await screen.findByText(/rose\/03\.jpg \(404\)/)).toBeInTheDocument();
+    expect(await repos.repository.findAll()).toHaveLength(0);
+  });
+
+  test('tạo dự án từ bộ hình vẽ', async () => {
+    open('/studio');
+    const panel = screen.getByRole('list', { name: 'Hình vẽ tổng hợp' });
     await userEvent.click(within(panel).getAllByRole('button', { name: 'Tạo dự án mẫu' })[0]!);
     expect(await screen.findByRole('heading', { level: 1, name: 'Tròn hay vuông?' })).toBeInTheDocument();
     await waitFor(async () => expect(await repos.repository.findAll()).toHaveLength(1));

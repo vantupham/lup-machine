@@ -23,7 +23,7 @@ export function FeatureMapViewer({ sample }: { readonly sample: SampleRecord }) 
       </div>
       <p className="text-xs text-muted">{t('project.featureMaps.lead')}</p>
       {(state.status === 'idle' || state.status === 'loading') && (
-        <button type="button" className="btn" onClick={load} disabled={state.status === 'loading'}>
+        <button type="button" className="btn btn-ghost self-start text-sm" onClick={load} disabled={state.status === 'loading'}>
           {t(state.status === 'loading' ? 'project.featureMaps.loading' : 'project.featureMaps.open')}
         </button>
       )}

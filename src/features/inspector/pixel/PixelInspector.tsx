@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MODEL_INPUT_SIZE, normalizePixelValue, readPixel, type RgbaImage } from '@/core/image/preprocess';
-import type { StoredImage } from '@/storage/db';
+import type { ImageCredit, StoredImage } from '@/storage/db';
+import { ImageCreditLine } from '@/ui/ImageCreditLine';
 import { useModeStore } from '@/ui/mode-store';
 import { Dialog } from '@/ui/Dialog';
 import { ExactBadge } from '@/ui/ExactBadge';
@@ -21,9 +22,11 @@ interface PixelInspectorProps {
   readonly title: string;
   readonly onClose: () => void;
   readonly decode: (image: StoredImage) => Promise<RgbaImage>;
+  /** Ghi công nếu ảnh lấy từ bộ dữ liệu có giấy phép mở. */
+  readonly credit?: ImageCredit | undefined;
 }
 
-export function PixelInspector({ image, title, onClose, decode }: PixelInspectorProps) {
+export function PixelInspector({ image, title, onClose, decode, credit }: PixelInspectorProps) {
   const { t, i18n } = useTranslation();
   const [state, setState] = useState<DecodeState>({ status: 'loading' });
   const [pos, setPos] = useState({ x: MODEL_INPUT_SIZE / 2, y: MODEL_INPUT_SIZE / 2 });
@@ -55,6 +58,7 @@ export function PixelInspector({ image, title, onClose, decode }: PixelInspector
         </li>
       </ol>
 
+      {credit && <div className="-mt-3 mb-4"><ImageCreditLine credit={credit} /></div>}
       {state.status === 'loading' && <p>{t('project.inspector.loading')}</p>}
       {state.status === 'error' && <p role="alert">{t('project.inspector.error')}</p>}
       {state.status === 'ready' && (
