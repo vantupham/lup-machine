@@ -47,6 +47,8 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
+  // Web Worker chạy MobileNet dùng ES module để tải động TensorFlow.js bên trong worker.
+  worker: { format: 'es' },
   build: {
     target: 'es2022',
     sourcemap: true,
