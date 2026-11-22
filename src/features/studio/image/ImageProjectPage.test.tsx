@@ -1,0 +1,235 @@
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import i18n from '@/i18n';
+import { useModeStore } from '@/ui/mode-store';
+import type { StoredImage } from '@/storage/db';
+import { createTestRepository, renderApp, type TestRepositories } from '../../../../tests/setup/render';
+import * as codec from './image-codec.browser';
+
+const FAKE_IMAGE: StoredImage = { bytes: new Uint8Array([9]).buffer, mime: 'image/jpeg', width: 224, height: 224 };
+
+vi.mock('./image-codec.browser', () => ({
+  fileToStoredImage: vi.fn(async () => FAKE_IMAGE),
+  videoFrameToStoredImage: vi.fn(async () => FAKE_IMAGE),
+  decodeStoredImage: vi.fn(async () => {
+    const data = new Uint8ClampedArray(224 * 224 * 4);
+    for (let i = 0; i < 224 * 224; i++) data.set([200, 100, 50, 255], i * 4);
+    return { width: 224, height: 224, data };
+  }),
+}));
+
+let repos: TestRepositories;
+let projectId: string;
+let classIds: string[];
+
+async function seed(trainPerClass = 0, testPerClass = 0) {
+  repos = createTestRepository();
+  const project = await repos.repository.create({ name: 'Phân loại rác', projectType: 'image' });
+  projectId = project.id;
+  const a = await repos.dataset.addClass(projectId, 'Nhựa');
+  const b = await repos.dataset.addClass(projectId, 'Giấy');
+  classIds = [a.id, b.id];
+  for (const classId of classIds) {
+    const make = (split: 'train' | 'test', n: number) =>
+      Array.from({ length: n }, () => ({ projectId, classId, split, source: 'upload' as const, image: FAKE_IMAGE }));
+    await repos.dataset.addSamples([...make('train', trainPerClass), ...make('test', testPerClass)]);
+  }
+}
+
+function openProject() {
+  return renderApp(`/studio/${projectId}`, repos.repository, repos.dataset);
+}
+
+function panel(name: string) {
+  return screen.getByRole('article', { name });
+}
+
+beforeEach(async () => {
+  await i18n.changeLanguage('vi');
+  useModeStore.setState({ mode: 'explore' });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
+describe('Trang dự án ảnh', () => {
+  test('dự án không tồn tại', async () => {
+    repos = createTestRepository();
+    renderApp('/studio/khong-co', repos.repository, repos.dataset);
+    expect(await screen.findByRole('alert')).toHaveTextContent(/không tìm thấy dự án/i);
+  });
+
+  test('hiển thị các lớp, bước quy trình và cảnh báo lớp rỗng', async () => {
+    await seed();
+    openProject();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Phân loại rác' })).toBeInTheDocument();
+    expect(panel('Nhựa')).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Các bước của dự án' })).toBeInTheDocument();
+    expect(screen.getByText('Lớp "Nhựa" chưa có ảnh Dạy nào.')).toBeInTheDocument();
+  });
+
+  test('dữ liệu đủ và cân bằng thì trợ lý báo ổn', async () => {
+    await seed(10, 2);
+    openProject();
+    expect(await screen.findByText(/dữ liệu ổn/i)).toBeInTheDocument();
+  });
+
+  test('chế độ Khám phá có gợi ý, chế độ Chuyên sâu ẩn gợi ý', async () => {
+    await seed(3, 0);
+    openProject();
+    expect(await screen.findAllByText(/chụp thêm ở nhiều góc/i)).not.toHaveLength(0);
+    useModeStore.setState({ mode: 'expert' });
+    await waitFor(() => expect(screen.queryByText(/chụp thêm ở nhiều góc/i)).toBeNull());
+  });
+
+  test('thêm lớp mới và báo lỗi khi trùng tên', async () => {
+    await seed();
+    openProject();
+    const input = await screen.findByLabelText('Tên lớp mới');
+    await userEvent.type(input, 'Kim loại{Enter}');
+    expect(await screen.findByRole('article', { name: 'Kim loại' })).toBeInTheDocument();
+    await userEvent.type(input, 'nhựa{Enter}');
+    expect(await screen.findByRole('alert')).toHaveTextContent(/đã có/i);
+  });
+
+  test('tải ảnh lên: nhận ảnh hợp lệ, báo tệp bị bỏ qua và lý do', async () => {
+    await seed();
+    openProject();
+    await screen.findByRole('article', { name: 'Nhựa' });
+    const files = [
+      new File(['a'], 'a.png', { type: 'image/png' }),
+      new File(['b'], 'b.txt', { type: 'text/plain' }),
+    ];
+    fireEvent.change(screen.getByTestId(`upload-${classIds[0]}`), { target: { files } });
+    expect(await screen.findByText(/đã thêm 1 ảnh vào lớp "nhựa".*bỏ qua 1 tệp: sai định dạng/i)).toBeInTheDocument();
+    expect(within(panel('Nhựa')).getAllByRole('listitem')).toHaveLength(1);
+  });
+
+  test('ảnh không giải mã được thì báo lỗi', async () => {
+    vi.mocked(codec.fileToStoredImage).mockRejectedValueOnce(new Error('hỏng'));
+    await seed();
+    openProject();
+    await screen.findByRole('article', { name: 'Nhựa' });
+    fireEvent.change(screen.getByTestId(`upload-${classIds[0]}`), {
+      target: { files: [new File(['x'], 'x.png', { type: 'image/png' })] },
+    });
+    expect(await screen.findByRole('alert')).toHaveTextContent(/không đọc được ảnh/i);
+  });
+
+  test('chuyển ảnh sang ngăn Kiểm tra rồi xóa ảnh', async () => {
+    await seed(1, 0);
+    openProject();
+    await userEvent.click(await within(await screen.findByRole('article', { name: 'Nhựa' })).findByRole('button', { name: /chuyển sang kiểm tra/i }));
+    await waitFor(async () => expect((await repos.dataset.countSamples(projectId))[classIds[0]!]).toEqual({ train: 0, test: 1 }));
+    await userEvent.click(within(panel('Nhựa')).getByRole('tab', { name: /kiểm tra/i }));
+    await userEvent.click(within(panel('Nhựa')).getByRole('button', { name: /xóa ảnh/i }));
+    await waitFor(async () => expect(await repos.dataset.listSamples(projectId)).toHaveLength(1));
+  });
+
+  test('tự chia Dạy / Kiểm tra theo tỉ lệ 80/20', async () => {
+    await seed(10, 0);
+    openProject();
+    await userEvent.click(await screen.findByRole('button', { name: /tự chia/i }));
+    expect(await screen.findByText('Đã chia lại: 16 ảnh Dạy, 4 ảnh Kiểm tra.')).toBeInTheDocument();
+  });
+
+  test('đổi tên lớp', async () => {
+    await seed();
+    openProject();
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Đổi tên' }));
+    const input = screen.getByLabelText('Tên lớp');
+    await userEvent.clear(input);
+    await userEvent.type(input, 'Chai nhựa{Enter}');
+    expect(await screen.findByRole('article', { name: 'Chai nhựa' })).toBeInTheDocument();
+  });
+
+  test('đổi tên trùng thì báo lỗi và giữ ô nhập', async () => {
+    await seed();
+    openProject();
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Đổi tên' }));
+    const input = screen.getByLabelText('Tên lớp');
+    await userEvent.clear(input);
+    await userEvent.type(input, 'Giấy{Enter}');
+    expect(await screen.findByRole('alert')).toHaveTextContent(/đã có/i);
+    expect(screen.getByLabelText('Tên lớp')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Hủy' }));
+    expect(screen.queryByLabelText('Tên lớp')).toBeNull();
+  });
+
+  test('xóa lớp sau khi xác nhận', async () => {
+    await seed(2, 0);
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    openProject();
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Xóa lớp' }));
+    await waitFor(() => expect(screen.queryByRole('article', { name: 'Nhựa' })).toBeNull());
+  });
+
+  test('soi ảnh: hiển thị giá trị điểm ảnh thật, chế độ Chuyên sâu có giá trị chuẩn hóa', async () => {
+    await seed(1, 0);
+    openProject();
+    await userEvent.click(await within(await screen.findByRole('article', { name: 'Nhựa' })).findByRole('button', { name: /soi ảnh/i }));
+    const dialog = await screen.findByRole('dialog', { name: /kính hiển vi/i });
+    expect(await within(dialog).findByTestId('pixel-r')).toHaveTextContent('200');
+    expect(within(dialog).getByTestId('pixel-b')).toHaveTextContent('50');
+    expect(within(dialog).getByText('Chính xác')).toBeInTheDocument();
+    expect(within(dialog).getAllByRole('gridcell')).toHaveLength(49);
+
+    useModeStore.setState({ mode: 'expert' });
+    expect(await within(dialog).findByText('→ 0,569')).toBeInTheDocument(); // 200 / 127,5 − 1
+
+    fireEvent.keyDown(within(dialog).getByRole('img'), { key: 'ArrowRight' });
+    expect(within(dialog).getByRole('heading', { name: 'Điểm ảnh (113, 112)' })).toBeInTheDocument();
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  });
+
+  test('soi ảnh lỗi giải mã', async () => {
+    vi.mocked(codec.decodeStoredImage).mockRejectedValueOnce(new Error('x'));
+    await seed(1, 0);
+    openProject();
+    await userEvent.click(await within(await screen.findByRole('article', { name: 'Nhựa' })).findByRole('button', { name: /soi ảnh/i }));
+    expect(await screen.findByText('Không đọc được ảnh này.')).toBeInTheDocument();
+  });
+});
+
+describe('Thu ảnh bằng webcam', () => {
+  test('chụp ảnh, lưu vào lớp và tắt camera khi xong', async () => {
+    const stop = vi.fn();
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: { getUserMedia: vi.fn(async () => ({ getTracks: () => [{ stop }] })) },
+    });
+    await seed();
+    openProject();
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Webcam' }));
+    const dialog = await screen.findByRole('dialog');
+    const snap = within(dialog).getByRole('button', { name: 'Chụp 1 ảnh' });
+    await waitFor(() => expect(snap).toBeEnabled());
+    await userEvent.click(snap);
+    expect(await within(dialog).findByText('Đã chụp 1 ảnh')).toBeInTheDocument();
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Xong' }));
+    expect(await screen.findByText(/đã thêm 1 ảnh vào lớp "nhựa"/i)).toBeInTheDocument();
+    expect(stop).toHaveBeenCalled();
+  });
+
+  test('báo lỗi thân thiện khi chưa cấp quyền camera', async () => {
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: { getUserMedia: vi.fn(async () => Promise.reject(new DOMException('no', 'NotAllowedError'))) },
+    });
+    await seed();
+    openProject();
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Webcam' }));
+    expect(await screen.findByText(/chưa cho phép dùng camera/i)).toBeInTheDocument();
+  });
+
+  test('trình duyệt không hỗ trợ camera', async () => {
+    Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: undefined });
+    await seed();
+    openProject();
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Webcam' }));
+    expect(await screen.findByText(/không tìm thấy camera/i)).toBeInTheDocument();
+  });
+});

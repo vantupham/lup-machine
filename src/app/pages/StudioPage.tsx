@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useProjectRepository } from '@/storage/repository-context';
+import { Link } from 'react-router-dom';
+import { useDatasetRepository, useProjectRepository } from '@/storage/repository-context';
 import type { ProjectRecord } from '@/storage/db';
 import { PROJECT_TYPES } from '@/storage/schemas/manifest';
 import { projectNameSchema, type ProjectType } from '@/storage/schemas/project';
@@ -52,8 +53,8 @@ export function StudioPage() {
   return (
     <div className="space-y-10">
       <header>
-        <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold">{t('studio.title')}</h1>
-        <p className="mt-2 max-w-2xl text-[var(--color-muted)]">{t('studio.lead')}</p>
+        <h1 className="font-display text-4xl font-bold">{t('studio.title')}</h1>
+        <p className="mt-2 max-w-2xl text-muted">{t('studio.lead')}</p>
       </header>
 
       <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
@@ -63,12 +64,12 @@ export function StudioPage() {
             {t('studio.listTitle')}
           </h2>
           {state.status === 'error' && (
-            <p role="alert" className="rounded border border-[var(--color-danger)] p-3 text-[var(--color-danger)]">
+            <p role="alert" className="rounded border border-danger p-3 text-danger">
               {t('studio.loadError')}
             </p>
           )}
           {state.status === 'ready' && state.projects.length === 0 && (
-            <p className="rounded border border-dashed border-[var(--color-rule)] p-6 text-[var(--color-muted)]">
+            <p className="rounded border border-dashed border-rule p-6 text-muted">
               {t('studio.empty')}
             </p>
           )}
@@ -92,6 +93,7 @@ interface NewProjectFormProps {
 function NewProjectForm({ onCreated }: NewProjectFormProps) {
   const { t } = useTranslation();
   const repository = useProjectRepository();
+  const dataset = useDatasetRepository();
   const [name, setName] = useState('');
   const [projectType, setProjectType] = useState<ProjectType>('image');
   const [isSaving, setIsSaving] = useState(false);
@@ -106,7 +108,9 @@ function NewProjectForm({ onCreated }: NewProjectFormProps) {
     setIsSaving(true);
     setError(null);
     try {
-      await repository.create({ name, projectType });
+      const project = await repository.create({ name, projectType });
+      await dataset.addClass(project.id, t('project.defaultClass', { n: 1 }));
+      await dataset.addClass(project.id, t('project.defaultClass', { n: 2 }));
       setName('');
       await onCreated();
     } catch (err: unknown) {
@@ -129,7 +133,7 @@ function NewProjectForm({ onCreated }: NewProjectFormProps) {
           onChange={(e) => setName(e.target.value)}
           placeholder={t('studio.namePlaceholder')}
           maxLength={100}
-          className="w-full rounded border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2"
+          className="w-full rounded border border-rule bg-paper px-3 py-2"
         />
       </div>
       <fieldset>
@@ -141,7 +145,7 @@ function NewProjectForm({ onCreated }: NewProjectFormProps) {
               <label
                 key={type}
                 className={`flex items-center gap-2 rounded border px-3 py-2 text-sm ${
-                  projectType === type ? 'border-[var(--color-primary)]' : 'border-[var(--color-rule)]'
+                  projectType === type ? 'border-primary' : 'border-rule'
                 } ${isAvailable ? 'cursor-pointer' : 'opacity-50'}`}
               >
                 <input
@@ -160,7 +164,7 @@ function NewProjectForm({ onCreated }: NewProjectFormProps) {
         </div>
       </fieldset>
       {error && (
-        <p role="alert" className="text-sm text-[var(--color-danger)]">
+        <p role="alert" className="text-sm text-danger">
           {error}
         </p>
       )}
@@ -183,20 +187,29 @@ function ProjectCard({ project, onDelete }: ProjectCardProps) {
   return (
     <li className="lab-card lab-card-interactive flex flex-col gap-3 p-4">
       <div>
-        <span className="font-[family-name:var(--font-mono)] text-xs uppercase text-[var(--color-accent)]">
+        <span className="font-mono text-xs uppercase text-accent">
           {t(`studio.types.${project.projectType}`)}
         </span>
         <p className="text-lg font-semibold">{project.name}</p>
-        <p className="text-xs text-[var(--color-muted)]">{t('studio.updatedAt', { date })}</p>
+        <p className="text-xs text-muted">{t('studio.updatedAt', { date })}</p>
       </div>
-      <button
-        type="button"
-        onClick={() => void onDelete(project)}
-        aria-label={`${t('studio.delete')} ${project.name}`}
-        className="btn btn-ghost mt-auto self-start px-3 py-1 text-sm"
-      >
-        {t('studio.delete')}
-      </button>
+      <div className="mt-auto flex gap-2">
+        <Link
+          to={`/studio/${project.id}`}
+          aria-label={`${t('studio.open')} ${project.name}`}
+          className="btn btn-primary px-3 py-1 text-sm"
+        >
+          {t('studio.open')} →
+        </Link>
+        <button
+          type="button"
+          onClick={() => void onDelete(project)}
+          aria-label={`${t('studio.delete')} ${project.name}`}
+          className="btn btn-ghost px-3 py-1 text-sm"
+        >
+          {t('studio.delete')}
+        </button>
+      </div>
     </li>
   );
 }

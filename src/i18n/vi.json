@@ -77,7 +77,8 @@
     "confirmDelete": "Xóa dự án \"{{name}}\"? Không thể hoàn tác.",
     "loadError": "Không đọc được dữ liệu đã lưu trên trình duyệt. Có thể trình duyệt đang ở chế độ ẩn danh hoặc đã chặn lưu trữ.",
     "saveError": "Không lưu được dự án: {{message}}",
-    "nameRequired": "Hãy đặt tên cho dự án (1–100 ký tự)."
+    "nameRequired": "Hãy đặt tên cho dự án (1–100 ký tự).",
+    "open": "Mở"
   },
   "about": {
     "title": "Giới thiệu & Quyền riêng tư",
@@ -106,5 +107,123 @@
   },
   "footer": {
     "privacy": "Không máy chủ · Không theo dõi · Dữ liệu ở lại trên máy"
+  },
+  "project": {
+    "back": "← Xưởng mô hình",
+    "notFound": "Không tìm thấy dự án này trên máy.",
+    "loadError": "Không đọc được dữ liệu dự án.",
+    "steps": {
+      "label": "Các bước của dự án",
+      "data": "Dữ liệu",
+      "check": "Kiểm tra dữ liệu",
+      "represent": "Biểu diễn",
+      "train": "Huấn luyện",
+      "evaluate": "Đánh giá",
+      "use": "Sử dụng",
+      "soon": "sắp có"
+    },
+    "data": {
+      "title": "① Dữ liệu",
+      "lead": "Mỗi lớp là một nhóm em muốn máy phân biệt. Ảnh ở ngăn Dạy dùng để học, ảnh ở ngăn Kiểm tra được giấu đi để chấm điểm công bằng.",
+      "addClass": "Thêm lớp",
+      "newClassPlaceholder": "Tên lớp mới, ví dụ: Giấy",
+      "newClassLabel": "Tên lớp mới",
+      "autoSplit": "Tự chia Dạy / Kiểm tra (80/20)",
+      "autoSplitDone": "Đã chia lại: {{train}} ảnh Dạy, {{test}} ảnh Kiểm tra.",
+      "autoSplitHint": "Chia ngẫu nhiên nhưng có seed cố định ({{seed}}) nên lần sau chia lại vẫn ra đúng kết quả này.",
+      "actionError": "Có lỗi: {{message}}"
+    },
+    "class": {
+      "train": "Dạy",
+      "test": "Kiểm tra",
+      "upload": "Tải ảnh lên",
+      "webcam": "Webcam",
+      "rename": "Đổi tên",
+      "renameLabel": "Tên lớp",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "delete": "Xóa lớp",
+      "confirmDelete": "Xóa lớp \"{{name}}\" và toàn bộ {{count}} ảnh của lớp? Không thể hoàn tác.",
+      "empty": "Chưa có ảnh ở ngăn này.",
+      "inspect": "Soi ảnh",
+      "moveToTest": "Chuyển sang Kiểm tra",
+      "moveToTrain": "Chuyển sang Dạy",
+      "deleteSample": "Xóa ảnh",
+      "count": "{{train}} Dạy · {{test}} Kiểm tra",
+      "sample": "Ảnh {{n}}"
+    },
+    "upload": {
+      "processing": "Đang xử lý {{done}}/{{total}} ảnh…",
+      "added": "Đã thêm {{count}} ảnh vào lớp \"{{name}}\" (ngăn {{split}}).",
+      "skipped": "Bỏ qua {{count}} tệp: {{reasons}}.",
+      "reasons": {
+        "unsupported-type": "sai định dạng",
+        "too-large": "quá 10 MB",
+        "empty": "tệp rỗng",
+        "too-many": "quá 100 tệp mỗi lần",
+        "decode": "không đọc được ảnh"
+      }
+    },
+    "webcam": {
+      "title": "Thu ảnh bằng webcam · lớp \"{{name}}\"",
+      "hold": "Giữ để chụp liên tục",
+      "snap": "Chụp 1 ảnh",
+      "done": "Xong",
+      "captured": "Đã chụp {{count}} ảnh",
+      "starting": "Đang bật camera…",
+      "denied": "Em chưa cho phép dùng camera. Hãy bấm biểu tượng ổ khóa trên thanh địa chỉ để cho phép, rồi thử lại.",
+      "unavailable": "Không tìm thấy camera, hoặc trình duyệt không hỗ trợ. Em có thể dùng \"Tải ảnh lên\".",
+      "privacy": "Hình ảnh chỉ được xử lý trên máy này.",
+      "full": "Lớp này đã đủ {{max}} ảnh."
+    },
+    "quality": {
+      "title": "② Kiểm tra dữ liệu",
+      "lead": "Trợ lý soát dữ liệu Dạy trước khi huấn luyện.",
+      "ok": "Dữ liệu ổn. Có thể sang bước huấn luyện.",
+      "chartLabel": "Số ảnh mỗi lớp",
+      "issues": {
+        "too-few-classes": "Cần ít nhất 2 lớp thì máy mới có cái để phân biệt.",
+        "empty-class": "Lớp \"{{label}}\" chưa có ảnh Dạy nào.",
+        "too-few-samples": "Lớp \"{{label}}\" mới có {{count}} ảnh Dạy. Nên có ít nhất {{minimum}} ảnh.",
+        "class-imbalance": "Lớp \"{{largest}}\" có nhiều ảnh gấp {{ratio}} lần lớp \"{{smallest}}\". Mô hình sẽ dễ thiên về lớp nhiều ảnh.",
+        "no-test-samples": "Lớp \"{{label}}\" chưa có ảnh Kiểm tra, nên không chấm điểm được lớp này."
+      },
+      "tips": {
+        "too-few-classes": "Thêm một lớp nữa, ví dụ \"Không có gì\".",
+        "empty-class": "Tải ảnh lên hoặc chụp bằng webcam.",
+        "too-few-samples": "Chụp thêm ở nhiều góc, nhiều ánh sáng khác nhau.",
+        "class-imbalance": "Thêm ảnh cho lớp ít, hoặc bớt ảnh ở lớp nhiều.",
+        "no-test-samples": "Bấm \"Tự chia Dạy / Kiểm tra\" hoặc chuyển vài ảnh sang ngăn Kiểm tra."
+      }
+    },
+    "inspector": {
+      "title": "Kính hiển vi · Máy tính nhìn thấy gì?",
+      "close": "Đóng",
+      "exact": "Chính xác",
+      "exactHint": "Đây đúng là những con số mô hình nhận được.",
+      "loading": "Đang giải mã ảnh…",
+      "error": "Không đọc được ảnh này.",
+      "pipeline": [
+        "Ảnh gốc",
+        "Cắt vuông ở giữa",
+        "Thu về 224 × 224",
+        "Bảng số RGB",
+        "Chuẩn hóa về [−1, 1]"
+      ],
+      "imageLabel": "Ảnh 224 × 224 điểm. Bấm hoặc dùng phím mũi tên để chọn điểm ảnh.",
+      "total": "Cả ảnh là 224 × 224 × 3 = {{count}} con số.",
+      "pixel": "Điểm ảnh ({{x}}, {{y}})",
+      "channels": {
+        "r": "Đỏ",
+        "g": "Xanh lá",
+        "b": "Xanh dương"
+      },
+      "neighborhood": "Vùng 7 × 7 điểm quanh điểm đang chọn",
+      "normalized": "Mô hình nhận (sau chuẩn hóa)",
+      "formula": "giá trị / 127,5 − 1",
+      "howTitle": "Hình này được tạo thế nào?",
+      "howBody": "Khi em thêm ảnh, trang web cắt hình vuông lớn nhất ở giữa, thu nhỏ về 224 × 224 điểm và lưu lại. Các con số ở đây được đọc trực tiếp từ ảnh đã lưu đó, tức là đúng dữ liệu đưa vào mô hình MobileNetV2. Bước chuẩn hóa dùng công thức v / 127,5 − 1, giống hệt lúc mô hình được huấn luyện gốc."
+    },
+    "defaultClass": "Lớp {{n}}"
   }
 }

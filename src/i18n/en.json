@@ -77,7 +77,8 @@
     "confirmDelete": "Delete project \"{{name}}\"? This cannot be undone.",
     "loadError": "Could not read saved data. The browser may be in private mode or blocking storage.",
     "saveError": "Could not save the project: {{message}}",
-    "nameRequired": "Please name your project (1–100 characters)."
+    "nameRequired": "Please name your project (1–100 characters).",
+    "open": "Open"
   },
   "about": {
     "title": "About & Privacy",
@@ -106,5 +107,123 @@
   },
   "footer": {
     "privacy": "No server · No tracking · Data stays on your device"
+  },
+  "project": {
+    "back": "← Model Studio",
+    "notFound": "This project was not found on this device.",
+    "loadError": "Could not read project data.",
+    "steps": {
+      "label": "Project steps",
+      "data": "Data",
+      "check": "Check data",
+      "represent": "Represent",
+      "train": "Train",
+      "evaluate": "Evaluate",
+      "use": "Use",
+      "soon": "soon"
+    },
+    "data": {
+      "title": "① Data",
+      "lead": "Each class is a group you want the machine to tell apart. Train images are used for learning; Test images are held back for fair scoring.",
+      "addClass": "Add class",
+      "newClassPlaceholder": "New class name, e.g. Paper",
+      "newClassLabel": "New class name",
+      "autoSplit": "Auto-split Train / Test (80/20)",
+      "autoSplitDone": "Re-split: {{train}} Train images, {{test}} Test images.",
+      "autoSplitHint": "Random but with a fixed seed ({{seed}}), so splitting again gives exactly the same result.",
+      "actionError": "Error: {{message}}"
+    },
+    "class": {
+      "train": "Train",
+      "test": "Test",
+      "upload": "Upload images",
+      "webcam": "Webcam",
+      "rename": "Rename",
+      "renameLabel": "Class name",
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete class",
+      "confirmDelete": "Delete class \"{{name}}\" and all its {{count}} images? This cannot be undone.",
+      "empty": "No images in this set yet.",
+      "inspect": "Inspect image",
+      "moveToTest": "Move to Test",
+      "moveToTrain": "Move to Train",
+      "deleteSample": "Delete image",
+      "count": "{{train}} Train · {{test}} Test",
+      "sample": "Image {{n}}"
+    },
+    "upload": {
+      "processing": "Processing {{done}}/{{total}} images…",
+      "added": "Added {{count}} images to \"{{name}}\" ({{split}} set).",
+      "skipped": "Skipped {{count}} files: {{reasons}}.",
+      "reasons": {
+        "unsupported-type": "unsupported format",
+        "too-large": "over 10 MB",
+        "empty": "empty file",
+        "too-many": "over 100 files at once",
+        "decode": "unreadable image"
+      }
+    },
+    "webcam": {
+      "title": "Capture with webcam · class \"{{name}}\"",
+      "hold": "Hold to record",
+      "snap": "Take 1 photo",
+      "done": "Done",
+      "captured": "Captured {{count}} images",
+      "starting": "Starting camera…",
+      "denied": "Camera permission was not granted. Click the lock icon in the address bar to allow it, then try again.",
+      "unavailable": "No camera found or not supported. You can use \"Upload images\" instead.",
+      "privacy": "Images are processed only on this device.",
+      "full": "This class already has {{max}} images."
+    },
+    "quality": {
+      "title": "② Check data",
+      "lead": "The assistant reviews the Train data before training.",
+      "ok": "Data looks good. Ready for training.",
+      "chartLabel": "Images per class",
+      "issues": {
+        "too-few-classes": "You need at least 2 classes for the machine to tell something apart.",
+        "empty-class": "Class \"{{label}}\" has no Train images yet.",
+        "too-few-samples": "Class \"{{label}}\" has only {{count}} Train images. Aim for at least {{minimum}}.",
+        "class-imbalance": "Class \"{{largest}}\" has {{ratio}}× more images than \"{{smallest}}\". The model may favour the larger class.",
+        "no-test-samples": "Class \"{{label}}\" has no Test images, so it cannot be scored."
+      },
+      "tips": {
+        "too-few-classes": "Add another class, e.g. \"Nothing\".",
+        "empty-class": "Upload images or capture with the webcam.",
+        "too-few-samples": "Capture more from different angles and lighting.",
+        "class-imbalance": "Add images to the smaller class or remove some from the larger one.",
+        "no-test-samples": "Press \"Auto-split\" or move a few images to Test."
+      }
+    },
+    "inspector": {
+      "title": "Microscope · What does the computer see?",
+      "close": "Close",
+      "exact": "Exact",
+      "exactHint": "These are exactly the numbers the model receives.",
+      "loading": "Decoding image…",
+      "error": "Could not read this image.",
+      "pipeline": [
+        "Original",
+        "Centre square crop",
+        "Resize to 224 × 224",
+        "Grid of RGB numbers",
+        "Normalise to [−1, 1]"
+      ],
+      "imageLabel": "224 × 224 image. Click or use arrow keys to pick a pixel.",
+      "total": "The whole image is 224 × 224 × 3 = {{count}} numbers.",
+      "pixel": "Pixel ({{x}}, {{y}})",
+      "channels": {
+        "r": "Red",
+        "g": "Green",
+        "b": "Blue"
+      },
+      "neighborhood": "7 × 7 pixels around the selected one",
+      "normalized": "Model receives (normalised)",
+      "formula": "value / 127.5 − 1",
+      "howTitle": "How was this made?",
+      "howBody": "When you add an image, the site crops the largest centred square, resizes it to 224 × 224 pixels and stores it. The numbers here are read directly from that stored image, which is exactly what goes into MobileNetV2. Normalisation uses v / 127.5 − 1, identical to the original training of the model."
+    },
+    "defaultClass": "Class {{n}}"
   }
 }

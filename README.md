@@ -27,7 +27,13 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 - [x] Trang Quyền riêng tư, nút xóa toàn bộ dữ liệu (cho máy dùng chung)
 - [x] CI/CD: lint, kiểm tra kiểu, kiểm thử (độ phủ ≥ 80%), tự động triển khai lên GitHub Pages
 
-Tiếp theo (Giai đoạn 1 – MVP): Studio Ảnh 6 bước với Kính hiển vi (xem điểm ảnh, vector đặc trưng, bản đồ PCA, giải thích bằng ví dụ, huấn luyện chậm có phát lại, ma trận nhầm lẫn bấm được). Xem [lộ trình đầy đủ](docs/ke-hoach/Phuong-an-xay-dung-website.md#10-lộ-trình-phát-triển).
+**Giai đoạn 1 – Studio Ảnh (đang làm).** Đã có:
+
+- [x] Thu ảnh bằng tải tệp và webcam; mỗi lớp có ngăn Dạy / Kiểm tra; tự chia 80/20 có seed
+- [x] Trợ lý kiểm tra dữ liệu hiển thị trực tiếp, có gợi ý sửa
+- [x] Kính hiển vi điểm ảnh: giá trị RGB thật và giá trị sau chuẩn hóa mà mô hình nhận
+- [ ] Biểu diễn: trích đặc trưng MobileNetV2, bản đồ dữ liệu 2D (PCA)
+- [ ] Huấn luyện chậm có phát lại, đánh giá trên tập Kiểm tra, ma trận nhầm lẫn bấm được Xem [lộ trình đầy đủ](docs/ke-hoach/Phuong-an-xay-dung-website.md#10-lộ-trình-phát-triển).
 
 ## Yêu cầu
 

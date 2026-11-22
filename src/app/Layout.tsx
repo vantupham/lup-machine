@@ -20,13 +20,13 @@ export function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-[var(--color-rule)] bg-[var(--color-surface)]/90 backdrop-blur">
+      <header className="border-b border-rule bg-surface/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
           <NavLink to="/" className="group flex items-baseline gap-2">
-            <span className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight">
-              LUP<span className="text-[var(--color-primary)]">·</span>Machine
+            <span className="font-display text-2xl font-bold tracking-tight">
+              LUP<span className="text-primary">·</span>Machine
             </span>
-            <span className="hidden text-xs uppercase tracking-[0.18em] text-[var(--color-muted)] sm:inline">
+            <span className="hidden text-xs uppercase tracking-[0.18em] text-muted sm:inline">
               {t('app.tagline')}
             </span>
           </NavLink>
@@ -41,8 +41,8 @@ export function Layout() {
                     className={({ isActive }) =>
                       `block whitespace-nowrap rounded px-3 py-1.5 text-sm font-medium transition-colors ${
                         isActive
-                          ? 'bg-[var(--color-ink)] text-[var(--color-paper)]'
-                          : 'hover:bg-[var(--color-rule)]/60'
+                          ? 'bg-ink text-paper'
+                          : 'hover:bg-rule/60'
                       }`
                     }
                   >
@@ -71,7 +71,7 @@ export function Layout() {
         <Outlet />
       </main>
 
-      <footer className="border-t border-[var(--color-rule)] py-6 text-center font-[family-name:var(--font-mono)] text-xs text-[var(--color-muted)]">
+      <footer className="border-t border-rule py-6 text-center font-mono text-xs text-muted">
         {t('footer.privacy')}
       </footer>
     </div>

@@ -28,13 +28,13 @@ export function AboutPage() {
 
   return (
     <article className="mx-auto max-w-3xl space-y-12">
-      <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold">{t('about.title')}</h1>
+      <h1 className="font-display text-4xl font-bold">{t('about.title')}</h1>
 
       <section aria-labelledby="what-title">
         <h2 id="what-title" className="mb-2 text-xl font-semibold">
           {t('about.whatTitle')}
         </h2>
-        <p className="leading-relaxed text-[var(--color-muted)]">{t('about.whatBody')}</p>
+        <p className="leading-relaxed text-muted">{t('about.whatBody')}</p>
       </section>
 
       <section aria-labelledby="privacy-title" className="lab-card p-6">
@@ -44,7 +44,7 @@ export function AboutPage() {
         <ul className="space-y-3">
           {privacyItems.map((item) => (
             <li key={item} className="flex gap-3 leading-relaxed">
-              <span aria-hidden="true" className="text-[var(--color-accent)]">
+              <span aria-hidden="true" className="text-accent">
                 ✓
               </span>
               {item}
@@ -53,21 +53,21 @@ export function AboutPage() {
         </ul>
       </section>
 
-      <section aria-labelledby="shared-title" className="border-l-4 border-[var(--color-warning)] pl-5">
+      <section aria-labelledby="shared-title" className="border-l-4 border-warning pl-5">
         <h2 id="shared-title" className="mb-2 text-xl font-semibold">
           {t('about.sharedTitle')}
         </h2>
-        <p className="mb-4 text-[var(--color-muted)]">{t('about.sharedBody')}</p>
+        <p className="mb-4 text-muted">{t('about.sharedBody')}</p>
         <button type="button" onClick={() => void handleDeleteAll()} className="btn btn-danger">
           {t('about.deleteAll')}
         </button>
         {deleteState.status === 'done' && (
-          <p role="status" className="mt-3 text-sm text-[var(--color-accent)]">
+          <p role="status" className="mt-3 text-sm text-accent">
             {t('about.deletedAll')}
           </p>
         )}
         {deleteState.status === 'error' && (
-          <p role="alert" className="mt-3 text-sm text-[var(--color-danger)]">
+          <p role="alert" className="mt-3 text-sm text-danger">
             {t('about.deleteError', { message: deleteState.message })}
           </p>
         )}
@@ -77,8 +77,8 @@ export function AboutPage() {
         <h2 id="license-title" className="mb-2 text-xl font-semibold">
           {t('about.licenseTitle')}
         </h2>
-        <p className="mb-3 text-[var(--color-muted)]">{t('about.licenseBody')}</p>
-        <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className="text-[var(--color-primary)] underline">
+        <p className="mb-3 text-muted">{t('about.licenseBody')}</p>
+        <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className="text-primary underline">
           {t('about.sourceCode')} ↗
         </a>
       </section>

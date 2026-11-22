@@ -1,23 +1,43 @@
 import { render, type RenderResult } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { AppRoutes } from '@/app/AppRoutes';
-import { ProjectRepositoryProvider } from '@/storage/repository-context';
-import type { ProjectRepository } from '@/storage/repositories/project-repository';
-import { createDexieProjectRepository } from '@/storage/repositories/project-repository';
+import { RepositoriesProvider } from '@/storage/repository-context';
+import {
+  createDexieProjectRepository,
+  type ProjectRepository,
+} from '@/storage/repositories/project-repository';
+import {
+  createDexieDatasetRepository,
+  type DatasetRepository,
+} from '@/storage/repositories/dataset-repository';
 import { LupDatabase } from '@/storage/db';
 import '@/i18n';
 
-export function createTestRepository(): { repository: ProjectRepository; db: LupDatabase } {
-  const db = new LupDatabase(`ui-test-${crypto.randomUUID()}`);
-  return { db, repository: createDexieProjectRepository(db) };
+export interface TestRepositories {
+  readonly db: LupDatabase;
+  readonly repository: ProjectRepository;
+  readonly dataset: DatasetRepository;
 }
 
-export function renderApp(route: string, repository: ProjectRepository): RenderResult {
+export function createTestRepository(): TestRepositories {
+  const db = new LupDatabase(`ui-test-${crypto.randomUUID()}`);
+  return {
+    db,
+    repository: createDexieProjectRepository(db),
+    dataset: createDexieDatasetRepository(db),
+  };
+}
+
+export function renderApp(
+  route: string,
+  repository: ProjectRepository,
+  dataset: DatasetRepository = createTestRepository().dataset,
+): RenderResult {
   return render(
-    <ProjectRepositoryProvider repository={repository}>
+    <RepositoriesProvider repositories={{ projects: repository, dataset }}>
       <MemoryRouter initialEntries={[route]}>
         <AppRoutes />
       </MemoryRouter>
-    </ProjectRepositoryProvider>,
+    </RepositoriesProvider>,
   );
 }

@@ -68,11 +68,17 @@ export function createDexieProjectRepository(
     },
 
     async delete(id) {
-      await db.projects.delete(id);
+      await db.transaction('rw', db.projects, db.classes, db.samples, async () => {
+        await db.samples.where('projectId').equals(id).delete();
+        await db.classes.where('projectId').equals(id).delete();
+        await db.projects.delete(id);
+      });
     },
 
     async deleteAll() {
-      await db.projects.clear();
+      await db.transaction('rw', db.projects, db.classes, db.samples, async () => {
+        await Promise.all([db.samples.clear(), db.classes.clear(), db.projects.clear()]);
+      });
     },
   };
 }

@@ -61,6 +61,30 @@ describe('ProjectRepository', () => {
     await expect(repo.update('khong-co', { name: 'X' })).rejects.toThrow(/không tìm thấy/i);
   });
 
+  test('xóa dự án thì xóa luôn lớp và ảnh của dự án đó (không để sót dữ liệu)', async () => {
+    const keep = await repo.create({ name: 'Giữ', projectType: 'image' });
+    const drop = await repo.create({ name: 'Xóa', projectType: 'image' });
+    const image = { bytes: new ArrayBuffer(1), mime: 'image/jpeg', width: 224, height: 224 };
+    const base = { order: 0, createdAt: 'x' };
+    await db.classes.bulkAdd([
+      { id: 'c-keep', projectId: keep.id, name: 'A', ...base },
+      { id: 'c-drop', projectId: drop.id, name: 'A', ...base },
+    ]);
+    const sample = { split: 'train', source: 'upload', image, createdAt: 'x' } as const;
+    await db.samples.bulkAdd([
+      { id: 's-keep', projectId: keep.id, classId: 'c-keep', ...sample },
+      { id: 's-drop', projectId: drop.id, classId: 'c-drop', ...sample },
+    ]);
+
+    await repo.delete(drop.id);
+    expect((await db.classes.toArray()).map((c) => c.id)).toEqual(['c-keep']);
+    expect((await db.samples.toArray()).map((s) => s.id)).toEqual(['s-keep']);
+
+    await repo.deleteAll();
+    expect(await db.classes.count()).toBe(0);
+    expect(await db.samples.count()).toBe(0);
+  });
+
   test('delete và deleteAll', async () => {
     const a = await repo.create({ name: 'A', projectType: 'image' });
     await repo.create({ name: 'B', projectType: 'image' });

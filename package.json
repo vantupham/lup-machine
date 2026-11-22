@@ -21,9 +21,14 @@
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@tensorflow/tfjs-backend-cpu": "4.22.0",
+    "@tensorflow/tfjs-backend-webgl": "4.22.0",
+    "@tensorflow/tfjs-core": "4.22.0",
+    "@tensorflow/tfjs-layers": "4.22.0",
     "dexie": "4.4.7",
     "i18next": "27.2.3",
     "react": "19.3.1",
@@ -35,6 +40,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",
+    "@playwright/test": "1.65.1",
     "@tailwindcss/vite": "4.3.5",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.3",

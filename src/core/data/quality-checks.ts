@@ -32,6 +32,21 @@ export type QualityIssue =
       readonly ratio: number;
     };
 
+export interface TestCoverageIssue {
+  readonly code: 'no-test-samples';
+  readonly severity: 'warning';
+  readonly label: string;
+}
+
+/** Lớp có ảnh Dạy nhưng không có ảnh Kiểm tra thì không thể đánh giá khách quan. */
+export function checkTestCoverage(
+  counts: Readonly<Record<string, { readonly train: number; readonly test: number }>>,
+): TestCoverageIssue[] {
+  return Object.entries(counts)
+    .filter(([, c]) => c.train > 0 && c.test === 0)
+    .map(([label]) => ({ code: 'no-test-samples', severity: 'warning', label }));
+}
+
 export function checkDatasetQuality(counts: Readonly<Record<string, number>>): QualityIssue[] {
   const entries = Object.entries(counts).map(([label, count]) => {
     if (!Number.isInteger(count) || count < 0) {

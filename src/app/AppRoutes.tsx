@@ -4,6 +4,7 @@ import { HomePage } from './pages/HomePage';
 import { StudioPage } from './pages/StudioPage';
 import { AboutPage } from './pages/AboutPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { ImageProjectPage } from '@/features/studio/image/ImageProjectPage';
 
 export function AppRoutes() {
   return (
@@ -11,6 +12,7 @@ export function AppRoutes() {
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="studio" element={<StudioPage />} />
+        <Route path="studio/:projectId" element={<ImageProjectPage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>

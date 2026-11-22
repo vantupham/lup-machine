@@ -10,14 +10,14 @@ export function ModeSwitch() {
   const setMode = useModeStore((s) => s.setMode);
 
   return (
-    <fieldset className="flex rounded border border-[var(--color-rule)] bg-[var(--color-surface)] p-0.5 text-sm">
+    <fieldset className="flex rounded border border-rule bg-surface p-0.5 text-sm">
       <legend className="sr-only">{t('mode.label')}</legend>
       {MODES.map((m) => (
         <label
           key={m}
           title={t(`mode.${m}Hint`)}
-          className={`cursor-pointer rounded px-2.5 py-1 font-medium transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[var(--color-primary)] ${
-            mode === m ? 'bg-[var(--color-accent)] text-white' : 'text-[var(--color-muted)]'
+          className={`cursor-pointer rounded px-2.5 py-1 font-medium transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary ${
+            mode === m ? 'bg-accent text-white' : 'text-muted'
           }`}
         >
           <input

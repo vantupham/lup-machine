@@ -1,8 +1,20 @@
 import {
+  checkTestCoverage,
   checkDatasetQuality,
   IMBALANCE_RATIO_THRESHOLD,
   MIN_SAMPLES_PER_CLASS,
 } from './quality-checks';
+
+describe('checkTestCoverage', () => {
+  test('cảnh báo lớp có ảnh Dạy nhưng chưa có ảnh Kiểm tra', () => {
+    expect(
+      checkTestCoverage({ meo: { train: 20, test: 0 }, cho: { train: 20, test: 4 } }),
+    ).toEqual([{ code: 'no-test-samples', severity: 'warning', label: 'meo' }]);
+  });
+  test('bỏ qua lớp rỗng hoàn toàn', () => {
+    expect(checkTestCoverage({ meo: { train: 0, test: 0 } })).toEqual([]);
+  });
+});
 
 describe('checkDatasetQuality', () => {
   test('dữ liệu tốt: không có cảnh báo', () => {

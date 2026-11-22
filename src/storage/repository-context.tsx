@@ -1,21 +1,33 @@
 import { createContext, useContext, type ReactNode } from 'react';
 import type { ProjectRepository } from './repositories/project-repository';
+import type { DatasetRepository } from './repositories/dataset-repository';
 
-const ProjectRepositoryContext = createContext<ProjectRepository | null>(null);
+export interface Repositories {
+  readonly projects: ProjectRepository;
+  readonly dataset: DatasetRepository;
+}
+
+const RepositoriesContext = createContext<Repositories | null>(null);
 
 interface ProviderProps {
-  readonly repository: ProjectRepository;
+  readonly repositories: Repositories;
   readonly children: ReactNode;
 }
 
-export function ProjectRepositoryProvider({ repository, children }: ProviderProps) {
-  return (
-    <ProjectRepositoryContext.Provider value={repository}>{children}</ProjectRepositoryContext.Provider>
-  );
+export function RepositoriesProvider({ repositories, children }: ProviderProps) {
+  return <RepositoriesContext.Provider value={repositories}>{children}</RepositoriesContext.Provider>;
+}
+
+function useRepositories(): Repositories {
+  const repositories = useContext(RepositoriesContext);
+  if (!repositories) throw new Error('Cần đặt trong RepositoriesProvider');
+  return repositories;
 }
 
 export function useProjectRepository(): ProjectRepository {
-  const repository = useContext(ProjectRepositoryContext);
-  if (!repository) throw new Error('useProjectRepository phải nằm trong ProjectRepositoryProvider');
-  return repository;
+  return useRepositories().projects;
+}
+
+export function useDatasetRepository(): DatasetRepository {
+  return useRepositories().dataset;
 }
