@@ -48,6 +48,7 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 - [x] Bên trong mạng CNN (Chuyên sâu): kênh mạnh nhất của 5 tầng, từ 112×112 đến 7×7
 - [x] Bản đồ UMAP (xấp xỉ, có seed) bên cạnh PCA (chính xác)
 - [x] Chạy khi mất mạng: lần đầu mở có mạng, ứng dụng và mô hình được lưu sẵn trên máy
+- [x] 2 bộ ảnh thật có giấy phép mở, tuyển chọn thủ công, ghi công từng ảnh: hoa (cúc / hướng dương / hồng) và lá đậu (khỏe / đốm góc / gỉ sắt)
 - [x] Mô hình chạy trong Web Worker: giao diện luôn mượt, kể cả trên máy yếu (tự chuyển về luồng chính nếu trình duyệt không hỗ trợ)
 
 ## Yêu cầu
@@ -99,3 +100,5 @@ Mọi đóng góp đều quý, đặc biệt từ giáo viên. Xem [CONTRIBUTING
 
 - Mã nguồn: [MIT](LICENSE)
 - Nội dung bài học và tài liệu: [CC BY 4.0](CONTENT_LICENSE.md)
+- Bộ ảnh thật trong `public/datasets/`: giữ giấy phép gốc, ghi công từng ảnh (ảnh hoa: CC BY 2.0; ảnh lá đậu: MIT, © 2020 AIR Lab Makerere University). Xem [public/datasets/README.md](public/datasets/README.md)
+- Mô hình MobileNetV2: Apache-2.0

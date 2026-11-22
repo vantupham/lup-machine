@@ -1,0 +1,1093 @@
+{
+  "id": "flowers-3",
+  "version": 1,
+  "size": 224,
+  "changes": "Cắt vuông giữa, thu nhỏ về 224×224 điểm ảnh, nén JPEG, bỏ siêu dữ liệu EXIF.",
+  "classes": [
+    "daisy",
+    "sunflower",
+    "rose"
+  ],
+  "images": [
+    {
+      "file": "daisy/01.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/1314069875_da8dc023c6_m.jpg",
+      "credit": {
+        "author": "alfaneque",
+        "source": "https://www.flickr.com/photos/76623287@N00/1314069875/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/02.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/2480569557_f4e1f0dcb8_n.jpg",
+      "credit": {
+        "author": "Fabien Dany",
+        "source": "https://www.flickr.com/photos/fabdany/2480569557/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/03.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/6323721068_3d3394af6d_n.jpg",
+      "credit": {
+        "author": "Sergio Tudela Romero",
+        "source": "https://www.flickr.com/photos/ectopsyche/6323721068/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/04.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/4413849849_b8d2f3bcf1_n.jpg",
+      "credit": {
+        "author": "Neal Fowler",
+        "source": "https://www.flickr.com/photos/31878512@N06/4413849849/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/05.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/302782756_d35cb3e468.jpg",
+      "credit": {
+        "author": "Audrey",
+        "source": "https://www.flickr.com/photos/audreyjm529/302782756/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/06.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/20619292635_9857a12d54.jpg",
+      "credit": {
+        "author": "kismihok",
+        "source": "https://www.flickr.com/photos/kismihok/20619292635/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/07.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/754296579_30a9ae018c_n.jpg",
+      "credit": {
+        "author": "Ryan Poplin",
+        "source": "https://www.flickr.com/photos/poplinre/754296579/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/08.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/3625257860_33efeef614_m.jpg",
+      "credit": {
+        "author": "photogramma1",
+        "source": "https://www.flickr.com/photos/photogramma1/3625257860/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/09.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/437859108_173fb33c98.jpg",
+      "credit": {
+        "author": "Audrey",
+        "source": "https://www.flickr.com/photos/audreyjm529/437859108/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/10.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/2536529152_33ef3ee078_n.jpg",
+      "credit": {
+        "author": "Balaji Photography - 3,000,000 Views and Growing",
+        "source": "https://www.flickr.com/photos/bbalaji/2536529152/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/11.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/5110107234_12ddc0206b_m.jpg",
+      "credit": {
+        "author": "William Warby",
+        "source": "https://www.flickr.com/photos/wwarby/5110107234/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/12.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/3475870145_685a19116d.jpg",
+      "credit": {
+        "author": "Fabrizio Sciami",
+        "source": "https://www.flickr.com/photos/_fabrizio_/3475870145/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/13.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/7630511450_02d3292e90.jpg",
+      "credit": {
+        "author": "William Wootton",
+        "source": "https://www.flickr.com/photos/wwootton/7630511450/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/14.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/8085329197_41d53a21e2_n.jpg",
+      "credit": {
+        "author": "Alias 0591",
+        "source": "https://www.flickr.com/photos/renemensen/8085329197/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/15.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/506348009_9ecff8b6ef.jpg",
+      "credit": {
+        "author": "Peter Pearson",
+        "source": "https://www.flickr.com/photos/peterpearson/506348009/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/16.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/3900172983_9312fdf39c_n.jpg",
+      "credit": {
+        "author": "jenny downing",
+        "source": "https://www.flickr.com/photos/jenny-pics/3900172983/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/17.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/4598422221_b37313a3e3_n.jpg",
+      "credit": {
+        "author": "Daisyree Bakker",
+        "source": "https://www.flickr.com/photos/27875041@N02/4598422221/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/18.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/15029936576_8d6f96c72c_n.jpg",
+      "credit": {
+        "author": "William Warby",
+        "source": "https://www.flickr.com/photos/wwarby/15029936576/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/19.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/16360180712_b72695928c_n.jpg",
+      "credit": {
+        "author": "Melanie Lazarow",
+        "source": "https://www.flickr.com/photos/mlazarow/16360180712/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/20.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/154332674_453cea64f4.jpg",
+      "credit": {
+        "author": "Serena",
+        "source": "https://www.flickr.com/photos/zenera/154332674/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/21.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/2642408410_61545fdc83_n.jpg",
+      "credit": {
+        "author": "Dennis Jarvis",
+        "source": "https://www.flickr.com/photos/archer10/2642408410/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/22.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/5884807222_22f5326ba8_m.jpg",
+      "credit": {
+        "author": "Kurt Bauschardt",
+        "source": "https://www.flickr.com/photos/kurt-b/5884807222/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/23.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/3704306975_75b74497d8.jpg",
+      "credit": {
+        "author": "InAweofGod'sCreation",
+        "source": "https://www.flickr.com/photos/nhoulihan/3704306975/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/24.jpg",
+      "class": "daisy",
+      "split": "train",
+      "original": "daisy/11642632_1e7627a2cc.jpg",
+      "credit": {
+        "author": "Nick Coombe",
+        "source": "https://www.flickr.com/photos/thearchive/11642632/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/25.jpg",
+      "class": "daisy",
+      "split": "test",
+      "original": "daisy/676120388_28f03069c3.jpg",
+      "credit": {
+        "author": "Christine Majul",
+        "source": "https://www.flickr.com/photos/kitkaphotogirl/676120388/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/26.jpg",
+      "class": "daisy",
+      "split": "test",
+      "original": "daisy/7416083788_fcb4c4f27e_n.jpg",
+      "credit": {
+        "author": "Marius Benta",
+        "source": "https://www.flickr.com/photos/9637599@N02/7416083788/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/27.jpg",
+      "class": "daisy",
+      "split": "test",
+      "original": "daisy/2408024540_37f0be7cc0_n.jpg",
+      "credit": {
+        "author": "Sabrina Campagna",
+        "source": "https://www.flickr.com/photos/mar1lyn84/2408024540/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/28.jpg",
+      "class": "daisy",
+      "split": "test",
+      "original": "daisy/18023717391_e2c9089e10.jpg",
+      "credit": {
+        "author": "Image Catalog",
+        "source": "https://www.flickr.com/photos/image-catalog/18023717391/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/29.jpg",
+      "class": "daisy",
+      "split": "test",
+      "original": "daisy/19178753159_a471bf4b6b.jpg",
+      "credit": {
+        "author": "Javcon117*",
+        "source": "https://www.flickr.com/photos/javcon117/19178753159/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "daisy/30.jpg",
+      "class": "daisy",
+      "split": "test",
+      "original": "daisy/16025261368_911703a536_n.jpg",
+      "credit": {
+        "author": "katrien berckmoes",
+        "source": "https://www.flickr.com/photos/129891689@N02/16025261368/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/01.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/20972866151_e6a928b00a.jpg",
+      "credit": {
+        "author": "Rob Bertholf",
+        "source": "https://www.flickr.com/photos/robbertholf/20972866151/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/02.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/13959937305_2f5c532886_n.jpg",
+      "credit": {
+        "author": "photobeppus",
+        "source": "https://www.flickr.com/photos/photobeppus/13959937305/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/03.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/3568114325_d6b1363497.jpg",
+      "credit": {
+        "author": "cbransto",
+        "source": "https://www.flickr.com/photos/cbransto/3568114325/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/04.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/164671753_ab36d9cbb7_n.jpg",
+      "credit": {
+        "author": "David",
+        "source": "https://www.flickr.com/photos/davidw/164671753/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/05.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/4877195645_791c3a83b9_m.jpg",
+      "credit": {
+        "author": "cbransto",
+        "source": "https://www.flickr.com/photos/cbransto/4877195645/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/06.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/58636535_bc53ef0a21_m.jpg",
+      "credit": {
+        "author": "sophie & cie",
+        "source": "https://www.flickr.com/photos/biscotte/58636535/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/07.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/6606820461_952c450f90_n.jpg",
+      "credit": {
+        "author": "Bosque Village",
+        "source": "https://www.flickr.com/photos/thebosque/6606820461/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/08.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/14921668662_3ffc5b9db3_n.jpg",
+      "credit": {
+        "author": "capt_tain Tom",
+        "source": "https://www.flickr.com/photos/87744089@N08/14921668662/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/09.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/22429146402_332fa2fc72_m.jpg",
+      "credit": {
+        "author": "Don Graham",
+        "source": "https://www.flickr.com/photos/23155134@N06/22429146402/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/10.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/4746648726_e37a2de16d_n.jpg",
+      "credit": {
+        "author": "Maggie McCain",
+        "source": "https://www.flickr.com/photos/vamcmag/4746648726/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/11.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/9216286876_289a4779f7.jpg",
+      "credit": {
+        "author": "Donald Lee Pardue",
+        "source": "https://www.flickr.com/photos/oldrebel/9216286876/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/12.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/5951665793_8ae4807cbd_n.jpg",
+      "credit": {
+        "author": "Moyan Brenn",
+        "source": "https://www.flickr.com/photos/aigle_dore/5951665793/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/13.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/2883115621_4837267ea1_m.jpg",
+      "credit": {
+        "author": "fauxto_digit",
+        "source": "https://www.flickr.com/photos/fauxto_dkp/2883115621/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/14.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/15042911059_b6153d94e7_n.jpg",
+      "credit": {
+        "author": "Mike Lewinski",
+        "source": "https://www.flickr.com/photos/ikewinski/15042911059/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/15.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/9359374034_21fb12d613_n.jpg",
+      "credit": {
+        "author": "Forsaken Fotos",
+        "source": "https://www.flickr.com/photos/55229469@N07/9359374034/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/16.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/4895720722_8247f2015b_n.jpg",
+      "credit": {
+        "author": "F Delventhal",
+        "source": "https://www.flickr.com/photos/krossbow/4895720722/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/17.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/6953297_8576bf4ea3.jpg",
+      "credit": {
+        "author": "Kelly Cookson",
+        "source": "https://www.flickr.com/photos/mscaprikell/6953297/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/18.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/19915160340_ec904edbdf_n.jpg",
+      "credit": {
+        "author": "tdlucas5000",
+        "source": "https://www.flickr.com/photos/tdlucas5000/19915160340/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/19.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/5994586159_1dd99d66b4_n.jpg",
+      "credit": {
+        "author": "Manu",
+        "source": "https://www.flickr.com/photos/seven_of9/5994586159/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/20.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/19349582128_68a662075e_n.jpg",
+      "credit": {
+        "author": "Mary Anne Morgan",
+        "source": "https://www.flickr.com/photos/maryannemorgan/19349582128/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/21.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/1240624822_4111dde542.jpg",
+      "credit": {
+        "author": "Rob Young",
+        "source": "https://www.flickr.com/photos/rob-young/1240624822/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/22.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/23356825566_f5885875f2.jpg",
+      "credit": {
+        "author": "Chi-Hung Lin",
+        "source": "https://www.flickr.com/photos/92585929@N06/23356825566/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/23.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/22478719251_276cb094f9_n.jpg",
+      "credit": {
+        "author": "tdlucas5000",
+        "source": "https://www.flickr.com/photos/tdlucas5000/22478719251/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/24.jpg",
+      "class": "sunflower",
+      "split": "train",
+      "original": "sunflowers/9599534035_ae4df582b6.jpg",
+      "credit": {
+        "author": "capt_tain Tom",
+        "source": "https://www.flickr.com/photos/87744089@N08/9599534035/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/25.jpg",
+      "class": "sunflower",
+      "split": "test",
+      "original": "sunflowers/6958724008_12259943a7.jpg",
+      "credit": {
+        "author": "psyberartist",
+        "source": "https://www.flickr.com/photos/psyberartist/6958724008/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/26.jpg",
+      "class": "sunflower",
+      "split": "test",
+      "original": "sunflowers/7654774598_6b715a8d3e.jpg",
+      "credit": {
+        "author": "istolethetv",
+        "source": "https://www.flickr.com/photos/istolethetv/7654774598/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/27.jpg",
+      "class": "sunflower",
+      "split": "test",
+      "original": "sunflowers/201809908_0ef84bb351.jpg",
+      "credit": {
+        "author": "Audrey",
+        "source": "https://www.flickr.com/photos/audreyjm529/201809908/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/28.jpg",
+      "class": "sunflower",
+      "split": "test",
+      "original": "sunflowers/1484598527_579a272f53.jpg",
+      "credit": {
+        "author": "liz west",
+        "source": "https://www.flickr.com/photos/calliope/1484598527/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/29.jpg",
+      "class": "sunflower",
+      "split": "test",
+      "original": "sunflowers/4932735362_6e1017140f.jpg",
+      "credit": {
+        "author": "jim simonson",
+        "source": "https://www.flickr.com/photos/rocketjim54/4932735362/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "sunflower/30.jpg",
+      "class": "sunflower",
+      "split": "test",
+      "original": "sunflowers/5556633113_0a04f5ed8a_n.jpg",
+      "credit": {
+        "author": "Ana Rodríguez Carrington",
+        "source": "https://www.flickr.com/photos/ana_carrington/5556633113/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/01.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/12240303_80d87f77a3_n.jpg",
+      "credit": {
+        "author": "liz west",
+        "source": "https://www.flickr.com/photos/calliope/12240303/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/02.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/5990626258_697f007308_n.jpg",
+      "credit": {
+        "author": "Ronald Saunders",
+        "source": "https://www.flickr.com/photos/ronsaunders47/5990626258/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/03.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/4242976586_607a8f9843_n.jpg",
+      "credit": {
+        "author": "liz west",
+        "source": "https://www.flickr.com/photos/calliope/4242976586/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/04.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/6125332325_b768e08bd9_n.jpg",
+      "credit": {
+        "author": "A Syn",
+        "source": "https://www.flickr.com/photos/24293932@N00/6125332325/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/05.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/5061135742_2870a7b691_n.jpg",
+      "credit": {
+        "author": "Christine Majul",
+        "source": "https://www.flickr.com/photos/kitkaphotogirl/5061135742/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/06.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/15060816740_68e1b2c31b.jpg",
+      "credit": {
+        "author": "Micolo J",
+        "source": "https://www.flickr.com/photos/robin1966/15060816740/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/07.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/8742493617_c2a9bf854f_m.jpg",
+      "credit": {
+        "author": "pemberlolly",
+        "source": "https://www.flickr.com/photos/pemberlolly/8742493617/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/08.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/6105809987_8f3d7a8d67_n.jpg",
+      "credit": {
+        "author": "Taryn Nefdt",
+        "source": "https://www.flickr.com/photos/taryn_nefdt/6105809987/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/09.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/4918137796_21f0922b0c_n.jpg",
+      "credit": {
+        "author": "Christine Majul",
+        "source": "https://www.flickr.com/photos/kitkaphotogirl/4918137796/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/10.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/3751835302_d5a03f55e8_n.jpg",
+      "credit": {
+        "author": "Zaqqy",
+        "source": "https://www.flickr.com/photos/zaqography/3751835302/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/11.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/17158274118_00ec99a23c.jpg",
+      "credit": {
+        "author": "tfinamore",
+        "source": "https://www.flickr.com/photos/tjfinamore/17158274118/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/12.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/5487945052_bcb8e9fc8b_m.jpg",
+      "credit": {
+        "author": "Ally Mauro",
+        "source": "https://www.flickr.com/photos/ally_m/5487945052/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/13.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/8926641787_d2515dfe8f_m.jpg",
+      "credit": {
+        "author": "brillianthues",
+        "source": "https://www.flickr.com/photos/brillianthues/8926641787/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/14.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/12240577184_b0de0e53ea_n.jpg",
+      "credit": {
+        "author": "Jocelyn Kinghorn",
+        "source": "https://www.flickr.com/photos/joceykinghorn/12240577184/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/15.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/4495885281_fe2a3b671d.jpg",
+      "credit": {
+        "author": "Rexness",
+        "source": "https://www.flickr.com/photos/rexness/4495885281/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/16.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/3203779656_3580151ea4_m.jpg",
+      "credit": {
+        "author": "grace_kat",
+        "source": "https://www.flickr.com/photos/g_kat26/3203779656/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/17.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/3654988152_b11178bbcb.jpg",
+      "credit": {
+        "author": "Dorota (Dorothy)",
+        "source": "https://www.flickr.com/photos/dorocia/3654988152/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/18.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/7186509956_c37c02fb43_n.jpg",
+      "credit": {
+        "author": "Nicki Dugan Pogue",
+        "source": "https://www.flickr.com/photos/thenickster/7186509956/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/19.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/388405293_4db1d71f21_n.jpg",
+      "credit": {
+        "author": "Procsilas Moscas",
+        "source": "https://www.flickr.com/photos/procsilas/388405293/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/20.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/5050969148_a0090f762a.jpg",
+      "credit": {
+        "author": "ALhanouf AL- abdollah",
+        "source": "https://www.flickr.com/photos/al-hanouf/5050969148/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/21.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/4609168052_3d4e1d3804_n.jpg",
+      "credit": {
+        "author": "Larry Johnson",
+        "source": "https://www.flickr.com/photos/drljohnson/4609168052/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/22.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/15094168139_8f636ffa1d_n.jpg",
+      "credit": {
+        "author": "Magnus Johansson",
+        "source": "https://www.flickr.com/photos/120374925@N06/15094168139/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/23.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/8723767157_c45bfd3ab6.jpg",
+      "credit": {
+        "author": "Tony Alter",
+        "source": "https://www.flickr.com/photos/78428166@N00/8723767157/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/24.jpg",
+      "class": "rose",
+      "split": "train",
+      "original": "roses/102501987_3cdb8e5394_n.jpg",
+      "credit": {
+        "author": "Elaine with Grey Cats",
+        "source": "https://www.flickr.com/photos/elainegreycats/102501987/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/25.jpg",
+      "class": "rose",
+      "split": "test",
+      "original": "roses/22982871191_ec61e36939_n.jpg",
+      "credit": {
+        "author": "StockyPics",
+        "source": "https://www.flickr.com/photos/stockypics/22982871191/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/26.jpg",
+      "class": "rose",
+      "split": "test",
+      "original": "roses/3475572132_01ae28e834_n.jpg",
+      "credit": {
+        "author": "Parvin",
+        "source": "https://www.flickr.com/photos/55948751@N00/3475572132/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/27.jpg",
+      "class": "rose",
+      "split": "test",
+      "original": "roses/16670921315_0fc48d7ab2_n.jpg",
+      "credit": {
+        "author": "Camera Eye Photography",
+        "source": "https://www.flickr.com/photos/camera_is_a_mirror_with_memory/16670921315/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/28.jpg",
+      "class": "rose",
+      "split": "test",
+      "original": "roses/4267024012_295e7141a3_n.jpg",
+      "credit": {
+        "author": "Avia Venefica",
+        "source": "https://www.flickr.com/photos/avenefica/4267024012/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/29.jpg",
+      "class": "rose",
+      "split": "test",
+      "original": "roses/4713531680_1110a2fa07_n.jpg",
+      "credit": {
+        "author": "Roberto Verzo",
+        "source": "https://www.flickr.com/photos/verzo/4713531680/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    },
+    {
+      "file": "rose/30.jpg",
+      "class": "rose",
+      "split": "test",
+      "original": "roses/8742493689_fb852f0228_n.jpg",
+      "credit": {
+        "author": "pemberlolly",
+        "source": "https://www.flickr.com/photos/pemberlolly/8742493689/",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      }
+    }
+  ]
+}

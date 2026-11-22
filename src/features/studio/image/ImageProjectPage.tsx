@@ -180,6 +180,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
           title={inspectingClass?.name ?? ''}
           onClose={() => setInspecting(null)}
           decode={decodeStoredImage}
+          credit={inspecting.credit}
         />
       )}
       {webcam && (

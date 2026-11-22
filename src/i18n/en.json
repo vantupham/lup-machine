@@ -443,18 +443,40 @@
       "background-trap": {
         "title": "Challenge: what did the AI really learn?",
         "description": "A dataset with a hidden trap. Train, check the Test score, then find out what happened."
+      },
+      "flowers-3": {
+        "title": "Daisy, sunflower or rose?",
+        "description": "90 real photos: all kinds of angles, lighting and backgrounds. See right away how real photos differ from drawings.",
+        "source": "Flickr photos by many authors, curated from TensorFlow's tf_flowers dataset."
+      },
+      "beans-3": {
+        "title": "Bean leaf doctor: healthy, angular leaf spot or rust?",
+        "description": "Bean leaves photographed in fields in Uganda so AI can detect crop disease. A real, harder problem: the classes look quite alike.",
+        "source": "© 2020 AIR Lab, Makerere University (Uganda), ibean dataset."
       }
     },
     "classes": {
       "circle": "Circle",
       "square": "Square",
-      "triangle": "Triangle"
+      "triangle": "Triangle",
+      "daisy": "Daisy",
+      "sunflower": "Sunflower",
+      "rose": "Rose",
+      "healthy": "Healthy",
+      "angular-leaf-spot": "Angular leaf spot",
+      "bean-rust": "Bean rust"
     },
     "count": "{{images}} images · {{classes}} classes",
     "create": "Create sample project",
     "creating": "Drawing images {{done}}/{{total}}…",
     "note": "Sample images are drawn by the computer from a fixed seed: no real people, no copyright issues, and the same images every time.",
-    "error": "Could not create the sample project: {{message}}"
+    "error": "Could not create the sample project: {{message}}",
+    "syntheticTitle": "Synthetic drawings",
+    "photoTitle": "Real photos (open licence)",
+    "photoNote": "Real photos taken by other people and shared under open licences. Every image lists its author and licence (see the Pixel Microscope or click the image on the map). Images were cropped square and resized; photos with people, text or logos were removed during curation.",
+    "credits": "Per-image credits",
+    "creditsLoading": "Loading the list…",
+    "creditsError": "Could not load the credits list."
   },
   "lessons": {
     "title": "Lessons",
@@ -478,5 +500,9 @@
     "wrapUp": "Summary",
     "teacherNotes": "Notes for teachers",
     "license": "Lesson content is licensed under CC BY 4.0."
+  },
+  "credit": {
+    "photo": "Photo:",
+    "changed": "cropped and resized"
   }
 }

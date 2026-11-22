@@ -20,7 +20,8 @@ function bootWorker(source: string, { online = true, existingCaches = [] as stri
   const fetchFn = vi.fn(async (req: string | { url: string }) => {
     const url = typeof req === 'string' ? new URL(req, SCOPE).href : req.url;
     if (!online) throw new TypeError('offline');
-    return `net:${url}`;
+    const body = `net:${url}`;
+    return url.includes('/missing/') ? { ok: false, body, clone: () => ({ body }) } : { ok: true, body, clone: () => ({ body }) };
   });
   const caches = {
     open: async (name: string) => {
@@ -29,6 +30,9 @@ function bootWorker(source: string, { online = true, existingCaches = [] as stri
       return {
         addAll: async (urls: string[]) => {
           for (const u of urls) store.set(new URL(u, SCOPE).href, `cached:${u}`);
+        },
+        put: async (req: { url: string }, res: { body: string }) => {
+          store.set(req.url, res.body);
         },
       };
     },
@@ -63,8 +67,8 @@ function bootWorker(source: string, { online = true, existingCaches = [] as stri
 const get = (path: string, mode = 'cors') => ({ method: 'GET', url: new URL(path, SCOPE).href, mode });
 
 describe('danh sách tệp lưu sẵn', () => {
-  test('gộp tệp build và tệp public, bỏ bản đồ nguồn, tài liệu và chính sw.js, có trang gốc', () => {
-    const list = precacheList(['assets/app-1a2b.js', 'assets/app-1a2b.js.map', 'index.html', 'sw.js'], ['models/m/model.json', 'models/README.md', 'favicon.svg']);
+  test('gộp tệp build và tệp public, bỏ bản đồ nguồn, tài liệu, bộ ảnh (lưu khi dùng) và chính sw.js, có trang gốc', () => {
+    const list = precacheList(['assets/app-1a2b.js', 'assets/app-1a2b.js.map', 'index.html', 'sw.js'], ['models/m/model.json', 'models/README.md', 'favicon.svg', 'datasets/flowers-3/manifest.json', 'datasets/flowers-3/rose/01.jpg']);
     expect(list).toEqual(['./', 'assets/app-1a2b.js', 'favicon.svg', 'index.html', 'models/m/model.json']);
   });
 
@@ -121,7 +125,7 @@ describe('service worker', () => {
   test('tệp chưa lưu thì lấy từ mạng', async () => {
     const w = bootWorker(source);
     await w.dispatch('install');
-    expect(await w.dispatch('fetch', get('assets/other.js'))).toBe(`net:${SCOPE}assets/other.js`);
+    expect(await w.dispatch('fetch', get('assets/other.js'))).toMatchObject({ body: `net:${SCOPE}assets/other.js` });
   });
 
   test('mở trang khi mất mạng: trả về index.html đã lưu', async () => {
@@ -136,7 +140,28 @@ describe('service worker', () => {
   test('mở trang khi có mạng: lấy bản mới nhất từ mạng', async () => {
     const w = bootWorker(source);
     await w.dispatch('install');
-    expect(await w.dispatch('fetch', get('', 'navigate'))).toBe(`net:${SCOPE}`);
+    expect(await w.dispatch('fetch', get('', 'navigate'))).toMatchObject({ body: `net:${SCOPE}` });
+  });
+
+  test('bộ ảnh mẫu: lưu vào cache khi dùng lần đầu, mất mạng vẫn dùng lại được', async () => {
+    const w = bootWorker(source);
+    await w.dispatch('install');
+    expect(w.stores.get('lup-machine-v2')!.has(`${SCOPE}datasets/flowers-3/manifest.json`)).toBe(false); // không lưu sẵn
+    await w.dispatch('fetch', get('datasets/flowers-3/manifest.json'));
+    expect(w.stores.get('lup-machine-v2')!.get(`${SCOPE}datasets/flowers-3/manifest.json`)).toBe(`net:${SCOPE}datasets/flowers-3/manifest.json`);
+
+    const offline = bootWorker(source, { online: false });
+    offline.stores.set('lup-machine-v2', w.stores.get('lup-machine-v2')!);
+    expect(await offline.dispatch('fetch', get('datasets/flowers-3/manifest.json'))).toBe(`net:${SCOPE}datasets/flowers-3/manifest.json`);
+  });
+
+  test('không lưu phản hồi lỗi, không lưu tệp ngoài thư mục bộ ảnh', async () => {
+    const w = bootWorker(source);
+    await w.dispatch('install');
+    await w.dispatch('fetch', get('datasets/missing/x.jpg'));
+    await w.dispatch('fetch', get('assets/other.js'));
+    const keys = [...w.stores.get('lup-machine-v2')!.keys()];
+    expect(keys.some((k) => k.includes('missing') || k.includes('other.js'))).toBe(false);
   });
 
   test('bỏ qua yêu cầu khác GET hoặc khác nguồn', async () => {

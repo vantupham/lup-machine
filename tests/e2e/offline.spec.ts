@@ -26,3 +26,34 @@ test('mất mạng sau lần mở đầu: vẫn mở trang, tạo dự án mẫu
   await context.setOffline(false);
   expect(errors).toEqual([]);
 });
+
+test('bộ ảnh thật: không lưu sẵn, nhưng đã dùng một lần khi có mạng thì mất mạng vẫn tạo lại được', async ({ page, context }) => {
+  test.setTimeout(120_000);
+  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  const createFlowers = async () => {
+    await page.goto('./#/studio');
+    await page
+      .getByRole('list', { name: 'Ảnh thật (giấy phép mở)' })
+      .getByRole('listitem')
+      .filter({ hasText: 'Hoa cúc, hướng dương hay hoa hồng?' })
+      .getByRole('button', { name: 'Tạo dự án mẫu' })
+      .click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Hoa cúc, hướng dương hay hoa hồng?' })).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByRole('article', { name: 'Hoa hồng' })).toContainText('24');
+  };
+
+  await page.goto('./');
+  await expect(page.getByTestId('offline-status')).toContainText('dùng được cả khi mất mạng', { timeout: 60_000 });
+  const precached = await page.evaluate(async () => {
+    const keys = await caches.keys();
+    const requests = await (await caches.open(keys[0]!)).keys();
+    return requests.some((r) => r.url.includes('/datasets/'));
+  });
+  expect(precached).toBe(false); // không bắt mọi người tải sẵn vài MB ảnh
+
+  await createFlowers();
+  await context.setOffline(true);
+  await page.reload();
+  await createFlowers();
+  await context.setOffline(false);
+});

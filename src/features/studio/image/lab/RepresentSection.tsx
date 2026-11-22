@@ -5,6 +5,7 @@ import type { SoftmaxParams } from '@/core/ml/softmax-regression';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { useModeStore } from '@/ui/mode-store';
 import { ExactBadge } from '@/ui/ExactBadge';
+import { ImageCreditLine } from '@/ui/ImageCreditLine';
 import { useObjectUrl } from '../useObjectUrl';
 import { EmbeddingMap, type MapPoint } from './EmbeddingMap';
 import { FeatureStrip } from './FeatureStrip';
@@ -200,6 +201,7 @@ function SelectedDetail({ sample, classes, samples, features, onSelect, params }
           {t('project.represent.selected', { name: nameOf(sample.classId), split: t(`project.class.${sample.split}`) })}
         </p>
       </div>
+      {sample.credit && <ImageCreditLine credit={sample.credit} />}
       <FeatureStrip vector={features.get(sample.id)!} />
       {mode === 'expert' && <FeatureMapViewer sample={sample} />}
       {neighbors.length > 0 && (

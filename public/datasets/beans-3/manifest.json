@@ -1,0 +1,1093 @@
+{
+  "id": "beans-3",
+  "version": 1,
+  "size": 224,
+  "changes": "Cắt vuông giữa, thu nhỏ về 224×224 điểm ảnh, nén JPEG, bỏ siêu dữ liệu EXIF.",
+  "classes": [
+    "healthy",
+    "angular-leaf-spot",
+    "bean-rust"
+  ],
+  "images": [
+    {
+      "file": "healthy/01.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.334.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/02.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.136.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/03.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.198.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/04.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "test/healthy/healthy_test.26.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/05.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.308.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/06.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.4.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/07.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "test/healthy/healthy_test.6.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/08.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.65.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/09.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.144.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/10.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.99.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/11.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.299.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/12.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.315.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/13.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.137.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/14.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.171.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/15.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.125.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/16.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.306.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/17.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.189.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/18.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "test/healthy/healthy_test.11.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/19.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.244.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/20.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.324.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/21.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.302.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/22.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.341.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/23.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.10.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/24.jpg",
+      "class": "healthy",
+      "split": "train",
+      "original": "train/healthy/healthy_train.3.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/25.jpg",
+      "class": "healthy",
+      "split": "test",
+      "original": "train/healthy/healthy_train.170.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/26.jpg",
+      "class": "healthy",
+      "split": "test",
+      "original": "train/healthy/healthy_train.335.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/27.jpg",
+      "class": "healthy",
+      "split": "test",
+      "original": "train/healthy/healthy_train.199.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/28.jpg",
+      "class": "healthy",
+      "split": "test",
+      "original": "train/healthy/healthy_train.303.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/29.jpg",
+      "class": "healthy",
+      "split": "test",
+      "original": "test/healthy/healthy_test.39.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "healthy/30.jpg",
+      "class": "healthy",
+      "split": "test",
+      "original": "train/healthy/healthy_train.327.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/01.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.117.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/02.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.276.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/03.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.270.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/04.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.275.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/05.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.250.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/06.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.180.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/07.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "test/angular_leaf_spot/angular_leaf_spot_test.16.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/08.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.200.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/09.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.278.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/10.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.94.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/11.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "test/angular_leaf_spot/angular_leaf_spot_test.36.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/12.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.79.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/13.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.280.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/14.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.244.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/15.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.43.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/16.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.50.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/17.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.198.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/18.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.114.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/19.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.126.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/20.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.73.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/21.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.330.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/22.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.128.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/23.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.242.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/24.jpg",
+      "class": "angular-leaf-spot",
+      "split": "train",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.81.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/25.jpg",
+      "class": "angular-leaf-spot",
+      "split": "test",
+      "original": "test/angular_leaf_spot/angular_leaf_spot_test.19.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/26.jpg",
+      "class": "angular-leaf-spot",
+      "split": "test",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.295.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/27.jpg",
+      "class": "angular-leaf-spot",
+      "split": "test",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.99.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/28.jpg",
+      "class": "angular-leaf-spot",
+      "split": "test",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.156.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/29.jpg",
+      "class": "angular-leaf-spot",
+      "split": "test",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.312.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "angular-leaf-spot/30.jpg",
+      "class": "angular-leaf-spot",
+      "split": "test",
+      "original": "train/angular_leaf_spot/angular_leaf_spot_train.333.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/01.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.119.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/02.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.302.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/03.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.319.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/04.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.279.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/05.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.139.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/06.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.148.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/07.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.344.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/08.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "test/bean_rust/bean_rust_test.10.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/09.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.230.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/10.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.77.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/11.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.130.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/12.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.24.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/13.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.36.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/14.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.239.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/15.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.86.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/16.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "test/bean_rust/bean_rust_test.20.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/17.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.313.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/18.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.100.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/19.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.332.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/20.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "test/bean_rust/bean_rust_test.19.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/21.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "test/bean_rust/bean_rust_test.24.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/22.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.178.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/23.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "test/bean_rust/bean_rust_test.23.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/24.jpg",
+      "class": "bean-rust",
+      "split": "train",
+      "original": "train/bean_rust/bean_rust_train.333.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/25.jpg",
+      "class": "bean-rust",
+      "split": "test",
+      "original": "train/bean_rust/bean_rust_train.271.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/26.jpg",
+      "class": "bean-rust",
+      "split": "test",
+      "original": "test/bean_rust/bean_rust_test.32.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/27.jpg",
+      "class": "bean-rust",
+      "split": "test",
+      "original": "train/bean_rust/bean_rust_train.307.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/28.jpg",
+      "class": "bean-rust",
+      "split": "test",
+      "original": "train/bean_rust/bean_rust_train.156.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/29.jpg",
+      "class": "bean-rust",
+      "split": "test",
+      "original": "train/bean_rust/bean_rust_train.280.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    },
+    {
+      "file": "bean-rust/30.jpg",
+      "class": "bean-rust",
+      "split": "test",
+      "original": "test/bean_rust/bean_rust_test.40.jpg",
+      "credit": {
+        "author": "AIR Lab, Makerere University",
+        "source": "https://github.com/AI-Lab-Makerere/ibean",
+        "license": "MIT",
+        "licenseUrl": "https://github.com/AI-Lab-Makerere/ibean/blob/master/LICENSE"
+      }
+    }
+  ]
+}

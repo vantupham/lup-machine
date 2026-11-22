@@ -28,6 +28,14 @@ export interface StoredImage {
   readonly height: number;
 }
 
+/** Ghi công cho ảnh lấy từ bộ dữ liệu có giấy phép mở (bắt buộc theo CC BY / MIT). */
+export interface ImageCredit {
+  readonly author: string;
+  readonly source: string;
+  readonly license: string;
+  readonly licenseUrl: string;
+}
+
 export interface SampleRecord {
   readonly id: string;
   readonly projectId: string;
@@ -38,6 +46,8 @@ export interface SampleRecord {
   readonly createdAt: string;
   /** Thứ tự trong lô thêm vào. Giữ thứ tự ổn định khi nhiều ảnh cùng createdAt (dữ liệu cũ có thể thiếu). */
   readonly seq?: number;
+  /** Chỉ có ở ảnh từ bộ dữ liệu ảnh thật: tác giả, nguồn, giấy phép. */
+  readonly credit?: ImageCredit;
 }
 
 /** Vector đặc trưng đã trích (cache): mỗi ảnh chỉ trích một lần cho mỗi mô hình. */

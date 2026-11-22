@@ -1,0 +1,83 @@
+{
+  "_comment": "Cấu hình bộ ảnh thật. 'exclude' = ảnh bị loại khi duyệt bằng mắt (có người, chữ, logo, ảnh mờ hoặc không đúng lớp). Chạy: python scripts/build-photo-datasets.py --help",
+  "datasets": [
+    {
+      "id": "flowers-3",
+      "source": "tf_flowers",
+      "seed": 404,
+      "train": 24,
+      "test": 6,
+      "classes": [
+        {
+          "key": "daisy",
+          "folder": "daisy"
+        },
+        {
+          "key": "sunflower",
+          "folder": "sunflowers"
+        },
+        {
+          "key": "rose",
+          "folder": "roses"
+        }
+      ],
+      "exclude": [
+        "daisy/107592979_aaa9cdfe78_m.jpg",
+        "daisy/173350276_02817aa8d5.jpg",
+        "daisy/2889325612_f2fc403ff0_m.jpg",
+        "daisy/3706420943_66f3214862_n.jpg",
+        "daisy/5714327423_50af0cffe9.jpg",
+        "daisy/8932490012_cc08e690ba_n.jpg",
+        "roses/13235124703_a7e1266e44.jpg",
+        "roses/13264214185_d6aa79b3bd.jpg",
+        "roses/15174615529_144ae28bdb_n.jpg",
+        "roses/15712574834_2f121c7cf9_m.jpg",
+        "roses/16258946661_f9739cdc0a.jpg",
+        "roses/17953368844_be3d18cf30_m.jpg",
+        "roses/22679076_bdb4c24401_m.jpg",
+        "roses/2536282942_b5ca27577e.jpg",
+        "roses/2627513944_b1361e60ec_m.jpg",
+        "roses/3141434519_aaa64c4f65_n.jpg",
+        "roses/3208417632_19138d8e35_n.jpg",
+        "roses/4675532860_890504a4a3_m.jpg",
+        "roses/5273722065_c85d8543c2_m.jpg",
+        "roses/6347846687_3f0a7c3176.jpg",
+        "roses/6864417932_36fa4ceecf_n.jpg",
+        "roses/7419966772_d6c1c22a81.jpg",
+        "roses/8442304572_2fdc9c7547_n.jpg",
+        "sunflowers/18843967474_9cb552716b.jpg",
+        "sunflowers/19756232959_17cde3b9f0_m.jpg",
+        "sunflowers/20704967595_a9c9b8d431.jpg",
+        "sunflowers/215798354_429de28c2d.jpg",
+        "sunflowers/22429946721_e17a12cb39_n.jpg",
+        "sunflowers/4933821940_38064522a8.jpg",
+        "sunflowers/5043404000_9bc16cb7e5_m.jpg"
+      ]
+    },
+    {
+      "id": "beans-3",
+      "source": "ibean",
+      "seed": 505,
+      "train": 24,
+      "test": 6,
+      "classes": [
+        {
+          "key": "healthy",
+          "folder": "healthy"
+        },
+        {
+          "key": "angular-leaf-spot",
+          "folder": "angular_leaf_spot"
+        },
+        {
+          "key": "bean-rust",
+          "folder": "bean_rust"
+        }
+      ],
+      "exclude": [
+        "test/healthy/healthy_test.36.jpg",
+        "train/bean_rust/bean_rust_train.33.jpg"
+      ]
+    }
+  ]
+}

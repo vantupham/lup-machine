@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { ClassRecord, LupDatabase, SampleRecord, SampleSource, Split, StoredImage } from '../db';
+import type { ClassRecord, ImageCredit, LupDatabase, SampleRecord, SampleSource, Split, StoredImage } from '../db';
 import type { RepositoryDeps } from './project-repository';
 
 /** Giới hạn để máy phòng tin cấu hình thấp vẫn chạy mượt. */
@@ -14,6 +14,7 @@ export interface NewSampleInput {
   readonly split: Split;
   readonly source: SampleSource;
   readonly image: StoredImage;
+  readonly credit?: ImageCredit;
 }
 
 export type SplitCounts = Record<string, { train: number; test: number }>;

@@ -185,6 +185,21 @@ describe('Trang dự án ảnh', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   });
 
+  test('ảnh từ bộ dữ liệu có giấy phép mở: Kính hiển vi ghi tác giả, nguồn và giấy phép', async () => {
+    repos = createTestRepository();
+    const project = await repos.repository.create({ name: 'Hoa', projectType: 'image' });
+    projectId = project.id;
+    const cls = await repos.dataset.addClass(projectId, 'Nhựa');
+    const credit = { author: 'Nguyễn A', source: 'https://www.flickr.com/photos/a/1/', license: 'CC BY 2.0', licenseUrl: 'https://creativecommons.org/licenses/by/2.0/' };
+    await repos.dataset.addSamples([{ projectId, classId: cls.id, split: 'train', source: 'dataset', image: FAKE_IMAGE, credit }]);
+    openProject();
+    await userEvent.click(await within(await screen.findByRole('article', { name: 'Nhựa' })).findByRole('button', { name: /soi ảnh/i }));
+    const line = await within(await screen.findByRole('dialog', { name: /kính hiển vi/i })).findByTestId('image-credit');
+    expect(within(line).getByRole('link', { name: 'Nguyễn A' })).toHaveAttribute('href', credit.source);
+    expect(within(line).getByRole('link', { name: 'CC BY 2.0' })).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(line).toHaveTextContent(/đã cắt vuông, thu nhỏ/);
+  });
+
   test('soi ảnh lỗi giải mã', async () => {
     vi.mocked(codec.decodeStoredImage).mockRejectedValueOnce(new Error('x'));
     await seed(1, 0);
