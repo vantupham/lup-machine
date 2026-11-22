@@ -51,6 +51,19 @@ export const lessonPlantDisease: Lesson = {
         answer:
           'Không đáng kể. Điểm Dạy tăng dần lên 100% (mô hình nhớ hết 72 ảnh đã học), nhưng điểm Kiểm tra chỉ dừng quanh 70–80% từ khá sớm. Đó là quá khớp: học thuộc bài chứ chưa hiểu bài. Cách chữa thật sự là có thêm nhiều ảnh đa dạng hơn, không phải học lâu hơn.',
       },
+      record: [
+        {
+          kind: 'table',
+          title: 'Kéo thanh "Phát lại" tới từng epoch và ghi điểm',
+          columns: ['Epoch', 'Điểm Dạy (%)', 'Điểm Kiểm tra (%)'],
+          rows: ['0', '10', '50'],
+          answers: [
+            ['37,5', '44,4'],
+            ['97,2', '72,2'],
+            ['100', '72,2'],
+          ],
+        },
+      ],
     },
     {
       title: 'Lỗi nào nguy hiểm nhất?',
@@ -64,12 +77,39 @@ export const lessonPlantDisease: Lesson = {
         answer:
           'Thường gặp nhất là lá gỉ sắt bị đoán thành đốm góc: hai bệnh đều tạo đốm nâu. Lá bệnh bị đoán là khỏe thì hiếm hoặc không có. Đây là điều tốt, vì bỏ sót bệnh (nông dân không chữa, bệnh lây lan) thường nguy hiểm hơn nhầm tên bệnh.',
       },
+      record: [
+        {
+          kind: 'confusion',
+          title: 'Chép ma trận nhầm lẫn trên tập Kiểm tra (số ảnh)',
+          // hàng = lớp thật (khỏe, đốm góc, gỉ sắt), cột = lớp mô hình đoán
+          answers: [
+            [5, 0, 1],
+            [0, 5, 1],
+            [0, 3, 3],
+          ],
+        },
+        {
+          kind: 'fields',
+          title: 'Em rút ra',
+          fields: ['Cặp lớp bị nhầm nhiều nhất:', 'Số lá bệnh bị đoán là "Lá khỏe":'],
+          answers: ['Bệnh gỉ sắt bị đoán là Bệnh đốm góc (3 ảnh)', '0'],
+        },
+      ],
     },
     {
       title: 'Mô hình nhìn vào đâu?',
       body: [
         'Bấm vào một chấm có vòng đỏ (ảnh bị đoán sai) trên bản đồ. Xem "Mô hình nhìn vào đâu?" và bấm "Đo bằng cách che từng ô".',
         'Vùng đỏ nằm trên các vết bệnh, hay trên bàn tay, đất, cỏ? Nhiều ảnh trong bộ này có bàn tay cầm lá: nếu mô hình dựa vào những thứ đó, nó có đang "học nhầm" như bài 3 không?',
+      ],
+      record: [
+        {
+          kind: 'lines',
+          title: 'Vùng đỏ nằm ở đâu trên ảnh em chọn? Em nghĩ gì về điều đó?',
+          lines: 3,
+          answer:
+            'Câu hỏi mở, mỗi ảnh một khác. Khen học sinh nào so sánh cả hai bản đồ (nhìn vào đâu và che thử từng ô), chỉ ra được vùng đỏ nằm trên vết bệnh hay trên bàn tay, đất, và nối với bài 3: nếu mô hình dựa vào thứ không phải vết bệnh thì đó là dấu hiệu học lối tắt.',
+        },
       ],
     },
     {
@@ -83,12 +123,34 @@ export const lessonPlantDisease: Lesson = {
         answer:
           'Mô hình trả lời ít ảnh hơn (khoảng một nửa), nhưng trong số đó đúng nhiều hơn hẳn (khoảng 90%). Đây là sự đánh đổi: muốn đáng tin hơn thì phải chấp nhận để con người xử lý những trường hợp khó.',
       },
+      record: [
+        {
+          kind: 'table',
+          title: 'Kéo ngưỡng tin cậy và ghi kết quả',
+          columns: ['Ngưỡng', 'Số ảnh được trả lời (trên 18)', 'Đúng (%)'],
+          rows: ['50%', '70%', '90%'],
+          answers: [
+            ['18', '72'],
+            ['13', '85'],
+            ['10', '90'],
+          ],
+        },
+      ],
     },
     {
       title: 'Làm sao để bác sĩ AI giỏi hơn?',
       body: [
         'Thảo luận: nhóm em sẽ làm gì để mô hình tốt hơn? Gợi ý: thêm nhiều ảnh hơn (bộ gốc có khoảng 1.300 ảnh, ta mới dùng 90), chụp nhiều điều kiện ánh sáng và nhiều loại điện thoại, chụp cả khi không có bàn tay, nhờ chuyên gia kiểm tra nhãn.',
         'Mô hình học từ lá đậu ở Uganda có dùng ngay được cho cây trồng ở địa phương em không? Cần kiểm tra những gì trước khi đưa cho nông dân dùng?',
+      ],
+      record: [
+        {
+          kind: 'lines',
+          title: 'Ý tưởng của nhóm em để bác sĩ AI giỏi hơn',
+          lines: 4,
+          answer:
+            'Ý tưởng tốt: thêm nhiều ảnh mỗi lớp; chụp nhiều nơi, nhiều giờ trong ngày, nhiều loại điện thoại; có ảnh không có bàn tay; chuyên gia kiểm tra lại nhãn; thử trên ảnh từ ruộng khác trước khi dùng; cho AI trả lời "không chắc" khi độ tin cậy thấp.',
+        },
       ],
     },
   ],

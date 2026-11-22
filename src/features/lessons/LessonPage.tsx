@@ -34,6 +34,9 @@ export function LessonPage() {
           {t('lessons.grade', { grade: lesson.grade })} · {t('lessons.minutes', { minutes: lesson.minutes })}
         </p>
         <p className="text-lg text-muted">{lesson.summary}</p>
+        <Link to={`/lessons/${lesson.id}/phieu-bai-tap`} className="inline-block text-sm text-primary hover:underline">
+          🖨 {t('worksheet.link')}
+        </Link>
       </header>
 
       <section aria-labelledby="goals-title" className="lab-card p-5">

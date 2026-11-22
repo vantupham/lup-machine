@@ -504,5 +504,25 @@
   "credit": {
     "photo": "Ảnh:",
     "changed": "đã cắt vuông, thu nhỏ"
+  },
+  "worksheet": {
+    "link": "Phiếu bài tập in được",
+    "title": "Phiếu bài tập",
+    "keyTitle": "Đáp án cho giáo viên",
+    "version": "Phiên bản phiếu",
+    "student": "Phiếu học sinh",
+    "teacher": "Bản giáo viên (có đáp án)",
+    "print": "In phiếu",
+    "hint": "Bấm \"In phiếu\" rồi chọn máy in, hoặc chọn \"Lưu dưới dạng PDF\" để gửi cho học sinh. Phiếu luôn in nền trắng, khổ A4.",
+    "name": "Họ và tên:",
+    "class": "Lớp:",
+    "date": "Ngày:",
+    "step": "Bước {{n}}.",
+    "myPrediction": "Em dự đoán (viết TRƯỚC khi làm):",
+    "observed": "Kết quả em quan sát được:",
+    "actualPredicted": "Thật ↓ / Đoán →",
+    "reflect": "Em rút ra được điều gì sau bài học này?",
+    "footer": "LUP Machine – vantupham.github.io/lup-machine · Nội dung bài học theo giấy phép CC BY 4.0.",
+    "sampleNote": "Chữ nghiêng trong các bảng là số liệu mẫu từ lần chạy kiểm chứng với MobileNetV2 (cài đặt mặc định). Kết quả trên máy học sinh có thể lệch nhẹ, nhất là ±1 ảnh trong ma trận nhầm lẫn."
   }
 }
