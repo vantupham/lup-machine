@@ -42,7 +42,7 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 ## Yêu cầu
 
 - **Người dùng:** Chrome hoặc Edge bản mới trên máy tính. Firefox và Safari dùng được phần lớn tính năng.
-- **Nhà phát triển:** Node.js ≥ 20.17 (khuyến nghị 22, xem `.nvmrc`).
+- **Nhà phát triển:** Node.js 22.22+, 24.15+ hoặc 26+ (CI dùng 26, xem `.nvmrc`).
 
 ## Chạy trên máy
 

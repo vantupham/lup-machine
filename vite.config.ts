@@ -51,13 +51,17 @@ export default defineConfig({
     sourcemap: true,
     // Chunk lớn nhất là backend WebGL của TensorFlow.js (~530 kB, ~84 kB gzip), chỉ tải khi trích đặc trưng.
     chunkSizeWarningLimit: 600,
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         // Tách thư viện ít thay đổi thành chunk riêng để trình duyệt cache lâu dài.
-        manualChunks: {
-          react: ['react', 'react-dom', 'react-router-dom'],
-          data: ['dexie', 'zod', 'zustand'],
-          i18n: ['i18next', 'react-i18next'],
+        // TensorFlow.js không nằm trong nhóm nào → vẫn được tải động khi cần.
+        codeSplitting: {
+          groups: [
+            // [\\/] khớp cả dấu / và \ (đường dẫn Windows).
+            { name: 'react', test: /node_modules[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/ },
+            { name: 'data', test: /node_modules[\\/](dexie|zod|zustand)[\\/]/ },
+            { name: 'i18n', test: /node_modules[\\/](i18next|react-i18next)[\\/]/ },
+          ],
         },
       },
     },
@@ -70,7 +74,9 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/main.tsx', 'src/**/*.test.{ts,tsx}', 'src/vite-env.d.ts'],
+      // *.browser.ts dùng canvas / WebGL / camera thật, không chạy được trong jsdom:
+      // chúng được kiểm chứng bằng E2E trên Chromium (tests/e2e), không tính vào độ phủ kiểm thử đơn vị.
+      exclude: ['src/main.tsx', 'src/**/*.test.{ts,tsx}', 'src/vite-env.d.ts', 'src/**/*.browser.ts'],
       thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 },
     },
   },

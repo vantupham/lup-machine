@@ -4,6 +4,13 @@
 
 ## [Chưa phát hành]
 
+### Thay đổi (công cụ phát triển)
+
+- Nâng Vite 6 → 8 (Rolldown, build nhanh hơn khoảng 15 lần), Vitest 3 → 5, ESLint 9 → 10, jsdom 26 → 31, jest-dom 6 → 8, plugin-react 4 → 6.
+- Yêu cầu Node 22.22+ / 24.15+ / 26+; CI chuyển sang Node 26.
+- Tách cấu hình TypeScript: mã ứng dụng không còn thấy kiểu của Node (tránh vô tình dùng API Node trong code chạy trên trình duyệt); mã kiểm thử dùng tsconfig.test.json.
+- Chia chunk theo API `codeSplitting` của Rolldown; gói tải ban đầu giữ nguyên ~193 KB gzip, TensorFlow.js vẫn tải động.
+
 ### Thêm (Giai đoạn 1 – Studio Ảnh, phần 1)
 
 - Trang dự án ảnh: thêm / đổi tên / xóa lớp; mỗi lớp có hai ngăn Dạy và Kiểm tra.
