@@ -3,6 +3,7 @@ import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath, URL } from 'node:url';
+import { serviceWorkerPlugin } from './build/service-worker.ts';
 
 // GitHub Pages phục vụ trang tại https://vantupham.github.io/lup-machine/
 const BASE_PATH = '/lup-machine/';
@@ -42,7 +43,7 @@ function cspPlugin(): Plugin {
 
 export default defineConfig({
   base: BASE_PATH,
-  plugins: [react(), tailwindcss(), cspPlugin()],
+  plugins: [react(), tailwindcss(), cspPlugin(), serviceWorkerPlugin(fileURLToPath(new URL('./public', import.meta.url)))],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },

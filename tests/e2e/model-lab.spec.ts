@@ -69,10 +69,57 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   const testScore = Number((await page.getByTestId('score-test').textContent())?.replace(',', '.').replace(/[^\d.]/g, ''));
   expect(testScore).toBeGreaterThanOrEqual(75);
 
+  // Giai đoạn 2a: giải thích dự đoán với kích hoạt 7×7 thật, ranh giới 2D, ngưỡng tin cậy.
+  await map.getByRole('button').first().click();
+  const heatmap = page.getByTestId('cam-heatmap');
+  await expect(heatmap).toBeVisible({ timeout: 30_000 });
+  await expect(heatmap.locator('rect')).toHaveCount(49);
+  const cellValues = await heatmap.locator('rect').evaluateAll((rects) => rects.map((r) => Number(r.getAttribute('data-value'))));
+  expect(new Set(cellValues.map((v) => v.toFixed(4))).size).toBeGreaterThan(1); // bản đồ thật không đồng đều
+  await page.getByRole('checkbox', { name: /Hiện ranh giới quyết định/ }).check();
+  await expect(page.getByTestId('decision-grid').locator('rect')).toHaveCount(48 * 48);
+  await expect(page.getByTestId('threshold-summary')).toContainText('Trả lời');
+
+  // Giai đoạn 2b ①: che thử từng ô — 50 lượt chạy MobileNet thật.
+  const occlusion = page.getByTestId('occlusion');
+  await occlusion.getByRole('button', { name: /che từng ô \(49 lần\)/i }).click();
+  const occlusionMap = page.getByTestId('occlusion-map');
+  await expect(occlusionMap.locator('rect')).toHaveCount(49, { timeout: 90_000 });
+  const drops = await occlusionMap.locator('rect').evaluateAll((rects) => rects.map((r) => Number(r.getAttribute('data-value'))));
+  expect(new Set(drops.map((v) => v.toFixed(5))).size).toBeGreaterThan(1);
+  await expect(page.getByTestId('occlusion-summary')).toBeVisible();
+
+  // ②: UMAP (xấp xỉ) rồi quay lại PCA.
+  await page.getByRole('button', { name: 'UMAP', exact: true }).click();
+  await expect(page.getByTestId('umap-note')).toContainText('seed 42', { timeout: 30_000 });
+  await expect(map.getByRole('button')).toHaveCount(20);
+  await page.getByRole('button', { name: 'PCA', exact: true }).click();
+  await expect(page.getByTestId('map-kept')).toBeVisible();
+
+  // ③: Chuyên sâu — bên trong mạng CNN, canvas được vẽ thật bằng kích hoạt của tầng.
+  // Ô radio được ẩn (sr-only) sau nhãn → bấm vào nhãn như người dùng thật.
+  await page.locator('label', { has: page.getByRole('radio', { name: /Chuyên sâu/ }) }).click();
+  await expect(page.getByRole('radio', { name: /Chuyên sâu/ })).toBeChecked();
+  const viewer = page.getByTestId('feature-maps');
+  await viewer.getByRole('button', { name: 'Mở các tầng của mạng' }).click();
+  await expect(page.getByTestId('fmap-shape')).toContainText(/Conv1_relu: 112 × 112 ô × \d+ kênh/, { timeout: 30_000 });
+  await expect(page.getByTestId('fmap-channel')).toHaveCount(8);
+  const distinctGray = await viewer.locator('canvas').first().evaluate((c: HTMLCanvasElement) => {
+    const data = c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data;
+    return new Set(Array.from({ length: data.length / 4 }, (_, i) => data[i * 4])).size;
+  });
+  expect(distinctGray).toBeGreaterThan(2);
+  await viewer.getByRole('button', { name: 'Tầng 5' }).click();
+  await expect(page.getByTestId('fmap-shape')).toContainText('out_relu: 7 × 7 ô × 1280 kênh');
+
   const shots = process.env.SCREENSHOT_DIR;
   if (shots) {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.getByRole('region', { name: '③ Biểu diễn' }).screenshot({ path: `${shots}/represent.png` });
+    await page.getByTestId('selected-detail').screenshot({ path: `${shots}/explainer.png` });
+    await page.getByTestId('feature-maps').screenshot({ path: `${shots}/feature-maps.png` });
+    await page.getByTestId('explainer').screenshot({ path: `${shots}/occlusion.png` });
+    await page.getByRole('region', { name: 'Ngưỡng tin cậy' }).screenshot({ path: `${shots}/threshold.png` });
     await page.getByRole('region', { name: '④ Huấn luyện' }).screenshot({ path: `${shots}/train.png` });
     await page.getByRole('region', { name: '⑤ Đánh giá' }).screenshot({ path: `${shots}/evaluate.png` });
   }

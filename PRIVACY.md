@@ -17,6 +17,7 @@
 | Camera và micro dùng thế nào? | Chỉ bật khi bạn bấm và trình duyệt hỏi ý kiến. Hình ảnh được xử lý tại chỗ và tắt khi rời trang. |
 | Khi nào dữ liệu rời khỏi máy? | Chỉ khi **bạn** bấm "Xuất" để tạo tệp, rồi **bạn** tự gửi tệp đó cho người khác. |
 | Trình duyệt có ghi nhớ gì khác không? | Chỉ ngôn ngữ và chế độ học bạn chọn (localStorage). |
+| "Dùng được khi mất mạng" nghĩa là lưu gì? | Trình duyệt lưu sẵn **tệp của ứng dụng** (mã, giao diện, mô hình MobileNet ~1,7 MB) để chạy khi không có mạng. Không lưu và không gửi dữ liệu học tập của bạn. Xóa bằng cách xóa dữ liệu trang web trong cài đặt trình duyệt. |
 | Làm sao xóa hết dữ liệu? | Vào **Giới thiệu & Quyền riêng tư → Xóa toàn bộ dữ liệu trên máy này**, hoặc xóa dữ liệu trang web trong cài đặt trình duyệt. |
 
 ## Lưu ý về GitHub Pages

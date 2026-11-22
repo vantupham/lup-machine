@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
+import type { DecisionGrid } from '@/core/ml/explain';
 import { colorFor, markerFor } from './class-style';
+import { pointBounds } from './boundary';
 
 export interface MapPoint {
   readonly sample: SampleRecord;
@@ -15,27 +17,24 @@ interface EmbeddingMapProps {
   readonly wrongIds: ReadonlySet<string>;
   readonly axisLabels: readonly [string, string];
   readonly onSelect: (sample: SampleRecord) => void;
+  /** Lưới ranh giới quyết định (tùy chọn), vẽ dưới các chấm theo đúng hệ tọa độ của bản đồ. */
+  readonly grid?: DecisionGrid | null;
 }
 
 const WIDTH = 480;
 const HEIGHT = 320;
 const PAD = 24;
 
-function scaler(values: readonly number[], size: number): (v: number) => number {
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const span = max - min || 1;
-  return (v) => PAD + ((v - min) / span) * (size - 2 * PAD);
-}
-
-export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels, onSelect }: EmbeddingMapProps) {
+export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels, onSelect, grid = null }: EmbeddingMapProps) {
   const { t } = useTranslation();
-  const sx = scaler(points.map((p) => p.x), WIDTH);
-  const sy = scaler(points.map((p) => -p.y), HEIGHT); // trục y hướng lên
+  const b = pointBounds(points);
+  const sx = (x: number) => PAD + ((x - b.minX) / (b.maxX - b.minX)) * (WIDTH - 2 * PAD);
+  const sy = (y: number) => PAD + ((b.maxY - y) / (b.maxY - b.minY)) * (HEIGHT - 2 * PAD); // trục y hướng lên
   const indexOf = new Map(classes.map((c, i) => [c.id, i]));
 
   return (
     <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="h-auto w-full rounded border border-rule bg-surface" role="group" aria-label={t('project.represent.mapTitle')}>
+      {grid && <GridLayer grid={grid} sx={sx} sy={sy} bounds={b} />}
       <line x1={PAD} y1={HEIGHT - PAD / 2} x2={WIDTH - PAD} y2={HEIGHT - PAD / 2} className="stroke-rule" />
       <line x1={PAD / 2} y1={PAD} x2={PAD / 2} y2={HEIGHT - PAD} className="stroke-rule" />
       <text x={WIDTH - PAD} y={HEIGHT - 2} textAnchor="end" className="fill-muted text-[10px]">
@@ -47,7 +46,7 @@ export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels
       {points.map(({ sample, x, y }) => {
         const i = indexOf.get(sample.classId) ?? 0;
         const cx = sx(x);
-        const cy = sy(-y);
+        const cy = sy(y);
         const isSelected = sample.id === selectedId;
         const className = classes[i]?.name ?? '';
         return (
@@ -72,5 +71,39 @@ export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels
         );
       })}
     </svg>
+  );
+}
+
+interface GridLayerProps {
+  readonly grid: DecisionGrid;
+  readonly bounds: { minX: number; maxX: number; minY: number; maxY: number };
+  readonly sx: (x: number) => number;
+  readonly sy: (y: number) => number;
+}
+
+/** Tô mỗi ô lưới theo lớp mà mô hình 2D chọn; càng chắc chắn màu càng đậm. */
+function GridLayer({ grid, bounds, sx, sy }: GridLayerProps) {
+  const dx = (bounds.maxX - bounds.minX) / grid.size;
+  const dy = (bounds.maxY - bounds.minY) / grid.size;
+  return (
+    <g data-testid="decision-grid" aria-hidden="true">
+      {Array.from(grid.classes, (cls, i) => {
+        const col = i % grid.size;
+        const row = Math.floor(i / grid.size);
+        const x0 = sx(bounds.minX + col * dx);
+        const y0 = sy(bounds.maxY - row * dy);
+        return (
+          <rect
+            key={i}
+            x={x0}
+            y={y0}
+            width={sx(bounds.minX + (col + 1) * dx) - x0 + 0.5}
+            height={sy(bounds.maxY - (row + 1) * dy) - y0 + 0.5}
+            fill={colorFor(cls)}
+            fillOpacity={0.06 + 0.22 * grid.confidence[i]!}
+          />
+        );
+      })}
+    </g>
   );
 }

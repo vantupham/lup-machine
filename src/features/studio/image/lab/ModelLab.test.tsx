@@ -13,9 +13,12 @@ const imageOf = (tone: number, n: number): StoredImage => ({ bytes: new Uint8Arr
 vi.mock('../image-codec.browser', () => ({
   fileToStoredImage: vi.fn(),
   videoFrameToStoredImage: vi.fn(),
+  // Ảnh 224×224 thật, chỉ điểm ảnh đầu tiên mang thông tin → che ô (hàng 1, cột 1) làm vector đổi, che ô khác thì không.
   decodeStoredImage: vi.fn(async (img: StoredImage) => {
     const [tone, n] = new Uint8Array(img.bytes);
-    return { width: 224, height: 224, data: new Uint8ClampedArray([tone!, n!, 0, 255]) };
+    const data = new Uint8ClampedArray(224 * 224 * 4);
+    data.set([tone!, n!, 0, 255]);
+    return { width: 224, height: 224, data };
   }),
 }));
 
@@ -35,6 +38,20 @@ vi.mock('../feature-loader.browser', () => ({
       onProgress?.(images.length);
       return images.map((img) => fakeVector(img.data[0]!, img.data[1]!));
     },
+    // 49 ô giống hệt nhau → trung bình không gian đúng bằng vector đặc trưng (nhất quán với extract).
+    extractSpatial: async (images: { data: Uint8ClampedArray }[]) =>
+      images.map((img) => {
+        const v = fakeVector(img.data[0]!, img.data[1]!);
+        const out = new Float32Array(49 * 1280);
+        for (let cell = 0; cell < 49; cell++) out.set(v, cell * 1280);
+        return out;
+      }),
+    extractLayers: async (_image: unknown, names: string[]) =>
+      names.map((layer, i) => {
+        const size = 112 >> i;
+        const channels = 12;
+        return { layer, height: size, width: size, channels, data: Float32Array.from({ length: size * size * channels }, (_, k) => (k % channels) / channels) };
+      }),
   })),
 }));
 
@@ -143,7 +160,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await extractAll();
     await trainToEnd();
     expect(screen.getByText('Kết quả tại epoch 50')).toBeInTheDocument();
-    fireEvent.change(screen.getByRole('slider'), { target: { value: '0' } });
+    fireEvent.change(screen.getByRole('slider', { name: /phát lại/i }), { target: { value: '0' } });
     expect(await screen.findByText('Kết quả tại epoch 0')).toBeInTheDocument();
     expect(screen.getByText('Phát lại: epoch 0')).toBeInTheDocument();
   });
@@ -265,6 +282,123 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     expect(await screen.findByText('Dữ liệu đã thay đổi')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Chạy lại lần 1' })).toBeNull();
     expect(screen.getByText('Hãy huấn luyện ở bước ④ trước.')).toBeInTheDocument();
+  });
+
+  test('chưa huấn luyện: phần giải thích nhắc huấn luyện trước', async () => {
+    await seed();
+    open();
+    await extractAll();
+    const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
+    await userEvent.click(within(map).getAllByRole('button')[0]!);
+    expect(await screen.findByText('Hãy huấn luyện ở bước ④ để xem giải thích.')).toBeInTheDocument();
+  });
+
+  test('giải thích dự đoán: xác suất, bản đồ CAM 7×7 và (Chuyên sâu) đường đi phép tính khớp logit', async () => {
+    useModeStore.setState({ mode: 'expert' });
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
+    await userEvent.click(within(map).getAllByRole('button', { name: /ảnh lớp nhựa, ngăn kiểm tra/i })[0]!);
+    const explainer = await screen.findByTestId('explainer');
+    expect(within(explainer).getByTestId('prob-0').textContent).toMatch(/%$/);
+
+    const heatmap = await within(explainer).findByTestId('cam-heatmap');
+    expect(heatmap.querySelectorAll('rect')).toHaveLength(49);
+    expect(within(explainer).getByRole('button', { name: /● Nhựa/ })).toHaveAttribute('aria-pressed', 'true');
+
+    // Đẳng thức hiển thị: trung bình 49 ô + b = logit (cùng một số ở hai vế)
+    const check = within(explainer).getByTestId('cam-check').textContent!;
+    const [, sum, logit] = /= (-?[\d,.]+) ≈ logit (-?[\d,.]+)/.exec(check)!;
+    const num = (s: string) => Number(s.replace(',', '.'));
+    expect(sum).toBe(logit);
+    expect(num(within(explainer).getByTestId('path-logit').textContent!)).toBeCloseTo(num(logit!), 3);
+
+    await userEvent.click(within(explainer).getByRole('button', { name: /▲ Giấy/ }));
+    expect(within(explainer).getByRole('button', { name: /▲ Giấy/ })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('che thử từng ô: đo 49 lần, chỉ ô chứa thông tin làm đổi xác suất', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
+    await userEvent.click(within(map).getAllByRole('button', { name: /ảnh lớp giấy, ngăn kiểm tra/i })[0]!);
+    const occlusion = await screen.findByTestId('occlusion');
+    await userEvent.click(within(occlusion).getByRole('button', { name: /che từng ô \(49 lần\)/i }));
+    const grid = await within(occlusion).findByTestId('occlusion-map');
+    const values = [...grid.querySelectorAll('rect')].map((r) => Number(r.getAttribute('data-value')));
+    expect(values).toHaveLength(49);
+    expect(values[0]).not.toBe(0);
+    expect(values.slice(1).every((v) => v === 0)).toBe(true);
+    // Đổi lớp: cùng 49 lần đo, không phải chạy lại mô hình
+    await userEvent.click(screen.getByRole('button', { name: /● Nhựa/ }));
+    expect(within(occlusion).getByTestId('occlusion-summary')).toHaveTextContent(/Nhựa/);
+  });
+
+  test('Chuyên sâu: mở các tầng CNN, xem kênh mạnh nhất và đổi tầng', async () => {
+    useModeStore.setState({ mode: 'expert' });
+    await seed();
+    open();
+    await extractAll();
+    const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
+    await userEvent.click(within(map).getAllByRole('button')[0]!);
+    const viewer = await screen.findByTestId('feature-maps');
+    await userEvent.click(within(viewer).getByRole('button', { name: 'Mở các tầng của mạng' }));
+    expect(await within(viewer).findByTestId('fmap-shape')).toHaveTextContent('Conv1_relu: 112 × 112 ô × 12 kênh');
+    expect(within(viewer).getAllByTestId('fmap-channel')).toHaveLength(8);
+    expect(within(viewer).getAllByRole('img', { name: /^Kênh / })[0]).toHaveAccessibleName('Kênh 11');
+    await userEvent.click(within(viewer).getByRole('button', { name: 'Tầng 5' }));
+    expect(within(viewer).getByTestId('fmap-shape')).toHaveTextContent('out_relu: 7 × 7 ô');
+    expect(within(viewer).getByText(/1280 con số ở trên/)).toBeInTheDocument();
+  });
+
+  test('Khám phá: không hiện trình xem tầng CNN', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await userEvent.click(within(screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' })).getAllByRole('button')[0]!);
+    await screen.findByTestId('selected-detail');
+    expect(screen.queryByTestId('feature-maps')).toBeNull();
+  });
+
+  test('UMAP: chuyển cách vẽ, gắn nhãn xấp xỉ, ẩn ranh giới; về PCA như cũ', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await userEvent.click(screen.getByRole('button', { name: 'UMAP' }));
+    expect(await screen.findByTestId('umap-note', {}, { timeout: 10_000 })).toHaveTextContent(/seed 42/);
+    expect(within(screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' })).getAllByRole('button')).toHaveLength(16);
+    expect(screen.getByText(/UMAP 1 \(không có đơn vị\)/)).toBeInTheDocument();
+    expect(screen.queryByRole('checkbox', { name: /hiện ranh giới quyết định/i })).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: 'PCA' }));
+    expect(screen.getByTestId('map-kept')).toBeInTheDocument();
+  });
+
+  test('ranh giới quyết định 2D: bật thì vẽ lưới và so sánh với mô hình chính', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    await userEvent.click(screen.getByRole('checkbox', { name: /hiện ranh giới quyết định/i }));
+    expect(await screen.findByTestId('decision-grid')).toBeInTheDocument();
+    expect(screen.getByTestId('decision-grid').querySelectorAll('rect')).toHaveLength(48 * 48);
+    expect(screen.getByTestId('boundary-note')).toHaveTextContent(/2 trục đạt 100% .* mô hình chính .* đạt 100%/);
+    await userEvent.click(screen.getByRole('checkbox', { name: /hiện ranh giới quyết định/i }));
+    expect(screen.queryByTestId('decision-grid')).toBeNull();
+  });
+
+  test('ngưỡng tin cậy: ngưỡng cao hơn thì trả lời ít hơn', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    expect(screen.getByTestId('threshold-summary')).toHaveTextContent('Trả lời 4/4 ảnh (100%)');
+    fireEvent.change(screen.getByRole('slider', { name: /ngưỡng/i }), { target: { value: '0.95' } });
+    expect(screen.getByRole('slider', { name: /ngưỡng/i })).toHaveValue('0.95');
+    expect(screen.getByTestId('threshold-summary').textContent).not.toBe('Trả lời 4/4 ảnh (100%) · đúng 100% trong số đã trả lời');
   });
 
   test('chỉ có 1 lớp có ảnh Dạy thì chưa huấn luyện được', async () => {

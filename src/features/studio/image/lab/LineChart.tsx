@@ -11,6 +11,8 @@ interface LineChartProps {
   readonly maxX: number;
   readonly yMax?: number;
   readonly markerX: number | null;
+  /** Nhãn ở cuối trục X (mặc định "epoch N"). */
+  readonly xAxisLabel?: string;
 }
 
 const W = 320;
@@ -20,7 +22,7 @@ const PAD_B = 18;
 const PAD_T = 8;
 
 /** Biểu đồ đường đơn giản (SVG) cho loss / accuracy theo epoch, có vạch đánh dấu epoch đang xem. */
-export function LineChart({ title, series, maxX, yMax, markerX }: LineChartProps) {
+export function LineChart({ title, series, maxX, yMax, markerX, xAxisLabel }: LineChartProps) {
   const all = series.flatMap((s) => s.values.filter((v): v is number => v !== null));
   const top = yMax ?? Math.max(1e-9, ...all) * 1.05;
   const x = (i: number) => PAD_L + (i / Math.max(1, maxX)) * (W - PAD_L - 4);
@@ -44,7 +46,7 @@ export function LineChart({ title, series, maxX, yMax, markerX }: LineChartProps
           </g>
         ))}
         <text x={W - 4} y={H - 2} textAnchor="end" className="fill-muted text-[9px]">
-          epoch {maxX}
+          {xAxisLabel ?? `epoch ${maxX}`}
         </text>
         {markerX !== null && <line x1={x(markerX)} x2={x(markerX)} y1={PAD_T} y2={H - PAD_B} stroke="var(--color-ink)" strokeOpacity={0.4} />}
         {series.map((s) => (

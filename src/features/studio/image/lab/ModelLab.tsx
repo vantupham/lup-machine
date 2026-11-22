@@ -133,6 +133,8 @@ export function ModelLab({ projectId, classes, samples }: ModelLabProps) {
         selected={selectedSample}
         onSelect={setSelected}
         wrongIds={wrongIds}
+        params={snapshot?.params ?? null}
+        mainTrainAccuracy={snapshot?.train.accuracy ?? null}
       />
       <TrainSection
         readiness={readiness}
