@@ -1,0 +1,110 @@
+{
+  "app": {
+    "name": "LUP Machine",
+    "tagline": "Phòng thí nghiệm AI minh bạch"
+  },
+  "nav": {
+    "label": "Điều hướng chính",
+    "home": "Trang chủ",
+    "studio": "Xưởng mô hình",
+    "about": "Giới thiệu & Quyền riêng tư",
+    "language": "Ngôn ngữ",
+    "switchTo": "English"
+  },
+  "mode": {
+    "label": "Chế độ học",
+    "explore": "Khám phá",
+    "exploreHint": "THCS · trực quan, ít số liệu",
+    "expert": "Chuyên sâu",
+    "expertHint": "THPT · số liệu thật, công thức"
+  },
+  "home": {
+    "eyebrow": "Dạy và học AI cho THCS · THPT",
+    "title": "Đừng chỉ xem AI đoán đúng.",
+    "titleMark": "Hãy nhìn nó làm thế nào.",
+    "lead": "Tự dạy cho máy tính bằng dữ liệu của em, rồi mở nắp từng bước: ảnh biến thành con số ra sao, máy học như thế nào, vì sao nó đoán sai.",
+    "ctaStudio": "Vào Xưởng mô hình",
+    "ctaAbout": "Dữ liệu của em đi đâu?",
+    "pipelineTitle": "Sáu bước, bước nào cũng mở nắp được",
+    "steps": {
+      "data": "Dữ liệu",
+      "check": "Kiểm tra dữ liệu",
+      "represent": "Biểu diễn",
+      "train": "Huấn luyện",
+      "evaluate": "Đánh giá",
+      "use": "Sử dụng"
+    },
+    "stepHints": {
+      "data": "Thu ảnh, chia Dạy / Kiểm tra",
+      "check": "Phát hiện lệch, trùng, thiếu",
+      "represent": "Ảnh → bảng số → vector",
+      "train": "Đoán, so đáp án, sửa lỗi",
+      "evaluate": "Sai ở đâu, vì sao",
+      "use": "Thử trực tiếp, xuất mô hình"
+    },
+    "promisesTitle": "Ba cam kết",
+    "promises": {
+      "privacyTitle": "Dữ liệu ở lại trên máy",
+      "privacyBody": "Không máy chủ, không tài khoản, không theo dõi. Ảnh của em không được gửi đi đâu cả.",
+      "honestTitle": "Nói thật về AI",
+      "honestBody": "Mỗi hình minh họa đều ghi rõ là chính xác hay xấp xỉ, kèm cách nó được tạo ra.",
+      "openTitle": "Mã nguồn mở, miễn phí",
+      "openBody": "Giáo viên có thể xem, góp ý và đóng góp bài học trên GitHub."
+    },
+    "status": "Phiên bản {{version}} · đang phát triển giai đoạn nền móng"
+  },
+  "studio": {
+    "title": "Xưởng mô hình",
+    "lead": "Mỗi dự án là một thí nghiệm. Dự án được lưu ngay trên trình duyệt của máy này.",
+    "newProject": "Dự án mới",
+    "nameLabel": "Tên dự án",
+    "namePlaceholder": "Ví dụ: Phân loại rác",
+    "typeLabel": "Loại dữ liệu",
+    "create": "Tạo dự án",
+    "creating": "Đang tạo…",
+    "comingSoon": "sắp có",
+    "types": {
+      "image": "Ảnh",
+      "audio": "Âm thanh",
+      "pose": "Tư thế",
+      "text": "Văn bản",
+      "tabular": "Bảng số"
+    },
+    "listTitle": "Dự án của em",
+    "empty": "Chưa có dự án nào. Hãy tạo dự án đầu tiên ở bên cạnh.",
+    "updatedAt": "Cập nhật {{date}}",
+    "delete": "Xóa",
+    "confirmDelete": "Xóa dự án \"{{name}}\"? Không thể hoàn tác.",
+    "loadError": "Không đọc được dữ liệu đã lưu trên trình duyệt. Có thể trình duyệt đang ở chế độ ẩn danh hoặc đã chặn lưu trữ.",
+    "saveError": "Không lưu được dự án: {{message}}",
+    "nameRequired": "Hãy đặt tên cho dự án (1–100 ký tự)."
+  },
+  "about": {
+    "title": "Giới thiệu & Quyền riêng tư",
+    "whatTitle": "LUP Machine là gì?",
+    "whatBody": "Một phòng thí nghiệm AI chạy hoàn toàn trên trình duyệt, giúp học sinh tự huấn luyện mô hình học máy và nhìn thấy từng bước AI xử lý dữ liệu của mình.",
+    "privacyTitle": "Dữ liệu của em đi đâu?",
+    "privacyItems": [
+      "Ảnh, âm thanh, văn bản em đưa vào chỉ được lưu trong bộ nhớ trình duyệt của máy này (IndexedDB).",
+      "Trang web không có máy chủ nhận dữ liệu, không dùng cookie theo dõi, không dùng công cụ phân tích.",
+      "Chỉ khi em bấm \"Xuất\" thì dữ liệu mới thành một tệp trên máy em. Em tự quyết định gửi tệp đó cho ai.",
+      "Camera và micro chỉ bật khi em cho phép, và tắt khi em rời trang."
+    ],
+    "sharedTitle": "Dùng máy chung ở phòng tin?",
+    "sharedBody": "Hãy xóa dữ liệu trước khi rời máy để bạn khác không xem được dự án của em.",
+    "deleteAll": "Xóa toàn bộ dữ liệu trên máy này",
+    "confirmDeleteAll": "Xóa TOÀN BỘ dự án LUP Machine trên trình duyệt này? Không thể hoàn tác.",
+    "deletedAll": "Đã xóa toàn bộ dữ liệu.",
+    "deleteError": "Không xóa được dữ liệu: {{message}}",
+    "licenseTitle": "Giấy phép",
+    "licenseBody": "Mã nguồn: MIT. Nội dung bài học: CC BY 4.0. Mô hình nền và bộ dữ liệu mẫu ghi nguồn và giấy phép riêng.",
+    "sourceCode": "Mã nguồn trên GitHub"
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "back": "Về trang chủ"
+  },
+  "footer": {
+    "privacy": "Không máy chủ · Không theo dõi · Dữ liệu ở lại trên máy"
+  }
+}

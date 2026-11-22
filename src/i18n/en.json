@@ -1,0 +1,110 @@
+{
+  "app": {
+    "name": "LUP Machine",
+    "tagline": "A transparent AI lab"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home",
+    "studio": "Model Studio",
+    "about": "About & Privacy",
+    "language": "Language",
+    "switchTo": "Tiếng Việt"
+  },
+  "mode": {
+    "label": "Learning mode",
+    "explore": "Explore",
+    "exploreHint": "Lower secondary · visual, few numbers",
+    "expert": "In depth",
+    "expertHint": "Upper secondary · real numbers, formulas"
+  },
+  "home": {
+    "eyebrow": "Teaching and learning AI for grades 6–12",
+    "title": "Don't just watch AI guess right.",
+    "titleMark": "See how it does it.",
+    "lead": "Teach the computer with your own data, then open the lid on every step: how a photo turns into numbers, how the machine learns, and why it gets things wrong.",
+    "ctaStudio": "Open the Model Studio",
+    "ctaAbout": "Where does my data go?",
+    "pipelineTitle": "Six steps, each one can be opened up",
+    "steps": {
+      "data": "Data",
+      "check": "Check data",
+      "represent": "Represent",
+      "train": "Train",
+      "evaluate": "Evaluate",
+      "use": "Use"
+    },
+    "stepHints": {
+      "data": "Collect images, split Train / Test",
+      "check": "Spot imbalance, duplicates, gaps",
+      "represent": "Image → grid of numbers → vector",
+      "train": "Guess, compare, correct",
+      "evaluate": "Where it fails, and why",
+      "use": "Try it live, export the model"
+    },
+    "promisesTitle": "Three promises",
+    "promises": {
+      "privacyTitle": "Your data stays on this device",
+      "privacyBody": "No server, no account, no tracking. Your photos are never sent anywhere.",
+      "honestTitle": "Honest about AI",
+      "honestBody": "Every visualisation says whether it is exact or approximate, and how it was made.",
+      "openTitle": "Open source, free",
+      "openBody": "Teachers can read, review and contribute lessons on GitHub."
+    },
+    "status": "Version {{version}} · foundation stage in progress"
+  },
+  "studio": {
+    "title": "Model Studio",
+    "lead": "Each project is an experiment. Projects are saved in this browser on this device.",
+    "newProject": "New project",
+    "nameLabel": "Project name",
+    "namePlaceholder": "e.g. Waste sorting",
+    "typeLabel": "Data type",
+    "create": "Create project",
+    "creating": "Creating…",
+    "comingSoon": "coming soon",
+    "types": {
+      "image": "Image",
+      "audio": "Audio",
+      "pose": "Pose",
+      "text": "Text",
+      "tabular": "Table"
+    },
+    "listTitle": "Your projects",
+    "empty": "No projects yet. Create your first one.",
+    "updatedAt": "Updated {{date}}",
+    "delete": "Delete",
+    "confirmDelete": "Delete project \"{{name}}\"? This cannot be undone.",
+    "loadError": "Could not read saved data. The browser may be in private mode or blocking storage.",
+    "saveError": "Could not save the project: {{message}}",
+    "nameRequired": "Please name your project (1–100 characters)."
+  },
+  "about": {
+    "title": "About & Privacy",
+    "whatTitle": "What is LUP Machine?",
+    "whatBody": "An AI lab that runs entirely in the browser, letting students train machine-learning models and see every step the AI takes with their data.",
+    "privacyTitle": "Where does my data go?",
+    "privacyItems": [
+      "Images, sounds and text you add are stored only in this browser on this device (IndexedDB).",
+      "The site has no server receiving data, no tracking cookies and no analytics.",
+      "Only when you press \"Export\" does your data become a file on your device. You decide who gets it.",
+      "Camera and microphone turn on only with your permission and turn off when you leave the page."
+    ],
+    "sharedTitle": "Using a shared computer?",
+    "sharedBody": "Delete your data before leaving so others cannot see your projects.",
+    "deleteAll": "Delete all data on this device",
+    "confirmDeleteAll": "Delete ALL LUP Machine projects in this browser? This cannot be undone.",
+    "deletedAll": "All data deleted.",
+    "deleteError": "Could not delete data: {{message}}",
+    "licenseTitle": "Licences",
+    "licenseBody": "Code: MIT. Lesson content: CC BY 4.0. Base models and sample datasets carry their own attribution and licences.",
+    "sourceCode": "Source code on GitHub"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back to home"
+  },
+  "footer": {
+    "privacy": "No server · No tracking · Data stays on your device"
+  }
+}
