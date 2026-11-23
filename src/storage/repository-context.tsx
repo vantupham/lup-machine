@@ -5,6 +5,7 @@ import type { ExperimentRepository } from './repositories/experiment-repository'
 import type { TableRepository } from './repositories/table-repository';
 import type { AudioRepository } from './repositories/audio-repository';
 import type { PoseRepository } from './repositories/pose-repository';
+import type { ProjectFileRepository } from './repositories/project-file-repository';
 
 export interface Repositories {
   readonly projects: ProjectRepository;
@@ -13,6 +14,7 @@ export interface Repositories {
   readonly tables: TableRepository;
   readonly audio: AudioRepository;
   readonly poses: PoseRepository;
+  readonly projectFiles: ProjectFileRepository;
 }
 
 const RepositoriesContext = createContext<Repositories | null>(null);
@@ -54,4 +56,8 @@ export function useAudioRepository(): AudioRepository {
 
 export function usePoseRepository(): PoseRepository {
   return useRepositories().poses;
+}
+
+export function useProjectFileRepository(): ProjectFileRepository {
+  return useRepositories().projectFiles;
 }

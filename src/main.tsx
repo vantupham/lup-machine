@@ -9,6 +9,7 @@ import { createDexieExperimentRepository } from './storage/repositories/experime
 import { createDexieTableRepository } from './storage/repositories/table-repository';
 import { createDexieAudioRepository } from './storage/repositories/audio-repository';
 import { createDexiePoseRepository } from './storage/repositories/pose-repository';
+import { createDexieProjectFileRepository } from './storage/repositories/project-file-repository';
 import { LupDatabase } from './storage/db';
 import { initialLanguage } from './i18n';
 import { registerServiceWorker, useOfflineStore } from './ui/offline';
@@ -26,6 +27,7 @@ const repositories: Repositories = {
   tables: createDexieTableRepository(db),
   audio: createDexieAudioRepository(db),
   poses: createDexiePoseRepository(db),
+  projectFiles: createDexieProjectFileRepository(db),
 };
 
 // Chạy ngoại tuyến chỉ bật ở bản build (bản dev của Vite thay đổi mã liên tục).

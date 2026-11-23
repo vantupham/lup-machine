@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { SampleDatasetsPanel } from '@/features/samples/SampleDatasetsPanel';
+import { ExportProjectButton } from '@/features/project-file/ExportProjectButton';
+import { ImportProjectPanel } from '@/features/project-file/ImportProjectPanel';
 import { useDatasetRepository, useProjectRepository } from '@/storage/repository-context';
 import type { ProjectRecord } from '@/storage/db';
 import { PROJECT_TYPES } from '@/storage/schemas/manifest';
@@ -61,7 +63,10 @@ export function StudioPage() {
       <SampleDatasetsPanel />
 
       <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
-        <NewProjectForm onCreated={reload} />
+        <div className="space-y-6">
+          <NewProjectForm onCreated={reload} />
+          <ImportProjectPanel onImported={reload} />
+        </div>
         <section aria-labelledby="project-list-title">
           <h2 id="project-list-title" className="mb-4 text-lg font-semibold">
             {t('studio.listTitle')}
@@ -198,7 +203,7 @@ function ProjectCard({ project, onDelete }: ProjectCardProps) {
         <p className="text-lg font-semibold">{project.name}</p>
         <p className="text-xs text-muted">{t('studio.updatedAt', { date })}</p>
       </div>
-      <div className="mt-auto flex gap-2">
+      <div className="mt-auto flex flex-wrap gap-2">
         <Link
           to={`/studio/${project.id}`}
           aria-label={`${t('studio.open')} ${project.name}`}
@@ -206,6 +211,7 @@ function ProjectCard({ project, onDelete }: ProjectCardProps) {
         >
           {t('studio.open')} →
         </Link>
+        <ExportProjectButton projectId={project.id} projectName={project.name} />
         <button
           type="button"
           onClick={() => void onDelete(project)}

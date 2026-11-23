@@ -13,7 +13,7 @@ const metricSchema = z.object({
   testAccuracy: z.number().min(0).max(1).nullable(),
 });
 
-const newRunSchema = z.object({
+export const newRunSchema = z.object({
   projectId: z.string().min(1),
   fingerprint: z.string().min(1).max(64),
   options: z.object({
