@@ -81,6 +81,17 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   const testScore = Number((await page.getByTestId('score-test').textContent())?.replace(',', '.').replace(/[^\d.]/g, ''));
   expect(testScore).toBeGreaterThanOrEqual(75);
 
+  // Giai đoạn 3: tải notebook Colab chứa đặc trưng thật vừa tính trong trình duyệt.
+  // Đặt NOTEBOOK_DIR để lưu lại rồi chạy thật bằng scripts/check-notebooks.py.
+  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Tải notebook (.ipynb)' }).click()]);
+  expect(download.suggestedFilename()).toMatch(/-lup-machine\.ipynb$/);
+  const { readFileSync } = await import('node:fs');
+  const nb = JSON.parse(readFileSync((await download.path())!, 'utf8'));
+  const sourceText = nb.cells.map((c: { source: string[] }) => c.source.join('')).join('\n');
+  expect(sourceText).toContain('CLASS_NAMES = ["Lớp 1", "Lớp 2"]');
+  expect(sourceText).toContain('TFLiteConverter');
+  if (process.env.NOTEBOOK_DIR) await download.saveAs(`${process.env.NOTEBOOK_DIR}/e2e-image-real-features.ipynb`);
+
   // Giai đoạn 2a: giải thích dự đoán với kích hoạt 7×7 thật, ranh giới 2D, ngưỡng tin cậy.
   await map.getByRole('button').first().click();
   const heatmap = page.getByTestId('cam-heatmap');

@@ -8,6 +8,9 @@ import { prepareData } from '@/core/tabular/prepare';
 import { checkTabularQuality } from '@/core/tabular/quality';
 import type { TabularConfig } from '@/storage/schemas/tabular';
 import { getErrorMessage } from '@/ui/error-message';
+import { tabularNotebook } from '@/core/export/tabular-notebook';
+import { ColabExportPanel } from '@/features/export/ColabExportPanel';
+import { version as appVersion } from '../../../../package.json';
 import { DataSection } from './DataSection';
 import { EvaluateSection } from './EvaluateSection';
 import { ModelSection } from './ModelSection';
@@ -119,6 +122,23 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
               </Step>
               <Step n={6} id="tab-step-use" title={t('tabular.steps.use')}>
                 <UseSection key={trainKey} trained={current} data={data} />
+                {parsed && (
+                  <ColabExportPanel
+                    projectName={state.project.name}
+                    descriptionKey="export.colab.tabularDescription"
+                    build={() =>
+                      tabularNotebook({
+                        projectName: state.project.name,
+                        appVersion,
+                        exportedAt: new Date().toLocaleString('vi'),
+                        table: parsed,
+                        data,
+                        settings: config.model,
+                        evaluation,
+                      })
+                    }
+                  />
+                )}
               </Step>
             </>
           )}

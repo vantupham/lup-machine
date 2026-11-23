@@ -865,5 +865,20 @@
       "score": "Điểm lớp \"{{cls}}\" = {{b}} (độ lệch) + các đóng góp = {{score}}. Đóng góp lớn nhất:",
       "linearSum": "Dự đoán = {{b}} (độ lệch) + tổng các đóng góp (hệ số × giá trị). Đóng góp lớn nhất:"
     }
+  },
+  "export": {
+    "colab": {
+      "title": "Học tiếp bằng Python: notebook Google Colab",
+      "tabularDescription": "Tải về một notebook dựng lại đúng mô hình này bằng pandas và scikit-learn, trên cùng dữ liệu và cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine.",
+      "imageDescription": "Tải về một notebook chứa 1.280 con số đặc trưng của mỗi ảnh (không chứa ảnh gốc), huấn luyện lại tầng phân loại bằng Keras rồi chuyển mô hình hoàn chỉnh sang TensorFlow Lite.",
+      "step1": "Bấm nút dưới đây để tải tệp .ipynb về máy.",
+      "step2": "Mở colab.research.google.com, chọn Tệp → Tải sổ tay lên (File → Upload notebook) và chọn tệp vừa tải.",
+      "step3": "Chọn Thời gian chạy → Chạy tất cả (Runtime → Run all).",
+      "download": "Tải notebook (.ipynb)",
+      "done": "Đã tạo notebook ({{size}} MB). Kiểm tra thư mục Tải xuống.",
+      "large": "Notebook khá lớn nên Colab có thể mở chậm.",
+      "error": "Không tạo được notebook: {{message}}",
+      "privacy": "Notebook được tạo ngay trên máy này. LUP Machine không gửi dữ liệu đi đâu; chỉ khi em tự tải notebook lên Colab thì dữ liệu trong đó mới nằm trên Google Drive của em."
+    }
   }
 }

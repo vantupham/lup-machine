@@ -51,12 +51,12 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 - [x] 2 bộ ảnh thật có giấy phép mở, tuyển chọn thủ công, ghi công từng ảnh: hoa (cúc / hướng dương / hồng) và lá đậu (khỏe / đốm góc / gỉ sắt)
 - [x] Mô hình chạy trong Web Worker: giao diện luôn mượt, kể cả trên máy yếu (tự chuyển về luồng chính nếu trình duyệt không hỗ trợ)
 
-**Giai đoạn 3 – Sân chơi thuật toán & dữ liệu bảng (đang làm).** Đã có:
+**Giai đoạn 3 – Sân chơi thuật toán & dữ liệu bảng (xong).** Đã có:
 
 - [x] Sân chơi thuật toán (`#/playground`) với 6 thuật toán tự cài đặt bằng TypeScript, chạy từng bước trên dữ liệu 2D: k-NN, cây quyết định (mọc từng nút, thấy quá khớp), hồi quy tuyến tính (tự kéo đường thẳng), gradient descent, k-means, mạng nơ-ron mini (xem từng nơ-ron "vẽ" gì)
 - [x] Kiểm thử đối chiếu với scikit-learn (`scripts/gen-reference-results.py`): k-NN (phân loại và hồi quy), cây quyết định, hồi quy tuyến tính, hồi quy logistic, k-means, một bước huấn luyện của mạng nơ-ron
 - [x] Studio dữ liệu bảng: nạp CSV (tải tệp, dán từ Excel / Google Trang tính, hoặc bộ mẫu Iris và chim cánh cụt Palmer), chọn cột nhãn và đặc trưng, trợ lý kiểm tra dữ liệu (dòng thiếu, mất cân bằng, cột giống mã định danh), xem chuẩn hóa và one-hot, huấn luyện cây quyết định / hồi quy logistic / k-NN / hồi quy tuyến tính, ma trận nhầm lẫn, R², giải thích từng dự đoán
-- [ ] Xuất notebook Colab
+- [x] Xuất notebook Google Colab (tạo ngay trong trình duyệt, tải về máy): dự án bảng dựng lại đúng mô hình bằng scikit-learn và so kết quả với LUP Machine; dự án ảnh huấn luyện lại tầng phân loại bằng Keras rồi chuyển mô hình hoàn chỉnh sang TensorFlow Lite. `scripts/check-notebooks.py` chạy thật các notebook mẫu
 
 ## Yêu cầu
 

@@ -24,6 +24,14 @@ test('Studio dữ liệu bảng: tạo dự án, nạp chim cánh cụt, huấn 
   await form.getByLabel('Cân nặng (g)').fill('5200');
   await expect(page.getByTestId('tabular-prediction')).toHaveText(/Gentoo/);
 
+  // tải notebook Colab dựng lại đúng mô hình này bằng scikit-learn
+  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Tải notebook (.ipynb)' }).click()]);
+  expect(download.suggestedFilename()).toBe('chim-canh-cut-e2e-lup-machine.ipynb');
+  const { readFileSync } = await import('node:fs');
+  const nb = JSON.parse(readFileSync((await download.path())!, 'utf8'));
+  expect(nb.cells.map((c: { source: string[] }) => c.source.join('')).join('\n')).toContain('LogisticRegression(C=1, max_iter=10000)');
+  if (process.env.NOTEBOOK_DIR) await download.saveAs(`${process.env.NOTEBOOK_DIR}/e2e-tabular-penguins.ipynb`);
+
   // mở lại trang: bảng và cấu hình vẫn còn (lưu trên máy)
   await page.reload();
   await expect(page.getByTestId('table-size')).toHaveText('344 dòng × 7 cột');

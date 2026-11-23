@@ -4,6 +4,14 @@
 
 ## [Chưa phát hành]
 
+### Thêm (xuất notebook Google Colab – giai đoạn 3)
+
+- Nút **"Tải notebook (.ipynb)"** ở bước ⑥ của Studio dữ liệu bảng và sau phần Đánh giá của Studio ảnh (chỉ hiện khi đã huấn luyện xong và dữ liệu chưa đổi). Notebook được tạo ngay trong trình duyệt và tải về máy; học sinh tự tải lên Colab. LUP Machine không gửi dữ liệu đi đâu.
+- **Dự án bảng:** notebook chứa bảng đã làm sạch kèm cột Dạy / Kiểm tra đúng như trên LUP Machine, dựng lại cùng mô hình và tham số bằng pandas + scikit-learn, in kết quả cạnh số của LUP Machine ("khớp" / "lệch", có giải thích các trường hợp hòa của k-NN và cây), giải thích mô hình (`export_text`, trọng số, hệ số) và ô thử dự đoán.
+- **Dự án ảnh:** notebook chứa vector đặc trưng float32 (base64, numpy đọc lại đúng từng bit), không chứa ảnh gốc; huấn luyện lại tầng Dense + softmax bằng Keras với cùng epoch / learning rate / batch / seed, ghép MobileNetV2 α=0.35 của Keras Applications, chuyển sang TensorFlow Lite, tự kiểm tra TFLite ↔ Keras rồi tải `lup_model.tflite` và `labels.txt` về.
+- Kiểm thử đối chiếu mới `src/core/ml/keras-parity.test.ts` với tham chiếu sinh bằng Keras (`scripts/gen-keras-reference.py`): đặc trưng LUP Machine tính bằng TF.js trùng với Keras MobileNetV2 (sai khác < 0,001, cosine > 0,99999), nên tầng phân loại huấn luyện trên đặc trưng của trình duyệt dùng được với mô hình Keras.
+- `scripts/check-notebooks.py` chạy thật mọi ô của các notebook mẫu. Đã chạy: 6 notebook bảng (cả 5 mô hình) khớp LUP Machine, trừ k-NN hồi quy lệch nhẹ do hòa khoảng cách như đã giải thích; notebook ảnh huấn luyện, xuất TFLite 1,6 MB, TFLite trùng Keras (chênh < 1e-6); hai notebook tải từ trình duyệt thật trong E2E cũng chạy đạt.
+
 ### Thêm (Studio dữ liệu bảng – giai đoạn 3)
 
 - Loại dự án **Bảng số** trong Xưởng mô hình, quy trình 6 bước trên một trang:
