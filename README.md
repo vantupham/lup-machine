@@ -58,11 +58,11 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 - [x] Studio dữ liệu bảng: nạp CSV (tải tệp, dán từ Excel / Google Trang tính, hoặc bộ mẫu Iris và chim cánh cụt Palmer), chọn cột nhãn và đặc trưng, trợ lý kiểm tra dữ liệu (dòng thiếu, mất cân bằng, cột giống mã định danh), xem chuẩn hóa và one-hot, huấn luyện cây quyết định / hồi quy logistic / k-NN / hồi quy tuyến tính, ma trận nhầm lẫn, R², giải thích từng dự đoán
 - [x] Xuất notebook Google Colab (tạo ngay trong trình duyệt, tải về máy): dự án bảng dựng lại đúng mô hình bằng scikit-learn và so kết quả với LUP Machine; dự án ảnh huấn luyện lại tầng phân loại bằng Keras rồi chuyển mô hình hoàn chỉnh sang TensorFlow Lite. `scripts/check-notebooks.py` chạy thật các notebook mẫu
 
-**Giai đoạn 4 – Âm thanh, tư thế, văn bản tiếng Việt (đang làm).** Đã có:
+**Giai đoạn 4 – Âm thanh, tư thế, văn bản tiếng Việt (xong).** Đã có:
 
 - [x] Studio văn bản tiếng Việt: tự gõ câu cho từng nhóm, tải CSV, hoặc 2 bộ câu mẫu tự soạn (chủ đề; góp ý căng tin); trợ lý kiểm tra (câu trùng, câu mâu thuẫn nhãn, câu quá ngắn, mất cân bằng); Kính hiển vi tách âm tiết và TF-IDF; Naive Bayes và hồi quy logistic; từ đặc trưng của mỗi nhóm; tô màu đóng góp của từng âm tiết trong câu (cộng lại đúng bằng điểm của mô hình); xuất notebook Colab. Đối chiếu scikit-learn: TF-IDF, Naive Bayes, hồi quy logistic
 - [x] Studio âm thanh: thu 1 giây bằng micro (có phổ trực tiếp), tải tệp, hoặc âm thanh mẫu tổng hợp (chuông / còi / trống); trợ lý báo đoạn im lặng, đoạn bị rè; Kính hiển vi dạng sóng → FFT một khung → ảnh phổ mel → 160 con số; hồi quy logistic (bản đồ vùng phổ quan trọng, đóng góp từng ô) hoặc k-NN (nghe lại các đoạn giống nhất); xuất notebook Colab. Đối chiếu NumPy / librosa: FFT, cửa sổ Hann, bộ lọc mel, ảnh phổ mel
-- [ ] Studio tư thế & bàn tay (khung xương)
+- [x] Studio tư thế & bàn tay: MoveNet (17 khớp) và MediaPipe Hand Landmark (21 điểm) tự lưu trữ, chạy trên trình duyệt; ghi từ camera (1 mẫu hoặc 10 mẫu liên tiếp có đếm ngược), tải ảnh, hoặc tư thế / cử chỉ mẫu giả lập; **chỉ lưu tọa độ khớp, không lưu ảnh**; Kính hiển vi chuẩn hóa (gốc ở hông / cổ tay, đơn vị = thân / bàn tay); độ quan trọng từng khớp; nhận dạng trực tiếp qua camera, khung xương tô màu theo đóng góp; xuất notebook Colab
 
 ## Yêu cầu
 

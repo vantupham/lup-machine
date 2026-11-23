@@ -28,10 +28,10 @@ describe('Xưởng mô hình', () => {
     expect(await repository.findAll()).toHaveLength(1);
   });
 
-  test('các loại đã có dùng được; loại chưa làm (Tư thế) hiển thị "sắp có"', () => {
+  test('cả 5 loại dự án đều dùng được, không còn loại "sắp có"', () => {
     renderApp('/studio', createTestRepository().repository);
-    for (const name of [/ảnh/i, /bảng số/i, /văn bản/i, /âm thanh/i]) expect(screen.getByRole('radio', { name })).toBeEnabled();
-    expect(screen.getByRole('radio', { name: /tư thế/i })).toBeDisabled();
+    for (const name of [/ảnh/i, /bảng số/i, /văn bản/i, /âm thanh/i, /tư thế/i]) expect(screen.getByRole('radio', { name })).toBeEnabled();
+    expect(screen.queryByText(/sắp có/i)).toBeNull();
   });
 
   test('báo lỗi khi tên rỗng', async () => {

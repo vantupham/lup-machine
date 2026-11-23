@@ -11,10 +11,13 @@ import type { TabularModelKind } from '@/storage/schemas/tabular';
 import topicsCsv from '@/content/text/chu-de.csv?raw';
 import canteenCsv from '@/content/text/can-tin.csv?raw';
 import { evaluateText, prepareText, trainText } from '@/core/text/text-model';
-import { evaluateAudio, prepareAudio, trainAudio } from '@/core/audio/audio-model';
+import { evaluateVectors, prepareVectors, trainVectorModel } from '@/core/ml/vector-classifier';
 import { audioFeatures, fitClip } from '@/core/audio/features';
 import { SOUND_KINDS, soundDataset } from '@/core/audio/synthetic-sounds';
+import { poseFeatures } from '@/core/pose/features';
+import { BODY_POSES, HAND_POSES, poseDataset } from '@/core/pose/synthetic-poses';
 import { audioNotebook } from './audio-notebook';
+import { poseNotebook } from './pose-notebook';
 import { imageNotebook } from './image-notebook';
 import { textNotebook } from './text-notebook';
 import { serializeNotebook, type Notebook } from './notebook';
@@ -147,17 +150,33 @@ describe('notebook dự án văn bản', () => {
 
 describe('notebook dự án âm thanh', () => {
   const examples = soundDataset(1).map((s, i) => ({ id: `c${i}`, label: SOUND_KINDS.indexOf(s.kind), features: audioFeatures(fitClip(s.signal)) }));
-  const prepared = prepareAudio(examples, ['chuông', 'còi', 'trống'], { testRatio: 0.25, seed: 3 });
+  const prepared = prepareVectors(examples, ['chuông', 'còi', 'trống'], { testRatio: 0.25, seed: 3 });
   if (!prepared.ok) throw new Error(prepared.error.code);
   const data = prepared.data;
 
   test.each(['logistic', 'knn'] as const)('%s: chứa đặc trưng (không chứa âm thanh), cùng mô hình và kết quả', (kind) => {
     const settings = { kind, c: 1, k: 3 };
-    const nb = audioNotebook({ projectName: 'Âm thanh', appVersion: '0.1.0', exportedAt: 'x', data, settings, evaluation: evaluateAudio(trainAudio(data, settings), data) });
+    const nb = audioNotebook({ projectName: 'Âm thanh', appVersion: '0.1.0', exportedAt: 'x', data, settings, evaluation: evaluateVectors(trainVectorModel(data, settings), data) });
     save(`audio-${kind}.ipynb`, nb);
     const source = nb.cells.map((c) => c.source.join('')).join('\n');
     expect(source).toContain('CLASS_NAMES = ["chuông", "còi", "trống"]');
     expect(source).toContain(kind === 'knn' ? 'KNeighborsClassifier(n_neighbors=3, algorithm="brute")' : 'LogisticRegression(C=1, max_iter=10000)');
     expect(source.includes('imshow')).toBe(kind === 'logistic');
+  });
+});
+
+describe('notebook dự án tư thế', () => {
+  test.each([['body', BODY_POSES], ['hand', HAND_POSES]] as const)('%s: chứa tọa độ khớp (không chứa ảnh), cùng mô hình và tên khớp', (kind, poses) => {
+    const examples = poseDataset(kind).map((p, i) => ({ id: `p${i}`, label: (poses as readonly string[]).indexOf(p.pose), features: poseFeatures(kind, p.keypoints)! }));
+    const prepared = prepareVectors(examples, poses, { testRatio: 0.25, seed: 2 });
+    if (!prepared.ok) throw new Error(prepared.error.code);
+    for (const model of ['logistic', 'knn'] as const) {
+      const settings = { kind: model, c: 1, k: 3 };
+      const nb = poseNotebook({ kind, projectName: 'Tư thế', appVersion: '0.1.0', exportedAt: 'x', data: prepared.data, settings, evaluation: evaluateVectors(trainVectorModel(prepared.data, settings), prepared.data) });
+      save(`pose-${kind}-${model}.ipynb`, nb);
+      const source = nb.cells.map((c) => c.source.join('')).join('\n');
+      expect(source).toContain(`DIM = ${kind === 'body' ? 34 : 42}`);
+      expect(source.includes('JOINTS = [')).toBe(model === 'logistic');
+    }
   });
 });
