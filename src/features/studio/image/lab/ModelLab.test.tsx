@@ -370,7 +370,9 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await extractAll();
     await userEvent.click(screen.getByRole('button', { name: 'UMAP' }));
     expect(await screen.findByTestId('umap-note', {}, { timeout: 10_000 })).toHaveTextContent(/seed 42/);
-    expect(within(screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' })).getAllByRole('button')).toHaveLength(16);
+    // ghi chú hiện ngay, còn bản đồ chỉ hiện khi UMAP tính xong (bất đồng bộ): phải chờ bản đồ
+    const map = await screen.findByRole('group', { name: 'Bản đồ dữ liệu 2D' }, { timeout: 10_000 });
+    expect(within(map).getAllByRole('button')).toHaveLength(16);
     expect(screen.getByText(/UMAP 1 \(không có đơn vị\)/)).toBeInTheDocument();
     expect(screen.queryByRole('checkbox', { name: /hiện ranh giới quyết định/i })).toBeNull();
     await userEvent.click(screen.getByRole('button', { name: 'PCA' }));

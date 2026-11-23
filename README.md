@@ -54,8 +54,8 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 **Giai đoạn 3 – Sân chơi thuật toán & dữ liệu bảng (đang làm).** Đã có:
 
 - [x] Sân chơi thuật toán (`#/playground`) với 6 thuật toán tự cài đặt bằng TypeScript, chạy từng bước trên dữ liệu 2D: k-NN, cây quyết định (mọc từng nút, thấy quá khớp), hồi quy tuyến tính (tự kéo đường thẳng), gradient descent, k-means, mạng nơ-ron mini (xem từng nơ-ron "vẽ" gì)
-- [x] Kiểm thử đối chiếu với scikit-learn (`scripts/gen-reference-results.py`): k-NN, cây quyết định, hồi quy tuyến tính, k-means, một bước huấn luyện của mạng nơ-ron
-- [ ] Studio dữ liệu bảng (CSV)
+- [x] Kiểm thử đối chiếu với scikit-learn (`scripts/gen-reference-results.py`): k-NN (phân loại và hồi quy), cây quyết định, hồi quy tuyến tính, hồi quy logistic, k-means, một bước huấn luyện của mạng nơ-ron
+- [x] Studio dữ liệu bảng: nạp CSV (tải tệp, dán từ Excel / Google Trang tính, hoặc bộ mẫu Iris và chim cánh cụt Palmer), chọn cột nhãn và đặc trưng, trợ lý kiểm tra dữ liệu (dòng thiếu, mất cân bằng, cột giống mã định danh), xem chuẩn hóa và one-hot, huấn luyện cây quyết định / hồi quy logistic / k-NN / hồi quy tuyến tính, ma trận nhầm lẫn, R², giải thích từng dự đoán
 - [ ] Xuất notebook Colab
 
 ## Yêu cầu
@@ -108,4 +108,5 @@ Mọi đóng góp đều quý, đặc biệt từ giáo viên. Xem [CONTRIBUTING
 - Mã nguồn: [MIT](LICENSE)
 - Nội dung bài học và tài liệu: [CC BY 4.0](CONTENT_LICENSE.md)
 - Bộ ảnh thật trong `public/datasets/`: giữ giấy phép gốc, ghi công từng ảnh (ảnh hoa: CC BY 2.0; ảnh lá đậu: MIT, © 2020 AIR Lab Makerere University). Xem [public/datasets/README.md](public/datasets/README.md)
+- Bộ dữ liệu bảng trong `src/content/tabular/`: Iris (CC BY 4.0), chim cánh cụt Palmer (CC0 1.0). Xem [src/content/tabular/README.md](src/content/tabular/README.md)
 - Mô hình MobileNetV2: Apache-2.0

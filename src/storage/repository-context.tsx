@@ -2,11 +2,13 @@ import { createContext, useContext, type ReactNode } from 'react';
 import type { ProjectRepository } from './repositories/project-repository';
 import type { DatasetRepository } from './repositories/dataset-repository';
 import type { ExperimentRepository } from './repositories/experiment-repository';
+import type { TableRepository } from './repositories/table-repository';
 
 export interface Repositories {
   readonly projects: ProjectRepository;
   readonly dataset: DatasetRepository;
   readonly experiments: ExperimentRepository;
+  readonly tables: TableRepository;
 }
 
 const RepositoriesContext = createContext<Repositories | null>(null);
@@ -36,4 +38,8 @@ export function useDatasetRepository(): DatasetRepository {
 
 export function useExperimentRepository(): ExperimentRepository {
   return useRepositories().experiments;
+}
+
+export function useTableRepository(): TableRepository {
+  return useRepositories().tables;
 }

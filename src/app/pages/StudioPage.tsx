@@ -8,8 +8,8 @@ import { PROJECT_TYPES } from '@/storage/schemas/manifest';
 import { projectNameSchema, type ProjectType } from '@/storage/schemas/project';
 import { getErrorMessage } from '@/ui/error-message';
 
-/** Loại dự án đã có trong phiên bản hiện tại (MVP: chỉ Ảnh). */
-const AVAILABLE_TYPES: ReadonlySet<ProjectType> = new Set(['image']);
+/** Loại dự án đã có trong phiên bản hiện tại. */
+const AVAILABLE_TYPES: ReadonlySet<ProjectType> = new Set(['image', 'tabular']);
 
 type LoadState =
   | { readonly status: 'loading' }
@@ -112,8 +112,10 @@ function NewProjectForm({ onCreated }: NewProjectFormProps) {
     setError(null);
     try {
       const project = await repository.create({ name, projectType });
-      await dataset.addClass(project.id, t('project.defaultClass', { n: 1 }));
-      await dataset.addClass(project.id, t('project.defaultClass', { n: 2 }));
+      if (projectType === 'image') {
+        await dataset.addClass(project.id, t('project.defaultClass', { n: 1 }));
+        await dataset.addClass(project.id, t('project.defaultClass', { n: 2 }));
+      }
       setName('');
       await onCreated();
     } catch (err: unknown) {

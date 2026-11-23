@@ -693,5 +693,177 @@
       "lossAxis": "bước {{n}}",
       "fullBatchNote": "Mỗi bước dùng toàn bộ dữ liệu để tính gradient (gradient descent toàn khối). Thử 1 nơ-ron với \"Hai vòng tròn\": mạng chỉ vẽ được một đường thẳng."
     }
+  },
+  "tabular": {
+    "lead": "Dạy máy dự đoán một cột của bảng từ các cột còn lại. Mỗi bước đều xem được máy đang làm gì với các con số.",
+    "loading": "Đang tải dự án…",
+    "saveError": "Không lưu được: {{message}}",
+    "steps": {
+      "data": "Dữ liệu",
+      "check": "Chọn cột và kiểm tra dữ liệu",
+      "represent": "Biểu diễn: máy nhìn bảng thế nào",
+      "train": "Huấn luyện",
+      "evaluate": "Đánh giá và giải thích",
+      "use": "Sử dụng: dự đoán một dòng mới"
+    },
+    "kinds": {
+      "numeric": "số",
+      "categorical": "chữ"
+    },
+    "tasks": {
+      "classification": "Phân loại (đoán nhóm)",
+      "regression": "Hồi quy (đoán con số)"
+    },
+    "samples": {
+      "iris": {
+        "name": "Hoa diên vĩ (Iris)"
+      },
+      "penguins": {
+        "name": "Chim cánh cụt Palmer"
+      }
+    },
+    "data": {
+      "empty": "Chọn một bộ dữ liệu mẫu, tải tệp CSV lên hoặc dán bảng từ Excel / Google Trang tính. Dữ liệu chỉ lưu trên máy này.",
+      "samplesTitle": "Bộ dữ liệu mẫu",
+      "rowCount": "{{n}} dòng",
+      "uploadTitle": "Tải tệp CSV",
+      "chooseFile": "Chọn tệp…",
+      "uploadHint": "Dòng đầu là tên cột. Phân cách bằng dấu phẩy, chấm phẩy hoặc tab. Tối đa {{rows}} dòng, {{columns}} cột.",
+      "pasteTitle": "Dán bảng",
+      "pastePlaceholder": "chiều cao,cân nặng,lớp\n150,42,6A\n…",
+      "pastedName": "bảng đã dán",
+      "usePasted": "Dùng bảng đã dán",
+      "cancel": "Giữ bảng cũ",
+      "replace": "Thay dữ liệu",
+      "size": "{{rows}} dòng × {{columns}} cột",
+      "credit": "Nguồn dữ liệu: {{author}} ·",
+      "source": "trang gốc",
+      "missing": "thiếu {{n}}",
+      "previewCaption": "{{n}} dòng đầu của bảng",
+      "moreRows": "… và {{n}} dòng nữa."
+    },
+    "csvErrors": {
+      "empty": "Tệp trống, chưa có dữ liệu.",
+      "too-large": "Tệp quá lớn (tối đa khoảng 2 MB).",
+      "too-many-rows": "Bảng có {{detail}} dòng, vượt giới hạn {{maxRows}} dòng.",
+      "too-many-columns": "Bảng có {{detail}} cột, vượt giới hạn {{maxColumns}} cột.",
+      "unclosed-quote": "Dấu ngoặc kép mở ở dòng {{line}} chưa được đóng.",
+      "ragged-row": "Dòng {{line}} có số ô khác dòng tiêu đề ({{detail}}).",
+      "empty-header": "Cột thứ {{detail}} chưa có tên ở dòng tiêu đề.",
+      "duplicate-header": "Có hai cột cùng tên \"{{detail}}\"."
+    },
+    "setup": {
+      "target": "Cột cần dự đoán (nhãn)",
+      "task": "Loại bài toán",
+      "taskHint": {
+        "classification": "Máy đoán mỗi dòng thuộc nhóm nào trong các giá trị của cột nhãn.",
+        "regression": "Máy đoán một con số; sai bao nhiêu được đo bằng khoảng cách tới số thật."
+      },
+      "testRatio": "Tỉ lệ để dành làm tập Kiểm tra",
+      "seed": "Cách chia số {{seed}} (seed)",
+      "reshuffle": "Chia lại",
+      "features": "Các cột máy được dùng (đặc trưng)"
+    },
+    "prepareErrors": {
+      "no-features": "Hãy chọn ít nhất một cột đặc trưng khác cột nhãn.",
+      "target-not-numeric": "Hồi quy cần cột nhãn là số.",
+      "too-many-classes": "Cột nhãn có {{count}} giá trị khác nhau, quá nhiều để phân loại (tối đa 10). Nếu đây là con số, hãy chọn Hồi quy.",
+      "single-class": "Cột nhãn chỉ có một giá trị: máy không có gì để phân biệt.",
+      "too-many-categories": "Cột \"{{column}}\" có {{count}} giá trị chữ khác nhau (tối đa 20). Hãy bỏ chọn cột này.",
+      "too-few-rows": "Chỉ còn {{count}} dòng dùng được, cần ít nhất 10."
+    },
+    "quality": {
+      "title": "Trợ lý kiểm tra dữ liệu",
+      "none": "Chưa thấy vấn đề nào.",
+      "dropped-rows": "{{count}} dòng bị bỏ vì thiếu giá trị ở cột nhãn hoặc cột đặc trưng đã chọn.",
+      "imbalance": "Mất cân bằng: lớp \"{{smallest}}\" chỉ có {{smallestCount}} dòng, lớp \"{{largest}}\" có {{largestCount}}. Máy có thể ít đoán \"{{smallest}}\" hơn.",
+      "id-like": "Cột \"{{column}}\" gần như mỗi dòng một giá trị, giống mã định danh. Máy sẽ học thuộc mã thay vì học quy luật: nên bỏ cột này.",
+      "constant": "Cột \"{{column}}\" chỉ có một giá trị nên không giúp máy phân biệt gì.",
+      "small-data": "Chỉ có {{count}} dòng: kết quả Kiểm tra sẽ dao động nhiều khi chia lại."
+    },
+    "represent": {
+      "mapTitle": "Bản đồ hai cột",
+      "mapHint": "Mỗi chấm là một dòng thật, đặt theo giá trị đã chuẩn hóa của hai cột được chọn.",
+      "xAxis": "Trục ngang",
+      "yAxis": "Trục dọc",
+      "plotLabel": "Biểu đồ phân tán của hai cột đã chọn",
+      "axisNote": "Đơn vị trên trục là \"số độ lệch chuẩn so với trung bình\". Điểm xa hơn 3,5 được đặt ở mép hình.",
+      "needNumeric": "Cần ít nhất hai cột số để vẽ bản đồ.",
+      "tableTitle": "Một dòng biến thành các con số",
+      "tableHint": "Đúng các con số mô hình nhận được cho dòng này.",
+      "tableCaption": "Dòng {{row}} của bảng (dòng đầu tiên của tập Dạy)",
+      "column": "Cột",
+      "original": "Giá trị gốc",
+      "how": "Cách đổi",
+      "modelSees": "Mô hình nhận",
+      "oneHot": "mỗi giá trị một ô 0/1: {{categories}}",
+      "whyScale": "Chuẩn hóa giúp các cột có đơn vị khác nhau (mm, g…) được so sánh công bằng. k-NN và hồi quy logistic dùng số đã chuẩn hóa; cây quyết định và hồi quy tuyến tính dùng số gốc để ngưỡng và hệ số đọc được theo đơn vị thật."
+    },
+    "models": {
+      "tree": {
+        "name": "Cây quyết định",
+        "how": "Chuỗi câu hỏi \"cột ≤ ngưỡng?\" do máy tự chọn."
+      },
+      "logistic": {
+        "name": "Hồi quy logistic",
+        "how": "Cộng các cột nhân trọng số thành điểm cho mỗi lớp, rồi đổi điểm thành xác suất."
+      },
+      "knn": {
+        "name": "k láng giềng gần nhất",
+        "how": "Tìm k dòng giống nhất trong tập Dạy và lấy nhãn chiếm đa số."
+      },
+      "linear": {
+        "name": "Hồi quy tuyến tính",
+        "how": "Dự đoán = độ lệch + tổng (hệ số × giá trị cột)."
+      },
+      "knn-regression": {
+        "name": "k láng giềng gần nhất",
+        "how": "Lấy trung bình giá trị của k dòng giống nhất trong tập Dạy."
+      }
+    },
+    "model": {
+      "choose": "Chọn mô hình",
+      "c": "Độ \"thoải mái\" C",
+      "cHint": "C nhỏ: trọng số bị kéo về gần 0 (mô hình đơn giản). C lớn: mô hình bám sát dữ liệu Dạy hơn.",
+      "kHint": "Khoảng cách tính trên các cột đã chuẩn hóa.",
+      "linearNoSettings": "Hồi quy tuyến tính không có tham số cần chỉnh: máy tính thẳng ra nghiệm bình phương tối thiểu.",
+      "train": "Huấn luyện",
+      "notTrained": "Chưa huấn luyện.",
+      "stale": "Dữ liệu hoặc cấu hình đã đổi: bấm Huấn luyện để cập nhật kết quả.",
+      "trained": "Đã huấn luyện (lần {{n}})."
+    },
+    "evaluate": {
+      "confusion": "Ma trận nhầm lẫn trên tập Kiểm tra",
+      "trueVsPred": "thật ↓ / đoán →",
+      "overfit": "Đúng trên tập Dạy cao hơn hẳn tập Kiểm tra: có thể mô hình đang học thuộc (quá khớp).",
+      "r2Train": "R² tập Dạy",
+      "r2Test": "R² tập Kiểm tra",
+      "rmseTrain": "Sai số RMSE tập Dạy",
+      "rmseTest": "Sai số RMSE tập Kiểm tra",
+      "regressionHint": "R² = 1 là đoán đúng hết, 0 là chỉ ngang đoán bằng giá trị trung bình. RMSE là sai số điển hình, cùng đơn vị với \"{{target}}\".",
+      "predVsTrue": "Giá trị thật (trục ngang) và giá trị dự đoán (trục dọc) trên tập Kiểm tra; đường chéo là đoán đúng hoàn toàn",
+      "explainTitle": "Mô hình đã học được gì?",
+      "explainHint": "Các trọng số, ngưỡng và độ quan trọng là số thật của mô hình vừa huấn luyện.",
+      "importances": "Độ quan trọng của từng cột (tổng mức giảm tạp chất)",
+      "logisticBinary": "Trọng số tính trên các cột đã chuẩn hóa. Cột có trọng số dương đẩy dự đoán về lớp \"{{cls}}\", âm thì ngược lại.",
+      "logisticMulti": "Mỗi lớp có một bộ trọng số (tính trên các cột đã chuẩn hóa). Lớp nào có tổng điểm cao nhất thì được chọn.",
+      "weightsFor": "Điểm của lớp \"{{cls}}\" (độ lệch {{b}})",
+      "linearHint": "Mỗi hệ số cho biết dự đoán thay đổi bao nhiêu khi cột đó tăng 1 đơn vị và các cột khác giữ nguyên. Hệ số không phải là quan hệ nhân quả.",
+      "knnHint": "k-NN không học trọng số nào: nó ghi nhớ {{n}} dòng của tập Dạy và mỗi lần dự đoán thì tìm {{k}} dòng gần nhất."
+    },
+    "use": {
+      "formLabel": "Giá trị của dòng mới",
+      "resultTitle": "Dự đoán",
+      "invalid": "Hãy nhập đủ các ô; ô số phải là số (có thể dùng dấu phẩy thập phân).",
+      "predictedClass": "Máy đoán: {{cls}}",
+      "predictedValue": "Máy đoán {{target}} ≈ {{value}}",
+      "why": "Vì sao?",
+      "yes": "đúng",
+      "no": "sai",
+      "neighbors": "{{k}} dòng gần nhất trong tập Dạy:",
+      "neighborRow": "dòng {{row}} (khoảng cách {{distance}}):",
+      "score": "Điểm lớp \"{{cls}}\" = {{b}} (độ lệch) + các đóng góp = {{score}}. Đóng góp lớn nhất:",
+      "linearSum": "Dự đoán = {{b}} (độ lệch) + tổng các đóng góp (hệ số × giá trị). Đóng góp lớn nhất:"
+    }
   }
 }

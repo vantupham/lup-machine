@@ -12,9 +12,9 @@ import numpy as np
 import sklearn
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.neural_network import MLPClassifier
 from sklearn.tree import DecisionTreeClassifier
 
@@ -61,7 +61,15 @@ def knn_reference() -> dict:
             "neighbors": idx.tolist(),
             "distances": dist.tolist(),
         })
-    return {"generator": GENERATOR, "x": x.tolist(), "y": y.tolist(), "queries": queries.tolist(), "cases": cases}
+    targets = np.round(x[:, 0] * 2 - x[:, 1] + rng.normal(0, 0.3, size=len(x)), 6)
+    regression = []
+    for k in (1, 5):
+        reg = KNeighborsRegressor(n_neighbors=k, algorithm="brute").fit(x, targets)
+        regression.append({"k": k, "predictions": reg.predict(queries).tolist()})
+    return {
+        "generator": GENERATOR, "x": x.tolist(), "y": y.tolist(), "queries": queries.tolist(), "cases": cases,
+        "targets": targets.tolist(), "regression": regression,
+    }
 
 
 def tree_reference() -> dict:
@@ -108,6 +116,27 @@ def linreg_reference() -> dict:
         "r2": float(r2_score(y, pred)),
         "simpleCoef": float(m1.coef_[0]),
         "simpleIntercept": float(m1.intercept_),
+    }
+
+
+def logistic_case(x: np.ndarray, y: np.ndarray, c: float) -> dict:
+    clf = LogisticRegression(C=c, tol=1e-12, max_iter=100000).fit(x, y)
+    return {
+        "C": c,
+        "coef": clf.coef_.tolist(),
+        "intercept": clf.intercept_.tolist(),
+        "proba": clf.predict_proba(x).tolist(),
+    }
+
+
+def logistic_reference() -> dict:
+    rng = np.random.default_rng(20261128)
+    x3, y3 = blobs(rng, np.array([[0.0, 0.0, 0.0], [1.5, 0.5, -1.0], [-0.5, 1.8, 0.7]]), 25, 1.0)
+    x2, y2 = blobs(rng, np.array([[0.0, 0.0], [1.2, 0.8]]), 30, 0.9)
+    return {
+        "generator": GENERATOR,
+        "multiclass": {"x": x3.tolist(), "y": y3.tolist(), "cases": [logistic_case(x3, y3, 1.0), logistic_case(x3, y3, 0.1)]},
+        "binary": {"x": x2.tolist(), "y": y2.tolist(), "cases": [logistic_case(x2, y2, 1.0), logistic_case(x2, y2, 0.05)]},
     }
 
 
@@ -174,6 +203,7 @@ REFERENCES = {
     "knn-reference.json": knn_reference,
     "tree-reference.json": tree_reference,
     "linreg-reference.json": linreg_reference,
+    "logistic-reference.json": logistic_reference,
     "kmeans-reference.json": kmeans_reference,
     "mlp-reference.json": mlp_reference,
 }
