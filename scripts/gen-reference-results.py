@@ -12,7 +12,9 @@ import numpy as np
 import sklearn
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.neural_network import MLPClassifier
@@ -140,6 +142,51 @@ def logistic_reference() -> dict:
     }
 
 
+TEXT_DOCS = [
+    "Hôm nay trời nắng đẹp, em đi học sớm.",
+    "Trời mưa to, đường ngập nước!",
+    "Đội bóng của lớp em thắng 2-1.",
+    "Cầu thủ ghi bàn ở phút cuối, cả sân reo hò.",
+    "Bát phở bò nóng hổi, thơm mùi quế hồi.",
+    "Mẹ nấu canh chua cá lóc rất ngon.",
+    "Gió mùa đông bắc tràn về, trời rét đậm.",
+    "Em thích đá bóng và bơi lội vào cuối tuần.",
+    "Bánh mì Việt Nam nổi tiếng khắp thế giới.",
+    "Ngày mai có mưa rào và dông ở vài nơi.",
+    "Trận chung kết diễn ra lúc 19 giờ tối nay.",
+    "Chè đậu xanh mát lạnh ngày hè.",
+]
+TEXT_LABELS = [0, 0, 1, 1, 2, 2, 0, 1, 2, 0, 1, 2]
+TEXT_QUERIES = ["Trời hôm nay mưa và có gió.", "Em ăn phở và đá bóng.", "Một câu hoàn toàn mới lạ."]
+TOKEN_PATTERN = r"(?u)\b\w+\b"  # giữ cả âm tiết 1 chữ cái (ở, à, ý…)
+
+
+def text_reference() -> dict:
+    cases = []
+    for ngram in (1, 2):
+        tfidf = TfidfVectorizer(token_pattern=TOKEN_PATTERN, ngram_range=(1, ngram)).fit(TEXT_DOCS)
+        count = CountVectorizer(token_pattern=TOKEN_PATTERN, ngram_range=(1, ngram)).fit(TEXT_DOCS)
+        counts = count.transform(TEXT_DOCS)
+        nb = MultinomialNB(alpha=1.0).fit(counts, TEXT_LABELS)
+        q_counts = count.transform(TEXT_QUERIES)
+        x_tfidf = tfidf.transform(TEXT_DOCS)
+        logistic = LogisticRegression(C=10.0, tol=1e-12, max_iter=100000).fit(x_tfidf, TEXT_LABELS)
+        cases.append({
+            "ngram": ngram,
+            "vocabulary": tfidf.get_feature_names_out().tolist(),
+            "idf": tfidf.idf_.tolist(),
+            "tfidf": x_tfidf.toarray().tolist(),
+            "queryTfidf": tfidf.transform(TEXT_QUERIES).toarray().tolist(),
+            "nbClassLogPrior": nb.class_log_prior_.tolist(),
+            "nbFeatureLogProb": nb.feature_log_prob_.tolist(),
+            "nbQueryProba": nb.predict_proba(q_counts).tolist(),
+            "logisticCoef": logistic.coef_.tolist(),
+            "logisticIntercept": logistic.intercept_.tolist(),
+            "logisticQueryProba": logistic.predict_proba(tfidf.transform(TEXT_QUERIES)).tolist(),
+        })
+    return {"generator": GENERATOR, "docs": TEXT_DOCS, "labels": TEXT_LABELS, "queries": TEXT_QUERIES, "cases": cases}
+
+
 def kmeans_reference() -> dict:
     rng = np.random.default_rng(20261126)
     x, _ = blobs(rng, np.array([[-2.0, -1.0], [2.0, -1.5], [0.0, 2.0], [2.5, 2.5]]), 25, 0.6)
@@ -204,6 +251,7 @@ REFERENCES = {
     "tree-reference.json": tree_reference,
     "linreg-reference.json": linreg_reference,
     "logistic-reference.json": logistic_reference,
+    "text-reference.json": text_reference,
     "kmeans-reference.json": kmeans_reference,
     "mlp-reference.json": mlp_reference,
 }

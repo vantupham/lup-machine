@@ -8,7 +8,11 @@ import { summarizeColumns } from '@/core/tabular/columns';
 import { DEFAULT_MODEL_SETTINGS, evaluateTabular, MODELS_BY_TASK, trainTabular } from '@/core/tabular/models';
 import { prepareData, type PrepareOptions } from '@/core/tabular/prepare';
 import type { TabularModelKind } from '@/storage/schemas/tabular';
+import topicsCsv from '@/content/text/chu-de.csv?raw';
+import canteenCsv from '@/content/text/can-tin.csv?raw';
+import { evaluateText, prepareText, trainText } from '@/core/text/text-model';
 import { imageNotebook } from './image-notebook';
+import { textNotebook } from './text-notebook';
 import { serializeNotebook, type Notebook } from './notebook';
 import { cleanedCsv, SPLIT_COLUMN, tabularNotebook } from './tabular-notebook';
 
@@ -112,5 +116,27 @@ describe('notebook dự án ảnh', () => {
     const source = nb.cells.map((c) => c.source.join('')).join('\n');
     expect(source).toContain('X_test = decode("")');
     expect(source).not.toContain('"test_accuracy": ');
+  });
+});
+
+describe('notebook dự án văn bản', () => {
+  test.each([
+    ['chu-de', 'naive-bayes', 1, topicsCsv],
+    ['chu-de', 'logistic', 2, topicsCsv],
+    ['can-tin', 'logistic', 1, canteenCsv],
+    ['can-tin', 'naive-bayes', 2, canteenCsv],
+  ] as const)('%s · %s · n-gram 1–%d: chứa câu, cùng cách tách từ và kết quả của LUP Machine', (name, kind, maxN, csv) => {
+    const parsed = parseCsv(csv);
+    if (!parsed.ok) throw new Error(parsed.error);
+    const prepared = prepareText(parsed.table.rows.map(([label, text]) => ({ label: label!, text: text! })), { testRatio: 0.25, seed: 2, maxN });
+    if (!prepared.ok) throw new Error(prepared.error.code);
+    const settings = { kind, alpha: 1, c: 10 };
+    const trained = trainText(prepared.data, settings);
+    const nb = textNotebook({ projectName: 'Văn bản', appVersion: '0.1.0', exportedAt: 'x', data: prepared.data, settings, evaluation: evaluateText(trained, prepared.data) });
+    save(`text-${name}-${kind}-${maxN}.ipynb`, nb);
+    const source = nb.cells.map((c) => c.source.join('')).join('\n');
+    expect(source).toContain(`ngram_range=(1, ${maxN})`);
+    expect(source).toContain(String.raw`token_pattern=r"(?u)\b\w+\b"`);
+    expect(source).toContain(kind === 'naive-bayes' ? 'MultinomialNB(alpha=1)' : 'LogisticRegression(C=10');
   });
 });

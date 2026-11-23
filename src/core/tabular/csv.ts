@@ -137,3 +137,12 @@ export function parseCsv(input: string): CsvResult {
   }
   return { ok: true, table: { headers, rows, delimiter } };
 }
+
+function csvCell(value: string): string {
+  return /[",\n\r]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+}
+
+/** Ghi bảng thành CSV (RFC 4180): ô có dấu phẩy, ngoặc kép hoặc xuống dòng được đặt trong ngoặc kép. */
+export function formatCsv(headers: readonly string[], rows: readonly (readonly string[])[]): string {
+  return `${[headers, ...rows].map((r) => r.map(csvCell).join(',')).join('\n')}\n`;
+}

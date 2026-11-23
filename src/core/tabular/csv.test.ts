@@ -1,4 +1,4 @@
-import { CSV_LIMITS, detectDelimiter, parseCsv } from './csv';
+import { CSV_LIMITS, detectDelimiter, formatCsv, parseCsv } from './csv';
 
 function ok(text: string) {
   const result = parseCsv(text);
@@ -62,5 +62,13 @@ describe('parseCsv', () => {
 
   test('tiêu đề quá dài bị cắt ngắn', () => {
     expect(ok(`${'x'.repeat(200)}\n1`).headers[0]).toHaveLength(CSV_LIMITS.maxHeaderLength);
+  });
+});
+
+describe('formatCsv', () => {
+  test('ghi rồi đọc lại được đúng bảng, kể cả ô có dấu phẩy, ngoặc kép, xuống dòng', () => {
+    const rows = [['khen', 'Ngon, "rẻ"\nvà nhanh'], ['chê', 'Chậm']];
+    const result = parseCsv(formatCsv(['nhãn', 'văn bản'], rows));
+    expect(result).toMatchObject({ ok: true, table: { headers: ['nhãn', 'văn bản'], rows } });
   });
 });

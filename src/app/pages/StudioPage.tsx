@@ -9,7 +9,7 @@ import { projectNameSchema, type ProjectType } from '@/storage/schemas/project';
 import { getErrorMessage } from '@/ui/error-message';
 
 /** Loại dự án đã có trong phiên bản hiện tại. */
-const AVAILABLE_TYPES: ReadonlySet<ProjectType> = new Set(['image', 'tabular']);
+const AVAILABLE_TYPES: ReadonlySet<ProjectType> = new Set(['image', 'tabular', 'text']);
 
 type LoadState =
   | { readonly status: 'loading' }

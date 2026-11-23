@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { ProjectRecord } from '@/storage/db';
 import type { SaveTableInput, StoredTable } from '@/storage/repositories/table-repository';
 import { useProjectRepository, useTableRepository } from '@/storage/repository-context';
-import type { TabularConfig } from '@/storage/schemas/tabular';
+import type { TableProjectConfig } from '@/storage/repositories/table-repository';
 
 export type TabularProjectState =
   | { readonly status: 'loading' }
@@ -10,7 +10,7 @@ export type TabularProjectState =
   | { readonly status: 'error' }
   | { readonly status: 'ready'; readonly project: ProjectRecord; readonly table: StoredTable | null };
 
-/** Tải dự án dữ liệu bảng và bảng dữ liệu đã lưu; các hàm lưu cập nhật luôn trạng thái. */
+/** Tải dự án dữ liệu bảng / văn bản và bảng dữ liệu đã lưu; các hàm lưu cập nhật luôn trạng thái. */
 export function useTabularProject(projectId: string) {
   const projects = useProjectRepository();
   const tables = useTableRepository();
@@ -44,7 +44,7 @@ export function useTabularProject(projectId: string) {
   );
 
   const saveConfig = useCallback(
-    async (config: TabularConfig) => {
+    async (config: TableProjectConfig) => {
       setState((s) => (s.status === 'ready' && s.table ? { ...s, table: { ...s.table, config } } : s));
       await tables.saveConfig(projectId, config);
     },

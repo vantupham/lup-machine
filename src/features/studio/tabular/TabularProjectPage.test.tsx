@@ -68,7 +68,7 @@ describe('Studio dữ liệu bảng', () => {
     await userEvent.click(await screen.findByRole('button', { name: /Chim cánh cụt/ }));
     fireEvent.change(await screen.findByLabelText('Cột cần dự đoán (nhãn)'), { target: { value: 'Đảo' } });
     await screen.findByDisplayValue('Đảo');
-    await vi.waitFor(async () => expect((await repos.tables.get(projectId))?.config?.target).toBe('Đảo'));
+    await vi.waitFor(async () => expect(((await repos.tables.get(projectId))?.config as { target?: string } | null)?.target).toBe('Đảo'));
     first.unmount();
     render(repos, projectId);
     expect(await screen.findByLabelText('Cột cần dự đoán (nhãn)')).toHaveValue('Đảo');

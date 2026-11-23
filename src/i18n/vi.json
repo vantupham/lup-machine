@@ -878,7 +878,118 @@
       "done": "Đã tạo notebook ({{size}} MB). Kiểm tra thư mục Tải xuống.",
       "large": "Notebook khá lớn nên Colab có thể mở chậm.",
       "error": "Không tạo được notebook: {{message}}",
-      "privacy": "Notebook được tạo ngay trên máy này. LUP Machine không gửi dữ liệu đi đâu; chỉ khi em tự tải notebook lên Colab thì dữ liệu trong đó mới nằm trên Google Drive của em."
+      "privacy": "Notebook được tạo ngay trên máy này. LUP Machine không gửi dữ liệu đi đâu; chỉ khi em tự tải notebook lên Colab thì dữ liệu trong đó mới nằm trên Google Drive của em.",
+      "textDescription": "Tải về một notebook dựng lại đúng bộ từ vựng và mô hình này bằng scikit-learn, trên cùng các câu và cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine."
+    }
+  },
+  "text": {
+    "lead": "Dạy máy phân loại câu tiếng Việt. Mỗi bước đều thấy máy biến câu thành con số ra sao và từ nào khiến máy đoán như vậy.",
+    "steps": {
+      "data": "Các câu và nhãn",
+      "check": "Chia dữ liệu và kiểm tra",
+      "represent": "Biểu diễn: câu thành con số",
+      "train": "Huấn luyện",
+      "evaluate": "Đánh giá",
+      "use": "Sử dụng: thử một câu mới"
+    },
+    "samples": {
+      "chu-de": "Chủ đề: thời tiết / thể thao / ẩm thực",
+      "can-tin": "Góp ý căng tin: khen / chê"
+    },
+    "data": {
+      "empty": "Chọn bộ câu mẫu, tự gõ câu cho từng nhóm, hoặc tải tệp CSV. Dữ liệu chỉ lưu trên máy này.",
+      "sentenceCount": "{{n}} câu",
+      "writeTitle": "Tự gõ câu",
+      "writeHint": "Đặt tên cho từng nhóm, mỗi dòng gõ một câu.",
+      "write": "Mở trình soạn câu",
+      "uploadHint": "Tệp CSV có một cột chứa câu và một cột chứa nhãn (dòng đầu là tên cột).",
+      "needTwoColumns": "Bảng cần ít nhất hai cột: một cột câu và một cột nhãn.",
+      "size": "{{sentences}} câu · {{classes}} nhóm",
+      "edit": "Sửa câu"
+    },
+    "editor": {
+      "defaultClass": "Nhóm {{n}}",
+      "className": "Tên nhóm {{n}}",
+      "sentencesOf": "Các câu của nhóm {{name}}",
+      "placeholder": "Mỗi dòng một câu…",
+      "count": "{{n}} câu",
+      "addClass": "Thêm nhóm",
+      "removeClass": "Xóa nhóm",
+      "save": "Lưu các câu",
+      "fileName": "câu tự soạn",
+      "nameError": "Mỗi nhóm cần một tên riêng, không được để trống hoặc trùng nhau."
+    },
+    "setup": {
+      "textColumn": "Cột chứa câu",
+      "labelColumn": "Cột chứa nhãn"
+    },
+    "prepareErrors": {
+      "too-few-sentences": "Chỉ có {{count}} câu dùng được, cần ít nhất 6.",
+      "single-class": "Cần ít nhất hai nhóm khác nhau.",
+      "too-many-classes": "Có {{count}} nhóm, quá nhiều (tối đa 10). Hãy kiểm tra cột nhãn."
+    },
+    "quality": {
+      "dropped": "{{count}} câu bị bỏ vì trống hoặc chưa có nhãn.",
+      "imbalance": "Mất cân bằng: nhóm \"{{smallest}}\" chỉ có {{smallestCount}} câu, nhóm \"{{largest}}\" có {{largestCount}}.",
+      "few-examples": "Nhóm \"{{label}}\" mới có {{count}} câu; nên có ít nhất 5.",
+      "duplicates": "Có {{count}} câu bị trùng (không tính hoa / thường và dấu câu).",
+      "conflict": "Câu \"{{text}}\" có mặt ở nhiều nhóm ({{labels}}): máy sẽ bị \"dạy\" hai đáp án trái nhau.",
+      "short": "{{count}} câu quá ngắn (dưới 3 âm tiết), gần như không có thông tin."
+    },
+    "represent": {
+      "title": "Kính hiển vi: một câu thành vector",
+      "exactHint": "Đúng các âm tiết, số lần và giá trị TF-IDF mà mô hình dùng cho câu này.",
+      "ngram": "Đơn vị đếm",
+      "ngram1": "Từng âm tiết",
+      "ngram2": "Âm tiết + cặp âm tiết liền nhau",
+      "sentence": "Câu để xem (sửa thoải mái)",
+      "tokens": "Tách được {{n}} đơn vị:",
+      "unknown": "Không có trong bộ từ vựng của tập Dạy nên bị bỏ qua: {{words}}",
+      "vectorSize": "Vector của câu có {{total}} ô (mỗi từ trong bộ từ vựng một ô); chỉ {{nonzero}} ô khác 0.",
+      "tableCaption": "Các ô khác 0 của vector",
+      "term": "Từ",
+      "count": "Số lần",
+      "tfidfHint": "idf = ln((1 + {{n}}) / (1 + số câu Dạy chứa từ)) + 1: từ có trong nhiều câu (như \"và\", \"là\") có idf nhỏ. TF-IDF = số lần × idf, rồi chia cho độ dài vector.",
+      "frequentTitle": "Âm tiết hay gặp nhất trong mỗi nhóm (tập Dạy)",
+      "frequentHint": "Hay gặp chưa chắc đã giúp phân biệt: một từ xuất hiện nhiều ở mọi nhóm thì không cho biết câu thuộc nhóm nào."
+    },
+    "models": {
+      "naive-bayes": {
+        "name": "Naive Bayes",
+        "how": "Đếm mỗi từ hay xuất hiện trong nhóm nào, rồi nhân các xác suất lại (cộng log)."
+      },
+      "logistic": {
+        "name": "Hồi quy logistic",
+        "how": "Mỗi từ có một trọng số cho mỗi nhóm; cộng trọng số × TF-IDF thành điểm, rồi đổi điểm thành xác suất."
+      }
+    },
+    "model": {
+      "alpha": "Làm trơn α",
+      "alphaHint": "Cộng thêm α vào số đếm của mọi từ để từ chưa gặp ở một nhóm không làm xác suất bằng 0."
+    },
+    "evaluate": {
+      "wrongTitle": "Câu Kiểm tra bị đoán sai ({{n}})",
+      "wrongItem": "thật là \"{{actual}}\", máy đoán \"{{predicted}}\"",
+      "topTitle": "Từ đặc trưng nhất của mỗi nhóm",
+      "topHint": "Xếp theo đúng trọng số / xác suất của mô hình vừa huấn luyện.",
+      "topNb": "Xếp theo log P(từ | nhóm) trừ đi trung bình các nhóm: từ ở đầu danh sách nghiêng về nhóm đó nhiều nhất.",
+      "topLogistic": "Xếp theo trọng số của từ cho nhóm đó (với 3 nhóm trở lên: trừ đi trung bình các nhóm)."
+    },
+    "use": {
+      "input": "Gõ một câu",
+      "noKnownWords": "Câu không có từ nào trong bộ từ vựng: máy chỉ đoán theo tỉ lệ các nhóm lúc học.",
+      "whyTitle": "Vì sao máy đoán như vậy?",
+      "whyHint": "Các con số là phép tính thật của mô hình; cộng lại đúng bằng điểm của nhóm.",
+      "explainFor": "Giải thích cho nhóm",
+      "predictedOption": "Nhóm máy đoán ({{cls}})",
+      "colorLegend": "Xanh: âm tiết đẩy câu về nhóm \"{{cls}}\". Đỏ: kéo ra xa. Màu càng đậm, ảnh hưởng càng lớn. Không tô: từ lạ.",
+      "tableCaption": "Điểm của nhóm \"{{cls}}\" so với trung bình các nhóm",
+      "baseNb": "tỉ lệ nhóm lúc học (log)",
+      "baseLogistic": "độ lệch",
+      "otherTerms": "{{n}} từ khác",
+      "total": "Tổng điểm",
+      "totalHint": "Nhóm có tổng điểm lớn nhất là nhóm được chọn.",
+      "totalHintBinary": "Với 2 nhóm: điểm dương thì nghiêng về nhóm này, âm thì nghiêng về nhóm kia."
     }
   }
 }
