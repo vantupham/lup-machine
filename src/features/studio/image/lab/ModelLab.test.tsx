@@ -147,6 +147,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await trainToEnd();
     expect(screen.getByTestId('score-train')).toHaveTextContent('100%');
     expect(screen.getByTestId('score-test')).toHaveTextContent('100%');
+    expect(screen.getByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: '2 ảnh lớp Nhựa bị đoán là Nhựa' }));
     expect(within(screen.getByTestId('cell-samples')).getAllByRole('listitem')).toHaveLength(2);
@@ -213,6 +214,8 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await userEvent.type(screen.getByLabelText('Tên lớp mới'), 'Kim loại{Enter}');
     expect(await screen.findByText(/các lớp đã thay đổi/i)).toBeInTheDocument();
     expect(screen.getByText('Hãy huấn luyện ở bước ④ trước.')).toBeInTheDocument();
+    // mô hình cũ không còn khớp dữ liệu: không cho xuất notebook
+    expect(screen.queryByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeNull();
   });
 
   test('nhật ký: lưu mỗi lần huấn luyện mới, so sánh và xóa', async () => {

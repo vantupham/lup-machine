@@ -865,5 +865,20 @@
       "score": "Score of \"{{cls}}\" = {{b}} (intercept) + contributions = {{score}}. Largest contributions:",
       "linearSum": "Prediction = {{b}} (intercept) + sum of contributions (coefficient × value). Largest contributions:"
     }
+  },
+  "export": {
+    "colab": {
+      "title": "Keep learning with Python: a Google Colab notebook",
+      "tabularDescription": "Download a notebook that rebuilds exactly this model with pandas and scikit-learn, on the same data and the same training / test split, then compares the results with LUP Machine.",
+      "imageDescription": "Download a notebook holding the 1,280 feature numbers of each image (not the images themselves); it retrains the classifier layer with Keras and converts the complete model to TensorFlow Lite.",
+      "step1": "Press the button below to download the .ipynb file.",
+      "step2": "Open colab.research.google.com, choose File → Upload notebook and pick the downloaded file.",
+      "step3": "Choose Runtime → Run all.",
+      "download": "Download notebook (.ipynb)",
+      "done": "Notebook created ({{size}} MB). Check your Downloads folder.",
+      "large": "The notebook is fairly large, so Colab may open it slowly.",
+      "error": "Could not create the notebook: {{message}}",
+      "privacy": "The notebook is created on this device. LUP Machine sends no data anywhere; only if you upload the notebook to Colab yourself does its data live in your Google Drive."
+    }
   }
 }

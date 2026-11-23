@@ -172,7 +172,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         <QualityPanel classes={classes} counts={counts} markers={CLASS_MARKERS} />
       </div>
 
-      <ModelLab projectId={projectId} classes={classes} samples={samples} />
+      <ModelLab projectId={projectId} projectName={projectName} classes={classes} samples={samples} />
 
       {inspecting && (
         <PixelInspector

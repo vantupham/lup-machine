@@ -4,6 +4,9 @@ import { datasetFingerprint } from '@/core/data/fingerprint';
 import type { EpochSnapshot, TrainOptions } from '@/core/ml/softmax-regression';
 import type { ClassRecord, RunRecord, SampleRecord } from '@/storage/db';
 import { getErrorMessage } from '@/ui/error-message';
+import { imageNotebook } from '@/core/export/image-notebook';
+import { ColabExportPanel } from '@/features/export/ColabExportPanel';
+import { version as appVersion } from '../../../../../package.json';
 import { EvaluateSection } from './EvaluateSection';
 import { ExperimentLog } from './ExperimentLog';
 import { buildTrainingData, predictSamples } from './lab-data';
@@ -15,6 +18,7 @@ import { useTraining, type TrainingSpeed } from './useTraining';
 
 interface ModelLabProps {
   readonly projectId: string;
+  readonly projectName: string;
   readonly classes: readonly ClassRecord[];
   readonly samples: readonly SampleRecord[];
 }
@@ -37,7 +41,7 @@ function toMetrics(snapshots: readonly EpochSnapshot[]) {
 }
 
 /** Bước ③ Biểu diễn → ④ Huấn luyện → ⑤ Đánh giá → Nhật ký thí nghiệm. */
-export function ModelLab({ projectId, classes, samples }: ModelLabProps) {
+export function ModelLab({ projectId, projectName, classes, samples }: ModelLabProps) {
   const { t } = useTranslation();
   const { features, missingCount, status, extractMissing } = useFeatures(projectId, samples);
   const training = useTraining();
@@ -46,6 +50,7 @@ export function ModelLab({ projectId, classes, samples }: ModelLabProps) {
   const [replayEpoch, setReplayEpoch] = useState<number | null>(null);
   const [origin, setOrigin] = useState<RunOrigin | null>(null);
   const [notice, setNotice] = useState<Notice>(null);
+  const [lastOptions, setLastOptions] = useState<TrainOptions | null>(null);
   const restoreAttempted = useRef(false);
 
   const readiness = useMemo(() => buildTrainingData(classes, samples, features), [classes, samples, features]);
@@ -72,6 +77,7 @@ export function ModelLab({ projectId, classes, samples }: ModelLabProps) {
     if (readiness.readiness !== 'ready') return;
     setReplayEpoch(null);
     setOrigin(nextOrigin);
+    setLastOptions(options);
     // Chỉ lần huấn luyện MỚI được ghi vào nhật ký (chạy lại thì không lưu trùng).
     const onDone =
       nextOrigin.kind === 'new'
@@ -157,6 +163,25 @@ export function ModelLab({ projectId, classes, samples }: ModelLabProps) {
         </p>
       )}
       <EvaluateSection classes={classes} snapshot={snapshot} samplesBySplit={samplesBySplit} predictions={predictions} />
+      {training.status === 'done' && !isStale && lastOptions && readiness.readiness === 'ready' && snapshots.length > 0 && (
+        <ColabExportPanel
+          projectName={projectName}
+          descriptionKey="export.colab.imageDescription"
+          build={() => {
+            const final = snapshots.at(-1) as EpochSnapshot;
+            return imageNotebook({
+              projectName,
+              appVersion,
+              exportedAt: new Date().toLocaleString('vi'),
+              classNames: classes.map((c) => c.name),
+              train: readiness.data.train,
+              test: readiness.data.test,
+              options: lastOptions,
+              results: { trainAccuracy: final.train.accuracy, testAccuracy: final.test?.accuracy ?? null },
+            });
+          }}
+        />
+      )}
       <ExperimentLog
         runs={experiments.runs}
         fingerprint={fingerprint}

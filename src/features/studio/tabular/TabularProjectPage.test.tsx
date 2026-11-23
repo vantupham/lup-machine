@@ -37,6 +37,8 @@ describe('Studio dữ liệu bảng', () => {
     expect(screen.getByTestId('tabular-prediction')).toHaveTextContent('Máy đoán: setosa');
     fireEvent.change(screen.getByLabelText('Rộng cánh hoa (cm)'), { target: { value: 'abc' } });
     expect(screen.getByText(/Hãy nhập đủ các ô/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /notebook Google Colab/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeEnabled();
   });
 
   test('Penguins: báo dòng thiếu và mất cân bằng; đổi sang hồi quy cân nặng có phương trình', async () => {
