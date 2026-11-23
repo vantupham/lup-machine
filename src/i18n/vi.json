@@ -879,7 +879,8 @@
       "large": "Notebook khá lớn nên Colab có thể mở chậm.",
       "error": "Không tạo được notebook: {{message}}",
       "privacy": "Notebook được tạo ngay trên máy này. LUP Machine không gửi dữ liệu đi đâu; chỉ khi em tự tải notebook lên Colab thì dữ liệu trong đó mới nằm trên Google Drive của em.",
-      "textDescription": "Tải về một notebook dựng lại đúng bộ từ vựng và mô hình này bằng scikit-learn, trên cùng các câu và cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine."
+      "textDescription": "Tải về một notebook dựng lại đúng bộ từ vựng và mô hình này bằng scikit-learn, trên cùng các câu và cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine.",
+      "audioDescription": "Tải về một notebook chứa 160 con số đặc trưng của mỗi đoạn (không chứa âm thanh gốc), dựng lại cùng mô hình bằng scikit-learn trên cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine."
     }
   },
   "text": {
@@ -990,6 +991,103 @@
       "total": "Tổng điểm",
       "totalHint": "Nhóm có tổng điểm lớn nhất là nhóm được chọn.",
       "totalHintBinary": "Với 2 nhóm: điểm dương thì nghiêng về nhóm này, âm thì nghiêng về nhóm kia."
+    }
+  },
+  "audio": {
+    "lead": "Dạy máy nhận ra âm thanh. Mỗi bước đều thấy âm thanh biến thành con số ra sao: dạng sóng → phổ tần số → ảnh phổ mel → 160 con số.",
+    "steps": {
+      "data": "Thu và gom âm thanh",
+      "check": "Chia dữ liệu và kiểm tra",
+      "represent": "Kính hiển vi: âm thanh thành con số",
+      "train": "Huấn luyện",
+      "evaluate": "Đánh giá và vùng phổ quan trọng",
+      "use": "Sử dụng: thử một âm thanh mới"
+    },
+    "samples": {
+      "bell": "Chuông",
+      "whistle": "Còi",
+      "drum": "Trống"
+    },
+    "data": {
+      "empty": "Chưa có nhóm âm thanh nào. Thêm nhóm ở dưới rồi thu âm bằng micro hoặc tải tệp, hoặc dùng bộ âm thanh mẫu.",
+      "loadSamples": "Dùng âm thanh mẫu: chuông / còi / trống",
+      "samplesNote": "Âm thanh mẫu được máy tạo ra bằng công thức (mỗi nhóm 16 đoạn), không phải ghi âm thật.",
+      "className": "Tên nhóm {{n}}",
+      "clipCount": "{{n}} đoạn",
+      "record": "Thu 1 giây",
+      "recording": "Đang thu…",
+      "upload": "Tải tệp âm thanh",
+      "deleteClass": "Xóa nhóm",
+      "confirmDeleteClass": "Xóa nhóm \"{{name}}\" và mọi đoạn âm thanh của nhóm?",
+      "deleteClip": "Xóa đoạn này",
+      "play": "Nghe đoạn {{n}}",
+      "moreClips": "… và {{n}} đoạn cũ hơn.",
+      "newClass": "Tên nhóm mới",
+      "addClass": "Thêm nhóm",
+      "error": "Không xử lý được âm thanh: {{message}}",
+      "unsupported": "Trình duyệt này không hỗ trợ Web Audio, nên chưa thu / đọc được âm thanh. Hãy dùng Chrome hoặc Edge bản mới.",
+      "privacy": "Âm thanh chỉ lưu trên máy này dưới dạng đoạn 1 giây, 16 kHz; tệp gốc không được giữ lại và không gửi đi đâu."
+    },
+    "live": {
+      "badge": "Xấp xỉ",
+      "hint": "Phổ trực tiếp do trình duyệt tính (cửa sổ và độ phân giải khác), chỉ để em thấy micro đang nghe; mô hình không dùng hình này."
+    },
+    "quality": {
+      "silent": "{{count}} đoạn gần như im lặng: có thể micro chưa bật hoặc em đứng quá xa.",
+      "clipped": "{{count}} đoạn bị rè vì quá to (chạm mức tối đa của micro).",
+      "few-clips": "Nhóm \"{{label}}\" mới có {{count}} đoạn; nên có ít nhất 5.",
+      "imbalance": "Mất cân bằng: nhóm \"{{smallest}}\" chỉ có {{smallestCount}} đoạn, nhóm \"{{largest}}\" có {{largestCount}}."
+    },
+    "prepareErrors": {
+      "too-few-clips": "Mới có {{count}} đoạn, cần ít nhất 6 để huấn luyện.",
+      "single-class": "Cần âm thanh của ít nhất hai nhóm."
+    },
+    "inspector": {
+      "clip": "Đoạn âm thanh",
+      "exactHint": "Đúng các phép tính mà mô hình dùng: cùng khung, cửa sổ Hann, FFT, bộ lọc mel và cách gộp.",
+      "waveTitle": "① Dạng sóng",
+      "waveLabel": "Dạng sóng của đoạn âm thanh",
+      "waveHint": "Micro đo áp suất không khí {{rate}} lần mỗi giây: 1 giây là {{n}} con số. Vùng tô vàng là khung đang xem.",
+      "frame": "Khung thời gian",
+      "frameValue": "{{n}}/{{total}} (từ {{ms}} ms)",
+      "fftTitle": "② Phổ tần số của một khung (FFT)",
+      "fftLabel": "Phổ công suất của khung {{n}}",
+      "fftHint": "Lấy {{win}} mẫu (25 ms), nhân với cửa sổ Hann cho hai đầu mềm đi, rồi dùng biến đổi Fourier nhanh (FFT, {{nfft}} điểm) để biết khung đó gồm những tần số nào: {{bins}} giá trị từ 0 đến 8 kHz.",
+      "melTitle": "③ Ảnh phổ mel",
+      "melLabel": "Ảnh phổ mel: trục ngang là thời gian, trục dọc là dải tần",
+      "melHint": "Làm lại bước ② cho cả {{frames}} khung (mỗi khung cách nhau 10 ms), gom các tần số thành {{bands}} dải mel (từ khoảng {{low}} Hz tới {{high}} Hz; dải thấp hẹp, dải cao rộng giống cách tai người nghe) và đổi sang decibel. Càng sáng càng to. Đường nét đứt chia 4 đoạn thời gian.",
+      "poolTitle": "④ 160 con số mô hình nhận",
+      "poolLabel": "Độ to trung bình của mỗi dải trong mỗi đoạn thời gian",
+      "poolHint": "Lấy trung bình mỗi dải mel trong {{segments}} đoạn thời gian: {{bands}} × {{segments}} = {{total}} con số. Cột là đoạn thời gian (trái sang phải), hàng là dải tần (trầm ở dưới)."
+    },
+    "models": {
+      "logistic": {
+        "name": "Hồi quy logistic",
+        "how": "Mỗi ô trong 160 ô có một trọng số cho mỗi nhóm; cộng lại thành điểm rồi đổi ra xác suất. Đọc ngược được thành bản đồ vùng phổ quan trọng."
+      },
+      "knn": {
+        "name": "k láng giềng gần nhất",
+        "how": "Tìm k đoạn Dạy giống nhất (khoảng cách tính bằng dB) và lấy nhóm chiếm đa số."
+      }
+    },
+    "model": {
+      "kHint": "Khoảng cách tính trên dB gốc, không chuẩn hóa: chuẩn hóa sẽ phóng to tiếng ồn ở những ô im lặng."
+    },
+    "evaluate": {
+      "importanceTitle": "Mô hình nghe vào đâu?",
+      "importanceHint": "Trọng số thật của mô hình xếp lại thành lưới 40 dải × 4 đoạn thời gian.",
+      "importanceLabel": "Trọng số của nhóm {{cls}}",
+      "importanceLegend": "Cam: ô đó to hơn mức trung bình thì đẩy về nhóm này. Xanh: kéo ra xa. Hàng là dải tần (trầm ở dưới), cột là đoạn thời gian.",
+      "knnNoMap": "k-NN không học trọng số nên không có bản đồ này; hãy xem các láng giềng ở bước ⑥."
+    },
+    "use": {
+      "empty": "Thu 1 giây hoặc tải một tệp âm thanh để thử.",
+      "play": "Nghe lại",
+      "whyHint": "Đóng góp = giá trị đã chuẩn hóa của ô × trọng số; cộng lại với phần cố định đúng bằng điểm của nhóm.",
+      "contributionLabel": "Đóng góp của từng ô ảnh phổ",
+      "contributionHint": "Điểm của nhóm \"{{cls}}\" so với trung bình các nhóm = {{base}} (phần cố định) + tổng các ô = {{total}}. Cam: đẩy về nhóm này, xanh: kéo ra xa.",
+      "distance": "cách {{d}} dB",
+      "knnHint": "Bấm ▶ để nghe các đoạn Dạy giống nhất mà máy dựa vào."
     }
   }
 }

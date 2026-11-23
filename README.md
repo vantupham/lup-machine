@@ -61,7 +61,7 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 **Giai đoạn 4 – Âm thanh, tư thế, văn bản tiếng Việt (đang làm).** Đã có:
 
 - [x] Studio văn bản tiếng Việt: tự gõ câu cho từng nhóm, tải CSV, hoặc 2 bộ câu mẫu tự soạn (chủ đề; góp ý căng tin); trợ lý kiểm tra (câu trùng, câu mâu thuẫn nhãn, câu quá ngắn, mất cân bằng); Kính hiển vi tách âm tiết và TF-IDF; Naive Bayes và hồi quy logistic; từ đặc trưng của mỗi nhóm; tô màu đóng góp của từng âm tiết trong câu (cộng lại đúng bằng điểm của mô hình); xuất notebook Colab. Đối chiếu scikit-learn: TF-IDF, Naive Bayes, hồi quy logistic
-- [ ] Studio âm thanh (ảnh phổ)
+- [x] Studio âm thanh: thu 1 giây bằng micro (có phổ trực tiếp), tải tệp, hoặc âm thanh mẫu tổng hợp (chuông / còi / trống); trợ lý báo đoạn im lặng, đoạn bị rè; Kính hiển vi dạng sóng → FFT một khung → ảnh phổ mel → 160 con số; hồi quy logistic (bản đồ vùng phổ quan trọng, đóng góp từng ô) hoặc k-NN (nghe lại các đoạn giống nhất); xuất notebook Colab. Đối chiếu NumPy / librosa: FFT, cửa sổ Hann, bộ lọc mel, ảnh phổ mel
 - [ ] Studio tư thế & bàn tay (khung xương)
 
 ## Yêu cầu

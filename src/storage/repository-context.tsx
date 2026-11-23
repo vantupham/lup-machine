@@ -3,12 +3,14 @@ import type { ProjectRepository } from './repositories/project-repository';
 import type { DatasetRepository } from './repositories/dataset-repository';
 import type { ExperimentRepository } from './repositories/experiment-repository';
 import type { TableRepository } from './repositories/table-repository';
+import type { AudioRepository } from './repositories/audio-repository';
 
 export interface Repositories {
   readonly projects: ProjectRepository;
   readonly dataset: DatasetRepository;
   readonly experiments: ExperimentRepository;
   readonly tables: TableRepository;
+  readonly audio: AudioRepository;
 }
 
 const RepositoriesContext = createContext<Repositories | null>(null);
@@ -42,4 +44,8 @@ export function useExperimentRepository(): ExperimentRepository {
 
 export function useTableRepository(): TableRepository {
   return useRepositories().tables;
+}
+
+export function useAudioRepository(): AudioRepository {
+  return useRepositories().audio;
 }

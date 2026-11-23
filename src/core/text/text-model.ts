@@ -6,7 +6,7 @@
  * (phần cố định của lớp) + Σ_từ (đóng góp của từ). Hồi quy logistic 2 lớp dùng thẳng logit z = w·x + b.
  */
 import { stratifiedSplit } from '@/core/data/split';
-import { fitLogisticRegression, logisticScores, predictLogisticProba, type LogisticModel } from '@/core/algorithms/logistic-regression';
+import { fitLogisticRegression, logisticBase, logisticLeaning, logisticRelativeScore, predictLogisticProba, type LogisticModel } from '@/core/algorithms/logistic-regression';
 import { accuracy, confusionMatrix } from '@/core/ml/metrics';
 import { fitNaiveBayes, naiveBayesScores, predictNaiveBayesProba, type NaiveBayesModel } from './naive-bayes';
 import { countVector, fitVocabulary, inverseDocumentFrequency, termsOf, tfidfVector, type Vocabulary } from './vectorize';
@@ -127,11 +127,8 @@ export function predictProbaText(trained: TrainedText, encoded: EncodedText): nu
  * hoặc cho một đơn vị TF-IDF (logistic). Dùng để tô màu từ và liệt kê từ đặc trưng của lớp.
  */
 export function classLeaning(trained: TrainedText, c: number): number[] {
-  if (trained.kind === 'logistic' && trained.model.numClasses === 2) {
-    const w = trained.model.weights[0] as readonly number[];
-    return w.map((v) => (c === 1 ? v : -v));
-  }
-  const rows = trained.kind === 'naive-bayes' ? trained.model.featureLogProb : trained.model.weights;
+  if (trained.kind === 'logistic') return logisticLeaning(trained.model, c);
+  const rows = trained.model.featureLogProb;
   const k = rows.length;
   return (rows[c] as readonly number[]).map((v, j) => v - rows.reduce((s, r) => s + (r[j] as number), 0) / k);
 }
@@ -155,11 +152,8 @@ export interface TextExplanation {
 }
 
 function relativeBase(trained: TrainedText, c: number): number {
-  if (trained.kind === 'logistic' && trained.model.numClasses === 2) {
-    const b = trained.model.intercepts[0] as number;
-    return c === 1 ? b : -b;
-  }
-  const base = trained.kind === 'naive-bayes' ? trained.model.classLogPrior : trained.model.intercepts;
+  if (trained.kind === 'logistic') return logisticBase(trained.model, c);
+  const base = trained.model.classLogPrior;
   return (base[c] as number) - base.reduce((a, b) => a + b, 0) / base.length;
 }
 
@@ -187,11 +181,7 @@ export function explainText(trained: TrainedText, data: TextData, text: string, 
 
 /** Điểm tương đối của lớp c — đúng bằng base + Σ đóng góp (dùng trong kiểm thử). */
 export function relativeScore(trained: TrainedText, encoded: EncodedText, c: number): number {
-  if (trained.kind === 'logistic') {
-    const z = logisticScores(trained.model, encoded.tfidf);
-    if (trained.model.numClasses === 2) return c === 1 ? (z[0] as number) : -(z[0] as number);
-    return (z[c] as number) - z.reduce((a, b) => a + b, 0) / z.length;
-  }
+  if (trained.kind === 'logistic') return logisticRelativeScore(trained.model, encoded.tfidf, c);
   const s = naiveBayesScores(trained.model, encoded.counts);
   return (s[c] as number) - s.reduce((a, b) => a + b, 0) / s.length;
 }

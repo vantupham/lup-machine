@@ -6,6 +6,7 @@ import { useProjectRepository } from '@/storage/repository-context';
 import { ImageProjectPage } from './image/ImageProjectPage';
 import { TabularProjectPage } from './tabular/TabularProjectPage';
 import { TextProjectPage } from './text/TextProjectPage';
+import { AudioProjectPage } from './audio/AudioProjectPage';
 
 /** Mở đúng Studio theo loại dự án. Không tìm thấy dự án thì để trang Ảnh báo lỗi như trước. */
 export function ProjectRouter() {
@@ -28,5 +29,6 @@ export function ProjectRouter() {
   if (!type || type.id !== projectId) return <p className="text-muted">{t('tabular.loading')}</p>;
   if (type.type === 'tabular') return <TabularProjectPage key={projectId} projectId={projectId} />;
   if (type.type === 'text') return <TextProjectPage key={projectId} projectId={projectId} />;
+  if (type.type === 'audio') return <AudioProjectPage key={projectId} projectId={projectId} />;
   return <ImageProjectPage />;
 }

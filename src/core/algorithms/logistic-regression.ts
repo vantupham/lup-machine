@@ -121,3 +121,32 @@ export function fitLogisticRegression(
   }
   return { numClasses, weights, intercepts, converged: result.converged };
 }
+
+/**
+ * Trọng số "nghiêng về lớp c" của từng đặc trưng: 2 lớp dùng thẳng ±w (logit z = w·x + b);
+ * từ 3 lớp dùng w_c − trung bình các lớp, để điểm s_c − tb(s) = (b_c − tb(b)) + Σ_j x_j · nghiêng_j.
+ */
+export function logisticLeaning(model: LogisticModel, c: number): number[] {
+  if (model.numClasses === 2) {
+    const w = model.weights[0] as readonly number[];
+    return w.map((v) => (c === 1 ? v : -v));
+  }
+  const k = model.weights.length;
+  return (model.weights[c] as readonly number[]).map((v, j) => v - model.weights.reduce((s, r) => s + (r[j] as number), 0) / k);
+}
+
+/** Phần cố định (không phụ thuộc đặc trưng) của điểm tương đối ở trên. */
+export function logisticBase(model: LogisticModel, c: number): number {
+  if (model.numClasses === 2) {
+    const b = model.intercepts[0] as number;
+    return c === 1 ? b : -b;
+  }
+  return (model.intercepts[c] as number) - model.intercepts.reduce((a, b) => a + b, 0) / model.intercepts.length;
+}
+
+/** Điểm tương đối của lớp c (bằng đúng logisticBase + Σ x·logisticLeaning). */
+export function logisticRelativeScore(model: LogisticModel, x: Vector, c: number): number {
+  const z = logisticScores(model, x);
+  if (model.numClasses === 2) return c === 1 ? (z[0] as number) : -(z[0] as number);
+  return (z[c] as number) - z.reduce((a, b) => a + b, 0) / z.length;
+}

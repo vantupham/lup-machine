@@ -89,6 +89,19 @@ export interface TableRecord {
   readonly updatedAt: string;
 }
 
+export type AudioSource = 'microphone' | 'upload' | 'dataset';
+
+/** Một đoạn âm thanh đã chuẩn hóa: đúng 1 giây, 16 kHz, số thực 32 bit (64 KB). Không lưu tệp gốc. */
+export interface AudioClipRecord {
+  readonly id: string;
+  readonly projectId: string;
+  readonly classId: string;
+  readonly source: AudioSource;
+  readonly pcm: ArrayBuffer;
+  readonly createdAt: string;
+  readonly seq: number;
+}
+
 export const DEFAULT_DB_NAME = 'lup-machine';
 
 /** Cơ sở dữ liệu IndexedDB cục bộ. Dữ liệu chỉ nằm trên máy người dùng. */
@@ -99,6 +112,7 @@ export class LupDatabase extends Dexie {
   features!: Dexie.Table<FeatureRecord, [string, string]>;
   runs!: EntityTable<RunRecord, 'id'>;
   dataTables!: EntityTable<TableRecord, 'projectId'>;
+  audioClips!: EntityTable<AudioClipRecord, 'id'>;
 
   constructor(name: string = DEFAULT_DB_NAME) {
     super(name);
@@ -130,6 +144,15 @@ export class LupDatabase extends Dexie {
       features: '[sampleId+modelId], sampleId, projectId',
       runs: 'id, projectId',
       dataTables: 'projectId',
+    });
+    this.version(6).stores({
+      projects: 'id, updatedAt',
+      classes: 'id, projectId',
+      samples: 'id, projectId, classId',
+      features: '[sampleId+modelId], sampleId, projectId',
+      runs: 'id, projectId',
+      dataTables: 'projectId',
+      audioClips: 'id, projectId, classId',
     });
   }
 }
