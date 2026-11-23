@@ -16,6 +16,7 @@ import { useImageUpload } from './useImageUpload';
 import { decodeStoredImage, videoFrameToStoredImage } from './image-codec.browser';
 import { CLASS_MARKERS } from './lab/class-style';
 import { ModelLab } from './lab/ModelLab';
+import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 
 /** Lớp phân biệt bằng cả ký hiệu, không chỉ màu (thân thiện người mù màu). */
 export const SPLIT_SEED = 42;
@@ -116,6 +117,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
           {t('project.back')}
         </Link>
         <h1 className="font-display text-4xl font-bold">{projectName}</h1>
+        <ModelCardLink projectId={projectId} />
         <StepNav />
       </header>
 

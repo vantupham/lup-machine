@@ -96,6 +96,69 @@
     "importError": "Không mở được tệp: {{message}}",
     "tooLarge": "tệp lớn hơn {{mb}} MB"
   },
+  "modelCard": {
+    "title": "Thẻ mô hình",
+    "lead": "Trả lời 5 câu hỏi để người khác hiểu mô hình của em: dùng vào việc gì, học từ dữ liệu nào, tốt đến đâu và khi nào không nên tin nó. Thẻ đi kèm tệp .lup và bài nộp.",
+    "backToProject": "← Quay lại dự án",
+    "authors": "Người làm",
+    "authorsPlaceholder": "Tên em hoặc tên nhóm (không bắt buộc)",
+    "fields": {
+      "purpose": {
+        "label": "1. Mô hình dùng để làm gì?",
+        "hint": "Ví dụ: phân loại rác thành giấy, nhựa, kim loại để bỏ đúng thùng.",
+        "short": "mục đích"
+      },
+      "data": {
+        "label": "2. Dữ liệu lấy từ đâu?",
+        "hint": "Ai thu thập, ở đâu, bao nhiêu mẫu? Có xin phép người xuất hiện trong ảnh hay giọng nói không?",
+        "short": "nguồn dữ liệu"
+      },
+      "performance": {
+        "label": "3. Mô hình làm tốt đến đâu?",
+        "hint": "Ghi độ chính xác trên dữ liệu Kiểm tra và nhóm hay bị nhầm (xem bước Đánh giá).",
+        "short": "độ chính xác"
+      },
+      "limitations": {
+        "label": "4. Khi nào mô hình dễ sai?",
+        "hint": "Ví dụ: ảnh thiếu sáng, nền lạ, giọng vùng miền khác, người có độ tuổi hay màu da chưa có trong dữ liệu.",
+        "short": "khi nào dễ sai"
+      },
+      "misuse": {
+        "label": "5. Không nên dùng mô hình này để…",
+        "hint": "Những việc mà nếu mô hình đoán sai sẽ gây hại hoặc bất công cho ai đó.",
+        "short": "không nên dùng để"
+      }
+    },
+    "factsTitle": "Số liệu tự động",
+    "factsNote": "Đọc thẳng từ dự án nên chính xác. Dùng để trả lời câu 2 và câu 3.",
+    "factsType": "Loại dự án: {{type}}",
+    "factsClass": "{{name}}: {{count}} mẫu",
+    "factsClassSplit": "{{name}}: {{count}} ảnh (Dạy {{train}} · Kiểm tra {{test}})",
+    "factsNoClasses": "Chưa có nhóm nào.",
+    "factsTable": "Bảng dữ liệu: {{rows}} dòng × {{columns}} cột",
+    "factsNoTable": "Chưa có bảng dữ liệu.",
+    "factsRun": "Lần huấn luyện gần nhất (#{{number}}, {{epochs}} epoch): đúng {{train}}% trên ngăn Dạy, {{test}}% trên ngăn Kiểm tra.",
+    "factsRunNoTest": "Lần huấn luyện gần nhất (#{{number}}, {{epochs}} epoch): đúng {{train}}% trên ngăn Dạy (chưa có ảnh Kiểm tra).",
+    "factsNoRun": "Chưa huấn luyện lần nào.",
+    "factsMeasureHint": "Độ chính xác: xem bước Đánh giá của dự án rồi ghi vào câu 3.",
+    "save": "Lưu thẻ",
+    "saving": "Đang lưu…",
+    "saved": "Đã lưu thẻ mô hình.",
+    "saveError": "Không lưu được: {{message}}",
+    "unsaved": "Có thay đổi chưa lưu.",
+    "complete": "Đã trả lời đủ 5 câu hỏi.",
+    "missing": "Còn thiếu: {{fields}}.",
+    "print": "In thẻ",
+    "printHeading": "Thẻ mô hình: {{name}}",
+    "noAnswer": "(chưa trả lời)",
+    "updatedAt": "Cập nhật {{date}}",
+    "linkComplete": "Thẻ mô hình · đã điền đủ",
+    "linkIncomplete": "Thẻ mô hình · chưa điền đủ",
+    "factsExact": "Chính xác",
+    "factsExactHint": "Đếm thẳng từ dữ liệu và nhật ký huấn luyện đã lưu của dự án.",
+    "loading": "Đang tải thẻ mô hình…",
+    "factsRunOutdated": "Dữ liệu đã thay đổi sau lần huấn luyện này (thêm / xóa ảnh hoặc đổi ngăn). Hãy huấn luyện lại trước khi ghi độ chính xác."
+  },
   "about": {
     "title": "Giới thiệu & Quyền riêng tư",
     "whatTitle": "LUP Machine là gì?",

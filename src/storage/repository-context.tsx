@@ -6,6 +6,7 @@ import type { TableRepository } from './repositories/table-repository';
 import type { AudioRepository } from './repositories/audio-repository';
 import type { PoseRepository } from './repositories/pose-repository';
 import type { ProjectFileRepository } from './repositories/project-file-repository';
+import type { ModelCardRepository } from './repositories/model-card-repository';
 
 export interface Repositories {
   readonly projects: ProjectRepository;
@@ -15,6 +16,7 @@ export interface Repositories {
   readonly audio: AudioRepository;
   readonly poses: PoseRepository;
   readonly projectFiles: ProjectFileRepository;
+  readonly modelCards: ModelCardRepository;
 }
 
 const RepositoriesContext = createContext<Repositories | null>(null);
@@ -28,7 +30,7 @@ export function RepositoriesProvider({ repositories, children }: ProviderProps) 
   return <RepositoriesContext.Provider value={repositories}>{children}</RepositoriesContext.Provider>;
 }
 
-function useRepositories(): Repositories {
+export function useRepositories(): Repositories {
   const repositories = useContext(RepositoriesContext);
   if (!repositories) throw new Error('Cần đặt trong RepositoriesProvider');
   return repositories;
@@ -60,4 +62,8 @@ export function usePoseRepository(): PoseRepository {
 
 export function useProjectFileRepository(): ProjectFileRepository {
   return useRepositories().projectFiles;
+}
+
+export function useModelCardRepository(): ModelCardRepository {
+  return useRepositories().modelCards;
 }

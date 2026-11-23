@@ -21,6 +21,7 @@ import {
 import { createDexieAudioRepository, type AudioRepository } from '@/storage/repositories/audio-repository';
 import { createDexiePoseRepository, type PoseRepository } from '@/storage/repositories/pose-repository';
 import { createDexieProjectFileRepository, type ProjectFileRepository } from '@/storage/repositories/project-file-repository';
+import { createDexieModelCardRepository, type ModelCardRepository } from '@/storage/repositories/model-card-repository';
 import { LupDatabase } from '@/storage/db';
 import '@/i18n';
 
@@ -33,6 +34,7 @@ export interface TestRepositories {
   readonly audio: AudioRepository;
   readonly poses: PoseRepository;
   readonly projectFiles: ProjectFileRepository;
+  readonly modelCards: ModelCardRepository;
 }
 
 export function createTestRepository(): TestRepositories {
@@ -46,6 +48,7 @@ export function createTestRepository(): TestRepositories {
     audio: createDexieAudioRepository(db),
     poses: createDexiePoseRepository(db),
     projectFiles: createDexieProjectFileRepository(db),
+    modelCards: createDexieModelCardRepository(db),
   };
 }
 
@@ -58,12 +61,18 @@ export function renderApp(
   audio: AudioRepository = createTestRepository().audio,
   poses: PoseRepository = createTestRepository().poses,
   projectFiles: ProjectFileRepository = createTestRepository().projectFiles,
+  modelCards: ModelCardRepository = createTestRepository().modelCards,
 ): RenderResult {
   return render(
-    <RepositoriesProvider repositories={{ projects: repository, dataset, experiments, tables, audio, poses, projectFiles }}>
+    <RepositoriesProvider repositories={{ projects: repository, dataset, experiments, tables, audio, poses, projectFiles, modelCards }}>
       <MemoryRouter initialEntries={[route]}>
         <AppRoutes />
       </MemoryRouter>
     </RepositoriesProvider>,
   );
+}
+
+/** Mở ứng dụng với toàn bộ repository dùng chung một cơ sở dữ liệu thử. */
+export function renderWithRepositories(route: string, r: TestRepositories): RenderResult {
+  return renderApp(route, r.repository, r.dataset, r.experiments, r.tables, r.audio, r.poses, r.projectFiles, r.modelCards);
 }

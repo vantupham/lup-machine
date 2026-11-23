@@ -9,6 +9,7 @@ import { imageDimensions } from '@/core/project-file/image-size';
 import type { AudioSource, ImageCredit, PoseSource, RunRecord, SampleSource, Split, StoredImage } from '../db';
 import { parseManifest, type Manifest } from '../schemas/manifest';
 import type { ProjectType } from '../schemas/project';
+import { modelCardFileSchema, type ModelCardFields } from '../schemas/model-card';
 import { MAX_SAMPLES_PER_CLASS } from '../repositories/dataset-repository';
 import { MAX_CLIPS_PER_CLASS } from '../repositories/audio-repository';
 import { MAX_POSES_PER_CLASS } from '../repositories/pose-repository';
@@ -35,6 +36,8 @@ export interface ProjectBundle {
   readonly poses: readonly BundlePose[];
   readonly table: BundleTable | null;
   readonly runs: readonly BundleRun[];
+  /** Thẻ mô hình học sinh đã viết (null nếu chưa viết). */
+  readonly modelCard: ModelCardFields | null;
 }
 
 export interface BundleImage {
@@ -93,6 +96,7 @@ const fileNumber = (i: number) => String(i + 1).padStart(5, '0');
 
 export function encodeBundle(bundle: ProjectBundle): Uint8Array {
   const files: Record<string, Uint8Array> = { [BUNDLE_FILES.manifest]: json(bundle.manifest) };
+  if (bundle.modelCard) files[BUNDLE_FILES.modelCard] = json(bundle.modelCard);
   const type = bundle.manifest.projectType;
   if (type === 'image' || type === 'audio' || type === 'pose') files[BUNDLE_FILES.classes] = json({ classes: bundle.classes });
   if (type === 'image') {
@@ -277,7 +281,7 @@ function decodeTable(files: Map<string, Uint8Array>, type: 'text' | 'tabular'): 
 function checkTypeMatchesData(files: Map<string, Uint8Array>, type: ProjectType): void {
   const allowed = ALLOWED_DATA[type];
   const stray = [...files.keys()].find(
-    (name) => name !== BUNDLE_FILES.manifest && !allowed.has(name) && !(type === 'image' && IMAGE_FILE_PATTERN.test(name)) && !(type === 'audio' && AUDIO_FILE_PATTERN.test(name)),
+    (name) => name !== BUNDLE_FILES.manifest && name !== BUNDLE_FILES.modelCard && !allowed.has(name) && !(type === 'image' && IMAGE_FILE_PATTERN.test(name)) && !(type === 'audio' && AUDIO_FILE_PATTERN.test(name)),
   );
   if (stray) throw new ProjectFileError(`Tệp ${stray} không đúng loại dự án "${type}"`);
 }
@@ -315,5 +319,6 @@ export function decodeBundle(bytes: Uint8Array): ProjectBundle {
     poses: type === 'pose' ? decodePoses(files, classes.length) : [],
     table: type === 'text' || type === 'tabular' ? decodeTable(files, type) : null,
     runs,
+    modelCard: readJson(files, BUNDLE_FILES.modelCard, modelCardFileSchema),
   };
 }

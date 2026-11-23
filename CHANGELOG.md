@@ -4,6 +4,13 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Thẻ mô hình – giai đoạn 5)
+
+- **Thẻ mô hình** cho mọi loại dự án (`#/studio/:id/the-mo-hinh`): học sinh trả lời 5 câu hỏi (mô hình dùng để làm gì, dữ liệu lấy từ đâu, làm tốt đến đâu, khi nào dễ sai, không nên dùng để làm gì) và ghi tên người làm. Có gợi ý cho từng câu, trạng thái "còn thiếu", nút lưu và **bản in** gọn (chỉ câu trả lời và số liệu).
+- Khung **Số liệu tự động** (nhãn Chính xác) đọc thẳng từ dự án: số mẫu mỗi nhóm (dự án ảnh có ngăn Dạy / Kiểm tra), kích thước bảng dữ liệu, độ chính xác của lần huấn luyện gần nhất (dự án ảnh, làm tròn xuống), kèm cảnh báo nếu dữ liệu đã đổi sau lần huấn luyện đó — để học sinh dựa vào số thật khi viết.
+- Mỗi studio có liên kết "Thẻ mô hình · đã điền đủ / chưa điền đủ" ở đầu trang.
+- Lưu trong IndexedDB (phiên bản 8, bảng `modelCards`), xóa cùng dự án; đi kèm tệp `.lup` dưới tên `model-card.json` (kiểm tra bằng Zod khi mở). Điều kiện "điền đủ thẻ trước khi nộp bài" sẽ áp dụng khi có bài nộp `.lups`.
+
 ### Thêm (Tệp dự án .lup – giai đoạn 5)
 
 - **Xuất / mở tệp dự án `.lup`** cho cả 5 loại dự án: nút "Xuất .lup" trên mỗi thẻ dự án và khung "Mở tệp dự án" ở Xưởng mô hình. Dùng để mang dự án sang máy khác, gửi cho thầy cô hoặc cất giữ; là nền cho gói bài tập `.lupa` và bài nộp `.lups`. Mở tệp luôn tạo dự án mới, không ghi đè dự án đang có.

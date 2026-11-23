@@ -9,6 +9,7 @@ import { createDexieAudioRepository } from './audio-repository';
 import { createDexiePoseRepository } from './pose-repository';
 import { createDexieTableRepository } from './table-repository';
 import { createDexieExperimentRepository } from './experiment-repository';
+import { createDexieModelCardRepository } from './model-card-repository';
 import { createDexieProjectFileRepository, projectFileName, ProjectFileError } from './project-file-repository';
 
 let db: LupDatabase;
@@ -19,6 +20,7 @@ const repos = () => ({
   poses: createDexiePoseRepository(db),
   tables: createDexieTableRepository(db),
   experiments: createDexieExperimentRepository(db),
+  cards: createDexieModelCardRepository(db),
   files: createDexieProjectFileRepository(db),
 });
 
@@ -78,6 +80,15 @@ describe('ProjectFileRepository', () => {
     expect(runs[1]?.fingerprint).toBe('cu-khong-khop');
     // dự án gốc không bị đụng tới
     expect(await r.dataset.listSamples(project.id)).toHaveLength(3);
+  });
+
+  test('thẻ mô hình đi theo tệp .lup', async () => {
+    const r = repos();
+    const project = await r.projects.create({ name: 'Có thẻ', projectType: 'text' });
+    const card = { authors: 'Lan', purpose: 'Phân loại ý kiến', data: 'Phiếu khảo sát', performance: '80%', limitations: 'Câu mỉa mai', misuse: 'Đánh giá giáo viên' };
+    await r.cards.save(project.id, card);
+    const copy = await r.files.importProject((await r.files.exportProject(project.id)).bytes);
+    expect(await r.cards.get(copy.id)).toMatchObject(card);
   });
 
   test('dự án âm thanh và tư thế', async () => {
