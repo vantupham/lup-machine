@@ -1,6 +1,22 @@
 import type { LupDatabase, TableRecord } from '../db';
 import { CSV_LIMITS } from '@/core/tabular/csv';
 import { parseTabularConfig, type TabularConfig } from '../schemas/tabular';
+import { parseTextConfig, type TextConfig } from '../schemas/text';
+
+/** Cấu hình của dự án dữ liệu bảng hoặc dự án văn bản (cùng lưu bảng CSV). */
+export type TableProjectConfig = TabularConfig | TextConfig;
+
+export function parseTableProjectConfig(input: unknown): TableProjectConfig | null {
+  return parseTextConfig(input) ?? parseTabularConfig(input);
+}
+
+export function isTextConfig(config: TableProjectConfig | null): config is TextConfig {
+  return config !== null && 'kind' in config && config.kind === 'text';
+}
+
+export function isTabularConfig(config: TableProjectConfig | null): config is TabularConfig {
+  return config !== null && !isTextConfig(config);
+}
 
 export const TABLE_FILE_NAME_MAX_LENGTH = 120;
 
@@ -17,21 +33,21 @@ export interface StoredTable {
   readonly csv: string;
   readonly fileName: string;
   readonly sampleId: string | null;
-  readonly config: TabularConfig | null;
+  readonly config: TableProjectConfig | null;
   readonly updatedAt: string;
 }
 
-/** Bảng dữ liệu (CSV gốc) và cấu hình của một dự án dữ liệu bảng; mỗi dự án một bảng. */
+/** Bảng dữ liệu (CSV gốc) và cấu hình của một dự án dữ liệu bảng hoặc văn bản; mỗi dự án một bảng. */
 export interface TableRepository {
   get(projectId: string): Promise<StoredTable | null>;
   /** Thay bảng dữ liệu; cấu hình cũ bị xóa vì các cột có thể đã khác. */
   saveTable(input: SaveTableInput): Promise<StoredTable>;
-  saveConfig(projectId: string, config: TabularConfig): Promise<void>;
+  saveConfig(projectId: string, config: TableProjectConfig): Promise<void>;
   delete(projectId: string): Promise<void>;
 }
 
 function toStored(record: TableRecord): StoredTable {
-  return { ...record, config: parseTabularConfig(record.config) };
+  return { ...record, config: parseTableProjectConfig(record.config) };
 }
 
 export function createDexieTableRepository(db: LupDatabase, now: () => string = () => new Date().toISOString()): TableRepository {
@@ -56,7 +72,7 @@ export function createDexieTableRepository(db: LupDatabase, now: () => string = 
     },
 
     async saveConfig(projectId, config) {
-      const parsed = parseTabularConfig(config);
+      const parsed = parseTableProjectConfig(config);
       if (!parsed) throw new RangeError('Cấu hình không hợp lệ');
       const updated = await db.dataTables.update(projectId, { config: parsed, updatedAt: now() });
       if (updated === 0) throw new RangeError('Dự án chưa có bảng dữ liệu');

@@ -15,7 +15,7 @@ function formatNumber(v: number | null, digits = 3): string {
   return v === null ? '—' : Number(v.toPrecision(6)).toLocaleString('vi', { maximumFractionDigits: digits });
 }
 
-function ConfusionTable({ matrix, classNames }: { readonly matrix: readonly (readonly number[])[]; readonly classNames: readonly string[] }) {
+export function ConfusionTable({ matrix, classNames }: { readonly matrix: readonly (readonly number[])[]; readonly classNames: readonly string[] }) {
   const { t } = useTranslation();
   return (
     <table className="text-sm" data-testid="tabular-confusion">

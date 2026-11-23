@@ -19,7 +19,14 @@ export interface LogisticOptions {
   /** Nghịch đảo độ mạnh điều chuẩn (C lớn = phạt ít). Mặc định 1 như scikit-learn. */
   readonly c?: number;
   readonly maxIterations?: number;
+  /**
+   * Dừng khi mọi thành phần gradient (của hàm mục tiêu chia cho số mẫu) nhỏ hơn mức này.
+   * Mặc định 1e-6: chặt hơn mặc định 1e-4 của scikit-learn mà vẫn nhanh trên trình duyệt.
+   */
+  readonly tolerance?: number;
 }
+
+export const DEFAULT_LOGISTIC_TOLERANCE = 1e-6;
 
 const LOG_EPSILON = 1e-300;
 
@@ -53,7 +60,7 @@ export function fitLogisticRegression(
   xs: readonly Vector[],
   ys: readonly number[],
   numClasses: number,
-  { c = 1, maxIterations = 2000 }: LogisticOptions = {},
+  { c = 1, maxIterations = 2000, tolerance = DEFAULT_LOGISTIC_TOLERANCE }: LogisticOptions = {},
 ): LogisticModel {
   if (xs.length === 0) throw new RangeError('Cần ít nhất một mẫu để huấn luyện');
   if (xs.length !== ys.length) throw new RangeError('Số mẫu và số nhãn không bằng nhau');
@@ -104,7 +111,7 @@ export function fitLogisticRegression(
 
   const result = minimizeLbfgs(objective, new Array<number>(rows * stride).fill(0), {
     maxIterations,
-    gradientTolerance: 1e-9 * Math.max(1, xs.length),
+    gradientTolerance: tolerance * xs.length,
   });
   const weights = Array.from({ length: rows }, (_, k) => result.x.slice(k * stride, k * stride + d));
   let intercepts = Array.from({ length: rows }, (_, k) => result.x[k * stride + d] as number);

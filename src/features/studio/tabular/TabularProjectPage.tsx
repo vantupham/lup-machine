@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { parseCsv } from '@/core/tabular/csv';
@@ -9,8 +9,10 @@ import { checkTabularQuality } from '@/core/tabular/quality';
 import type { TabularConfig } from '@/storage/schemas/tabular';
 import { getErrorMessage } from '@/ui/error-message';
 import { tabularNotebook } from '@/core/export/tabular-notebook';
+import { isTabularConfig } from '@/storage/repositories/table-repository';
 import { ColabExportPanel } from '@/features/export/ColabExportPanel';
 import { version as appVersion } from '../../../../package.json';
+import { StudioStep as Step } from '../StudioStep';
 import { DataSection } from './DataSection';
 import { EvaluateSection } from './EvaluateSection';
 import { ModelSection } from './ModelSection';
@@ -20,18 +22,6 @@ import { initialConfig, isConfigValid } from './tabular-config';
 import { findTabularSample } from './tabular-samples';
 import { UseSection } from './UseSection';
 import { useTabularProject } from './useTabularProject';
-
-function Step({ n, id, title, children }: { readonly n: number; readonly id: string; readonly title: string; readonly children: ReactNode }) {
-  return (
-    <section aria-labelledby={id} className="space-y-4 border-t border-rule pt-6">
-      <h2 id={id} className="flex items-baseline gap-3 font-display text-2xl font-bold">
-        <span className="font-mono text-sm text-primary">{String(n).padStart(2, '0')}</span>
-        {title}
-      </h2>
-      {children}
-    </section>
-  );
-}
 
 interface TrainedState {
   readonly key: string;
@@ -52,7 +42,9 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
     return result.ok ? result.table : null;
   }, [table]);
   const columns = useMemo(() => (parsed ? summarizeColumns(parsed) : []), [parsed]);
-  const savedConfig = table?.config && isConfigValid(table.config, columns) ? table.config : null;
+  const storedConfig = table?.config ?? null;
+  const tabularConfig = isTabularConfig(storedConfig) ? storedConfig : null;
+  const savedConfig = tabularConfig && isConfigValid(tabularConfig, columns) ? tabularConfig : null;
   const config = useMemo(
     () => savedConfig ?? initialConfig(columns, findTabularSample(table?.sampleId ?? null)?.defaultTarget ?? null),
     [savedConfig, columns, table?.sampleId],

@@ -4,6 +4,19 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Studio văn bản tiếng Việt – giai đoạn 4)
+
+- Loại dự án **Văn bản** trong Xưởng mô hình, 6 bước trên một trang:
+  1. **Câu và nhãn:** trình soạn câu (mỗi nhóm một ô, mỗi dòng một câu), tải CSV (chọn cột câu / cột nhãn), hoặc 2 bộ câu mẫu do dự án tự soạn (CC BY 4.0): chủ đề thời tiết / thể thao / ẩm thực (72 câu), góp ý căng tin khen / chê (80 câu).
+  2. **Chia và kiểm tra:** tỉ lệ Kiểm tra, chia lại theo seed; trợ lý báo câu bị bỏ, mất cân bằng, nhóm quá ít câu, câu trùng, câu có mặt ở nhiều nhóm (mâu thuẫn nhãn), câu quá ngắn.
+  3. **Kính hiển vi:** tách âm tiết (giữ cả âm tiết một chữ cái), chọn âm tiết đơn hoặc thêm cặp âm tiết, bảng số lần / idf / TF-IDF của câu, cỡ vector và số ô khác 0, âm tiết hay gặp của mỗi nhóm.
+  4. **Huấn luyện:** Naive Bayes (làm trơn α) hoặc hồi quy logistic (C).
+  5. **Đánh giá:** độ chính xác, ma trận nhầm lẫn, danh sách câu bị đoán sai, từ đặc trưng nhất của mỗi nhóm.
+  6. **Sử dụng:** gõ câu mới, xem xác suất, tô màu từng âm tiết theo đóng góp, bảng điểm (phần cố định + đóng góp của từng từ = tổng điểm, kiểm thử chứng minh khớp đúng phép tính của mô hình), liệt kê từ lạ; xuất notebook Colab (scikit-learn, so kết quả với LUP Machine).
+- Lõi `src/core/text/` đối chiếu scikit-learn: bộ từ vựng và idf / TF-IDF khớp `TfidfVectorizer` tới 1e-12, `MultinomialNB` tới 1e-12, hồi quy logistic trên TF-IDF tới 1e-5.
+- Hồi quy logistic có tham số sai số dừng (mặc định 1e-6, chặt hơn mặc định 1e-4 của scikit-learn): huấn luyện trên ~800 từ chỉ mất khoảng 20 ms thay vì vài giây.
+- Dự án văn bản dùng chung kho lưu bảng với dự án dữ liệu bảng; cấu hình mỗi loại có schema zod riêng.
+
 ### Thêm (xuất notebook Google Colab – giai đoạn 3)
 
 - Nút **"Tải notebook (.ipynb)"** ở bước ⑥ của Studio dữ liệu bảng và sau phần Đánh giá của Studio ảnh (chỉ hiện khi đã huấn luyện xong và dữ liệu chưa đổi). Notebook được tạo ngay trong trình duyệt và tải về máy; học sinh tự tải lên Colab. LUP Machine không gửi dữ liệu đi đâu.

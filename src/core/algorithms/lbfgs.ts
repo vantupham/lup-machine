@@ -23,6 +23,10 @@ export interface LbfgsResult {
 
 const ARMIJO_C = 1e-4;
 const MAX_BACKTRACKS = 60;
+/** Mức giảm tương đối nhỏ hơn mức này coi như "đứng yên" (giới hạn của số thực 64 bit). */
+const STALL_RELATIVE_DECREASE = 1e-14;
+/** Đứng yên liên tiếp ngần này bước thì dừng: tối ưu thêm không còn ý nghĩa. */
+const MAX_STALLED_STEPS = 5;
 
 function dot(a: readonly number[], b: readonly number[]): number {
   let s = 0;
@@ -64,6 +68,7 @@ export function minimizeLbfgs(
   let current = fn(x);
   const ss: number[][] = [];
   const ys: number[][] = [];
+  let stalled = 0;
 
   for (let iter = 0; iter < maxIterations; iter++) {
     if (maxAbs(current.gradient) < gradientTolerance) return { x, value: current.value, iterations: iter, converged: true };
@@ -102,8 +107,13 @@ export function minimizeLbfgs(
         ys.shift();
       }
     }
+    const decrease = (current.value - nextEval.value) / Math.max(1, Math.abs(current.value));
+    stalled = decrease < STALL_RELATIVE_DECREASE ? stalled + 1 : 0;
     x = next;
     current = nextEval;
+    if (stalled >= MAX_STALLED_STEPS) {
+      return { x, value: current.value, iterations: iter + 1, converged: maxAbs(current.gradient) < gradientTolerance };
+    }
   }
   return { x, value: current.value, iterations: maxIterations, converged: maxAbs(current.gradient) < gradientTolerance };
 }

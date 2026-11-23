@@ -58,6 +58,12 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 - [x] Studio dữ liệu bảng: nạp CSV (tải tệp, dán từ Excel / Google Trang tính, hoặc bộ mẫu Iris và chim cánh cụt Palmer), chọn cột nhãn và đặc trưng, trợ lý kiểm tra dữ liệu (dòng thiếu, mất cân bằng, cột giống mã định danh), xem chuẩn hóa và one-hot, huấn luyện cây quyết định / hồi quy logistic / k-NN / hồi quy tuyến tính, ma trận nhầm lẫn, R², giải thích từng dự đoán
 - [x] Xuất notebook Google Colab (tạo ngay trong trình duyệt, tải về máy): dự án bảng dựng lại đúng mô hình bằng scikit-learn và so kết quả với LUP Machine; dự án ảnh huấn luyện lại tầng phân loại bằng Keras rồi chuyển mô hình hoàn chỉnh sang TensorFlow Lite. `scripts/check-notebooks.py` chạy thật các notebook mẫu
 
+**Giai đoạn 4 – Âm thanh, tư thế, văn bản tiếng Việt (đang làm).** Đã có:
+
+- [x] Studio văn bản tiếng Việt: tự gõ câu cho từng nhóm, tải CSV, hoặc 2 bộ câu mẫu tự soạn (chủ đề; góp ý căng tin); trợ lý kiểm tra (câu trùng, câu mâu thuẫn nhãn, câu quá ngắn, mất cân bằng); Kính hiển vi tách âm tiết và TF-IDF; Naive Bayes và hồi quy logistic; từ đặc trưng của mỗi nhóm; tô màu đóng góp của từng âm tiết trong câu (cộng lại đúng bằng điểm của mô hình); xuất notebook Colab. Đối chiếu scikit-learn: TF-IDF, Naive Bayes, hồi quy logistic
+- [ ] Studio âm thanh (ảnh phổ)
+- [ ] Studio tư thế & bàn tay (khung xương)
+
 ## Yêu cầu
 
 - **Người dùng:** Chrome hoặc Edge bản mới trên máy tính. Firefox và Safari dùng được phần lớn tính năng.

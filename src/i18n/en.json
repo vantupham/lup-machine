@@ -878,7 +878,118 @@
       "done": "Notebook created ({{size}} MB). Check your Downloads folder.",
       "large": "The notebook is fairly large, so Colab may open it slowly.",
       "error": "Could not create the notebook: {{message}}",
-      "privacy": "The notebook is created on this device. LUP Machine sends no data anywhere; only if you upload the notebook to Colab yourself does its data live in your Google Drive."
+      "privacy": "The notebook is created on this device. LUP Machine sends no data anywhere; only if you upload the notebook to Colab yourself does its data live in your Google Drive.",
+      "textDescription": "Download a notebook that rebuilds exactly this vocabulary and model with scikit-learn, on the same sentences and the same training / test split, then compares the results with LUP Machine."
+    }
+  },
+  "text": {
+    "lead": "Teach the computer to classify Vietnamese sentences. At every step you can see how a sentence becomes numbers and which words led to the prediction.",
+    "steps": {
+      "data": "Sentences and labels",
+      "check": "Split and check the data",
+      "represent": "Representation: sentences as numbers",
+      "train": "Train",
+      "evaluate": "Evaluate",
+      "use": "Use: try a new sentence"
+    },
+    "samples": {
+      "chu-de": "Topics: weather / sport / food",
+      "can-tin": "Canteen feedback: praise / complaint"
+    },
+    "data": {
+      "empty": "Pick a sample set, type sentences for each group yourself, or upload a CSV file. Data stays on this device only.",
+      "sentenceCount": "{{n}} sentences",
+      "writeTitle": "Type sentences",
+      "writeHint": "Name each group and type one sentence per line.",
+      "write": "Open the sentence editor",
+      "uploadHint": "A CSV file with one column of sentences and one column of labels (first row holds column names).",
+      "needTwoColumns": "The table needs at least two columns: one for sentences and one for labels.",
+      "size": "{{sentences}} sentences · {{classes}} groups",
+      "edit": "Edit sentences"
+    },
+    "editor": {
+      "defaultClass": "Group {{n}}",
+      "className": "Name of group {{n}}",
+      "sentencesOf": "Sentences of group {{name}}",
+      "placeholder": "One sentence per line…",
+      "count": "{{n}} sentences",
+      "addClass": "Add a group",
+      "removeClass": "Remove group",
+      "save": "Save sentences",
+      "fileName": "typed sentences",
+      "nameError": "Each group needs its own name; names cannot be empty or repeated."
+    },
+    "setup": {
+      "textColumn": "Sentence column",
+      "labelColumn": "Label column"
+    },
+    "prepareErrors": {
+      "too-few-sentences": "Only {{count}} usable sentences; at least 6 are needed.",
+      "single-class": "At least two different groups are needed.",
+      "too-many-classes": "There are {{count}} groups, too many (at most 10). Check the label column."
+    },
+    "quality": {
+      "dropped": "{{count}} sentences were dropped because they are empty or have no label.",
+      "imbalance": "Imbalance: group \"{{smallest}}\" has only {{smallestCount}} sentences while \"{{largest}}\" has {{largestCount}}.",
+      "few-examples": "Group \"{{label}}\" has only {{count}} sentences; at least 5 are recommended.",
+      "duplicates": "{{count}} sentences are duplicates (ignoring case and punctuation).",
+      "conflict": "The sentence \"{{text}}\" appears in several groups ({{labels}}): the computer would be taught two opposite answers.",
+      "short": "{{count}} sentences are very short (under 3 syllables) and carry almost no information."
+    },
+    "represent": {
+      "title": "Microscope: one sentence as a vector",
+      "exactHint": "Exactly the syllables, counts and TF-IDF values the model uses for this sentence.",
+      "ngram": "Counting unit",
+      "ngram1": "Single syllables",
+      "ngram2": "Syllables + pairs of neighbouring syllables",
+      "sentence": "Sentence to inspect (feel free to edit)",
+      "tokens": "Split into {{n}} units:",
+      "unknown": "Not in the training vocabulary, so ignored: {{words}}",
+      "vectorSize": "The sentence vector has {{total}} cells (one per vocabulary word); only {{nonzero}} are non-zero.",
+      "tableCaption": "Non-zero cells of the vector",
+      "term": "Word",
+      "count": "Count",
+      "tfidfHint": "idf = ln((1 + {{n}}) / (1 + training sentences containing the word)) + 1: words found in many sentences (like \"và\", \"là\") get a small idf. TF-IDF = count × idf, then divided by the vector length.",
+      "frequentTitle": "Most frequent syllables in each group (training set)",
+      "frequentHint": "Frequent does not mean useful: a word common to every group does not tell groups apart."
+    },
+    "models": {
+      "naive-bayes": {
+        "name": "Naive Bayes",
+        "how": "Counts which group each word tends to appear in, then multiplies the probabilities (adds logs)."
+      },
+      "logistic": {
+        "name": "Logistic regression",
+        "how": "Each word has a weight per group; weight × TF-IDF adds up to a score, then scores become probabilities."
+      }
+    },
+    "model": {
+      "alpha": "Smoothing α",
+      "alphaHint": "Adds α to every word count so a word never seen in a group does not make the probability zero."
+    },
+    "evaluate": {
+      "wrongTitle": "Test sentences predicted wrongly ({{n}})",
+      "wrongItem": "actually \"{{actual}}\", predicted \"{{predicted}}\"",
+      "topTitle": "Most characteristic words of each group",
+      "topHint": "Ranked by the actual weights / probabilities of the model just trained.",
+      "topNb": "Ranked by log P(word | group) minus the average over groups: words at the top lean most towards that group.",
+      "topLogistic": "Ranked by the word's weight for that group (with 3 or more groups: minus the average over groups)."
+    },
+    "use": {
+      "input": "Type a sentence",
+      "noKnownWords": "No word of this sentence is in the vocabulary: the prediction only reflects the group proportions seen in training.",
+      "whyTitle": "Why this prediction?",
+      "whyHint": "The numbers are the model's real calculation; they add up exactly to the group's score.",
+      "explainFor": "Explain for group",
+      "predictedOption": "Predicted group ({{cls}})",
+      "colorLegend": "Green: the syllable pushes the sentence towards \"{{cls}}\". Red: pulls it away. Darker means stronger. No colour: unknown word.",
+      "tableCaption": "Score of \"{{cls}}\" relative to the average over groups",
+      "baseNb": "group proportion in training (log)",
+      "baseLogistic": "intercept",
+      "otherTerms": "{{n}} other words",
+      "total": "Total score",
+      "totalHint": "The group with the highest total score is chosen.",
+      "totalHintBinary": "With 2 groups: a positive score leans towards this group, a negative one towards the other."
     }
   }
 }
