@@ -4,6 +4,12 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Tệp dự án .lup – giai đoạn 5)
+
+- **Xuất / mở tệp dự án `.lup`** cho cả 5 loại dự án: nút "Xuất .lup" trên mỗi thẻ dự án và khung "Mở tệp dự án" ở Xưởng mô hình. Dùng để mang dự án sang máy khác, gửi cho thầy cô hoặc cất giữ; là nền cho gói bài tập `.lupa` và bài nộp `.lups`. Mở tệp luôn tạo dự án mới, không ghi đè dự án đang có.
+- Bên trong là tệp zip: `manifest.json`, `classes.json`, ảnh JPEG/PNG 224 px trong `samples/`, âm thanh WAV một kênh 16 kHz số thực 32 bit trong `audio/` (giữ đúng từng mẫu, Audacity mở được), tọa độ khớp `poses.json`, bảng `table.csv` + cấu hình, nhật ký huấn luyện `runs.json`. Vector đặc trưng không đưa vào (tính lại được). Lần huấn luyện dùng đúng dữ liệu lúc xuất vẫn "chạy lại" được sau khi mở tệp.
+- Tệp mở vào được coi là không tin cậy: giới hạn kích thước tệp (256 MB), số tệp bên trong, kích thước sau giải nén của từng loại tệp và tổng cộng (chống "bom zip"); mỗi tệp ảnh / âm thanh chỉ được một mục dùng; kiểm tra mọi JSON bằng Zod, ảnh đúng là JPEG/PNG và kích thước thật khớp khai báo (chống ảnh khai báo 60000×60000), WAV đúng định dạng, bảng CSV đọc được, nhật ký đánh số tăng dần, số khớp, số mẫu mỗi lớp, tên lớp trùng; liên kết ghi công ảnh chỉ nhận `https`. Thư viện zip `fflate` 0.8.3 (MIT) chỉ tải khi cần.
+
 ### Thêm (Studio tư thế & bàn tay – giai đoạn 4)
 
 - Loại dự án **Tư thế** trong Xưởng mô hình (nay cả 5 loại dự án đều dùng được), chọn nhận dạng cơ thể hoặc bàn tay:

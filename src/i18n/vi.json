@@ -82,6 +82,20 @@
     "nameRequired": "Hãy đặt tên cho dự án (1–100 ký tự).",
     "open": "Mở"
   },
+  "projectFile": {
+    "exportButton": "Xuất .lup",
+    "exportLabel": "Xuất tệp dự án {{name}}",
+    "exporting": "Đang xuất…",
+    "exportError": "Không xuất được: {{message}}",
+    "importTitle": "Mở tệp dự án",
+    "importLead": "Dự án chỉ lưu trên trình duyệt của máy này. Bấm \"Xuất .lup\" để mang dự án sang máy khác, gửi cho thầy cô hoặc cất giữ, rồi mở lại tệp ở đây.",
+    "importLabel": "Chọn tệp .lup",
+    "importing": "Đang mở tệp…",
+    "imported": "Đã mở dự án \"{{name}}\".",
+    "openImported": "Mở dự án",
+    "importError": "Không mở được tệp: {{message}}",
+    "tooLarge": "tệp lớn hơn {{mb}} MB"
+  },
   "about": {
     "title": "Giới thiệu & Quyền riêng tư",
     "whatTitle": "LUP Machine là gì?",

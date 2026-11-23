@@ -82,6 +82,20 @@
     "nameRequired": "Please name your project (1–100 characters).",
     "open": "Open"
   },
+  "projectFile": {
+    "exportButton": "Export .lup",
+    "exportLabel": "Export project file {{name}}",
+    "exporting": "Exporting…",
+    "exportError": "Could not export: {{message}}",
+    "importTitle": "Open a project file",
+    "importLead": "Projects are only stored in this browser. Click \"Export .lup\" to move a project to another computer, send it to your teacher or keep a copy, then open the file here.",
+    "importLabel": "Choose a .lup file",
+    "importing": "Opening file…",
+    "imported": "Opened project \"{{name}}\".",
+    "openImported": "Open project",
+    "importError": "Could not open the file: {{message}}",
+    "tooLarge": "the file is larger than {{mb}} MB"
+  },
   "about": {
     "title": "About & Privacy",
     "whatTitle": "What is LUP Machine?",

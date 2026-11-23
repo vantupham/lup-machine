@@ -2,6 +2,8 @@
  * Dựng tệp Jupyter notebook (.ipynb, nbformat 4) ngay trong trình duyệt.
  * Notebook được TẢI VỀ máy; học sinh tự mở bằng Google Colab (Tệp → Tải sổ tay lên). Không gửi dữ liệu đi đâu.
  */
+import { fileSlug } from '@/core/file-name';
+
 export type NotebookCell =
   | { readonly cell_type: 'markdown'; readonly metadata: Record<string, never>; readonly source: string[] }
   | {
@@ -91,14 +93,5 @@ export function serializeNotebook(nb: Notebook): string {
 
 /** Tên tệp an toàn từ tên dự án (bỏ dấu, ký tự lạ). */
 export function notebookFileName(projectName: string): string {
-  const slug = projectName
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/đ/g, 'd')
-    .replace(/Đ/g, 'D')
-    .replace(/[^A-Za-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .toLowerCase()
-    .slice(0, 60);
-  return `${slug || 'du-an'}-lup-machine.ipynb`;
+  return `${fileSlug(projectName)}-lup-machine.ipynb`;
 }

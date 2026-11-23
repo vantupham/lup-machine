@@ -291,18 +291,20 @@ Webcam/ảnh ─► tiền xử lý (crop, resize 224, normalize) ─► MobileN
 
 ```
 project.lup (zip)
-├── manifest.json      ← phiên bản định dạng, loại dự án, ngày tạo, phiên bản ứng dụng
-├── classes.json       ← danh sách lớp, màu, mô tả
-├── samples/           ← ảnh thu nhỏ (JPEG 224px) / âm thanh (WAV 16 kHz) / văn bản / CSV
-├── features/          ← vector đặc trưng đã trích (Float32, tùy chọn)
-├── runs/              ← nhật ký mỗi lần huấn luyện (cấu hình, seed, chỉ số, ma trận nhầm lẫn)
-├── model/             ← trọng số mô hình tốt nhất (tùy chọn)
-└── model-card.json    ← thẻ mô hình
+├── manifest.json      ← phiên bản định dạng, loại dự án, tên, ngày tạo, phiên bản ứng dụng
+├── classes.json       ← danh sách lớp theo thứ tự (dự án ảnh / âm thanh / tư thế)
+├── images.json        ← mỗi ảnh: tệp, lớp, ngăn Dạy/Kiểm tra, nguồn, ghi công (nếu có)
+├── samples/           ← ảnh đã chuẩn hóa (JPEG/PNG 224 px)
+├── audio.json + audio/← đoạn 1 giây, WAV một kênh 16 kHz, số thực 32 bit
+├── poses.json         ← chỉ tọa độ khớp (không có ảnh)
+├── table.csv + table.json ← dự án bảng / văn bản: CSV gốc và cấu hình
+└── runs.json          ← nhật ký mỗi lần huấn luyện (cấu hình, seed, chỉ số)
 ```
 
-- Mọi tệp nhập vào đều được **xác thực bằng Zod**.
-- Giới hạn kích thước giải nén (chống "zip bomb"), giới hạn số tệp, chỉ chấp nhận đúng kiểu MIME.
-- Có cơ chế **chuyển đổi phiên bản (migration)** khi định dạng thay đổi.
+- Vector đặc trưng **không** đưa vào tệp (trình duyệt tính lại được); mô hình không lưu trọng số vì huấn luyện lại với cùng seed cho đúng kết quả cũ.
+- Mọi tệp nhập vào đều được **xác thực bằng Zod**; ảnh được kiểm tra đúng là JPEG/PNG, WAV đúng định dạng.
+- Giới hạn kích thước tệp, số tệp và kích thước giải nén (chống "zip bomb"); chỉ đọc những tên tệp đã biết.
+- Có trường `formatVersion` để **chuyển đổi phiên bản (migration)** khi định dạng thay đổi. Thẻ mô hình (`model-card.json`) được bổ sung ở giai đoạn 5.
 
 ### 5.5. Hiệu năng và yêu cầu thiết bị
 

@@ -20,6 +20,7 @@ import {
 } from '@/storage/repositories/table-repository';
 import { createDexieAudioRepository, type AudioRepository } from '@/storage/repositories/audio-repository';
 import { createDexiePoseRepository, type PoseRepository } from '@/storage/repositories/pose-repository';
+import { createDexieProjectFileRepository, type ProjectFileRepository } from '@/storage/repositories/project-file-repository';
 import { LupDatabase } from '@/storage/db';
 import '@/i18n';
 
@@ -31,6 +32,7 @@ export interface TestRepositories {
   readonly tables: TableRepository;
   readonly audio: AudioRepository;
   readonly poses: PoseRepository;
+  readonly projectFiles: ProjectFileRepository;
 }
 
 export function createTestRepository(): TestRepositories {
@@ -43,6 +45,7 @@ export function createTestRepository(): TestRepositories {
     tables: createDexieTableRepository(db),
     audio: createDexieAudioRepository(db),
     poses: createDexiePoseRepository(db),
+    projectFiles: createDexieProjectFileRepository(db),
   };
 }
 
@@ -54,9 +57,10 @@ export function renderApp(
   tables: TableRepository = createTestRepository().tables,
   audio: AudioRepository = createTestRepository().audio,
   poses: PoseRepository = createTestRepository().poses,
+  projectFiles: ProjectFileRepository = createTestRepository().projectFiles,
 ): RenderResult {
   return render(
-    <RepositoriesProvider repositories={{ projects: repository, dataset, experiments, tables, audio, poses }}>
+    <RepositoriesProvider repositories={{ projects: repository, dataset, experiments, tables, audio, poses, projectFiles }}>
       <MemoryRouter initialEntries={[route]}>
         <AppRoutes />
       </MemoryRouter>
