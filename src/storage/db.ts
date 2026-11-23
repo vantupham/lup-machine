@@ -79,6 +79,16 @@ export interface RunRecord {
   readonly metrics: readonly EpochMetrics[];
 }
 
+/** Bảng dữ liệu của dự án loại "Dữ liệu bảng": CSV gốc + cấu hình (đã kiểm tra bằng zod khi đọc). */
+export interface TableRecord {
+  readonly projectId: string;
+  readonly csv: string;
+  readonly fileName: string;
+  readonly sampleId: string | null;
+  readonly config: unknown;
+  readonly updatedAt: string;
+}
+
 export const DEFAULT_DB_NAME = 'lup-machine';
 
 /** Cơ sở dữ liệu IndexedDB cục bộ. Dữ liệu chỉ nằm trên máy người dùng. */
@@ -88,6 +98,7 @@ export class LupDatabase extends Dexie {
   samples!: EntityTable<SampleRecord, 'id'>;
   features!: Dexie.Table<FeatureRecord, [string, string]>;
   runs!: EntityTable<RunRecord, 'id'>;
+  dataTables!: EntityTable<TableRecord, 'projectId'>;
 
   constructor(name: string = DEFAULT_DB_NAME) {
     super(name);
@@ -111,6 +122,14 @@ export class LupDatabase extends Dexie {
       samples: 'id, projectId, classId',
       features: '[sampleId+modelId], sampleId, projectId',
       runs: 'id, projectId',
+    });
+    this.version(5).stores({
+      projects: 'id, updatedAt',
+      classes: 'id, projectId',
+      samples: 'id, projectId, classId',
+      features: '[sampleId+modelId], sampleId, projectId',
+      runs: 'id, projectId',
+      dataTables: 'projectId',
     });
   }
 }

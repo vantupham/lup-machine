@@ -693,5 +693,177 @@
       "lossAxis": "step {{n}}",
       "fullBatchNote": "Each step uses all the data to compute the gradient (full-batch gradient descent). Try 1 neuron on \"Two nested circles\": the network can only draw a straight line."
     }
+  },
+  "tabular": {
+    "lead": "Teach the computer to predict one column of a table from the others. At every step you can see what it does with the numbers.",
+    "loading": "Loading project…",
+    "saveError": "Could not save: {{message}}",
+    "steps": {
+      "data": "Data",
+      "check": "Choose columns and check the data",
+      "represent": "Representation: how the computer sees the table",
+      "train": "Train",
+      "evaluate": "Evaluate and explain",
+      "use": "Use: predict a new row"
+    },
+    "kinds": {
+      "numeric": "number",
+      "categorical": "text"
+    },
+    "tasks": {
+      "classification": "Classification (predict a group)",
+      "regression": "Regression (predict a number)"
+    },
+    "samples": {
+      "iris": {
+        "name": "Iris flowers"
+      },
+      "penguins": {
+        "name": "Palmer penguins"
+      }
+    },
+    "data": {
+      "empty": "Pick a sample dataset, upload a CSV file or paste a table from Excel / Google Sheets. Data stays on this device only.",
+      "samplesTitle": "Sample datasets",
+      "rowCount": "{{n}} rows",
+      "uploadTitle": "Upload a CSV file",
+      "chooseFile": "Choose file…",
+      "uploadHint": "The first row holds column names. Separated by commas, semicolons or tabs. At most {{rows}} rows, {{columns}} columns.",
+      "pasteTitle": "Paste a table",
+      "pastePlaceholder": "height,weight,class\n150,42,6A\n…",
+      "pastedName": "pasted table",
+      "usePasted": "Use pasted table",
+      "cancel": "Keep the current table",
+      "replace": "Replace data",
+      "size": "{{rows}} rows × {{columns}} columns",
+      "credit": "Data source: {{author}} ·",
+      "source": "original page",
+      "missing": "{{n}} missing",
+      "previewCaption": "First {{n}} rows of the table",
+      "moreRows": "… and {{n}} more rows."
+    },
+    "csvErrors": {
+      "empty": "The file is empty.",
+      "too-large": "The file is too large (about 2 MB at most).",
+      "too-many-rows": "The table has {{detail}} rows, over the {{maxRows}}-row limit.",
+      "too-many-columns": "The table has {{detail}} columns, over the {{maxColumns}}-column limit.",
+      "unclosed-quote": "A quote opened on line {{line}} is never closed.",
+      "ragged-row": "Line {{line}} has a different number of cells from the header ({{detail}}).",
+      "empty-header": "Column {{detail}} has no name in the header row.",
+      "duplicate-header": "Two columns are both named \"{{detail}}\"."
+    },
+    "setup": {
+      "target": "Column to predict (label)",
+      "task": "Kind of problem",
+      "taskHint": {
+        "classification": "The computer predicts which value of the label column each row belongs to.",
+        "regression": "The computer predicts a number; the error is the distance to the true number."
+      },
+      "testRatio": "Share kept aside as the test set",
+      "seed": "Split number {{seed}} (seed)",
+      "reshuffle": "Split again",
+      "features": "Columns the computer may use (features)"
+    },
+    "prepareErrors": {
+      "no-features": "Choose at least one feature column other than the label.",
+      "target-not-numeric": "Regression needs a numeric label column.",
+      "too-many-classes": "The label column has {{count}} different values, too many to classify (at most 10). If it is a number, choose Regression.",
+      "single-class": "The label column has only one value: there is nothing to tell apart.",
+      "too-many-categories": "Column \"{{column}}\" has {{count}} different text values (at most 20). Untick this column.",
+      "too-few-rows": "Only {{count}} usable rows remain; at least 10 are needed."
+    },
+    "quality": {
+      "title": "Data check assistant",
+      "none": "No problems found yet.",
+      "dropped-rows": "{{count}} rows were dropped because the label or a chosen feature is missing.",
+      "imbalance": "Imbalance: class \"{{smallest}}\" has only {{smallestCount}} rows while \"{{largest}}\" has {{largestCount}}. The computer may predict \"{{smallest}}\" less often.",
+      "id-like": "Column \"{{column}}\" has almost one value per row, like an ID. The computer would memorise IDs instead of learning a pattern: better untick it.",
+      "constant": "Column \"{{column}}\" has a single value, so it cannot help tell rows apart.",
+      "small-data": "Only {{count}} rows: test results will vary a lot between splits."
+    },
+    "represent": {
+      "mapTitle": "Two-column map",
+      "mapHint": "Each dot is a real row, placed by the standardised values of the two chosen columns.",
+      "xAxis": "Horizontal axis",
+      "yAxis": "Vertical axis",
+      "plotLabel": "Scatter plot of the two chosen columns",
+      "axisNote": "Axis units are \"standard deviations from the mean\". Points beyond 3.5 are drawn at the edge.",
+      "needNumeric": "At least two numeric columns are needed to draw the map.",
+      "tableTitle": "One row turned into numbers",
+      "tableHint": "Exactly the numbers the model receives for this row.",
+      "tableCaption": "Row {{row}} of the table (first row of the training set)",
+      "column": "Column",
+      "original": "Original value",
+      "how": "Conversion",
+      "modelSees": "Model receives",
+      "oneHot": "one 0/1 cell per value: {{categories}}",
+      "whyScale": "Standardising lets columns with different units (mm, g…) be compared fairly. k-NN and logistic regression use standardised numbers; decision trees and linear regression use original numbers so thresholds and coefficients read in real units."
+    },
+    "models": {
+      "tree": {
+        "name": "Decision tree",
+        "how": "A chain of \"column ≤ threshold?\" questions chosen by the computer."
+      },
+      "logistic": {
+        "name": "Logistic regression",
+        "how": "Adds up columns times weights into a score for each class, then turns scores into probabilities."
+      },
+      "knn": {
+        "name": "k-nearest neighbours",
+        "how": "Finds the k most similar rows in the training set and takes the majority label."
+      },
+      "linear": {
+        "name": "Linear regression",
+        "how": "Prediction = intercept + sum of (coefficient × column value)."
+      },
+      "knn-regression": {
+        "name": "k-nearest neighbours",
+        "how": "Averages the values of the k most similar training rows."
+      }
+    },
+    "model": {
+      "choose": "Choose a model",
+      "c": "Flexibility C",
+      "cHint": "Small C: weights are pulled towards 0 (simpler model). Large C: the model follows the training data more closely.",
+      "kHint": "Distances are computed on the standardised columns.",
+      "linearNoSettings": "Linear regression has nothing to tune: the computer directly solves for the least-squares answer.",
+      "train": "Train",
+      "notTrained": "Not trained yet.",
+      "stale": "The data or settings changed: press Train to update the results.",
+      "trained": "Trained (run {{n}})."
+    },
+    "evaluate": {
+      "confusion": "Confusion matrix on the test set",
+      "trueVsPred": "true ↓ / predicted →",
+      "overfit": "Training accuracy is much higher than test accuracy: the model may be memorising (overfitting).",
+      "r2Train": "R² training set",
+      "r2Test": "R² test set",
+      "rmseTrain": "RMSE training set",
+      "rmseTest": "RMSE test set",
+      "regressionHint": "R² = 1 means every prediction is right; 0 means no better than always guessing the mean. RMSE is a typical error, in the same unit as \"{{target}}\".",
+      "predVsTrue": "True value (horizontal) and predicted value (vertical) on the test set; the diagonal is a perfect prediction",
+      "explainTitle": "What did the model learn?",
+      "explainHint": "Weights, thresholds and importances are the real numbers of the model just trained.",
+      "importances": "Importance of each column (total impurity decrease)",
+      "logisticBinary": "Weights apply to standardised columns. A positive weight pushes the prediction towards \"{{cls}}\", a negative one away from it.",
+      "logisticMulti": "Each class has its own weights (on standardised columns). The class with the highest total score wins.",
+      "weightsFor": "Score of class \"{{cls}}\" (intercept {{b}})",
+      "linearHint": "Each coefficient says how much the prediction changes when that column grows by 1 unit and the others stay the same. A coefficient is not a cause-and-effect relationship.",
+      "knnHint": "k-NN learns no weights: it remembers the {{n}} training rows and, for each prediction, finds the {{k}} closest ones."
+    },
+    "use": {
+      "formLabel": "Values of the new row",
+      "resultTitle": "Prediction",
+      "invalid": "Fill in every cell; number cells must be numbers (a decimal comma is fine).",
+      "predictedClass": "The computer predicts: {{cls}}",
+      "predictedValue": "The computer predicts {{target}} ≈ {{value}}",
+      "why": "Why?",
+      "yes": "yes",
+      "no": "no",
+      "neighbors": "{{k}} closest rows in the training set:",
+      "neighborRow": "row {{row}} (distance {{distance}}):",
+      "score": "Score of \"{{cls}}\" = {{b}} (intercept) + contributions = {{score}}. Largest contributions:",
+      "linearSum": "Prediction = {{b}} (intercept) + sum of contributions (coefficient × value). Largest contributions:"
+    }
   }
 }

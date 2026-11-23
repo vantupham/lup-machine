@@ -58,6 +58,18 @@ export function knnClassify(
   return { label, votes, neighbors };
 }
 
+/** k-NN hồi quy: trung bình giá trị của k láng giềng gần nhất (khớp KNeighborsRegressor). */
+export function knnRegress(
+  xs: readonly Vector[],
+  targets: readonly number[],
+  query: Vector,
+  k: number,
+): { readonly value: number; readonly neighbors: readonly KnnNeighbor[] } {
+  const { neighbors } = knnClassify(xs, targets.map(() => 0), 1, query, k);
+  const value = neighbors.reduce((s, n) => s + (targets[n.index] as number), 0) / neighbors.length;
+  return { value, neighbors };
+}
+
 /** Tâm ô (col, row) của lưới; hàng 0 ở dưới cùng (y nhỏ nhất). */
 export function gridCellCenter(spec: GridSpec, col: number, row: number): [number, number] {
   const cw = (spec.xMax - spec.xMin) / spec.resolution;

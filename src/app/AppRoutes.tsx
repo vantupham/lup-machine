@@ -4,7 +4,7 @@ import { HomePage } from './pages/HomePage';
 import { StudioPage } from './pages/StudioPage';
 import { AboutPage } from './pages/AboutPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { ImageProjectPage } from '@/features/studio/image/ImageProjectPage';
+import { ProjectRouter } from '@/features/studio/ProjectRouter';
 import { LessonsPage } from '@/features/lessons/LessonsPage';
 import { LessonPage } from '@/features/lessons/LessonPage';
 import { WorksheetPage } from '@/features/lessons/WorksheetPage';
@@ -17,7 +17,7 @@ export function AppRoutes() {
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="studio" element={<StudioPage />} />
-        <Route path="studio/:projectId" element={<ImageProjectPage />} />
+        <Route path="studio/:projectId" element={<ProjectRouter />} />
         <Route path="playground" element={<PlaygroundPage />} />
         <Route path="playground/:algo" element={<PlaygroundAlgoPage />} />
         <Route path="lessons" element={<LessonsPage />} />

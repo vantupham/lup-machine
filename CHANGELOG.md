@@ -4,6 +4,19 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Studio dữ liệu bảng – giai đoạn 3)
+
+- Loại dự án **Bảng số** trong Xưởng mô hình, quy trình 6 bước trên một trang:
+  1. **Dữ liệu:** tải tệp CSV, dán bảng từ Excel / Google Trang tính, hoặc chọn bộ mẫu Iris (CC BY 4.0) và chim cánh cụt Palmer (CC0, giữ nguyên các ô thiếu thật); xem trước bảng, kiểu từng cột và số ô thiếu.
+  2. **Chọn cột và kiểm tra:** cột nhãn, loại bài toán (phân loại / hồi quy, có gợi ý), cột đặc trưng, tỉ lệ tập Kiểm tra, chia lại theo seed; trợ lý báo dòng bị bỏ vì thiếu giá trị, mất cân bằng lớp, cột giống mã định danh, cột hằng số, dữ liệu quá ít.
+  3. **Biểu diễn:** bản đồ hai cột đã chuẩn hóa; bảng cho thấy một dòng biến thành các con số (chuẩn hóa z, mã hóa one-hot).
+  4. **Huấn luyện:** cây quyết định, hồi quy logistic (C), k-NN (k); hồi quy tuyến tính, k-NN hồi quy. Đổi dữ liệu / cấu hình thì kết quả cũ bị ẩn cho tới khi huấn luyện lại.
+  5. **Đánh giá:** độ chính xác Dạy / Kiểm tra, cảnh báo quá khớp, ma trận nhầm lẫn; R² và RMSE, biểu đồ giá trị thật – dự đoán; giải thích mô hình (sơ đồ cây và độ quan trọng cột, trọng số từng lớp, phương trình hồi quy).
+  6. **Sử dụng:** nhập một dòng mới, xem xác suất và lý do (đường đi trên cây, các láng giềng gần nhất, các đóng góp lớn nhất).
+- Đọc CSV an toàn với dữ liệu không tin cậy: ngoặc kép RFC 4180, tự nhận dấu phẩy / chấm phẩy / tab, BOM, dấu phẩy thập phân kiểu Việt Nam, giới hạn 2 MB / 5.000 dòng / 40 cột, báo lỗi kèm số dòng.
+- Bảng và cấu hình lưu trong IndexedDB (bảng `dataTables`, phiên bản cơ sở dữ liệu 5), cấu hình được kiểm tra bằng zod khi đọc; xóa dự án thì xóa luôn bảng.
+- Hồi quy logistic (tối ưu bằng L-BFGS tự cài đặt) và k-NN hồi quy đối chiếu với scikit-learn: trọng số, độ lệch và xác suất khớp tới 1e-6 cho cả 2 lớp và 3 lớp.
+
 ### Thêm (Sân chơi thuật toán – giai đoạn 3)
 
 - Trang **Sân chơi thuật toán** (`#/playground`, có trên thanh điều hướng) với 6 thuật toán chạy trên dữ liệu 2D sinh theo seed (ba đám mây, XOR, hai vòng tròn, hai trăng khuyết, xoắn ốc):

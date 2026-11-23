@@ -1,5 +1,5 @@
 import reference from '../../../tests/fixtures/knn-reference.json';
-import { knnClassify, knnGrid } from './knn';
+import { knnClassify, knnGrid, knnRegress } from './knn';
 
 type Point = readonly [number, number];
 const xs = reference.x as unknown as Point[];
@@ -12,6 +12,16 @@ describe('knnClassify – đối chiếu với scikit-learn', () => {
         expect(result.label).toBe(c.predictions[i]);
         expect(result.neighbors.map((n) => n.index)).toEqual(c.neighbors[i]);
         result.neighbors.forEach((n, j) => expect(n.distance).toBeCloseTo(c.distances[i]![j]!, 9));
+      });
+    });
+  }
+});
+
+describe('knnRegress – đối chiếu với scikit-learn', () => {
+  for (const c of reference.regression) {
+    test(`k = ${c.k}: giá trị dự đoán là trung bình của k láng giềng`, () => {
+      reference.queries.forEach((q, i) => {
+        expect(knnRegress(xs, reference.targets, q, c.k).value).toBeCloseTo(c.predictions[i]!, 9);
       });
     });
   }
