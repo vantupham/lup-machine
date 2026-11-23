@@ -28,10 +28,10 @@ describe('Xưởng mô hình', () => {
     expect(await repository.findAll()).toHaveLength(1);
   });
 
-  test('chỉ loại Ảnh dùng được, các loại khác hiển thị "sắp có"', () => {
+  test('các loại đã có dùng được; loại chưa làm (Tư thế) hiển thị "sắp có"', () => {
     renderApp('/studio', createTestRepository().repository);
-    expect(screen.getByRole('radio', { name: /ảnh/i })).toBeEnabled();
-    expect(screen.getByRole('radio', { name: /âm thanh/i })).toBeDisabled();
+    for (const name of [/ảnh/i, /bảng số/i, /văn bản/i, /âm thanh/i]) expect(screen.getByRole('radio', { name })).toBeEnabled();
+    expect(screen.getByRole('radio', { name: /tư thế/i })).toBeDisabled();
   });
 
   test('báo lỗi khi tên rỗng', async () => {

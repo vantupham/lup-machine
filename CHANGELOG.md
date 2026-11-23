@@ -4,6 +4,18 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Studio âm thanh – giai đoạn 4)
+
+- Loại dự án **Âm thanh** trong Xưởng mô hình, 6 bước:
+  1. **Thu và gom âm thanh:** mỗi nhóm thu 1 giây bằng micro (kèm phổ trực tiếp, gắn nhãn xấp xỉ), tải tệp WAV / MP3 / OGG (trình duyệt giải mã, trộn về một kênh, đổi về 16 kHz), hoặc âm thanh mẫu tổng hợp theo seed: chuông / còi / trống, mỗi nhóm 16 đoạn (không ghi âm thật, không bản quyền). Nghe lại, xóa từng đoạn; thêm / đổi tên / xóa nhóm. Chỉ lưu đoạn 1 giây, 16 kHz (IndexedDB phiên bản 6, bảng `audioClips`), không giữ tệp gốc.
+  2. **Kiểm tra:** đoạn gần như im lặng, đoạn bị rè vì quá to, nhóm ít đoạn, mất cân bằng; tỉ lệ Kiểm tra và seed.
+  3. **Kính hiển vi:** dạng sóng với khung đang xem → phổ của một khung (cửa sổ Hann + FFT 512 điểm) → ảnh phổ mel 40 dải × 97 khung (dB) → 160 con số (trung bình 40 dải trong 4 đoạn thời gian).
+  4. **Huấn luyện:** hồi quy logistic (trên số đã chuẩn hóa) hoặc k-NN (trên dB gốc: đo trên bộ mẫu, chuẩn hóa làm k-NN tụt từ ~92% xuống ~78% vì phóng to tiếng ồn ở ô im lặng).
+  5. **Đánh giá:** độ chính xác, ma trận nhầm lẫn, bản đồ "mô hình nghe vào đâu" 40 × 4 ô cho từng nhóm (trọng số thật).
+  6. **Sử dụng:** thu hoặc tải âm thanh mới → xác suất; hồi quy logistic: bản đồ đóng góp từng ô (phần cố định + tổng các ô = điểm của nhóm); k-NN: nghe lại các đoạn Dạy giống nhất; xuất notebook Colab (scikit-learn, so kết quả với LUP Machine).
+- Lõi `src/core/audio/` đối chiếu NumPy / librosa (`scripts/gen-audio-reference.py`): FFT tới 1e-8, cửa sổ Hann và bộ lọc mel Slaney tới 1e-12, ảnh phổ mel sai lệch tương đối < 1e-9, đổi sang dB tới 1e-8.
+- E2E thu âm bằng micro giả của Chromium và tải tệp WAV 44,1 kHz; tiếng huýt 1.800 Hz được nhận ra là "Còi".
+
 ### Thêm (Studio văn bản tiếng Việt – giai đoạn 4)
 
 - Loại dự án **Văn bản** trong Xưởng mô hình, 6 bước trên một trang:

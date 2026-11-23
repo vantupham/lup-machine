@@ -11,6 +11,10 @@ import type { TabularModelKind } from '@/storage/schemas/tabular';
 import topicsCsv from '@/content/text/chu-de.csv?raw';
 import canteenCsv from '@/content/text/can-tin.csv?raw';
 import { evaluateText, prepareText, trainText } from '@/core/text/text-model';
+import { evaluateAudio, prepareAudio, trainAudio } from '@/core/audio/audio-model';
+import { audioFeatures, fitClip } from '@/core/audio/features';
+import { SOUND_KINDS, soundDataset } from '@/core/audio/synthetic-sounds';
+import { audioNotebook } from './audio-notebook';
 import { imageNotebook } from './image-notebook';
 import { textNotebook } from './text-notebook';
 import { serializeNotebook, type Notebook } from './notebook';
@@ -138,5 +142,22 @@ describe('notebook dự án văn bản', () => {
     expect(source).toContain(`ngram_range=(1, ${maxN})`);
     expect(source).toContain(String.raw`token_pattern=r"(?u)\b\w+\b"`);
     expect(source).toContain(kind === 'naive-bayes' ? 'MultinomialNB(alpha=1)' : 'LogisticRegression(C=10');
+  });
+});
+
+describe('notebook dự án âm thanh', () => {
+  const examples = soundDataset(1).map((s, i) => ({ id: `c${i}`, label: SOUND_KINDS.indexOf(s.kind), features: audioFeatures(fitClip(s.signal)) }));
+  const prepared = prepareAudio(examples, ['chuông', 'còi', 'trống'], { testRatio: 0.25, seed: 3 });
+  if (!prepared.ok) throw new Error(prepared.error.code);
+  const data = prepared.data;
+
+  test.each(['logistic', 'knn'] as const)('%s: chứa đặc trưng (không chứa âm thanh), cùng mô hình và kết quả', (kind) => {
+    const settings = { kind, c: 1, k: 3 };
+    const nb = audioNotebook({ projectName: 'Âm thanh', appVersion: '0.1.0', exportedAt: 'x', data, settings, evaluation: evaluateAudio(trainAudio(data, settings), data) });
+    save(`audio-${kind}.ipynb`, nb);
+    const source = nb.cells.map((c) => c.source.join('')).join('\n');
+    expect(source).toContain('CLASS_NAMES = ["chuông", "còi", "trống"]');
+    expect(source).toContain(kind === 'knn' ? 'KNeighborsClassifier(n_neighbors=3, algorithm="brute")' : 'LogisticRegression(C=1, max_iter=10000)');
+    expect(source.includes('imshow')).toBe(kind === 'logistic');
   });
 });
