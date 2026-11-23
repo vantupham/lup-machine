@@ -4,6 +4,17 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Sân chơi thuật toán – giai đoạn 3)
+
+- Trang **Sân chơi thuật toán** (`#/playground`, có trên thanh điều hướng) với 6 thuật toán chạy trên dữ liệu 2D sinh theo seed (ba đám mây, XOR, hai vòng tròn, hai trăng khuyết, xoắn ốc):
+  - **k-NN:** bấm để đặt điểm cần đoán, thấy đường nối tới k láng giềng và bảng phiếu bầu; vùng phân loại đổi theo k; thêm / xóa điểm.
+  - **Cây quyết định:** Gini hoặc entropy, độ sâu tối đa; "mọc thêm một nút" theo từng tầng, sơ đồ cây ghi ngưỡng, số mẫu, độ tạp chất; biểu đồ độ chính xác Dạy / Kiểm tra theo độ sâu để thấy quá khớp.
+  - **Hồi quy tuyến tính:** tự kéo độ dốc và độ lệch, hình vuông sai số, MSE của em so với đường bình phương tối thiểu của máy, nút "cho máy sửa một bước" bằng gradient descent.
+  - **Gradient descent:** 3 mặt lỗi có công thức (cái chén, thung lũng hẹp, hai hố), bản đồ đồng mức, chọn điểm xuất phát, từng bước hiện ∇f và phép cập nhật bằng số thật, cảnh báo khi η quá lớn.
+  - **k-means:** từng pha khởi đầu → gán → dời tâm, tâm khởi đầu k-means++ có seed, tổng bình phương khoảng cách, báo hội tụ.
+  - **Mạng nơ-ron mini:** 1–2 tầng ẩn, 1–8 nơ-ron, tanh / ReLU / sigmoid, huấn luyện trực tiếp, biểu đồ loss, vùng phân loại theo độ chắc chắn và bản đồ đầu ra của từng nơ-ron ẩn.
+- Lõi thuật toán thuần TypeScript trong `src/core/algorithms/` (không phụ thuộc React), kiểm thử đối chiếu với **scikit-learn 1.8**: k-NN (nhãn, láng giềng, khoảng cách), cây quyết định (toàn bộ cấu trúc cây, ngưỡng tới độ chính xác float32, độ quan trọng đặc trưng, dự đoán), hồi quy tuyến tính (hệ số, MSE, R²), k-means (tâm, nhãn, inertia, số vòng lặp), mạng nơ-ron (xác suất và trọng số sau đúng một bước SGD, sai số < 1e-9). Đạo hàm của mạng nơ-ron và các mặt lỗi được kiểm tra thêm bằng sai phân số.
+
 ### Thêm (biểu tượng ứng dụng)
 
 - Biểu tượng PNG 192 và 512 px, bản maskable 512 px (nền kín khung, logo trong vùng an toàn để Android cắt tròn / bo góc) và apple-touch-icon 180 px cho iPhone / iPad khi "Thêm vào màn hình chính". Trình duyệt cũ chưa hỗ trợ biểu tượng SVG trong manifest nay cũng cài được ứng dụng.

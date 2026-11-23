@@ -7,6 +7,7 @@
     "label": "Điều hướng chính",
     "home": "Trang chủ",
     "studio": "Xưởng mô hình",
+    "playground": "Sân chơi thuật toán",
     "about": "Giới thiệu & Quyền riêng tư",
     "language": "Ngôn ngữ",
     "switchTo": "English",
@@ -524,5 +525,173 @@
     "reflect": "Em rút ra được điều gì sau bài học này?",
     "footer": "LUP Machine – vantupham.github.io/lup-machine · Nội dung bài học theo giấy phép CC BY 4.0.",
     "sampleNote": "Chữ nghiêng trong các bảng là số liệu mẫu từ lần chạy kiểm chứng với MobileNetV2 (cài đặt mặc định). Kết quả trên máy học sinh có thể lệch nhẹ, nhất là ±1 ảnh trong ma trận nhầm lẫn."
+  },
+  "playground": {
+    "eyebrow": "Thuật toán tự cài đặt · chạy từng bước",
+    "title": "Sân chơi thuật toán",
+    "lead": "Sáu thuật toán học máy cơ bản trên dữ liệu 2 chiều để nhìn rõ từng bước. Mã nguồn tự viết bằng TypeScript và được kiểm thử đối chiếu với scikit-learn.",
+    "back": "Sân chơi thuật toán",
+    "exact": "Chính xác",
+    "algos": {
+      "knn": {
+        "name": "k láng giềng gần nhất (k-NN)",
+        "summary": "Điểm mới nhận nhãn theo số đông trong k điểm gần nó nhất.",
+        "concept": "láng giềng · khoảng cách · k lớn và k nhỏ",
+        "intro": "k-NN không \"học\" công thức nào: nó ghi nhớ toàn bộ dữ liệu, rồi với mỗi điểm mới thì tìm k điểm gần nhất (khoảng cách Euclid) và cho chúng bỏ phiếu.",
+        "exactHint": "Vùng màu là kết quả k-NN tính thật tại tâm mỗi ô của lưới 30×30; phiếu bầu là số đếm thật."
+      },
+      "decision-tree": {
+        "name": "Cây quyết định",
+        "summary": "Chuỗi câu hỏi \"có / không\" chia mặt phẳng thành các ô chữ nhật.",
+        "concept": "luật nếu – thì · Gini / entropy · quá khớp",
+        "intro": "Ở mỗi nút, máy thử mọi ngưỡng có thể trên từng đặc trưng và chọn câu hỏi làm các nhóm con \"thuần\" nhất (Gini hoặc entropy nhỏ nhất). Bấm \"Mọc thêm một nút\" để xem cây lớn dần.",
+        "exactHint": "Vùng màu là dự đoán thật của cây tại tâm mỗi ô lưới 40×40; ngưỡng, số mẫu và độ tạp chất là số thật."
+      },
+      "linear-regression": {
+        "name": "Hồi quy tuyến tính",
+        "summary": "Tự kéo đường thẳng, rồi so với đường của máy theo sai số bình phương.",
+        "concept": "hàm mất mát · bình phương tối thiểu",
+        "intro": "Mô hình là một đường thẳng ŷ = w·x + b. \"Tốt\" nghĩa là trung bình bình phương sai số (MSE) nhỏ. Mỗi hình vuông có cạnh bằng một sai số: tổng diện tích càng nhỏ, đường càng tốt.",
+        "exactHint": "MSE, đường của máy (nghiệm bình phương tối thiểu) và bước gradient descent đều là phép tính thật."
+      },
+      "gradient-descent": {
+        "name": "Gradient descent",
+        "summary": "Viên bi đi xuống dốc trên mặt lỗi; bước quá dài thì văng ra ngoài.",
+        "concept": "tối ưu hóa · learning rate · cực tiểu địa phương",
+        "intro": "Gradient ∇f chỉ hướng đi lên dốc nhất. Mỗi bước, ta đi ngược hướng đó một đoạn tỉ lệ với learning rate η. Đây chính là cách các mạng nơ-ron được huấn luyện.",
+        "exactHint": "Mặt lỗi có công thức và đạo hàm chính xác; mỗi chấm trên đường đi là một bước tính thật."
+      },
+      "k-means": {
+        "name": "Phân cụm k-means",
+        "summary": "Không có nhãn: tâm cụm tự dịch chuyển cho tới khi đứng yên.",
+        "concept": "học không giám sát · tâm cụm",
+        "intro": "k-means lặp lại hai việc: gán mỗi điểm vào tâm gần nhất, rồi dời mỗi tâm về trung bình các điểm của nó. Máy không biết nhãn đúng, nên màu ở đây là cụm do máy tìm ra, không phải đáp án.",
+        "exactHint": "Mỗi khung là một bước thật của thuật toán Lloyd; tâm khởi đầu chọn bằng k-means++ có seed."
+      },
+      "neural-network": {
+        "name": "Mạng nơ-ron mini",
+        "summary": "Thêm tầng ẩn để tách được dữ liệu mà một đường thẳng không tách nổi.",
+        "concept": "tầng ẩn · hàm kích hoạt · lan truyền ngược",
+        "intro": "Mỗi nơ-ron ẩn tính một tổng có trọng số rồi đưa qua hàm kích hoạt. Ghép nhiều nơ-ron lại, mạng vẽ được ranh giới cong. Huấn luyện bằng gradient descent và lan truyền ngược.",
+        "exactHint": "Vùng màu và bản đồ từng nơ-ron là đầu ra thật của mạng tại tâm mỗi ô lưới; loss là cross-entropy trung bình thật."
+      }
+    },
+    "datasets": {
+      "blobs": "Ba đám mây điểm",
+      "xor": "XOR (bàn cờ 2×2)",
+      "circles": "Hai vòng tròn lồng nhau",
+      "moons": "Hai trăng khuyết",
+      "spiral": "Hai dải xoắn ốc"
+    },
+    "common": {
+      "dataset": "Bộ dữ liệu",
+      "noise": "Độ nhiễu",
+      "className": "Lớp {{n}}",
+      "classToAdd": "Lớp của điểm sẽ thêm",
+      "clickMode": "Khi bấm vào hình",
+      "modeAdd": "Thêm điểm dữ liệu",
+      "addHint": "Bấm vào hình để thêm một điểm của lớp đang chọn.",
+      "clear": "Xóa hết điểm",
+      "reset": "Về đầu",
+      "step": "Một bước",
+      "run": "Chạy",
+      "pause": "Tạm dừng",
+      "trainAccuracy": "Đúng trên tập Dạy",
+      "testAccuracy": "Đúng trên tập Kiểm tra"
+    },
+    "knn": {
+      "plotLabel": "Mặt phẳng dữ liệu, vùng màu là lớp k-NN dự đoán với k = {{k}}",
+      "k": "Số láng giềng k",
+      "kHint": "k nhỏ: ranh giới lởm chởm, dễ bị một điểm lạc làm sai. k lớn: ranh giới mượt, nhưng lớp ít điểm dễ bị lấn át.",
+      "modeProbe": "Đặt điểm cần đoán",
+      "probeHint": "Bấm vào hình để đặt điểm cần đoán; các đường nét đứt nối tới k láng giềng gần nhất.",
+      "voteTitle": "Phiếu bầu của k láng giềng",
+      "verdict": "Điểm đang xét được đoán là Lớp {{n}} ({{votes}}/{{k}} phiếu).",
+      "tieRule": "Nếu hòa phiếu, chọn lớp có số thứ tự nhỏ hơn (giống scikit-learn).",
+      "noQuery": "Chưa có điểm nào để đoán."
+    },
+    "tree": {
+      "plotLabel": "Mặt phẳng dữ liệu, vùng màu là lớp cây quyết định dự đoán",
+      "maxDepth": "Độ sâu tối đa",
+      "criterion": "Cách đo độ \"lẫn lộn\"",
+      "gini": "Gini",
+      "entropy": "Entropy",
+      "restart": "Trồng lại từ gốc",
+      "grow": "Mọc thêm một nút",
+      "growStatus": "Đã mở {{shown}}/{{total}} câu hỏi.",
+      "diagramTitle": "Cây quyết định",
+      "diagramLabel": "Sơ đồ cây quyết định",
+      "nodeStats": "{{samples}} mẫu · tạp chất {{impurity}} · [{{counts}}]",
+      "yes": "đúng →",
+      "no": "sai →",
+      "depthChart": "Độ chính xác theo độ sâu tối đa",
+      "depthAxis": "độ sâu {{n}}",
+      "overfitHint": "Cây càng sâu càng thuộc tập Dạy (đường liền đi lên), nhưng tập Kiểm tra (nét đứt) có thể đi xuống: đó là quá khớp."
+    },
+    "regression": {
+      "plotLabel": "Các điểm dữ liệu, đường của em (cam) và đường của máy (xanh)",
+      "clickHint": "Bấm vào hình để thêm điểm. Đoạn thẳng đứng là sai số của từng điểm.",
+      "slope": "Độ dốc w",
+      "intercept": "Độ lệch b",
+      "gdStep": "Cho máy sửa một bước (gradient descent, η = {{lr}})",
+      "showSquares": "Hiện hình vuông sai số",
+      "showMachine": "Hiện đường của máy",
+      "userMse": "MSE đường của em",
+      "machineMse": "MSE đường của máy",
+      "machineLine": "Đường của máy: ŷ = {{w}}·x + ({{b}}). Không đường thẳng nào có MSE nhỏ hơn trên dữ liệu này.",
+      "mseHint": "MSE = trung bình của (y − ŷ)². Bình phương làm sai số lớn bị phạt nặng hơn nhiều sai số nhỏ."
+    },
+    "gradient": {
+      "plotLabel": "Bản đồ đồng mức của mặt lỗi {{formula}}, màu đậm là chỗ thấp",
+      "clickHint": "Bấm vào hình để chọn điểm xuất phát. Dấu ✕ là cực tiểu toàn cục.",
+      "surface": "Mặt lỗi",
+      "surfaces": {
+        "bowl": "Cái chén",
+        "valley": "Thung lũng hẹp",
+        "two-minima": "Hai hố"
+      },
+      "learningRate": "Learning rate η",
+      "stepTitle": "Bước {{n}}",
+      "updateRule": "Bước sau = (x, y) − {{lr}} × ∇f = ({{nx}}, {{ny}})",
+      "diverged": "Viên bi đang ở cao hơn điểm xuất phát: η quá lớn nên mỗi bước nhảy vượt qua đáy và lên cao dần.",
+      "lossChart": "Giá trị của f qua từng bước",
+      "lossSeries": "f − f(cực tiểu)",
+      "stepAxis": "bước {{n}}",
+      "viewNote": "Hình nhìn mặt lỗi từ trên xuống (bản đồ đồng mức), giống bản đồ địa hình."
+    },
+    "kmeans": {
+      "plotLabel": "Các điểm dữ liệu chưa có nhãn và {{k}} tâm cụm",
+      "unsupervisedNote": "Dữ liệu không có nhãn. Thử bộ \"Hai vòng tròn\" để thấy k-means chỉ tìm được cụm dạng \"đám tròn\".",
+      "k": "Số cụm k",
+      "newInit": "Chọn tâm khởi đầu khác",
+      "initNote": "Tâm khởi đầu chọn bằng k-means++ (seed {{seed}}). Khởi đầu khác có thể cho kết quả khác.",
+      "iteration": "Vòng lặp {{n}}",
+      "phases": {
+        "init": "Khởi đầu: đặt k tâm cụm. Các điểm chưa thuộc cụm nào.",
+        "assign": "Gán: mỗi điểm thuộc về tâm gần nó nhất.",
+        "update": "Dời tâm: mỗi tâm chạy về trung bình các điểm của cụm mình (mũi tên nét đứt)."
+      },
+      "inertia": "Tổng bình phương khoảng cách tới tâm = {{value}}",
+      "converged": "Tâm không dời nữa: thuật toán dừng (hội tụ).",
+      "inertiaHint": "Mỗi vòng lặp, tổng bình phương khoảng cách không bao giờ tăng, nên thuật toán chắc chắn dừng."
+    },
+    "neural": {
+      "plotLabel": "Mặt phẳng dữ liệu, vùng màu là lớp mạng nơ-ron dự đoán (đậm = chắc chắn hơn)",
+      "neuronsTitle": "Mỗi nơ-ron ẩn \"vẽ\" gì?",
+      "neuronsHint": "Đầu ra của từng nơ-ron trên cả mặt phẳng: cam là dương, xanh là âm, nhạt là gần 0.",
+      "layerName": "Tầng ẩn {{n}}",
+      "neuronName": "T{{layer}}·N{{n}}",
+      "layers": "Số tầng ẩn",
+      "neurons": "Số nơ-ron mỗi tầng",
+      "activation": "Hàm kích hoạt",
+      "reinit": "Khởi tạo lại trọng số",
+      "stepN": "Huấn luyện {{n}} bước",
+      "train": "Huấn luyện",
+      "architecture": "Cấu trúc: {{sizes}}",
+      "epoch": "Số bước",
+      "lossChart": "Loss qua quá trình huấn luyện",
+      "lossAxis": "bước {{n}}",
+      "fullBatchNote": "Mỗi bước dùng toàn bộ dữ liệu để tính gradient (gradient descent toàn khối). Thử 1 nơ-ron với \"Hai vòng tròn\": mạng chỉ vẽ được một đường thẳng."
+    }
   }
 }
