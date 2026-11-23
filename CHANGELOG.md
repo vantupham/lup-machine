@@ -4,6 +4,22 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Studio tư thế & bàn tay – giai đoạn 4)
+
+- Loại dự án **Tư thế** trong Xưởng mô hình (nay cả 5 loại dự án đều dùng được), chọn nhận dạng cơ thể hoặc bàn tay:
+  1. **Ghi tư thế:** camera trước (lật như gương) với khung xương vẽ đè, ghi 1 mẫu hoặc 10 mẫu liên tiếp sau 3 giây đếm ngược; bàn tay có khung hướng dẫn; tải ảnh lên; hoặc mẫu giả lập theo seed (giơ hai tay / dang tay / chống nạnh / đứng nghiêm; xòe tay / nắm tay / chữ V — tọa độ khớp, không có ảnh người). **Chỉ lưu tọa độ khớp, không lưu ảnh** (IndexedDB phiên bản 7, bảng `poseSamples`).
+  2. **Kiểm tra:** mẫu không chuẩn hóa được, mẫu thiếu nhiều khớp, nhóm ít mẫu, mất cân bằng.
+  3. **Kính hiển vi:** khung xương theo pixel với gốc tọa độ và "1 đơn vị", khung xương sau chuẩn hóa, bảng 17 / 21 khớp (tọa độ, độ tin cậy, số mô hình nhận).
+  4. **Huấn luyện:** hồi quy logistic hoặc k-NN.
+  5. **Đánh giá:** ma trận nhầm lẫn, độ quan trọng từng khớp vẽ trên tư thế trung bình của mỗi nhóm.
+  6. **Sử dụng:** nhận dạng trực tiếp qua camera hoặc ảnh tải lên, khung xương tô màu theo đóng góp từng khớp (cộng lại đúng bằng điểm của nhóm); xuất notebook Colab.
+- Mô hình tự lưu trữ (Apache-2.0): MoveNet SinglePose Lightning v4 và MediaPipe Hand Landmark lite (`scripts/fetch-models.mjs`, thêm `@tensorflow/tfjs-converter` 4.22.0). Kiểm thử trên ảnh thật có giấy phép mở (người đứng – phạm vi công cộng; bàn tay – CC BY-SA 4.0): đúng thứ tự khớp, đúng trái / phải, đúng vị trí; xác định được đầu ra "có bàn tay" của mô hình bàn tay.
+- Bộ phân loại vector dùng chung (`src/core/ml/vector-classifier.ts`) và khung notebook dùng chung (`src/core/export/vector-notebook.ts`) cho Studio âm thanh và Studio tư thế.
+
+### Sửa
+
+- Tải nhiều tệp cùng lúc (Studio âm thanh, Studio tư thế): danh sách tệp được chép ra trước khi đặt lại ô chọn tệp; trước đó có thể bị mất khi phải chờ nạp mô hình ("nhận dạng được 0 ảnh").
+
 ### Thêm (Studio âm thanh – giai đoạn 4)
 
 - Loại dự án **Âm thanh** trong Xưởng mô hình, 6 bước:

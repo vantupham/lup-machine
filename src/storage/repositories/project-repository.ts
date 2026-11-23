@@ -68,9 +68,10 @@ export function createDexieProjectRepository(
     },
 
     async delete(id) {
-      await db.transaction('rw', [db.projects, db.classes, db.samples, db.features, db.runs, db.dataTables, db.audioClips], async () => {
+      await db.transaction('rw', [db.projects, db.classes, db.samples, db.features, db.runs, db.dataTables, db.audioClips, db.poseSamples], async () => {
         await db.dataTables.delete(id);
         await db.audioClips.where('projectId').equals(id).delete();
+        await db.poseSamples.where('projectId').equals(id).delete();
         await db.features.where('projectId').equals(id).delete();
         await db.runs.where('projectId').equals(id).delete();
         await db.samples.where('projectId').equals(id).delete();
@@ -80,8 +81,8 @@ export function createDexieProjectRepository(
     },
 
     async deleteAll() {
-      await db.transaction('rw', [db.projects, db.classes, db.samples, db.features, db.runs, db.dataTables, db.audioClips], async () => {
-        await Promise.all([db.audioClips.clear(), db.dataTables.clear(), db.runs.clear(), db.features.clear(), db.samples.clear(), db.classes.clear(), db.projects.clear()]);
+      await db.transaction('rw', [db.projects, db.classes, db.samples, db.features, db.runs, db.dataTables, db.audioClips, db.poseSamples], async () => {
+        await Promise.all([db.poseSamples.clear(), db.audioClips.clear(), db.dataTables.clear(), db.runs.clear(), db.features.clear(), db.samples.clear(), db.classes.clear(), db.projects.clear()]);
       });
     },
   };

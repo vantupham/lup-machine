@@ -42,6 +42,8 @@ test('cây quyết định mọc từng nút; mạng nơ-ron huấn luyện làm
 });
 
 test('gradient descent và k-means chạy tới cuối', async ({ page }) => {
+  // hai hoạt ảnh chạy theo thời gian thật (60 bước × 180 ms và các vòng k-means × 700 ms): khoảng 20 giây
+  test.setTimeout(90_000);
   await page.goto('./#/playground/gradient-descent');
   await page.getByRole('button', { name: 'Chạy' }).click();
   await expect(page.getByRole('heading', { name: 'Bước 60' })).toBeVisible({ timeout: 20_000 });

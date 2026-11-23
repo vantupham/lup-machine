@@ -23,3 +23,40 @@ group1-shard1of1.bin   d366835afb87a9a6915084f00635339c2c8e137760cd891ab23434019
 ```
 
 Tài liệu gốc: Sandler, M. et al. (2018). *MobileNetV2: Inverted Residuals and Linear Bottlenecks.* CVPR.
+
+## movenet-lightning-4
+
+| | |
+|---|---|
+| Kiến trúc | MoveNet SinglePose Lightning v4 (Google), nhận dạng 17 khớp của MỘT người |
+| Đầu vào | Ảnh 192×192×3, số nguyên 0–255; ảnh gốc được đệm viền đen thành hình vuông rồi thu nhỏ |
+| Đầu ra | `[1, 1, 17, 3]` = (y, x, độ tin cậy) của 17 khớp, tọa độ 0–1 trong ô vuông đã đệm |
+| Định dạng | TensorFlow.js GraphModel |
+| Nguồn | <https://tfhub.dev/google/tfjs-model/movenet/singlepose/lightning/4> — giấy phép **Apache-2.0** |
+| Kích thước | ~4,4 MB trọng số |
+
+**SHA-256**
+
+```
+c65a3447162efa0c42af29498a4b151f4415b36ff3ae6fae2b28a32e840dcbfb  model.json
+b42c3232bf13b0efc691d3f0693dd3fc74404f709b1deee0a271828af6dbbea2  group1-shard1of2.bin
+8253ab965aa3122c08f331777ca395ce9ca19bb9e7cb278b99de1c46dbdeb6dc  group1-shard2of2.bin
+```
+
+## hand-landmark-lite-1
+
+| | |
+|---|---|
+| Kiến trúc | MediaPipe Hand Landmark (lite), 21 điểm mốc bàn tay |
+| Đầu vào | Ô vuông 224×224×3 chứa bàn tay, giá trị 0–1 (LUP Machine không dùng bộ dò lòng bàn tay: học sinh đặt tay vào khung hướng dẫn, hoặc ảnh tải lên được dùng nguyên) |
+| Đầu ra dùng | `Identity_2` = 21 × (x, y, z) theo pixel của ô 224; `Identity_1` = xác suất có bàn tay (kiểm chứng: 0,003 với ô trống, 0,87 với ảnh bàn tay) |
+| Định dạng | TensorFlow.js GraphModel |
+| Nguồn | <https://tfhub.dev/mediapipe/tfjs-model/handpose_3d/landmark/lite/1> — giấy phép **Apache-2.0** |
+| Kích thước | ~1,9 MB trọng số |
+
+**SHA-256**
+
+```
+2d6bd4d3b34a684e96293ff71e31f9fbc1b4922e0a88d82184cb584055ff3783  model.json
+444bee1c7d6d330991bd3ce840a95d0c0afcc3a3fcec47c0c3b7f66a3f3533b0  group1-shard1of1.bin
+```

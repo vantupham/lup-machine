@@ -880,7 +880,8 @@
       "error": "Không tạo được notebook: {{message}}",
       "privacy": "Notebook được tạo ngay trên máy này. LUP Machine không gửi dữ liệu đi đâu; chỉ khi em tự tải notebook lên Colab thì dữ liệu trong đó mới nằm trên Google Drive của em.",
       "textDescription": "Tải về một notebook dựng lại đúng bộ từ vựng và mô hình này bằng scikit-learn, trên cùng các câu và cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine.",
-      "audioDescription": "Tải về một notebook chứa 160 con số đặc trưng của mỗi đoạn (không chứa âm thanh gốc), dựng lại cùng mô hình bằng scikit-learn trên cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine."
+      "audioDescription": "Tải về một notebook chứa 160 con số đặc trưng của mỗi đoạn (không chứa âm thanh gốc), dựng lại cùng mô hình bằng scikit-learn trên cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine.",
+      "poseDescription": "Tải về một notebook chứa tọa độ khớp đã chuẩn hóa của mỗi mẫu (không chứa ảnh), dựng lại cùng mô hình bằng scikit-learn trên cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine."
     }
   },
   "text": {
@@ -1039,8 +1040,8 @@
       "imbalance": "Mất cân bằng: nhóm \"{{smallest}}\" chỉ có {{smallestCount}} đoạn, nhóm \"{{largest}}\" có {{largestCount}}."
     },
     "prepareErrors": {
-      "too-few-clips": "Mới có {{count}} đoạn, cần ít nhất 6 để huấn luyện.",
-      "single-class": "Cần âm thanh của ít nhất hai nhóm."
+      "single-class": "Cần âm thanh của ít nhất hai nhóm.",
+      "too-few-samples": "Mới có {{count}} đoạn, cần ít nhất 6 để huấn luyện."
     },
     "inspector": {
       "clip": "Đoạn âm thanh",
@@ -1088,6 +1089,176 @@
       "contributionHint": "Điểm của nhóm \"{{cls}}\" so với trung bình các nhóm = {{base}} (phần cố định) + tổng các ô = {{total}}. Cam: đẩy về nhóm này, xanh: kéo ra xa.",
       "distance": "cách {{d}} dB",
       "knnHint": "Bấm ▶ để nghe các đoạn Dạy giống nhất mà máy dựa vào."
+    }
+  },
+  "pose": {
+    "lead": "Dạy máy nhận ra tư thế cơ thể hoặc cử chỉ bàn tay. Mô hình nhận dạng tìm tọa độ các khớp; chỉ những con số đó được lưu và dùng để học — không lưu ảnh.",
+    "steps": {
+      "data": "Ghi tư thế",
+      "check": "Chia dữ liệu và kiểm tra",
+      "represent": "Kính hiển vi: tư thế thành con số",
+      "train": "Huấn luyện",
+      "evaluate": "Đánh giá và khớp quan trọng",
+      "use": "Sử dụng: nhận dạng trực tiếp"
+    },
+    "kinds": {
+      "body": "Cơ thể (17 khớp)",
+      "hand": "Bàn tay (21 điểm)"
+    },
+    "samples": {
+      "arms-up": "Giơ hai tay",
+      "arms-out": "Dang tay",
+      "hands-on-hips": "Chống nạnh",
+      "arms-down": "Đứng nghiêm",
+      "open": "Xòe tay",
+      "fist": "Nắm tay",
+      "victory": "Chữ V"
+    },
+    "joints": {
+      "nose": "mũi",
+      "leftEye": "mắt trái",
+      "rightEye": "mắt phải",
+      "leftEar": "tai trái",
+      "rightEar": "tai phải",
+      "leftShoulder": "vai trái",
+      "rightShoulder": "vai phải",
+      "leftElbow": "khuỷu tay trái",
+      "rightElbow": "khuỷu tay phải",
+      "leftWrist": "cổ tay trái",
+      "rightWrist": "cổ tay phải",
+      "leftHip": "hông trái",
+      "rightHip": "hông phải",
+      "leftKnee": "đầu gối trái",
+      "rightKnee": "đầu gối phải",
+      "leftAnkle": "cổ chân trái",
+      "rightAnkle": "cổ chân phải",
+      "wrist": "cổ tay",
+      "thumbCmc": "gốc ngón cái",
+      "thumbMcp": "khớp gốc ngón cái",
+      "thumbIp": "khớp giữa ngón cái",
+      "thumbTip": "đầu ngón cái",
+      "indexMcp": "khớp gốc ngón trỏ",
+      "indexPip": "khớp giữa ngón trỏ",
+      "indexDip": "khớp đầu ngón trỏ",
+      "indexTip": "đầu ngón trỏ",
+      "middleMcp": "khớp gốc ngón giữa",
+      "middlePip": "khớp giữa ngón giữa",
+      "middleDip": "khớp đầu ngón giữa",
+      "middleTip": "đầu ngón giữa",
+      "ringMcp": "khớp gốc ngón áp út",
+      "ringPip": "khớp giữa ngón áp út",
+      "ringDip": "khớp đầu ngón áp út",
+      "ringTip": "đầu ngón áp út",
+      "pinkyMcp": "khớp gốc ngón út",
+      "pinkyPip": "khớp giữa ngón út",
+      "pinkyDip": "khớp đầu ngón út",
+      "pinkyTip": "đầu ngón út"
+    },
+    "camera": {
+      "video": "Hình từ camera (lật như gương)",
+      "overlay": "Khung xương mô hình tìm thấy",
+      "bodyScore": "Độ tin cậy trung bình của các khớp: {{score}}%",
+      "handScore": "Xác suất có bàn tay trong khung: {{score}}%",
+      "state": {
+        "starting": "Đang bật camera…",
+        "loading-model": "Đang nạp mô hình nhận dạng (lần đầu cần mạng)…",
+        "ready": "Đang nhận dạng…",
+        "denied": "Em chưa cho phép dùng camera. Hãy bấm biểu tượng ổ khóa trên thanh địa chỉ để cho phép.",
+        "unavailable": "Không tìm thấy camera trên máy này.",
+        "model-error": "Không nạp được mô hình nhận dạng. Hãy kiểm tra kết nối mạng rồi thử lại."
+      }
+    },
+    "data": {
+      "kind": "Nhận dạng gì?",
+      "kindHint": {
+        "body": "MoveNet tìm 17 khớp (mũi, mắt, tai, vai, khuỷu, cổ tay, hông, gối, cổ chân). Đứng cách camera đủ xa để thấy cả người.",
+        "hand": "Mô hình bàn tay tìm 21 điểm (cổ tay và 4 điểm trên mỗi ngón). Đưa bàn tay vào khung vuông ở giữa camera."
+      },
+      "kindLocked": "Dự án đã có mẫu nên không đổi loại được nữa.",
+      "empty": "Chưa có nhóm nào. Thêm nhóm ở dưới rồi bật camera để ghi tư thế, tải ảnh lên, hoặc dùng bộ tư thế mẫu.",
+      "loadSamples": {
+        "body": "Dùng tư thế mẫu: giơ tay / dang tay / chống nạnh / đứng nghiêm",
+        "hand": "Dùng cử chỉ mẫu: xòe tay / nắm tay / chữ V"
+      },
+      "samplesNote": "Mẫu được máy tạo ra bằng công thức (tọa độ khớp giả lập, mỗi nhóm 15 mẫu), không có ảnh người thật.",
+      "cameraOn": "Bật camera",
+      "cameraOff": "Tắt camera",
+      "handGuide": "Đặt bàn tay vào khung nét đứt; mô hình chỉ nhìn trong khung này.",
+      "go": "Giữ nguyên!",
+      "poseCount": "{{n}} mẫu",
+      "recordOne": "Ghi 1 mẫu",
+      "recordBurst": "Ghi {{n}} mẫu liên tiếp",
+      "upload": "Tải ảnh lên",
+      "recorded": "Đã ghi {{n}} mẫu; bỏ qua {{skipped}} khung không thấy rõ.",
+      "uploaded": "Nhận dạng được {{n}} ảnh; bỏ qua {{skipped}} ảnh không thấy rõ.",
+      "thumb": "Khung xương một mẫu của nhóm {{name}}",
+      "deletePose": "Xóa mẫu này",
+      "confirmDeleteClass": "Xóa nhóm \"{{name}}\" và mọi mẫu tư thế của nhóm?",
+      "error": "Không xử lý được: {{message}}",
+      "privacy": "Chỉ tọa độ các khớp được lưu trên máy này; ảnh và khung hình camera không được lưu, không gửi đi đâu."
+    },
+    "quality": {
+      "unusable": "{{count}} mẫu không dùng được vì không thấy rõ vai và hông (hoặc cổ tay và gốc ngón giữa).",
+      "missing-joints": "{{count}} mẫu thiếu nhiều khớp (ví dụ chân ra ngoài khung hình).",
+      "few-poses": "Nhóm \"{{label}}\" mới có {{count}} mẫu; nên có ít nhất 5.",
+      "imbalance": "Mất cân bằng: nhóm \"{{smallest}}\" chỉ có {{smallestCount}} mẫu, nhóm \"{{largest}}\" có {{largestCount}}."
+    },
+    "prepareErrors": {
+      "too-few-samples": "Mới có {{count}} mẫu dùng được, cần ít nhất 6.",
+      "single-class": "Cần mẫu của ít nhất hai nhóm."
+    },
+    "inspector": {
+      "sample": "Mẫu",
+      "exactHint": "Đúng tọa độ mô hình nhận dạng tìm được và đúng phép chuẩn hóa mà mô hình học dùng.",
+      "rawTitle": "① Tọa độ khớp trên khung hình",
+      "rawLabel": "Khung xương theo pixel của khung hình",
+      "rawHint": {
+        "body": "Khung hình {{w}} × {{h}} pixel. Vòng tròn cam là gốc tọa độ mới (giữa hai hông); đoạn cam là \"1 đơn vị\" (giữa hông → giữa vai).",
+        "hand": "Khung hình {{w}} × {{h}} pixel. Vòng tròn cam là gốc tọa độ mới (cổ tay); đoạn cam là \"1 đơn vị\" (cổ tay → gốc ngón giữa)."
+      },
+      "normTitle": "② Sau khi chuẩn hóa",
+      "normLabel": "Khung xương sau khi dời gốc và đổi đơn vị",
+      "normHint": {
+        "body": "Dời gốc về giữa hông và đo bằng chiều dài thân, nên đứng gần hay xa, lệch trái hay phải đều cho cùng con số.",
+        "hand": "Dời gốc về cổ tay và đo bằng cỡ lòng bàn tay, nên tay gần hay xa camera đều cho cùng con số."
+      },
+      "cannotNormalize": {
+        "body": "Mẫu này không thấy rõ vai và hông nên không chuẩn hóa được; mô hình sẽ bỏ qua nó.",
+        "hand": "Mẫu này không thấy rõ cổ tay và gốc ngón giữa nên không chuẩn hóa được; mô hình sẽ bỏ qua nó."
+      },
+      "tableCaption": "{{n}} khớp × 2 tọa độ = {{dims}} con số mô hình nhận",
+      "joint": "Khớp",
+      "score": "Độ tin cậy",
+      "modelSees": "Mô hình nhận (x, y)",
+      "tableHint": "Khớp có độ tin cậy dưới {{min}} (chữ mờ) coi như không thấy rõ và được đặt về 0."
+    },
+    "models": {
+      "logistic": {
+        "name": "Hồi quy logistic",
+        "how": "Mỗi tọa độ có một trọng số cho mỗi nhóm; cộng lại thành điểm rồi đổi ra xác suất. Đọc ngược được thành độ quan trọng của từng khớp."
+      },
+      "knn": {
+        "name": "k láng giềng gần nhất",
+        "how": "Tìm k mẫu Dạy có các khớp nằm gần nhất và lấy nhóm chiếm đa số."
+      }
+    },
+    "model": {
+      "kHint": "Khoảng cách tính trên tọa độ đã chuẩn hóa (đơn vị: chiều dài thân / cỡ bàn tay)."
+    },
+    "evaluate": {
+      "importanceTitle": "Mô hình nhìn vào khớp nào?",
+      "importanceHint": "Độ quan trọng của khớp = |trọng số của x| + |trọng số của y|, tính từ trọng số thật của mô hình.",
+      "importanceLabel": "Độ quan trọng của các khớp với nhóm {{cls}}",
+      "importanceLegend": "Vẽ trên tư thế trung bình của mỗi nhóm; chấm càng to, khớp đó càng ảnh hưởng tới điểm của nhóm.",
+      "knnNoMap": "k-NN không học trọng số nên không có hình này; hãy xem các láng giềng ở bước ⑥."
+    },
+    "use": {
+      "live": "Nhận dạng trực tiếp bằng camera",
+      "empty": "Bật camera hoặc tải một ảnh lên để thử.",
+      "badImage": "Không đọc được ảnh.",
+      "whyHint": "Đóng góp của khớp = (giá trị chuẩn hóa × trọng số) của x cộng của y; mọi khớp cộng lại với phần cố định đúng bằng điểm của nhóm.",
+      "contributionHint": "Trên khung xương: cam là khớp đẩy về nhóm \"{{cls}}\", xanh là kéo ra xa; chấm càng to ảnh hưởng càng lớn. Điểm so với trung bình các nhóm = {{base}} (phần cố định) + tổng các khớp = {{total}}.",
+      "neighbors": "{{k}} mẫu Dạy gần nhất thuộc các nhóm: {{labels}}."
     }
   }
 }

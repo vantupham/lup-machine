@@ -89,8 +89,9 @@ export function createDexieDatasetRepository(
     },
 
     async deleteClass(classId) {
-      await db.transaction('rw', [db.classes, db.samples, db.features, db.audioClips], async () => {
+      await db.transaction('rw', [db.classes, db.samples, db.features, db.audioClips, db.poseSamples], async () => {
         await db.audioClips.where('classId').equals(classId).delete();
+        await db.poseSamples.where('classId').equals(classId).delete();
         const sampleIds = (await db.samples.where('classId').equals(classId).primaryKeys()) as string[];
         await db.features.where('sampleId').anyOf(sampleIds).delete();
         await db.samples.bulkDelete(sampleIds);
@@ -145,8 +146,9 @@ export function createDexieDatasetRepository(
     },
 
     async deleteProjectData(projectId) {
-      await db.transaction('rw', [db.classes, db.samples, db.features, db.audioClips], async () => {
+      await db.transaction('rw', [db.classes, db.samples, db.features, db.audioClips, db.poseSamples], async () => {
         await db.audioClips.where('projectId').equals(projectId).delete();
+        await db.poseSamples.where('projectId').equals(projectId).delete();
         await db.features.where('projectId').equals(projectId).delete();
         await db.samples.where('projectId').equals(projectId).delete();
         await db.classes.where('projectId').equals(projectId).delete();

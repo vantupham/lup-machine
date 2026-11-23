@@ -56,7 +56,7 @@ function ClassCard({ cls, index, clips, onRecord, onUpload, onDelete, onRename, 
   readonly index: number;
   readonly clips: readonly AudioClipRecord[];
   readonly onRecord: () => void;
-  readonly onUpload: (files: FileList) => void;
+  readonly onUpload: (files: readonly File[]) => void;
   readonly onDelete: (clip: AudioClipRecord) => void;
   readonly onRename: (name: string) => void;
   readonly onDeleteClass: () => void;
@@ -93,8 +93,10 @@ function ClassCard({ cls, index, clips, onRecord, onUpload, onDelete, onRename, 
             className="sr-only"
             disabled={busy || full}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              if (e.target.files?.length) onUpload(e.target.files);
+              // chép ra mảng TRƯỚC khi đặt lại ô chọn tệp: FileList sẽ bị xóa theo
+              const files = Array.from(e.target.files ?? []);
               e.target.value = '';
+              if (files.length) onUpload(files);
             }}
           />
         </label>
@@ -163,10 +165,10 @@ export function AudioDataSection({ projectId, classes, clips, dataset, audio, on
       }
     });
 
-  const upload = (classId: string, files: FileList) =>
+  const upload = (classId: string, files: readonly File[]) =>
     run(async () => {
       const signals: Float32Array[] = [];
-      for (const file of Array.from(files)) signals.push(await decodeAudioFile(file));
+      for (const file of files) signals.push(await decodeAudioFile(file));
       await add(classId, 'upload', signals);
     });
 

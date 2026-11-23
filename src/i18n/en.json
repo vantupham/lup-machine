@@ -880,7 +880,8 @@
       "error": "Could not create the notebook: {{message}}",
       "privacy": "The notebook is created on this device. LUP Machine sends no data anywhere; only if you upload the notebook to Colab yourself does its data live in your Google Drive.",
       "textDescription": "Download a notebook that rebuilds exactly this vocabulary and model with scikit-learn, on the same sentences and the same training / test split, then compares the results with LUP Machine.",
-      "audioDescription": "Download a notebook holding the 160 feature numbers of each clip (not the audio itself) that rebuilds the same model with scikit-learn on the same training / test split, then compares the results with LUP Machine."
+      "audioDescription": "Download a notebook holding the 160 feature numbers of each clip (not the audio itself) that rebuilds the same model with scikit-learn on the same training / test split, then compares the results with LUP Machine.",
+      "poseDescription": "Download a notebook holding the normalised joint coordinates of each sample (no images) that rebuilds the same model with scikit-learn on the same training / test split, then compares the results with LUP Machine."
     }
   },
   "text": {
@@ -1039,8 +1040,8 @@
       "imbalance": "Imbalance: group \"{{smallest}}\" has only {{smallestCount}} clips while \"{{largest}}\" has {{largestCount}}."
     },
     "prepareErrors": {
-      "too-few-clips": "Only {{count}} clips; at least 6 are needed to train.",
-      "single-class": "Sounds from at least two groups are needed."
+      "single-class": "Sounds from at least two groups are needed.",
+      "too-few-samples": "Only {{count}} clips; at least 6 are needed to train."
     },
     "inspector": {
       "clip": "Sound clip",
@@ -1088,6 +1089,176 @@
       "contributionHint": "Score of \"{{cls}}\" relative to the average over groups = {{base}} (fixed part) + sum of cells = {{total}}. Orange pushes towards this group, blue pulls away.",
       "distance": "{{d}} dB away",
       "knnHint": "Press ▶ to hear the most similar training clips the computer relied on."
+    }
+  },
+  "pose": {
+    "lead": "Teach the computer to recognise body poses or hand gestures. A detection model finds the joint coordinates; only those numbers are stored and used for learning — no images are kept.",
+    "steps": {
+      "data": "Record poses",
+      "check": "Split and check the data",
+      "represent": "Microscope: poses as numbers",
+      "train": "Train",
+      "evaluate": "Evaluate and important joints",
+      "use": "Use: live recognition"
+    },
+    "kinds": {
+      "body": "Body (17 joints)",
+      "hand": "Hand (21 points)"
+    },
+    "samples": {
+      "arms-up": "Arms up",
+      "arms-out": "Arms out",
+      "hands-on-hips": "Hands on hips",
+      "arms-down": "Standing straight",
+      "open": "Open hand",
+      "fist": "Fist",
+      "victory": "V sign"
+    },
+    "joints": {
+      "nose": "nose",
+      "leftEye": "left eye",
+      "rightEye": "right eye",
+      "leftEar": "left ear",
+      "rightEar": "right ear",
+      "leftShoulder": "left shoulder",
+      "rightShoulder": "right shoulder",
+      "leftElbow": "left elbow",
+      "rightElbow": "right elbow",
+      "leftWrist": "left wrist",
+      "rightWrist": "right wrist",
+      "leftHip": "left hip",
+      "rightHip": "right hip",
+      "leftKnee": "left knee",
+      "rightKnee": "right knee",
+      "leftAnkle": "left ankle",
+      "rightAnkle": "right ankle",
+      "wrist": "wrist",
+      "thumbCmc": "thumb – base (CMC)",
+      "thumbMcp": "thumb – knuckle (MCP)",
+      "thumbIp": "thumb – joint (IP)",
+      "thumbTip": "thumb – tip",
+      "indexMcp": "index – knuckle (MCP)",
+      "indexPip": "index – middle joint (PIP)",
+      "indexDip": "index – end joint (DIP)",
+      "indexTip": "index – tip",
+      "middleMcp": "middle – knuckle (MCP)",
+      "middlePip": "middle – middle joint (PIP)",
+      "middleDip": "middle – end joint (DIP)",
+      "middleTip": "middle – tip",
+      "ringMcp": "ring – knuckle (MCP)",
+      "ringPip": "ring – middle joint (PIP)",
+      "ringDip": "ring – end joint (DIP)",
+      "ringTip": "ring – tip",
+      "pinkyMcp": "little finger – knuckle (MCP)",
+      "pinkyPip": "little finger – middle joint (PIP)",
+      "pinkyDip": "little finger – end joint (DIP)",
+      "pinkyTip": "little finger – tip"
+    },
+    "camera": {
+      "video": "Camera picture (mirrored)",
+      "overlay": "Skeleton found by the model",
+      "bodyScore": "Average joint confidence: {{score}}%",
+      "handScore": "Probability of a hand in the frame: {{score}}%",
+      "state": {
+        "starting": "Starting the camera…",
+        "loading-model": "Loading the detection model (needs internet the first time)…",
+        "ready": "Detecting…",
+        "denied": "Camera access is not allowed. Click the lock icon in the address bar to allow it.",
+        "unavailable": "No camera found on this device.",
+        "model-error": "Could not load the detection model. Check the internet connection and try again."
+      }
+    },
+    "data": {
+      "kind": "What to recognise?",
+      "kindHint": {
+        "body": "MoveNet finds 17 joints (nose, eyes, ears, shoulders, elbows, wrists, hips, knees, ankles). Stand far enough from the camera to show your whole body.",
+        "hand": "The hand model finds 21 points (wrist and 4 points on each finger). Put your hand inside the square in the middle of the camera."
+      },
+      "kindLocked": "The project already has samples, so the kind cannot change.",
+      "empty": "No groups yet. Add a group below, then turn on the camera to record poses, upload photos, or use the sample poses.",
+      "loadSamples": {
+        "body": "Use sample poses: arms up / arms out / hands on hips / standing straight",
+        "hand": "Use sample gestures: open hand / fist / V sign"
+      },
+      "samplesNote": "The samples are generated by formulas (simulated joint coordinates, 15 per group); there are no photos of real people.",
+      "cameraOn": "Turn on camera",
+      "cameraOff": "Turn off camera",
+      "handGuide": "Put your hand inside the dashed square; the model only looks there.",
+      "go": "Hold still!",
+      "poseCount": "{{n}} samples",
+      "recordOne": "Record 1 sample",
+      "recordBurst": "Record {{n}} samples in a row",
+      "upload": "Upload photos",
+      "recorded": "Recorded {{n}} samples; skipped {{skipped}} unclear frames.",
+      "uploaded": "Detected {{n}} photos; skipped {{skipped}} unclear photos.",
+      "thumb": "Skeleton of one sample of group {{name}}",
+      "deletePose": "Delete this sample",
+      "confirmDeleteClass": "Delete group \"{{name}}\" and all its pose samples?",
+      "error": "Could not process: {{message}}",
+      "privacy": "Only joint coordinates are stored on this device; photos and camera frames are not saved and nothing is sent anywhere."
+    },
+    "quality": {
+      "unusable": "{{count}} samples cannot be used because the shoulders and hips (or wrist and middle-finger knuckle) are not clearly visible.",
+      "missing-joints": "{{count}} samples miss many joints (for example the legs are out of the frame).",
+      "few-poses": "Group \"{{label}}\" has only {{count}} samples; at least 5 are recommended.",
+      "imbalance": "Imbalance: group \"{{smallest}}\" has only {{smallestCount}} samples while \"{{largest}}\" has {{largestCount}}."
+    },
+    "prepareErrors": {
+      "too-few-samples": "Only {{count}} usable samples; at least 6 are needed.",
+      "single-class": "Samples from at least two groups are needed."
+    },
+    "inspector": {
+      "sample": "Sample",
+      "exactHint": "Exactly the coordinates the detection model found and the normalisation the learning model uses.",
+      "rawTitle": "① Joint coordinates in the frame",
+      "rawLabel": "Skeleton in frame pixels",
+      "rawHint": {
+        "body": "Frame of {{w}} × {{h}} pixels. The orange circle is the new origin (between the hips); the orange segment is \"1 unit\" (hips → shoulders).",
+        "hand": "Frame of {{w}} × {{h}} pixels. The orange circle is the new origin (wrist); the orange segment is \"1 unit\" (wrist → middle-finger knuckle)."
+      },
+      "normTitle": "② After normalisation",
+      "normLabel": "Skeleton after moving the origin and changing the unit",
+      "normHint": {
+        "body": "The origin moves to between the hips and lengths are measured in torso lengths, so standing near or far, left or right gives the same numbers.",
+        "hand": "The origin moves to the wrist and lengths are measured in palm sizes, so a hand near or far from the camera gives the same numbers."
+      },
+      "cannotNormalize": {
+        "body": "This sample does not clearly show the shoulders and hips, so it cannot be normalised; the model will skip it.",
+        "hand": "This sample does not clearly show the wrist and middle-finger knuckle, so it cannot be normalised; the model will skip it."
+      },
+      "tableCaption": "{{n}} joints × 2 coordinates = {{dims}} numbers the model receives",
+      "joint": "Joint",
+      "score": "Confidence",
+      "modelSees": "Model receives (x, y)",
+      "tableHint": "Joints with confidence below {{min}} (faded) count as not clearly visible and are set to 0."
+    },
+    "models": {
+      "logistic": {
+        "name": "Logistic regression",
+        "how": "Each coordinate has a weight per group; they add up to a score that becomes a probability. Readable back as the importance of each joint."
+      },
+      "knn": {
+        "name": "k-nearest neighbours",
+        "how": "Finds the k training samples whose joints are closest and takes the majority group."
+      }
+    },
+    "model": {
+      "kHint": "Distances use normalised coordinates (units: torso length / hand size)."
+    },
+    "evaluate": {
+      "importanceTitle": "Which joints does the model look at?",
+      "importanceHint": "Joint importance = |weight of x| + |weight of y|, from the model's real weights.",
+      "importanceLabel": "Importance of the joints for group {{cls}}",
+      "importanceLegend": "Drawn on the average pose of each group; the bigger the dot, the more that joint affects the group's score.",
+      "knnNoMap": "k-NN learns no weights, so there is no such picture; see the neighbours in step ⑥."
+    },
+    "use": {
+      "live": "Live recognition with the camera",
+      "empty": "Turn on the camera or upload a photo to try.",
+      "badImage": "Could not read the image.",
+      "whyHint": "A joint's contribution = (normalised value × weight) for x plus for y; all joints plus the fixed part add up exactly to the group's score.",
+      "contributionHint": "On the skeleton: orange joints push towards \"{{cls}}\", blue ones pull away; bigger dots matter more. Score relative to the average over groups = {{base}} (fixed part) + sum over joints = {{total}}.",
+      "neighbors": "The {{k}} closest training samples belong to: {{labels}}."
     }
   }
 }

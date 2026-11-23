@@ -1,7 +1,7 @@
 /** Bước ④ Huấn luyện, ⑤ Đánh giá, ⑥ Sử dụng của Studio âm thanh. */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { contributionMap, encodeClip, evaluateAudio, importanceMap, predictAudio, trainAudio, type AudioData, type AudioModelSettings, type TrainedAudio } from '@/core/audio/audio-model';
+import { contributionMap, encodeVector, evaluateVectors, importanceMap, predictVector, trainVectorModel, type VectorData, type VectorModelSettings, type TrainedVectorModel } from '@/core/ml/vector-classifier';
 import { audioFeatures, fitClip } from '@/core/audio/features';
 import { audioNotebook } from '@/core/export/audio-notebook';
 import { formatPercent, RangeField, SelectField, Stat } from '@/features/playground/controls';
@@ -16,17 +16,17 @@ import { ConfusionTable } from '../tabular/EvaluateSection';
 import { decodeAudioFile, playClip, recordClip } from './audio-io.browser';
 import { FeatureGrid, Waveform } from './viz';
 
-const DEFAULT_SETTINGS: AudioModelSettings = { kind: 'logistic', c: 1, k: 3 };
+const DEFAULT_SETTINGS: VectorModelSettings = { kind: 'logistic', c: 1, k: 3 };
 
 interface AudioModelLabProps {
   readonly projectName: string;
-  readonly data: AudioData;
+  readonly data: VectorData;
   readonly dataKey: string;
   /** Lấy lại âm thanh của một đoạn Dạy (để nghe các láng giềng của k-NN). */
   readonly trainSamples: (id: string) => Float32Array | null;
 }
 
-function TryClip({ trained, data, trainSamples }: { readonly trained: TrainedAudio; readonly data: AudioData; readonly trainSamples: (id: string) => Float32Array | null }) {
+function TryClip({ trained, data, trainSamples }: { readonly trained: TrainedVectorModel; readonly data: VectorData; readonly trainSamples: (id: string) => Float32Array | null }) {
   const { t } = useTranslation();
   const [signal, setSignal] = useState<Float32Array | null>(null);
   const [busy, setBusy] = useState(false);
@@ -45,8 +45,8 @@ function TryClip({ trained, data, trainSamples }: { readonly trained: TrainedAud
     }
   };
 
-  const encoded = signal ? encodeClip(data, audioFeatures(signal)) : null;
-  const prediction = encoded ? predictAudio(trained, encoded) : null;
+  const encoded = signal ? encodeVector(data, audioFeatures(signal)) : null;
+  const prediction = encoded ? predictVector(trained, encoded) : null;
   const c = explainFor === 'predicted' ? (prediction?.label ?? 0) : Number(explainFor);
   const contribution = encoded ? contributionMap(trained, encoded.scaled, c) : null;
 
@@ -132,11 +132,11 @@ function TryClip({ trained, data, trainSamples }: { readonly trained: TrainedAud
 
 export function AudioModelLab({ projectName, data, dataKey, trainSamples }: AudioModelLabProps) {
   const { t } = useTranslation();
-  const [settings, setSettings] = useState<AudioModelSettings>(DEFAULT_SETTINGS);
-  const [trained, setTrained] = useState<{ key: string; model: TrainedAudio; count: number } | null>(null);
+  const [settings, setSettings] = useState<VectorModelSettings>(DEFAULT_SETTINGS);
+  const [trained, setTrained] = useState<{ key: string; model: TrainedVectorModel; count: number } | null>(null);
   const key = JSON.stringify([dataKey, settings]);
   const current = trained?.key === key ? trained.model : null;
-  const evaluation = useMemo(() => (current ? evaluateAudio(current, data) : null), [current, data]);
+  const evaluation = useMemo(() => (current ? evaluateVectors(current, data) : null), [current, data]);
   const cIndex = Math.max(0, C_LEVELS.findIndex((c) => c >= settings.c));
 
   return (
@@ -161,7 +161,7 @@ export function AudioModelLab({ projectName, data, dataKey, trainSamples }: Audi
             ) : (
               <RangeField label={t('playground.knn.k')} value={settings.k} min={1} max={15} onChange={(k) => setSettings({ ...settings, k })} hint={t('audio.model.kHint')} />
             )}
-            <button type="button" className="btn btn-primary" onClick={() => setTrained({ key, model: trainAudio(data, settings), count: (trained?.count ?? 0) + 1 })}>
+            <button type="button" className="btn btn-primary" onClick={() => setTrained({ key, model: trainVectorModel(data, settings), count: (trained?.count ?? 0) + 1 })}>
               {t('tabular.model.train')}
             </button>
             <p className="text-xs text-muted" role="status">

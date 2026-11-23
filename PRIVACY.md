@@ -14,10 +14,13 @@
 | Có máy chủ nhận dữ liệu không? | **Không.** Trang được phục vụ dạng tĩnh từ GitHub Pages; không có máy chủ nào của dự án nhận dữ liệu. |
 | Có cần tài khoản, email không? | Không. |
 | Có cookie theo dõi, quảng cáo, công cụ phân tích không? | Không. |
-| Camera và micro dùng thế nào? | Chỉ bật khi bạn bấm và trình duyệt hỏi ý kiến. Hình ảnh được xử lý tại chỗ và tắt khi rời trang. |
+| Camera và micro dùng thế nào? | Chỉ bật khi bạn bấm và trình duyệt hỏi ý kiến. Hình ảnh và âm thanh được xử lý tại chỗ và tắt khi rời trang. |
+| Studio âm thanh lưu gì? | Chỉ đoạn âm thanh 1 giây đã đưa về 16 kHz. Tệp gốc bạn tải lên không được giữ lại. |
+| Studio tư thế & bàn tay lưu gì? | **Chỉ tọa độ các khớp** (ví dụ vai ở điểm ảnh 210, 150). Ảnh và khung hình camera không được lưu. |
+| Notebook Colab chứa gì? | Đặc trưng (con số) và nhãn của dự án, **không** chứa ảnh hay âm thanh gốc (riêng dự án bảng và văn bản chứa đúng các dòng / câu đã dùng). Notebook được tạo trên máy bạn; chỉ khi bạn tự tải lên Colab thì nó mới nằm trên Google Drive của bạn. |
 | Khi nào dữ liệu rời khỏi máy? | Chỉ khi **bạn** bấm "Xuất" để tạo tệp, rồi **bạn** tự gửi tệp đó cho người khác. |
 | Trình duyệt có ghi nhớ gì khác không? | Chỉ ngôn ngữ và chế độ học bạn chọn (localStorage). |
-| "Dùng được khi mất mạng" nghĩa là lưu gì? | Trình duyệt lưu sẵn **tệp của ứng dụng** (mã, giao diện, mô hình MobileNet ~1,7 MB) để chạy khi không có mạng. Không lưu và không gửi dữ liệu học tập của bạn. Xóa bằng cách xóa dữ liệu trang web trong cài đặt trình duyệt. |
+| "Dùng được khi mất mạng" nghĩa là lưu gì? | Trình duyệt lưu sẵn **tệp của ứng dụng** (mã, giao diện, các mô hình nền: MobileNet ~1,7 MB, MoveNet ~4,6 MB, bàn tay ~2 MB) để chạy khi không có mạng. Không lưu và không gửi dữ liệu học tập của bạn. Xóa bằng cách xóa dữ liệu trang web trong cài đặt trình duyệt. |
 | Làm sao xóa hết dữ liệu? | Vào **Giới thiệu & Quyền riêng tư → Xóa toàn bộ dữ liệu trên máy này**, hoặc xóa dữ liệu trang web trong cài đặt trình duyệt. |
 
 ## Lưu ý về GitHub Pages

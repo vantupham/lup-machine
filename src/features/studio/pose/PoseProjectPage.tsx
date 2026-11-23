@@ -1,0 +1,93 @@
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { prepareVectors } from '@/core/ml/vector-classifier';
+import { poseFeatures, unpackKeypoints } from '@/core/pose/features';
+import { checkPoseQuality } from '@/core/pose/pose-quality';
+import { RangeField } from '@/features/playground/controls';
+import { StudioStep as Step } from '../StudioStep';
+import { PoseDataSection } from './PoseDataSection';
+import { PoseInspector } from './PoseInspector';
+import { PoseModelLab } from './PoseModelLab';
+import { usePoseProject } from './usePoseProject';
+
+export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
+  const { t } = useTranslation();
+  const { state, reload, dataset, poses, kind, setKind, kindLocked } = usePoseProject(projectId);
+  const [testRatio, setTestRatio] = useState(0.2);
+  const [seed, setSeed] = useState(1);
+
+  const classes = state.status === 'ready' ? state.classes : null;
+  const samples = useMemo(
+    () => (state.status === 'ready' ? state.poses.filter((p) => p.kind === kind && state.classes.some((c) => c.id === p.classId)) : []),
+    [state, kind],
+  );
+  const issues = useMemo(
+    () => (classes ? checkPoseQuality(kind, samples.map((p) => ({ label: classes.find((c) => c.id === p.classId)?.name ?? '', keypoints: unpackKeypoints(p.keypoints) })), classes.map((c) => c.name)) : []),
+    [classes, samples, kind],
+  );
+  const prepared = useMemo(() => {
+    if (!classes) return null;
+    const withFeatures = samples.flatMap((p) => {
+      const f = poseFeatures(kind, unpackKeypoints(p.keypoints));
+      return f ? [{ sample: p, features: f }] : [];
+    });
+    const used = classes.filter((c) => withFeatures.some((s) => s.sample.classId === c.id));
+    const examples = withFeatures.map(({ sample, features }) => ({ id: sample.id, label: used.findIndex((c) => c.id === sample.classId), features }));
+    return prepareVectors(examples, used.map((c) => c.name), { testRatio, seed });
+  }, [classes, samples, kind, testRatio, seed]);
+
+  if (state.status === 'loading') return <p className="text-muted">{t('tabular.loading')}</p>;
+  if (state.status === 'not-found') return <p role="alert">{t('project.notFound')}</p>;
+  if (state.status === 'error') return <p role="alert" className="text-danger">{t('project.loadError')}</p>;
+
+  const data = prepared?.ok ? prepared.data : null;
+  const dataKey = JSON.stringify([kind, samples.map((p) => `${p.id}:${p.classId}`), state.classes.map((c) => c.name), testRatio, seed]);
+
+  return (
+    <div className="space-y-8">
+      <header className="space-y-2">
+        <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
+        <p className="font-mono text-xs uppercase text-accent">{t('studio.types.pose')}</p>
+        <h1 className="font-display text-4xl font-bold">{state.project.name}</h1>
+        <p className="max-w-3xl text-muted">{t('pose.lead')}</p>
+      </header>
+
+      <Step n={1} id="pose-step-data" title={t('pose.steps.data')}>
+        <PoseDataSection projectId={projectId} kind={kind} kindLocked={kindLocked} onKindChange={setKind} classes={state.classes} poses={samples} dataset={dataset} repo={poses} onChanged={reload} />
+      </Step>
+
+      {samples.length > 0 && (
+        <Step n={2} id="pose-step-check" title={t('pose.steps.check')}>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-4">
+              <RangeField label={t('tabular.setup.testRatio')} value={testRatio} min={0.1} max={0.5} step={0.05} onChange={setTestRatio} format={(v) => `${Math.round(v * 100)}%`} />
+              <div className="flex items-center gap-3 text-sm">
+                <span className="text-muted">{t('tabular.setup.seed', { seed })}</span>
+                <button type="button" className="btn btn-ghost px-3 py-1 text-sm" onClick={() => setSeed(seed + 1)}>{t('tabular.setup.reshuffle')}</button>
+              </div>
+            </div>
+            <section aria-labelledby="pose-quality-title" className="lab-card p-4">
+              <h3 id="pose-quality-title" className="font-semibold">{t('tabular.quality.title')}</h3>
+              {prepared && !prepared.ok && <p role="alert" className="mt-2 text-sm text-danger">{t(`pose.prepareErrors.${prepared.error.code}`, prepared.error)}</p>}
+              {issues.length === 0 && prepared?.ok && <p className="mt-2 text-sm text-accent">{t('tabular.quality.none')}</p>}
+              {issues.length > 0 && (
+                <ul className="mt-2 space-y-2 text-sm" data-testid="pose-issues">
+                  {issues.map((issue, i) => <li key={i} className="border-l-4 border-warning pl-2">{t(`pose.quality.${issue.kind}`, issue)}</li>)}
+                </ul>
+              )}
+            </section>
+          </div>
+        </Step>
+      )}
+
+      {samples.length > 0 && (
+        <Step n={3} id="pose-step-represent" title={t('pose.steps.represent')}>
+          <PoseInspector kind={kind} classes={state.classes} poses={samples} />
+        </Step>
+      )}
+
+      {data && <PoseModelLab kind={kind} projectName={state.project.name} data={data} dataKey={dataKey} />}
+    </div>
+  );
+}

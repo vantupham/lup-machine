@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { prepareAudio } from '@/core/audio/audio-model';
+import { prepareVectors } from '@/core/ml/vector-classifier';
 import { checkAudioQuality, peakAmplitude } from '@/core/audio/audio-quality';
 import { RangeField } from '@/features/playground/controls';
 import { clipSamples } from '@/storage/repositories/audio-repository';
@@ -28,7 +28,7 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
     if (!classes) return null;
     const used = classes.filter((c) => usable.some((clip) => clip.classId === c.id));
     const examples = usable.map((clip) => ({ id: clip.id, label: used.findIndex((c) => c.id === clip.classId), features: features.get(clip.id) as Float32Array }));
-    return prepareAudio(examples, used.map((c) => c.name), { testRatio, seed });
+    return prepareVectors(examples, used.map((c) => c.name), { testRatio, seed });
   }, [classes, usable, features, testRatio, seed]);
 
   if (state.status === 'loading') return <p className="text-muted">{t('tabular.loading')}</p>;
