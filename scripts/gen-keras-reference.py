@@ -39,7 +39,7 @@ def main() -> None:
         "images": ["stripes", "gradient"],
         "features": np.round(features.astype(np.float64), 7).tolist(),
     }
-    OUT.write_text(json.dumps(data) + "\n", encoding="utf-8")
+    OUT.write_text(json.dumps(data) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {OUT}")
 
 
