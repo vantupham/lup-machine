@@ -7,6 +7,7 @@
     "label": "Main navigation",
     "home": "Home",
     "studio": "Model Studio",
+    "playground": "Playground",
     "about": "About & Privacy",
     "language": "Language",
     "switchTo": "Tiếng Việt",
@@ -524,5 +525,173 @@
     "reflect": "What did I learn from this lesson?",
     "footer": "LUP Machine – vantupham.github.io/lup-machine · Lesson content licensed CC BY 4.0.",
     "sampleNote": "Italic values in the tables are sample results from the verification run with MobileNetV2 (default settings). Students' machines may differ slightly, especially ±1 image in the confusion matrix."
+  },
+  "playground": {
+    "eyebrow": "Hand-written algorithms · step by step",
+    "title": "Algorithm Playground",
+    "lead": "Six core machine-learning algorithms on 2-D data so every step is visible. Written from scratch in TypeScript and cross-checked against scikit-learn.",
+    "back": "Algorithm Playground",
+    "exact": "Exact",
+    "algos": {
+      "knn": {
+        "name": "k-nearest neighbours (k-NN)",
+        "summary": "A new point takes the majority label of its k closest points.",
+        "concept": "neighbours · distance · small vs large k",
+        "intro": "k-NN learns no formula: it memorises all the data, then for each new point finds the k closest points (Euclidean distance) and lets them vote.",
+        "exactHint": "Coloured regions are the real k-NN result at the centre of each cell of a 30×30 grid; votes are real counts."
+      },
+      "decision-tree": {
+        "name": "Decision tree",
+        "summary": "A chain of yes/no questions cuts the plane into rectangles.",
+        "concept": "if–then rules · Gini / entropy · overfitting",
+        "intro": "At each node the computer tries every possible threshold on every feature and picks the question that makes the child groups purest (lowest Gini or entropy). Press \"Grow one node\" to watch the tree grow.",
+        "exactHint": "Coloured regions are the tree's real predictions at the centre of each cell of a 40×40 grid; thresholds, sample counts and impurity are real numbers."
+      },
+      "linear-regression": {
+        "name": "Linear regression",
+        "summary": "Drag a line yourself, then compare it with the computer's line by squared error.",
+        "concept": "loss function · least squares",
+        "intro": "The model is a line ŷ = w·x + b. \"Good\" means a small mean squared error (MSE). Each square's side is one error: the smaller the total area, the better the line.",
+        "exactHint": "MSE, the computer's line (least-squares solution) and the gradient-descent step are all real calculations."
+      },
+      "gradient-descent": {
+        "name": "Gradient descent",
+        "summary": "A ball rolls downhill on the loss surface; steps that are too long fly off.",
+        "concept": "optimisation · learning rate · local minima",
+        "intro": "The gradient ∇f points in the steepest uphill direction. Each step moves against it by an amount proportional to the learning rate η. This is how neural networks are trained.",
+        "exactHint": "The surface has an exact formula and derivative; every dot on the path is a real computed step."
+      },
+      "k-means": {
+        "name": "k-means clustering",
+        "summary": "No labels: cluster centres move until they stop.",
+        "concept": "unsupervised learning · centroids",
+        "intro": "k-means repeats two things: assign each point to its nearest centre, then move each centre to the mean of its points. The computer does not know the true labels, so the colours are clusters it found, not answers.",
+        "exactHint": "Each frame is a real step of Lloyd's algorithm; starting centres come from seeded k-means++."
+      },
+      "neural-network": {
+        "name": "Mini neural network",
+        "summary": "Add hidden layers to separate data that no straight line can.",
+        "concept": "hidden layers · activation functions · backpropagation",
+        "intro": "Each hidden neuron computes a weighted sum and passes it through an activation function. Combined, neurons can draw curved boundaries. Trained with gradient descent and backpropagation.",
+        "exactHint": "Coloured regions and per-neuron maps are the network's real outputs at each grid-cell centre; loss is the real mean cross-entropy."
+      }
+    },
+    "datasets": {
+      "blobs": "Three blobs",
+      "xor": "XOR (2×2 checkerboard)",
+      "circles": "Two nested circles",
+      "moons": "Two moons",
+      "spiral": "Two spirals"
+    },
+    "common": {
+      "dataset": "Dataset",
+      "noise": "Noise",
+      "className": "Class {{n}}",
+      "classToAdd": "Class of the next point",
+      "clickMode": "Clicking the plot will",
+      "modeAdd": "Add a data point",
+      "addHint": "Click the plot to add a point of the selected class.",
+      "clear": "Clear all points",
+      "reset": "Back to start",
+      "step": "One step",
+      "run": "Run",
+      "pause": "Pause",
+      "trainAccuracy": "Correct on training set",
+      "testAccuracy": "Correct on test set"
+    },
+    "knn": {
+      "plotLabel": "Data plane; coloured regions are the class k-NN predicts with k = {{k}}",
+      "k": "Number of neighbours k",
+      "kHint": "Small k: jagged boundary, easily fooled by one stray point. Large k: smooth boundary, but small classes get outvoted.",
+      "modeProbe": "Place the point to classify",
+      "probeHint": "Click the plot to place the point to classify; dashed lines connect it to its k nearest neighbours.",
+      "voteTitle": "Votes of the k neighbours",
+      "verdict": "The point is predicted as Class {{n}} ({{votes}}/{{k}} votes).",
+      "tieRule": "On a tie, the class with the smaller number wins (same as scikit-learn).",
+      "noQuery": "No point to classify yet."
+    },
+    "tree": {
+      "plotLabel": "Data plane; coloured regions are the class the decision tree predicts",
+      "maxDepth": "Maximum depth",
+      "criterion": "Impurity measure",
+      "gini": "Gini",
+      "entropy": "Entropy",
+      "restart": "Replant from the root",
+      "grow": "Grow one node",
+      "growStatus": "{{shown}}/{{total}} questions opened.",
+      "diagramTitle": "Decision tree",
+      "diagramLabel": "Decision tree diagram",
+      "nodeStats": "{{samples}} samples · impurity {{impurity}} · [{{counts}}]",
+      "yes": "yes →",
+      "no": "no →",
+      "depthChart": "Accuracy by maximum depth",
+      "depthAxis": "depth {{n}}",
+      "overfitHint": "Deeper trees memorise the training set (solid line rises), but the test set (dashed) can drop: that is overfitting."
+    },
+    "regression": {
+      "plotLabel": "Data points, your line (orange) and the computer's line (teal)",
+      "clickHint": "Click the plot to add points. Vertical segments are each point's error.",
+      "slope": "Slope w",
+      "intercept": "Intercept b",
+      "gdStep": "Let the computer fix one step (gradient descent, η = {{lr}})",
+      "showSquares": "Show error squares",
+      "showMachine": "Show the computer's line",
+      "userMse": "MSE of your line",
+      "machineMse": "MSE of computer's line",
+      "machineLine": "Computer's line: ŷ = {{w}}·x + ({{b}}). No straight line has a smaller MSE on this data.",
+      "mseHint": "MSE = mean of (y − ŷ)². Squaring punishes one big error much more than several small ones."
+    },
+    "gradient": {
+      "plotLabel": "Contour map of the loss surface {{formula}}; darker is lower",
+      "clickHint": "Click the plot to choose a starting point. ✕ marks the global minimum.",
+      "surface": "Loss surface",
+      "surfaces": {
+        "bowl": "Bowl",
+        "valley": "Narrow valley",
+        "two-minima": "Two pits"
+      },
+      "learningRate": "Learning rate η",
+      "stepTitle": "Step {{n}}",
+      "updateRule": "Next = (x, y) − {{lr}} × ∇f = ({{nx}}, {{ny}})",
+      "diverged": "The ball is higher than where it started: η is so large that each step jumps over the bottom and climbs higher.",
+      "lossChart": "Value of f at each step",
+      "lossSeries": "f − f(minimum)",
+      "stepAxis": "step {{n}}",
+      "viewNote": "The surface is seen from above (a contour map), like a topographic map."
+    },
+    "kmeans": {
+      "plotLabel": "Unlabelled data points and {{k}} cluster centres",
+      "unsupervisedNote": "The data has no labels. Try \"Two nested circles\" to see that k-means only finds round blob-shaped clusters.",
+      "k": "Number of clusters k",
+      "newInit": "Try other starting centres",
+      "initNote": "Starting centres chosen by k-means++ (seed {{seed}}). A different start can give a different result.",
+      "iteration": "Iteration {{n}}",
+      "phases": {
+        "init": "Start: place k centres. No point belongs to a cluster yet.",
+        "assign": "Assign: each point joins its nearest centre.",
+        "update": "Move: each centre moves to the mean of its cluster's points (dashed arrow)."
+      },
+      "inertia": "Sum of squared distances to centres = {{value}}",
+      "converged": "The centres no longer move: the algorithm stops (converged).",
+      "inertiaHint": "The sum of squared distances never increases between iterations, so the algorithm is guaranteed to stop."
+    },
+    "neural": {
+      "plotLabel": "Data plane; coloured regions are the class the network predicts (darker = more confident)",
+      "neuronsTitle": "What does each hidden neuron \"draw\"?",
+      "neuronsHint": "Each neuron's output over the whole plane: orange is positive, blue negative, pale near 0.",
+      "layerName": "Hidden layer {{n}}",
+      "neuronName": "L{{layer}}·N{{n}}",
+      "layers": "Hidden layers",
+      "neurons": "Neurons per layer",
+      "activation": "Activation function",
+      "reinit": "Re-initialise weights",
+      "stepN": "Train {{n}} steps",
+      "train": "Train",
+      "architecture": "Architecture: {{sizes}}",
+      "epoch": "Steps",
+      "lossChart": "Loss during training",
+      "lossAxis": "step {{n}}",
+      "fullBatchNote": "Each step uses all the data to compute the gradient (full-batch gradient descent). Try 1 neuron on \"Two nested circles\": the network can only draw a straight line."
+    }
   }
 }

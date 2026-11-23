@@ -7,6 +7,7 @@ import { rememberLanguage, type Language } from '@/i18n';
 const NAV_ITEMS = [
   { to: '/', key: 'nav.home', end: true },
   { to: '/studio', key: 'nav.studio', end: false },
+  { to: '/playground', key: 'nav.playground', end: false },
   { to: '/lessons', key: 'nav.lessons', end: false },
   { to: '/about', key: 'nav.about', end: false },
 ] as const;

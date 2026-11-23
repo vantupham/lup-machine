@@ -51,6 +51,13 @@ LUP Machine giúp học sinh tự huấn luyện mô hình học máy bằng d�
 - [x] 2 bộ ảnh thật có giấy phép mở, tuyển chọn thủ công, ghi công từng ảnh: hoa (cúc / hướng dương / hồng) và lá đậu (khỏe / đốm góc / gỉ sắt)
 - [x] Mô hình chạy trong Web Worker: giao diện luôn mượt, kể cả trên máy yếu (tự chuyển về luồng chính nếu trình duyệt không hỗ trợ)
 
+**Giai đoạn 3 – Sân chơi thuật toán & dữ liệu bảng (đang làm).** Đã có:
+
+- [x] Sân chơi thuật toán (`#/playground`) với 6 thuật toán tự cài đặt bằng TypeScript, chạy từng bước trên dữ liệu 2D: k-NN, cây quyết định (mọc từng nút, thấy quá khớp), hồi quy tuyến tính (tự kéo đường thẳng), gradient descent, k-means, mạng nơ-ron mini (xem từng nơ-ron "vẽ" gì)
+- [x] Kiểm thử đối chiếu với scikit-learn (`scripts/gen-reference-results.py`): k-NN, cây quyết định, hồi quy tuyến tính, k-means, một bước huấn luyện của mạng nơ-ron
+- [ ] Studio dữ liệu bảng (CSV)
+- [ ] Xuất notebook Colab
+
 ## Yêu cầu
 
 - **Người dùng:** Chrome hoặc Edge bản mới trên máy tính. Firefox và Safari dùng được phần lớn tính năng.
