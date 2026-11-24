@@ -5,8 +5,20 @@
  */
 import { centerCropBox, MODEL_INPUT_SIZE, type RgbaImage } from '@/core/image/preprocess';
 import type { StoredImage } from '@/storage/db';
+import { blurFacesOnCanvas } from './face-blur.browser';
+import { FaceBlurError } from './face-blur-error';
 
 const JPEG_QUALITY = 0.92;
+
+async function blurOrFail(ctx: CanvasRenderingContext2D, onFaces?: (count: number) => void): Promise<void> {
+  let count: number;
+  try {
+    count = await blurFacesOnCanvas(ctx);
+  } catch (error: unknown) {
+    throw new FaceBlurError('Không làm mờ được khuôn mặt', { cause: error });
+  }
+  onFaces?.(count);
+}
 const STORED_MIME = 'image/jpeg';
 
 export function createSquareCanvas(): { canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D } {
@@ -49,11 +61,19 @@ function drawCropped(
   ctx.restore();
 }
 
-export async function fileToStoredImage(file: Blob): Promise<StoredImage> {
+export interface CaptureOptions {
+  /** Làm mờ khuôn mặt trên khung 224×224 trước khi mã hóa; không làm mờ được thì ném lỗi (không lưu ảnh gốc). */
+  readonly blurFaces?: boolean;
+  /** Được gọi với số khuôn mặt đã làm mờ trong ảnh này (0: không thấy khuôn mặt nào). */
+  readonly onFaces?: (count: number) => void;
+}
+
+export async function fileToStoredImage(file: Blob, options: CaptureOptions = {}): Promise<StoredImage> {
   const bitmap = await createImageBitmap(file);
   try {
     const { canvas, ctx } = createSquareCanvas();
     drawCropped(ctx, bitmap, bitmap.width, bitmap.height, false);
+    if (options.blurFaces) await blurOrFail(ctx, options.onFaces);
     return await canvasToStoredImage(canvas);
   } finally {
     bitmap.close();
@@ -61,10 +81,11 @@ export async function fileToStoredImage(file: Blob): Promise<StoredImage> {
 }
 
 /** Chụp một khung hình webcam. Lật ngang để khớp với hình gương người dùng nhìn thấy. */
-export async function videoFrameToStoredImage(video: HTMLVideoElement): Promise<StoredImage> {
+export async function videoFrameToStoredImage(video: HTMLVideoElement, options: CaptureOptions = {}): Promise<StoredImage> {
   if (!video.videoWidth || !video.videoHeight) throw new Error('Webcam chưa sẵn sàng');
   const { canvas, ctx } = createSquareCanvas();
   drawCropped(ctx, video, video.videoWidth, video.videoHeight, true);
+  if (options.blurFaces) await blurOrFail(ctx, options.onFaces);
   return canvasToStoredImage(canvas);
 }
 

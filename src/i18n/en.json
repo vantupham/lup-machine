@@ -458,7 +458,8 @@
         "too-large": "over 10 MB",
         "empty": "empty file",
         "too-many": "over 100 files at once",
-        "decode": "unreadable image"
+        "decode": "unreadable image",
+        "blur": "could not blur faces, so not saved"
       }
     },
     "webcam": {
@@ -471,7 +472,9 @@
       "denied": "Camera permission was not granted. Click the lock icon in the address bar to allow it, then try again.",
       "unavailable": "No camera found or not supported. You can use \"Upload images\" instead.",
       "privacy": "Images are processed only on this device.",
-      "full": "This class already has {{max}} images."
+      "full": "This class already has {{max}} images.",
+      "blurError": "Could not blur faces, so this frame was not saved. Check your connection and try again, or turn blurring off.",
+      "snapError": "Could not capture the frame. Please try again."
     },
     "quality": {
       "title": "② Check data",
@@ -717,6 +720,12 @@
       "needMore": "UMAP needs at least {{count}} images with features.",
       "axis": "UMAP {{n}} (no unit)",
       "note": "UMAP with seed {{seed}}: the same data always gives the same map. Read only \"who is close to whom\"; do not measure distances."
+    },
+    "faceBlur": {
+      "label": "Blur faces before saving images",
+      "hint": "Protects your and your friends’ privacy: faces detected in uploaded or camera images are blurred right on this computer, and the unblurred image is never saved. Small, distant or side-on faces may be missed, so check your images after adding them. Turn this off if the project needs to see faces (e.g. recognising expressions).",
+      "blurred": "Blurred {{count}} face(s).",
+      "none": "No faces found to blur. If the images show people (especially far away or turned sideways), check them and delete if needed."
     }
   },
   "samples": {

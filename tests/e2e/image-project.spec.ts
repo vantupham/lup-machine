@@ -57,7 +57,8 @@ test('tải ảnh lên: cắt vuông giữa, thu về 224×224 và Kính hiển 
   await panel.getByRole('button', { name: 'Tải ảnh lên' }).click();
   await (await chooser).setFiles({ name: 'hai-mau.png', mimeType: 'image/png', buffer: png });
 
-  await expect(page.getByText(/Đã thêm 1 ảnh vào lớp "Lớp 1"/)).toBeVisible();
+  // lần đầu thêm ảnh phải tải mô hình làm mờ khuôn mặt (mặc định bật)
+  await expect(page.getByText(/Đã thêm 1 ảnh vào lớp "Lớp 1"/)).toBeVisible({ timeout: 30_000 });
   await panel.getByRole('button', { name: /Soi ảnh/ }).click();
 
   const dialog = page.getByRole('dialog', { name: /Kính hiển vi/ });
@@ -87,6 +88,9 @@ test('webcam: chụp ảnh và lưu vào lớp', async ({ page }) => {
   const snap = dialog.getByRole('button', { name: 'Chụp 1 ảnh' });
   await expect(snap).toBeEnabled({ timeout: 10_000 });
   await snap.click();
+  // nút khóa trong lúc xử lý khung đầu (lần đầu phải tải mô hình làm mờ khuôn mặt)
+  await expect(dialog.getByText('Đã chụp 1 ảnh')).toBeVisible({ timeout: 30_000 });
+  await expect(snap).toBeEnabled();
   await snap.click();
   await expect(dialog.getByText('Đã chụp 2 ảnh')).toBeVisible();
   await dialog.getByRole('button', { name: 'Xong' }).click();

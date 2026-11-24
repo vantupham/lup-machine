@@ -72,6 +72,7 @@ export const DATA_FLOW = {
   tips: [
     'Bài nộp mặc định không kèm ảnh, giọng nói gốc. Chỉ kèm khi thầy cô yêu cầu.',
     'Trước khi chụp ảnh hay ghi âm bạn bè, hãy xin phép. Ghi điều đó vào Thẻ mô hình.',
+    'Studio ảnh mặc định làm mờ khuôn mặt phát hiện được trước khi lưu ảnh. Máy có thể sót mặt nhỏ, ở xa: hãy xem lại ảnh. Chỉ tắt khi dự án thật sự cần nhìn khuôn mặt.',
     'Máy dùng chung ở phòng tin: xóa dự án khi làm xong, hoặc xuất tệp .lup để mang về.',
   ],
 } as const;

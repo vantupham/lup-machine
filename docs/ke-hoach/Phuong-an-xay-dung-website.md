@@ -466,7 +466,7 @@ Hằng tuần ─► Dependabot + CodeQL + npm audit
 | **2. Mở nắp sâu hơn** | 4–6 tuần | Grad-CAM, bản đồ đặc trưng CNN, chế độ học 2D (ranh giới chính xác), UMAP, đường đi phép tính, ngưỡng tin cậy, PWA ngoại tuyến | Chạy ngoại tuyến được ở phòng máy |
 | **3. Sân chơi thuật toán & dữ liệu bảng** | 4–6 tuần | k-NN, cây quyết định, hồi quy, gradient descent, k-means, mạng nơ-ron mini; Studio dữ liệu bảng; xuất notebook Colab | Kiểm thử đối chiếu scikit-learn đạt |
 | **4. Âm thanh, tư thế, văn bản tiếng Việt** | 6–8 tuần | 3 Studio còn lại kèm Inspector riêng (ảnh phổ, khung xương, trọng số từ) | |
-| **5. Lớp học & đạo đức** | 4–6 tuần | Gói bài tập / bài nộp, bảng chấm, rubric, chế độ trình chiếu; Ethics Lab, thẻ mô hình, làm mờ khuôn mặt | Một giáo viên tổ chức trọn một bài kiểm tra |
+| **5. Lớp học & đạo đức** | 4–6 tuần | Gói bài tập / bài nộp, bảng chấm, rubric, chế độ trình chiếu; Ethics Lab, thẻ mô hình, làm mờ khuôn mặt (**đã xong**, PR #29–#35) | Một giáo viên tổ chức trọn một bài kiểm tra |
 | **6. Khối lệnh & phần cứng** | 4 tuần | Blockly, Web Serial / BLE, firmware mẫu | |
 | **7. Hoàn thiện & cộng đồng** | liên tục | Đủ bài học lớp 6–12, giáo án, thẩm định, thí điểm diện rộng, hướng dẫn đóng góp | Phiên bản 1.0 |
 

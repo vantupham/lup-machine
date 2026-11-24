@@ -36,7 +36,8 @@ async function upload(page: Page, className: string, buffers: Buffer[]) {
   const chooser = page.waitForEvent('filechooser');
   await panel.getByRole('button', { name: 'Tải ảnh lên' }).click();
   await (await chooser).setFiles(buffers.map((buffer, i) => ({ name: `${className}-${i}.png`, mimeType: 'image/png', buffer })));
-  await expect(page.getByText(new RegExp(`Đã thêm ${buffers.length} ảnh vào lớp "${className}"`))).toBeVisible();
+  // lần đầu thêm ảnh phải tải mô hình làm mờ khuôn mặt (mặc định bật), sau đó mỗi ảnh còn phải dò khuôn mặt
+  await expect(page.getByText(new RegExp(`Đã thêm ${buffers.length} ảnh vào lớp "${className}"`))).toBeVisible({ timeout: 60_000 });
 }
 
 test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu diễn → huấn luyện → đánh giá', async ({ page }) => {
