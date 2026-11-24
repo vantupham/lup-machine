@@ -24,7 +24,7 @@ describe('nâng cấp cơ sở dữ liệu', () => {
     expect(await db.classes.where('projectId').equals('p1').count()).toBe(1);
     await db.modelCards.put({ projectId: 'p1', fields: {}, updatedAt: '2026-11-23T00:00:00.000Z' });
     expect(await db.modelCards.count()).toBe(1);
-    expect(db.verno).toBe(9);
+    expect(db.verno).toBe(10);
     await db.delete();
   });
 });

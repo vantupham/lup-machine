@@ -188,7 +188,8 @@ Nhập nhiều tệp bài nộp ←───────────────
   - `.lupa` là zip gồm `manifest.json`, `assignment.json` (đề, câu hỏi, rubric) và `project.lup` tùy chọn;
   - `.lups` là zip gồm `manifest.json`, `submission.json` (đề, học sinh, câu trả lời, số liệu) và `project.lup`;
   - bài nộp mặc định không kèm dữ liệu gốc;
-  - chỉ nộp được khi thẻ mô hình đã điền đủ.
+  - chỉ nộp được khi thẻ mô hình đã điền đủ;
+  - giáo viên nhận nhiều `.lups` cùng lúc, chấm theo rubric và xuất bảng điểm `.xlsx`.
 - **Chế độ trình chiếu:** chữ to, ẩn chi tiết phụ, có con trỏ laser.
 - **Kho giáo án:** tải giáo án dạng DOCX/PDF kèm gói bài tập tương ứng.
 - **Giai đoạn sau (tùy chọn):** lớp học trực tuyến theo thời gian thực qua backend riêng (Supabase/Firebase) do nhà trường tự triển khai. Tính năng này nằm ngoài bản GitHub Pages mặc định.

@@ -11,8 +11,7 @@ import { ClassroomFileError } from './errors';
  */
 export { ClassroomFileError };
 
-export const ASSIGNMENT_FILE_EXTENSION = '.lupa';
-export const SUBMISSION_FILE_EXTENSION = '.lups';
+export { ASSIGNMENT_FILE_EXTENSION, SUBMISSION_FILE_EXTENSION } from './extensions';
 
 const FILES = { manifest: 'manifest.json', assignment: 'assignment.json', submission: 'submission.json', project: 'project.lup' } as const;
 const JSON_MAX_BYTES = 1024 * 1024;

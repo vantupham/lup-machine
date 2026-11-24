@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { ExactBadge } from '@/ui/ExactBadge';
+import { floorPercent } from '@/core/percent';
 import type { ModelCardFacts } from './facts';
 
-/** Làm tròn xuống: 99,6% vẫn hiện 99%, không bao giờ hiện 100% khi mô hình chưa đúng hết. */
-const percent = (x: number) => Math.floor(x * 100 + 1e-9);
+const percent = floorPercent;
 
 interface FactsPanelProps {
   readonly facts: ModelCardFacts;
