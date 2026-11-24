@@ -190,7 +190,7 @@ Nhập nhiều tệp bài nộp ←───────────────
   - bài nộp mặc định không kèm dữ liệu gốc;
   - chỉ nộp được khi thẻ mô hình đã điền đủ;
   - giáo viên nhận nhiều `.lups` cùng lúc, chấm theo rubric và xuất bảng điểm `.xlsx`.
-- **Chế độ trình chiếu:** chữ to, ẩn chi tiết phụ, có con trỏ laser.
+- **Chế độ trình chiếu** (đã làm ở giai đoạn 5): chữ to (4 cỡ), ẩn chi tiết phụ, có con trỏ laser, phím tắt `+ − L F Esc`.
 - **Kho giáo án:** tải giáo án dạng DOCX/PDF kèm gói bài tập tương ứng.
 - **Giai đoạn sau (tùy chọn):** lớp học trực tuyến theo thời gian thực qua backend riêng (Supabase/Firebase) do nhà trường tự triển khai. Tính năng này nằm ngoài bản GitHub Pages mặc định.
 

@@ -4,6 +4,16 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Chế độ trình chiếu – giai đoạn 5)
+
+- Nút **Trình chiếu** trên thanh đầu trang, để giáo viên chiếu lên màn hình lớp:
+  - **chữ to**: phóng toàn bộ trang theo 4 cỡ (112,5 / 125 / 150 / 175%), mặc định 125%, nhớ cỡ đã chọn cho lần sau;
+  - **ẩn chi tiết phụ**: thanh điều hướng, chân trang, các dòng gợi ý chữ nhỏ;
+  - nội dung giãn hết bề ngang.
+- **Con trỏ laser**: chấm đỏ phát sáng đi theo chuột và ẩn con trỏ chuột.
+- **Thanh điều khiển** nhỏ ở góc: A− / A+, Laser, Toàn màn hình, Thoát.
+- **Phím tắt:** `+` / `−` đổi cỡ chữ, `L` bật tắt laser, `F` toàn màn hình, `Esc` thoát. Phím tắt không chạy khi đang gõ trong ô nhập.
+
 ### Thêm (Chấm bài ở Góc giáo viên – giai đoạn 5)
 
 - Góc giáo viên có hai tab **Tạo bài tập** và **Chấm bài** (`#/giao-vien?tab=cham-bai`).

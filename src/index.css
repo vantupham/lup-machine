@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Chế độ trình chiếu (giáo viên chiếu lên màn hình lớp): dùng "presentation:hidden" để ẩn chi tiết phụ. */
+@custom-variant presentation (&:where([data-presentation='on'], [data-presentation='on'] *));
+
 /*
  * Hướng thiết kế: "Sổ tay phòng thí nghiệm".
  * Nền giấy kẻ ô, mực xanh, tiêu đề chữ có chân, số liệu chữ đơn cách.
@@ -130,6 +133,34 @@ body {
   .mark {
     background: linear-gradient(transparent 55%, var(--color-highlight) 55%);
   }
+}
+
+/*
+ * Trình chiếu: chữ phóng to qua cỡ chữ gốc (đặt bằng JS), ẩn dòng gợi ý chữ nhỏ màu nhạt
+ * (chi tiết phụ, ở xa khó đọc), con trỏ laser thay cho con trỏ chuột.
+ */
+/* Không bao giờ ẩn thông báo lỗi / trạng thái, kể cả khi chúng dùng chữ nhỏ màu nhạt. */
+[data-presentation='on'] main .text-xs.text-muted:not([role='alert'], [role='status'], [aria-live]) {
+  display: none;
+}
+
+[data-laser='on'],
+[data-laser='on'] *:not([data-presentation-bar], [data-presentation-bar] *) {
+  cursor: none !important;
+}
+
+.laser-pointer {
+  position: fixed;
+  left: -9px;
+  top: -9px;
+  z-index: 60;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, #fff 0 18%, #ff2d2d 30% 55%, rgb(255 45 45 / 0) 72%);
+  box-shadow: 0 0 14px 6px rgb(255 45 45 / 0.55);
 }
 
 /*

@@ -1507,5 +1507,16 @@
       "contributionHint": "Trên khung xương: cam là khớp đẩy về nhóm \"{{cls}}\", xanh là kéo ra xa; chấm càng to ảnh hưởng càng lớn. Điểm so với trung bình các nhóm = {{base}} (phần cố định) + tổng các khớp = {{total}}.",
       "neighbors": "{{k}} mẫu Dạy gần nhất thuộc các nhóm: {{labels}}."
     }
+  },
+  "presentation": {
+    "enter": "Trình chiếu",
+    "enterHint": "Chiếu lên màn hình lớp: chữ to, ẩn chi tiết phụ, có con trỏ laser",
+    "bar": "Điều khiển trình chiếu",
+    "smaller": "Chữ nhỏ hơn (phím −)",
+    "bigger": "Chữ to hơn (phím +)",
+    "size": "{{percent}}%",
+    "laser": "Laser (L)",
+    "fullscreen": "Toàn màn hình (F)",
+    "exit": "Thoát (Esc)"
   }
 }
