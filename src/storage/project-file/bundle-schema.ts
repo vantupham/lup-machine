@@ -13,6 +13,7 @@ export const BUNDLE_FILES = {
   tableCsv: 'table.csv',
   table: 'table.json',
   runs: 'runs.json',
+  modelCard: 'model-card.json',
 } as const;
 
 export const MAX_BUNDLE_CLASSES = 50;

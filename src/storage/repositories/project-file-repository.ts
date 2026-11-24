@@ -10,6 +10,8 @@ import { createDexieAudioRepository } from './audio-repository';
 import { createDexiePoseRepository } from './pose-repository';
 import { createDexieTableRepository } from './table-repository';
 import { createDexieExperimentRepository } from './experiment-repository';
+import { createDexieModelCardRepository } from './model-card-repository';
+import { pickModelCardFields } from '../schemas/model-card';
 import type { RepositoryDeps } from './project-repository';
 
 export interface ExportedProjectFile {
@@ -39,6 +41,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
   const poses = createDexiePoseRepository(db);
   const tables = createDexieTableRepository(db);
   const experiments = createDexieExperimentRepository(db);
+  const modelCards = createDexieModelCardRepository(db);
 
   const readBundle = async (project: ProjectRecord): Promise<ProjectBundle> => {
     const classes = await dataset.listClasses(project.id);
@@ -51,6 +54,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
     const samples = await dataset.listSamples(project.id);
     const fingerprint = datasetFingerprint(classes.map((c) => c.id), samples);
     const table = await tables.get(project.id);
+    const card = await modelCards.get(project.id);
     return {
       manifest: {
         formatVersion: CURRENT_FORMAT_VERSION,
@@ -90,6 +94,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
           metrics: run.metrics,
           matchesData: run.fingerprint === fingerprint,
         })),
+      modelCard: card ? pickModelCardFields(card) : null,
     };
   };
 
@@ -150,7 +155,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
     }));
     const table: TableRecord | null = bundle.table ? { projectId: project.id, ...bundle.table, updatedAt: timestamp } : null;
 
-    await db.transaction('rw', [db.projects, db.classes, db.samples, db.audioClips, db.poseSamples, db.dataTables, db.runs], async () => {
+    await db.transaction('rw', [db.projects, db.classes, db.samples, db.audioClips, db.poseSamples, db.dataTables, db.runs, db.modelCards], async () => {
       await db.projects.add(project);
       await db.classes.bulkAdd(classes);
       await db.samples.bulkAdd(samples);
@@ -158,6 +163,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
       await db.poseSamples.bulkAdd(poseRecords);
       await db.runs.bulkAdd(runs);
       if (table) await db.dataTables.add(table);
+      if (bundle.modelCard) await db.modelCards.add({ projectId: project.id, fields: bundle.modelCard, updatedAt: timestamp });
     });
     return project;
   };

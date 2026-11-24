@@ -118,6 +118,13 @@ export interface PoseSampleRecord {
   readonly seq: number;
 }
 
+/** Thẻ mô hình của một dự án; `fields` được kiểm tra bằng zod khi đọc. */
+export interface ModelCardRecord {
+  readonly projectId: string;
+  readonly fields: unknown;
+  readonly updatedAt: string;
+}
+
 export const DEFAULT_DB_NAME = 'lup-machine';
 
 /** Cơ sở dữ liệu IndexedDB cục bộ. Dữ liệu chỉ nằm trên máy người dùng. */
@@ -130,6 +137,7 @@ export class LupDatabase extends Dexie {
   dataTables!: EntityTable<TableRecord, 'projectId'>;
   audioClips!: EntityTable<AudioClipRecord, 'id'>;
   poseSamples!: EntityTable<PoseSampleRecord, 'id'>;
+  modelCards!: EntityTable<ModelCardRecord, 'projectId'>;
 
   constructor(name: string = DEFAULT_DB_NAME) {
     super(name);
@@ -180,6 +188,17 @@ export class LupDatabase extends Dexie {
       dataTables: 'projectId',
       audioClips: 'id, projectId, classId',
       poseSamples: 'id, projectId, classId',
+    });
+    this.version(8).stores({
+      projects: 'id, updatedAt',
+      classes: 'id, projectId',
+      samples: 'id, projectId, classId',
+      features: '[sampleId+modelId], sampleId, projectId',
+      runs: 'id, projectId',
+      dataTables: 'projectId',
+      audioClips: 'id, projectId, classId',
+      poseSamples: 'id, projectId, classId',
+      modelCards: 'projectId',
     });
   }
 }

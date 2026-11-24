@@ -96,6 +96,69 @@
     "importError": "Could not open the file: {{message}}",
     "tooLarge": "the file is larger than {{mb}} MB"
   },
+  "modelCard": {
+    "title": "Model card",
+    "lead": "Answer 5 questions so others understand your model: what it is for, what data it learned from, how good it is and when not to trust it. The card travels with the .lup file and your submission.",
+    "backToProject": "← Back to project",
+    "authors": "Made by",
+    "authorsPlaceholder": "Your name or group name (optional)",
+    "fields": {
+      "purpose": {
+        "label": "1. What is the model for?",
+        "hint": "Example: sorting rubbish into paper, plastic and metal to use the right bin.",
+        "short": "purpose"
+      },
+      "data": {
+        "label": "2. Where does the data come from?",
+        "hint": "Who collected it, where, how many samples? Did you ask permission from people in the photos or recordings?",
+        "short": "data source"
+      },
+      "performance": {
+        "label": "3. How well does the model work?",
+        "hint": "Write the accuracy on the Test data and which groups get confused (see the Evaluate step).",
+        "short": "accuracy"
+      },
+      "limitations": {
+        "label": "4. When does the model tend to fail?",
+        "hint": "Example: dark photos, unusual backgrounds, other accents, ages or skin tones missing from the data.",
+        "short": "when it fails"
+      },
+      "misuse": {
+        "label": "5. Do not use this model to…",
+        "hint": "Tasks where a wrong guess would harm someone or be unfair to them.",
+        "short": "do not use for"
+      }
+    },
+    "factsTitle": "Automatic facts",
+    "factsNote": "Read directly from the project, so they are exact. Use them for questions 2 and 3.",
+    "factsType": "Project type: {{type}}",
+    "factsClass": "{{name}}: {{count}} samples",
+    "factsClassSplit": "{{name}}: {{count}} images (Train {{train}} · Test {{test}})",
+    "factsNoClasses": "No groups yet.",
+    "factsTable": "Data table: {{rows}} rows × {{columns}} columns",
+    "factsNoTable": "No data table yet.",
+    "factsRun": "Latest training run (#{{number}}, {{epochs}} epochs): {{train}}% correct on Train, {{test}}% on Test.",
+    "factsRunNoTest": "Latest training run (#{{number}}, {{epochs}} epochs): {{train}}% correct on Train (no Test images).",
+    "factsNoRun": "Not trained yet.",
+    "factsMeasureHint": "Accuracy: see the project's Evaluate step, then write it in question 3.",
+    "save": "Save card",
+    "saving": "Saving…",
+    "saved": "Model card saved.",
+    "saveError": "Could not save: {{message}}",
+    "unsaved": "You have unsaved changes.",
+    "complete": "All 5 questions answered.",
+    "missing": "Missing: {{fields}}.",
+    "print": "Print card",
+    "printHeading": "Model card: {{name}}",
+    "noAnswer": "(not answered)",
+    "updatedAt": "Updated {{date}}",
+    "linkComplete": "Model card · complete",
+    "linkIncomplete": "Model card · incomplete",
+    "factsExact": "Exact",
+    "factsExactHint": "Counted directly from the project's stored data and training log.",
+    "loading": "Loading model card…",
+    "factsRunOutdated": "The data changed after this training run (images added / removed or moved). Train again before writing down the accuracy."
+  },
   "about": {
     "title": "About & Privacy",
     "whatTitle": "What is LUP Machine?",

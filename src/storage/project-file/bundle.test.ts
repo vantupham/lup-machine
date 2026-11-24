@@ -12,7 +12,7 @@ function manifest(projectType: ProjectBundle['manifest']['projectType']): Projec
 }
 
 function empty(projectType: ProjectBundle['manifest']['projectType']): ProjectBundle {
-  return { manifest: manifest(projectType), classes: [], images: [], clips: [], poses: [], table: null, runs: [] };
+  return { manifest: manifest(projectType), classes: [], images: [], clips: [], poses: [], table: null, runs: [], modelCard: null };
 }
 
 const credit = { author: 'A. Tác giả', source: 'https://example.org/a', license: 'CC BY 2.0', licenseUrl: 'https://creativecommons.org/licenses/by/2.0/' };
@@ -65,6 +65,20 @@ describe('tệp dự án .lup', () => {
   test('cấu trúc bên trong: manifest, classes, ảnh trong samples/', () => {
     const files = unzipSync(encodeBundle(imageBundle));
     expect(Object.keys(files).sort()).toEqual(['classes.json', 'images.json', 'manifest.json', 'runs.json', 'samples/00001.jpg', 'samples/00002.png']);
+  });
+
+  test('thẻ mô hình đi kèm mọi loại dự án', () => {
+    const modelCard = { authors: 'Nhóm 2', purpose: 'Phân loại', data: 'Tự chụp', performance: '9/10', limitations: 'Ảnh tối', misuse: 'Chấm điểm' };
+    for (const type of ['image', 'text'] as const) {
+      const bytes = encodeBundle({ ...empty(type), modelCard });
+      expect(Object.keys(unzipSync(bytes))).toContain('model-card.json');
+      expect(decodeBundle(bytes).modelCard).toEqual(modelCard);
+    }
+    expect(Object.keys(unzipSync(encodeBundle(empty('pose'))))).not.toContain('model-card.json');
+    const broken = rezip(encodeBundle({ ...empty('pose'), modelCard }), (files) => {
+      files['model-card.json'] = strToU8(JSON.stringify({ ...modelCard, purpose: 'x'.repeat(1001) }));
+    });
+    expect(() => decodeBundle(broken)).toThrow(/model-card\.json/);
   });
 
   test('dự án âm thanh: giữ đúng từng mẫu âm thanh qua tệp WAV', () => {

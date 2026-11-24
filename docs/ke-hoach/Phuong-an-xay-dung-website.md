@@ -298,13 +298,14 @@ project.lup (zip)
 ├── audio.json + audio/← đoạn 1 giây, WAV một kênh 16 kHz, số thực 32 bit
 ├── poses.json         ← chỉ tọa độ khớp (không có ảnh)
 ├── table.csv + table.json ← dự án bảng / văn bản: CSV gốc và cấu hình
-└── runs.json          ← nhật ký mỗi lần huấn luyện (cấu hình, seed, chỉ số)
+├── runs.json          ← nhật ký mỗi lần huấn luyện (cấu hình, seed, chỉ số)
+└── model-card.json    ← thẻ mô hình học sinh đã viết (nếu có)
 ```
 
 - Vector đặc trưng **không** đưa vào tệp (trình duyệt tính lại được); mô hình không lưu trọng số vì huấn luyện lại với cùng seed cho đúng kết quả cũ.
 - Mọi tệp nhập vào đều được **xác thực bằng Zod**; ảnh được kiểm tra đúng là JPEG/PNG, WAV đúng định dạng.
 - Giới hạn kích thước tệp, số tệp và kích thước giải nén (chống "zip bomb"); chỉ đọc những tên tệp đã biết.
-- Có trường `formatVersion` để **chuyển đổi phiên bản (migration)** khi định dạng thay đổi. Thẻ mô hình (`model-card.json`) được bổ sung ở giai đoạn 5.
+- Có trường `formatVersion` để **chuyển đổi phiên bản (migration)** khi định dạng thay đổi.
 
 ### 5.5. Hiệu năng và yêu cầu thiết bị
 

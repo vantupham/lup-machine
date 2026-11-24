@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { textNotebook } from '@/core/export/text-notebook';
@@ -75,6 +76,7 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
         <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
         <p className="font-mono text-xs uppercase text-accent">{t('studio.types.text')}</p>
         <h1 className="font-display text-4xl font-bold">{state.project.name}</h1>
+        <ModelCardLink projectId={projectId} />
         <p className="max-w-3xl text-muted">{t('text.lead')}</p>
         {saveError && <p role="alert" className="text-sm text-danger">{saveError}</p>}
       </header>

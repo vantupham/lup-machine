@@ -10,6 +10,7 @@ import { LessonPage } from '@/features/lessons/LessonPage';
 import { WorksheetPage } from '@/features/lessons/WorksheetPage';
 import { PlaygroundPage } from '@/features/playground/PlaygroundPage';
 import { PlaygroundAlgoPage } from '@/features/playground/PlaygroundAlgoPage';
+import { ModelCardPage } from '@/features/model-card/ModelCardPage';
 
 export function AppRoutes() {
   return (
@@ -18,6 +19,7 @@ export function AppRoutes() {
         <Route index element={<HomePage />} />
         <Route path="studio" element={<StudioPage />} />
         <Route path="studio/:projectId" element={<ProjectRouter />} />
+        <Route path="studio/:projectId/the-mo-hinh" element={<ModelCardPage />} />
         <Route path="playground" element={<PlaygroundPage />} />
         <Route path="playground/:algo" element={<PlaygroundAlgoPage />} />
         <Route path="lessons" element={<LessonsPage />} />
