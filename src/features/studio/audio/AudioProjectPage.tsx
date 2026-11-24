@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
+import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { prepareVectors } from '@/core/ml/vector-classifier';
@@ -45,6 +46,7 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
         <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
         <p className="font-mono text-xs uppercase text-accent">{t('studio.types.audio')}</p>
         <h1 className="font-display text-4xl font-bold">{state.project.name}</h1>
+        <AssignmentBanner projectId={projectId} />
         <ModelCardLink projectId={projectId} />
         <p className="max-w-3xl text-muted">{t('audio.lead')}</p>
       </header>

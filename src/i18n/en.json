@@ -11,7 +11,8 @@
     "about": "About & Privacy",
     "language": "Language",
     "switchTo": "Tiếng Việt",
-    "lessons": "Lessons"
+    "lessons": "Lessons",
+    "teacher": "Teacher corner"
   },
   "mode": {
     "label": "Learning mode",
@@ -87,14 +88,15 @@
     "exportLabel": "Export project file {{name}}",
     "exporting": "Exporting…",
     "exportError": "Could not export: {{message}}",
-    "importTitle": "Open a project file",
-    "importLead": "Projects are only stored in this browser. Click \"Export .lup\" to move a project to another computer, send it to your teacher or keep a copy, then open the file here.",
-    "importLabel": "Choose a .lup file",
+    "importTitle": "Open a project or assignment file",
+    "importLead": "Projects are only stored in this browser. Click \"Export .lup\" to move a project to another computer, send it to your teacher or keep a copy, then open the file here. Your teacher's assignment packages (.lupa) open here too.",
+    "importLabel": "Choose a .lup or .lupa file",
     "importing": "Opening file…",
     "imported": "Opened project \"{{name}}\".",
     "openImported": "Open project",
     "importError": "Could not open the file: {{message}}",
-    "tooLarge": "the file is larger than {{mb}} MB"
+    "tooLarge": "the file is larger than {{mb}} MB",
+    "importedAssignment": "Opened assignment \"{{name}}\"."
   },
   "modelCard": {
     "title": "Model card",
@@ -158,6 +160,96 @@
     "factsExactHint": "Counted directly from the project's stored data and training log.",
     "loading": "Loading model card…",
     "factsRunOutdated": "The data changed after this training run (images added / removed or moved). Train again before writing down the accuracy."
+  },
+  "classroom": {
+    "teacher": {
+      "title": "Teacher corner",
+      "lead": "Create an assignment package and send it to students via chat, Drive, USB or your learning platform. No accounts, no server: students open the package in the Model Studio, do the work and send back a submission file."
+    },
+    "create": {
+      "title": "Create an assignment (.lupa)",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Example: Teach a computer to sort rubbish",
+      "teacherLabel": "Teacher",
+      "teacherPlaceholder": "Your name (optional)",
+      "typeLabel": "Project type",
+      "instructionsLabel": "Instructions",
+      "instructionsPlaceholder": "Task, data requirements, deadline…",
+      "questionsTitle": "Lab sheet questions",
+      "questionsHint": "Students must answer all of them before submitting. Up to {{max}} questions.",
+      "questionLabel": "Question {{n}}",
+      "addQuestion": "+ Add question",
+      "removeQuestion": "Remove question {{n}}",
+      "rubricTitle": "Grading rubric",
+      "rubricTotal": "Total: {{total}} points",
+      "criterionLabel": "Criterion {{n}}",
+      "descriptionLabel": "Criterion {{n}} description",
+      "pointsLabel": "Criterion {{n}} max points",
+      "addCriterion": "+ Add criterion",
+      "removeCriterion": "Remove criterion {{n}}",
+      "starterLabel": "Starter project",
+      "starterNone": "None, students start from an empty project",
+      "starterHint": "The starter project's data and groups are included; your model card is not.",
+      "download": "Download assignment (.lupa)",
+      "creating": "Creating…",
+      "created": "Created {{file}}. Send this file to your students.",
+      "error": "Could not create the package: {{message}}",
+      "titleRequired": "Please give the assignment a title.",
+      "criterionRequired": "Every criterion needs a name.",
+      "questionRequired": "Questions cannot be empty."
+    },
+    "defaultRubric": {
+      "dataName": "Data",
+      "dataDescription": "Enough samples, balanced groups, permission asked for photos or voices",
+      "modelName": "Training and evaluation",
+      "modelDescription": "Train / Test split used, accuracy recorded, confused groups explained",
+      "cardName": "Model card and lab sheet",
+      "cardDescription": "Honest answers, limitations and responsible use described"
+    },
+    "banner": {
+      "label": "Assignment",
+      "by": "Teacher: {{teacher}}",
+      "open": "Work and submit →"
+    },
+    "assignment": {
+      "loading": "Loading assignment…",
+      "notLinked": "This project is not linked to an assignment.",
+      "back": "← Back to project",
+      "eyebrow": "Assignment",
+      "instructions": "Instructions",
+      "noInstructions": "(No instructions given.)",
+      "rubric": "Grading rubric",
+      "criterion": "Criterion",
+      "points": "Max points",
+      "total": "Total",
+      "questions": "Lab sheet",
+      "noQuestions": "This assignment has no questions.",
+      "saveAnswers": "Save answers",
+      "savingAnswers": "Saving…",
+      "savedAnswers": "Answers saved.",
+      "saveError": "Could not save: {{message}}",
+      "unsaved": "Some answers are not saved.",
+      "submitTitle": "Submit",
+      "studentsLabel": "Student name(s)",
+      "studentsPlaceholder": "Example: An Nguyen, Binh Tran",
+      "classLabel": "Class",
+      "includeData": "Include the original data (images, audio, data table…)",
+      "includeDataHint": "Not included by default to protect privacy. The submission still has sample counts, training log, model card and answers. Only tick this if your teacher asks.",
+      "checklist": "Before submitting",
+      "blockers": {
+        "students": "Write the student name(s).",
+        "model-card": "Complete the Model card.",
+        "answers": "Answer and save all questions.",
+        "unsaved-answers": "Save your answers before submitting."
+      },
+      "ready": "Ready to submit.",
+      "openModelCard": "Open Model card",
+      "download": "Download submission (.lups)",
+      "submitting": "Creating submission…",
+      "submitted": "Created {{file}}. Send this file to your teacher.",
+      "submitError": "Could not create the submission: {{message}}",
+      "checkError": "Could not check the submission requirements. Please reload the page."
+    }
   },
   "about": {
     "title": "About & Privacy",

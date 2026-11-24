@@ -117,13 +117,14 @@ function ModelCardEditor({ project, facts, saved, updatedAt, onSaved }: EditorPr
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px] print:block">
         <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5 print:hidden" aria-label={t('modelCard.title')}>
-          {/* Khóa ô nhập khi đang lưu: chữ gõ thêm lúc này sẽ không bị bản vừa lưu ghi đè. */}
-          <fieldset disabled={isSaving} className="space-y-5">
+          {/* Chỉ đọc khi đang lưu: chữ gõ thêm không bị bản vừa lưu ghi đè, mà con trỏ vẫn ở nguyên ô. */}
+          <div className="space-y-5">
             <div>
               <label htmlFor="model-card-authors" className="mb-1 block font-medium">{t('modelCard.authors')}</label>
               <input
                 id="model-card-authors"
                 value={draft.authors}
+              readOnly={isSaving}
                 maxLength={MODEL_CARD_AUTHORS_MAX_LENGTH}
                 placeholder={t('modelCard.authorsPlaceholder')}
                 onChange={(e) => update('authors', e.target.value)}
@@ -138,6 +139,7 @@ function ModelCardEditor({ project, facts, saved, updatedAt, onSaved }: EditorPr
                   id={`model-card-${field}`}
                   aria-describedby={`model-card-${field}-hint`}
                   value={draft[field]}
+                readOnly={isSaving}
                   maxLength={MODEL_CARD_TEXT_MAX_LENGTH}
                   rows={3}
                   onChange={(e) => update(field, e.target.value)}
@@ -145,7 +147,7 @@ function ModelCardEditor({ project, facts, saved, updatedAt, onSaved }: EditorPr
                 />
               </div>
             ))}
-          </fieldset>
+          </div>
           <div className="flex flex-wrap items-center gap-3">
             <button type="submit" className="btn btn-primary" disabled={isSaving || !isDirty}>
               {isSaving ? t('modelCard.saving') : t('modelCard.save')}

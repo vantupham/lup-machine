@@ -4,6 +4,31 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Gói bài tập .lupa và bài nộp .lups – giai đoạn 5)
+
+- **Góc giáo viên** (`#/giao-vien`, có trên thanh điều hướng): tạo **gói bài tập `.lupa`** gồm:
+  - tên bài, giáo viên, loại dự án, đề bài;
+  - tối đa 10 câu hỏi phiếu thí nghiệm;
+  - **rubric** (tiêu chí, mô tả, điểm tối đa; mặc định 3 tiêu chí / 10 điểm);
+  - tùy chọn kèm **dự án mẫu** (dữ liệu và các lớp; không kèm thẻ mô hình của giáo viên).
+- **Học sinh** mở gói `.lupa` ở Xưởng mô hình (cùng chỗ mở `.lup`):
+  - gói tạo thành một dự án mới gắn với bài tập;
+  - đầu trang dự án có dải "Bài tập";
+  - trang làm bài (`#/studio/:id/bai-tap`) có đề bài, rubric, phiếu thí nghiệm (lưu câu trả lời) và **nộp bài**.
+- **Bài nộp `.lups`** gồm:
+  - bản sao đề bài, họ tên học sinh, lớp;
+  - câu trả lời;
+  - số liệu tự động (số mẫu mỗi nhóm, lần huấn luyện gần nhất);
+  - dự án kèm nhật ký và thẻ mô hình.
+- **Chỉ nộp được khi:** có họ tên, **thẻ mô hình đã điền đủ** và đã trả lời hết câu hỏi. Danh sách "Trước khi nộp" chỉ rõ còn thiếu gì.
+- **Mặc định KHÔNG kèm dữ liệu gốc** (ảnh, âm thanh, bảng) để bảo vệ quyền riêng tư; học sinh tick để kèm khi thầy cô yêu cầu.
+- Tệp `.lupa` / `.lups` được kiểm tra như tệp không tin cậy:
+  - giới hạn kích thước và tên tệp bên trong;
+  - Zod cho đề bài, bài nộp và manifest;
+  - dự án lồng bên trong được kiểm tra như tệp `.lup`, và phải đúng loại dự án của bài tập;
+  - mở nhầm loại tệp thì báo rõ.
+- IndexedDB phiên bản 9 (bảng `assignments`). Mở gói là một giao dịch: lỗi giữa chừng không để lại dự án dở dang.
+
 ### Thêm (Thẻ mô hình – giai đoạn 5)
 
 - **Thẻ mô hình** cho mọi loại dự án (`#/studio/:id/the-mo-hinh`): học sinh trả lời 5 câu hỏi (mô hình dùng để làm gì, dữ liệu lấy từ đâu, làm tốt đến đâu, khi nào dễ sai, không nên dùng để làm gì) và ghi tên người làm. Có gợi ý cho từng câu, trạng thái "còn thiếu", nút lưu và **bản in** gọn (chỉ câu trả lời và số liệu).

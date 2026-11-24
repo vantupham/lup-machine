@@ -11,6 +11,8 @@ import { WorksheetPage } from '@/features/lessons/WorksheetPage';
 import { PlaygroundPage } from '@/features/playground/PlaygroundPage';
 import { PlaygroundAlgoPage } from '@/features/playground/PlaygroundAlgoPage';
 import { ModelCardPage } from '@/features/model-card/ModelCardPage';
+import { AssignmentPage } from '@/features/classroom/AssignmentPage';
+import { TeacherPage } from '@/features/classroom/TeacherPage';
 
 export function AppRoutes() {
   return (
@@ -20,6 +22,8 @@ export function AppRoutes() {
         <Route path="studio" element={<StudioPage />} />
         <Route path="studio/:projectId" element={<ProjectRouter />} />
         <Route path="studio/:projectId/the-mo-hinh" element={<ModelCardPage />} />
+        <Route path="studio/:projectId/bai-tap" element={<AssignmentPage />} />
+        <Route path="giao-vien" element={<TeacherPage />} />
         <Route path="playground" element={<PlaygroundPage />} />
         <Route path="playground/:algo" element={<PlaygroundAlgoPage />} />
         <Route path="lessons" element={<LessonsPage />} />

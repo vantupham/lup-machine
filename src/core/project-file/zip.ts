@@ -10,8 +10,8 @@ export interface ZipLimits {
 
 export class ZipLimitError extends RangeError {}
 
-/** Đuôi tệp đã nén sẵn (ảnh JPEG/PNG): lưu nguyên, nén thêm chỉ tốn thời gian. */
-const STORED_EXTENSIONS = /\.(jpe?g|png)$/i;
+/** Đuôi tệp đã nén sẵn (ảnh JPEG/PNG, tệp dự án .lup lồng trong gói bài tập): lưu nguyên, nén thêm chỉ tốn thời gian. */
+const STORED_EXTENSIONS = /\.(jpe?g|png|lup)$/i;
 
 /** Ghi tệp zip. Ngày giờ cố định để cùng nội dung luôn ra cùng một tệp. */
 export function writeZip(files: Readonly<Record<string, Uint8Array>>): Uint8Array {

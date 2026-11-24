@@ -11,7 +11,8 @@
     "about": "Giới thiệu & Quyền riêng tư",
     "language": "Ngôn ngữ",
     "switchTo": "English",
-    "lessons": "Bài học"
+    "lessons": "Bài học",
+    "teacher": "Góc giáo viên"
   },
   "mode": {
     "label": "Chế độ học",
@@ -87,14 +88,15 @@
     "exportLabel": "Xuất tệp dự án {{name}}",
     "exporting": "Đang xuất…",
     "exportError": "Không xuất được: {{message}}",
-    "importTitle": "Mở tệp dự án",
-    "importLead": "Dự án chỉ lưu trên trình duyệt của máy này. Bấm \"Xuất .lup\" để mang dự án sang máy khác, gửi cho thầy cô hoặc cất giữ, rồi mở lại tệp ở đây.",
-    "importLabel": "Chọn tệp .lup",
+    "importTitle": "Mở tệp dự án hoặc bài tập",
+    "importLead": "Dự án chỉ lưu trên trình duyệt của máy này. Bấm \"Xuất .lup\" để mang dự án sang máy khác, gửi cho thầy cô hoặc cất giữ, rồi mở lại tệp ở đây. Gói bài tập (.lupa) của thầy cô cũng mở ở đây.",
+    "importLabel": "Chọn tệp .lup hoặc .lupa",
     "importing": "Đang mở tệp…",
     "imported": "Đã mở dự án \"{{name}}\".",
     "openImported": "Mở dự án",
     "importError": "Không mở được tệp: {{message}}",
-    "tooLarge": "tệp lớn hơn {{mb}} MB"
+    "tooLarge": "tệp lớn hơn {{mb}} MB",
+    "importedAssignment": "Đã mở bài tập \"{{name}}\"."
   },
   "modelCard": {
     "title": "Thẻ mô hình",
@@ -158,6 +160,96 @@
     "factsExactHint": "Đếm thẳng từ dữ liệu và nhật ký huấn luyện đã lưu của dự án.",
     "loading": "Đang tải thẻ mô hình…",
     "factsRunOutdated": "Dữ liệu đã thay đổi sau lần huấn luyện này (thêm / xóa ảnh hoặc đổi ngăn). Hãy huấn luyện lại trước khi ghi độ chính xác."
+  },
+  "classroom": {
+    "teacher": {
+      "title": "Góc giáo viên",
+      "lead": "Tạo gói bài tập rồi gửi cho học sinh qua Zalo, Drive, USB hay hệ thống học tập. Không cần tài khoản, không có máy chủ: học sinh mở gói ở Xưởng mô hình, làm bài rồi gửi lại tệp bài nộp."
+    },
+    "create": {
+      "title": "Tạo gói bài tập (.lupa)",
+      "titleLabel": "Tên bài",
+      "titlePlaceholder": "Ví dụ: Dạy máy phân loại rác",
+      "teacherLabel": "Giáo viên",
+      "teacherPlaceholder": "Tên thầy cô (không bắt buộc)",
+      "typeLabel": "Loại dự án",
+      "instructionsLabel": "Đề bài",
+      "instructionsPlaceholder": "Nhiệm vụ, yêu cầu về dữ liệu, hạn nộp…",
+      "questionsTitle": "Câu hỏi phiếu thí nghiệm",
+      "questionsHint": "Học sinh phải trả lời hết trước khi nộp. Tối đa {{max}} câu.",
+      "questionLabel": "Câu hỏi {{n}}",
+      "addQuestion": "+ Thêm câu hỏi",
+      "removeQuestion": "Xóa câu hỏi {{n}}",
+      "rubricTitle": "Rubric chấm điểm",
+      "rubricTotal": "Tổng: {{total}} điểm",
+      "criterionLabel": "Tiêu chí {{n}}",
+      "descriptionLabel": "Mô tả tiêu chí {{n}}",
+      "pointsLabel": "Điểm tối đa tiêu chí {{n}}",
+      "addCriterion": "+ Thêm tiêu chí",
+      "removeCriterion": "Xóa tiêu chí {{n}}",
+      "starterLabel": "Dự án mẫu",
+      "starterNone": "Không, học sinh bắt đầu từ dự án trống",
+      "starterHint": "Dữ liệu và các lớp của dự án mẫu được gửi kèm; thẻ mô hình của thầy cô thì không.",
+      "download": "Tải gói bài tập (.lupa)",
+      "creating": "Đang tạo…",
+      "created": "Đã tạo {{file}}. Gửi tệp này cho học sinh.",
+      "error": "Không tạo được gói: {{message}}",
+      "titleRequired": "Hãy đặt tên bài.",
+      "criterionRequired": "Mỗi tiêu chí cần có tên.",
+      "questionRequired": "Câu hỏi không được để trống."
+    },
+    "defaultRubric": {
+      "dataName": "Dữ liệu",
+      "dataDescription": "Đủ mẫu, cân bằng giữa các nhóm, có xin phép khi thu ảnh hoặc giọng nói",
+      "modelName": "Huấn luyện và đánh giá",
+      "modelDescription": "Có chia Dạy / Kiểm tra, ghi độ chính xác, giải thích được nhóm hay bị nhầm",
+      "cardName": "Thẻ mô hình và phiếu thí nghiệm",
+      "cardDescription": "Trả lời trung thực, nêu được hạn chế và cách dùng có trách nhiệm"
+    },
+    "banner": {
+      "label": "Bài tập",
+      "by": "Giáo viên: {{teacher}}",
+      "open": "Làm bài và nộp bài →"
+    },
+    "assignment": {
+      "loading": "Đang tải bài tập…",
+      "notLinked": "Dự án này không gắn với bài tập nào.",
+      "back": "← Quay lại dự án",
+      "eyebrow": "Bài tập",
+      "instructions": "Đề bài",
+      "noInstructions": "(Thầy cô không ghi đề bài.)",
+      "rubric": "Rubric chấm điểm",
+      "criterion": "Tiêu chí",
+      "points": "Điểm tối đa",
+      "total": "Tổng",
+      "questions": "Phiếu thí nghiệm",
+      "noQuestions": "Bài này không có câu hỏi.",
+      "saveAnswers": "Lưu câu trả lời",
+      "savingAnswers": "Đang lưu…",
+      "savedAnswers": "Đã lưu câu trả lời.",
+      "saveError": "Không lưu được: {{message}}",
+      "unsaved": "Có câu trả lời chưa lưu.",
+      "submitTitle": "Nộp bài",
+      "studentsLabel": "Họ tên học sinh",
+      "studentsPlaceholder": "Ví dụ: Nguyễn An, Trần Bình",
+      "classLabel": "Lớp",
+      "includeData": "Kèm dữ liệu gốc (ảnh, âm thanh, bảng dữ liệu…)",
+      "includeDataHint": "Mặc định KHÔNG kèm để bảo vệ quyền riêng tư. Bài nộp vẫn có số mẫu, nhật ký huấn luyện, thẻ mô hình và câu trả lời. Chỉ tick khi thầy cô yêu cầu.",
+      "checklist": "Trước khi nộp",
+      "blockers": {
+        "students": "Ghi họ tên học sinh.",
+        "model-card": "Điền đủ Thẻ mô hình.",
+        "answers": "Trả lời và lưu đủ các câu hỏi.",
+        "unsaved-answers": "Lưu câu trả lời trước khi nộp."
+      },
+      "ready": "Đã đủ điều kiện nộp bài.",
+      "openModelCard": "Mở Thẻ mô hình",
+      "download": "Tải bài nộp (.lups)",
+      "submitting": "Đang tạo bài nộp…",
+      "submitted": "Đã tạo {{file}}. Gửi tệp này cho thầy cô.",
+      "submitError": "Không tạo được bài nộp: {{message}}",
+      "checkError": "Không kiểm tra được điều kiện nộp bài. Hãy tải lại trang."
+    }
   },
   "about": {
     "title": "Giới thiệu & Quyền riêng tư",

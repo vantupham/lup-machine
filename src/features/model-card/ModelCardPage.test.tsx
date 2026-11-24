@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { configure, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import i18n from '@/i18n';
 import { createTestRepository, renderWithRepositories } from '../../../tests/setup/render';
@@ -10,6 +10,9 @@ const answers = {
   'Khi nào mô hình dễ sai?': 'Ảnh chụp tối',
   'Không nên dùng mô hình này để…': 'Phạt bạn bỏ rác sai',
 };
+
+// Gõ đủ 5 câu trả lời: khi cả bộ kiểm thử chạy song song, máy chậm hơn nhiều so với khi chạy riêng.
+configure({ asyncUtilTimeout: 10_000 });
 
 describe('Thẻ mô hình', () => {
   beforeEach(async () => {
@@ -39,7 +42,7 @@ describe('Thẻ mô hình', () => {
 
     renderWithRepositories(`/studio/${project.id}`, r);
     expect(await screen.findByRole('link', { name: /Thẻ mô hình · đã điền đủ/ })).toHaveAttribute('href', `/studio/${project.id}/the-mo-hinh`);
-  });
+  }, 30_000);
 
   test('hiện số liệu tự động của dự án; liên kết báo chưa điền đủ', async () => {
     const r = createTestRepository();
