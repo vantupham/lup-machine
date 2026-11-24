@@ -1507,5 +1507,16 @@
       "contributionHint": "On the skeleton: orange joints push towards \"{{cls}}\", blue ones pull away; bigger dots matter more. Score relative to the average over groups = {{base}} (fixed part) + sum over joints = {{total}}.",
       "neighbors": "The {{k}} closest training samples belong to: {{labels}}."
     }
+  },
+  "presentation": {
+    "enter": "Present",
+    "enterHint": "Show on the classroom screen: large text, fewer details, laser pointer",
+    "bar": "Presentation controls",
+    "smaller": "Smaller text (− key)",
+    "bigger": "Larger text (+ key)",
+    "size": "{{percent}}%",
+    "laser": "Laser (L)",
+    "fullscreen": "Full screen (F)",
+    "exit": "Exit (Esc)"
   }
 }

@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ModeSwitch } from '@/ui/ModeSwitch';
+import { PresentationController, PresentationToggle } from '@/ui/PresentationMode';
 import { useOfflineStore } from '@/ui/offline';
 import { rememberLanguage, type Language } from '@/i18n';
 
@@ -25,7 +26,7 @@ export function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-rule bg-surface/90 backdrop-blur print:hidden">
+      <header className="border-b border-rule bg-surface/90 backdrop-blur print:hidden presentation:hidden">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
           <NavLink to="/" className="group flex items-baseline gap-2">
             <span className="font-display text-2xl font-bold tracking-tight">
@@ -60,6 +61,7 @@ export function Layout() {
 
           <div className="ml-auto flex items-center gap-3">
             <ModeSwitch />
+            <PresentationToggle />
             <button
               type="button"
               onClick={toggleLanguage}
@@ -72,11 +74,11 @@ export function Layout() {
         </div>
       </header>
 
-      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 print:p-0">
+      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 print:p-0 presentation:max-w-none presentation:px-10 presentation:pt-16">
         <Outlet />
       </main>
 
-      <footer className="border-t border-rule py-6 text-center font-mono text-xs text-muted print:hidden">
+      <footer className="border-t border-rule py-6 text-center font-mono text-xs text-muted print:hidden presentation:hidden">
         <p>{t('footer.privacy')}</p>
         {offline !== 'off' && (
           <p role="status" className={`mt-1 ${offline === 'error' ? 'text-warning' : offline === 'ready' ? 'text-accent' : ''}`} data-testid="offline-status">
@@ -84,6 +86,7 @@ export function Layout() {
           </p>
         )}
       </footer>
+      <PresentationController />
     </div>
   );
 }
