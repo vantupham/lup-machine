@@ -155,6 +155,11 @@ Thuật toán tự cài đặt bằng TypeScript, chạy được **từng bư�
 - **Thẻ mô hình (Model Card):** phải điền trước khi xuất hoặc nộp bài.
 - **"Dữ liệu của em đi đâu?":** sơ đồ trực quan cho thấy dữ liệu chỉ nằm trên máy, kèm bài học về quyền riêng tư.
 - **Tình huống thảo luận** gắn với dự án vừa làm (trách nhiệm, sai số, ứng dụng nhạy cảm như nhận diện khuôn mặt).
+- **Đã làm (giai đoạn 5):**
+  - trang `#/dao-duc`;
+  - thí nghiệm "bệnh lá lúa Đồng bằng / Miền núi" 3 bước (dữ liệu lệch → thêm dữ liệu → thêm bối cảnh), khẳng định kiểm thử trên 10 lần lấy mẫu;
+  - sơ đồ dữ liệu đi đâu;
+  - 4 tình huống thảo luận.
 
 ### 4.6. Bài học tương tác
 

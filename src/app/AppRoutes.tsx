@@ -13,6 +13,7 @@ import { PlaygroundAlgoPage } from '@/features/playground/PlaygroundAlgoPage';
 import { ModelCardPage } from '@/features/model-card/ModelCardPage';
 import { AssignmentPage } from '@/features/classroom/AssignmentPage';
 import { TeacherPage } from '@/features/classroom/TeacherPage';
+import { EthicsPage } from '@/features/ethics/EthicsPage';
 
 export function AppRoutes() {
   return (
@@ -24,6 +25,7 @@ export function AppRoutes() {
         <Route path="studio/:projectId/the-mo-hinh" element={<ModelCardPage />} />
         <Route path="studio/:projectId/bai-tap" element={<AssignmentPage />} />
         <Route path="giao-vien" element={<TeacherPage />} />
+        <Route path="dao-duc" element={<EthicsPage />} />
         <Route path="playground" element={<PlaygroundPage />} />
         <Route path="playground/:algo" element={<PlaygroundAlgoPage />} />
         <Route path="lessons" element={<LessonsPage />} />

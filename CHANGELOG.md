@@ -4,6 +4,19 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Phòng đạo đức AI – giai đoạn 5)
+
+- Trang **Phòng đạo đức AI** (`#/dao-duc`, có trên thanh điều hướng).
+- **Thí nghiệm thiên lệch** với bộ dữ liệu "bẫy": AI chẩn đoán bệnh lá lúa từ độ vàng lá và số đốm. Dữ liệu Dạy có 200 lá Đồng bằng nhưng chỉ 20 lá Miền núi; giả định lá Miền núi vàng hơn. Dữ liệu giả lập theo seed. Ba bước:
+  1. Dữ liệu lệch: độ chính xác chung trông ổn nhưng Miền núi kém hẳn, và lỗi đều là báo động nhầm. Học sinh **dự đoán trước** rồi mới xem kết quả theo vùng.
+  2. Thu thêm dữ liệu Miền núi: Miền núi tốt lên nhưng Đồng bằng bắt đầu bỏ sót lá bệnh, vì chỉ có một ranh giới chung.
+  3. Cho mô hình biết vùng: cả hai vùng trên 90%. Kèm lời nhắc về cột nhạy cảm (giới tính, dân tộc…) khi áp dụng cho con người.
+- Biểu đồ lá Dạy với **đường ranh giới thật** của mô hình, mỗi vùng một đường ở bước 3.
+- **Độ chính xác theo từng nhóm**. Chế độ Chuyên sâu có thêm bảng báo động nhầm / bỏ sót và nút lấy mẫu lại.
+- Mọi khẳng định của bài được kiểm thử trên **10 lần lấy mẫu**.
+- **"Dữ liệu của em đi đâu?"**: những gì được tải về máy, những gì ở lại trên máy, và chỉ rời máy khi em xuất tệp; kèm lời khuyên về quyền riêng tư.
+- **4 tình huống thảo luận**: điểm danh bằng khuôn mặt, máy chấm bài văn, camera phạt nguội, ứng dụng gợi ý chọn ngành. Có câu hỏi gắn với thí nghiệm và Thẻ mô hình.
+
 ### Thêm (Chế độ trình chiếu – giai đoạn 5)
 
 - Nút **Trình chiếu** trên thanh đầu trang, để giáo viên chiếu lên màn hình lớp:
