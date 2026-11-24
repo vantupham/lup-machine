@@ -6,12 +6,14 @@ import { useDatasetRepository } from '@/storage/repository-context';
 import { getErrorMessage } from '@/ui/error-message';
 import { planUpload, type ImageFileError } from './image-file';
 import { fileToStoredImage } from './image-codec.browser';
+import { FaceBlurError } from './face-blur-error';
+import { faceBlurSummary } from './face-blur-message';
 
-type RejectReason = ImageFileError | 'too-many' | 'decode';
+type RejectReason = ImageFileError | 'too-many' | 'decode' | 'blur';
 type Notify = (text: string, kind: 'info' | 'error') => void;
 
 /** Xử lý tải nhiều ảnh: kiểm tra → chuyển về 224×224 → lưu theo lô; báo tệp bị bỏ qua và lý do. */
-export function useImageUpload(projectId: string, notify: Notify, reload: () => Promise<void>) {
+export function useImageUpload(projectId: string, notify: Notify, reload: () => Promise<void>, blurFaces = false) {
   const { t } = useTranslation();
   const dataset = useDatasetRepository();
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
@@ -24,12 +26,15 @@ export function useImageUpload(projectId: string, notify: Notify, reload: () => 
     reasons.push(...plan.accepted.slice(room).map((): RejectReason => 'too-many'));
 
     const images: StoredImage[] = [];
+    let faces = 0;
     setProgress({ done: 0, total: toProcess.length });
     for (const [i, file] of toProcess.entries()) {
+      // Nhường luồng giao diện giữa các ảnh (phát hiện khuôn mặt chạy trên luồng chính).
+      if (blurFaces && i > 0) await new Promise((resolve) => window.setTimeout(resolve, 0));
       try {
-        images.push(await fileToStoredImage(file));
-      } catch {
-        reasons.push('decode');
+        images.push(await fileToStoredImage(file, { blurFaces, onFaces: (n) => (faces += n) }));
+      } catch (error: unknown) {
+        reasons.push(error instanceof FaceBlurError ? 'blur' : 'decode');
       }
       setProgress({ done: i + 1, total: toProcess.length });
     }
@@ -39,7 +44,8 @@ export function useImageUpload(projectId: string, notify: Notify, reload: () => 
       if (images.length > 0) {
         await dataset.addSamples(images.map((image) => ({ projectId, classId: cls.id, split, source: 'upload' as const, image })));
       }
-      notify(summarize(images.length, cls.name, split, reasons), reasons.length > 0 && images.length === 0 ? 'error' : 'info');
+      const blurNote = blurFaces ? faceBlurSummary(t, faces, images.length) : '';
+      notify([summarize(images.length, cls.name, split, reasons), blurNote].filter(Boolean).join(' '), reasons.length > 0 && images.length === 0 ? 'error' : 'info');
     } catch (error: unknown) {
       notify(t('project.data.actionError', { message: getErrorMessage(error) }), 'error');
     } finally {

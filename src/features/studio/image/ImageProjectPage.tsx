@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useMemo, useRef, useState, type FormEvent } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { stratifiedSplit } from '@/core/data/split';
@@ -13,6 +13,8 @@ import { StepNav } from './StepNav';
 import { WebcamCapture } from './WebcamCapture';
 import { useProjectData } from './useProjectData';
 import { useImageUpload } from './useImageUpload';
+import { useFaceBlurSetting } from './face-blur-setting';
+import { faceBlurSummary } from './face-blur-message';
 import { decodeStoredImage, videoFrameToStoredImage } from './image-codec.browser';
 import { CLASS_MARKERS } from './lab/class-style';
 import { ModelLab } from './lab/ModelLab';
@@ -70,7 +72,8 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
     }
   };
 
-  const { upload, progress } = useImageUpload(projectId, (text, kind) => setMessage({ kind, text }), reload);
+  const [blurFaces, setBlurFaces] = useFaceBlurSetting(projectId);
+  const { upload, progress } = useImageUpload(projectId, (text, kind) => setMessage({ kind, text }), reload, blurFaces);
 
   const byClass = useMemo(() => {
     const map = new Map<string, SampleRecord[]>(classes.map((c) => [c.id, []]));
@@ -99,13 +102,18 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
       return t('project.data.autoSplitDone', { train: train.length, test: test.length });
     });
 
+  /** Số khuôn mặt đã làm mờ trong lần chụp webcam đang mở. */
+  const webcamFaces = useRef(0);
+
   const saveWebcam = (images: StoredImage[]) => {
     const target = webcam;
+    const faces = webcamFaces.current;
     setWebcam(null);
     if (!target || images.length === 0) return;
     void run(async () => {
       await dataset.addSamples(images.map((image) => ({ projectId, classId: target.cls.id, split: target.split, source: 'webcam' as const, image })));
-      return t('project.upload.added', { count: images.length, name: target.cls.name, split: t(`project.class.${target.split}`) });
+      const added = t('project.upload.added', { count: images.length, name: target.cls.name, split: t(`project.class.${target.split}`) });
+      return blurFaces ? `${added} ${faceBlurSummary(t, faces, images.length)}` : added;
     });
   };
 
@@ -138,6 +146,13 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
             <h2 id="data-title" className="text-2xl font-semibold">{t('project.data.title')}</h2>
             <p className="max-w-2xl text-sm text-muted">{t('project.data.lead')}</p>
           </div>
+          <div className="rounded border border-rule bg-surface p-3">
+            <label className="flex items-center gap-2 font-medium">
+              <input type="checkbox" checked={blurFaces} onChange={(e) => setBlurFaces(e.target.checked)} aria-describedby="blur-faces-hint" />
+              {t('project.faceBlur.label')}
+            </label>
+            <p id="blur-faces-hint" className="mt-1 pl-6 text-sm text-muted">{t('project.faceBlur.hint')}</p>
+          </div>
           <div className="flex flex-wrap items-end gap-3">
             <AddClassForm onAdd={(name) => run(async () => { await dataset.addClass(projectId, name); return null; })} />
             <button type="button" className="btn btn-ghost" onClick={() => void autoSplit()} disabled={samples.length === 0} title={t('project.data.autoSplitHint', { seed: SPLIT_SEED })}>
@@ -151,7 +166,10 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
               marker={CLASS_MARKERS[i % CLASS_MARKERS.length] as string}
               samples={byClass.get(cls.id) ?? []}
               onUpload={(c, files, split) => void upload(c, files, split, byClass.get(c.id)?.length ?? 0)}
-              onWebcam={(c, split) => setWebcam({ cls: c, split })}
+              onWebcam={(c, split) => {
+                webcamFaces.current = 0;
+                setWebcam({ cls: c, split });
+              }}
               onRename={async (c, name) => {
                 try {
                   await dataset.renameClass(c.id, name);
@@ -191,7 +209,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         <WebcamCapture
           title={t('project.webcam.title', { name: webcam.cls.name })}
           remaining={MAX_SAMPLES_PER_CLASS - (byClass.get(webcam.cls.id)?.length ?? 0)}
-          captureFrame={videoFrameToStoredImage}
+          captureFrame={(video) => videoFrameToStoredImage(video, { blurFaces, onFaces: (n) => (webcamFaces.current += n) })}
           onDone={saveWebcam}
         />
       )}

@@ -5,6 +5,7 @@ import { useModeStore } from '@/ui/mode-store';
 import type { StoredImage } from '@/storage/db';
 import { createTestRepository, renderApp, type TestRepositories } from '../../../../tests/setup/render';
 import * as codec from './image-codec.browser';
+import { FaceBlurError } from './face-blur-error';
 
 const FAKE_IMAGE: StoredImage = { bytes: new Uint8Array([9]).buffer, mime: 'image/jpeg', width: 224, height: 224 };
 
@@ -115,6 +116,59 @@ describe('Trang dự án ảnh', () => {
       target: { files: [new File(['x'], 'x.png', { type: 'image/png' })] },
     });
     expect(await screen.findByRole('alert')).toHaveTextContent(/không đọc được ảnh/i);
+  });
+
+  test('làm mờ khuôn mặt: mặc định bật, ảnh tải lên được làm mờ; tắt thì nhớ cho dự án này', async () => {
+    window.localStorage.clear();
+    await seed();
+    const view = openProject();
+    await screen.findByRole('article', { name: 'Nhựa' });
+    const toggle = screen.getByRole('checkbox', { name: 'Làm mờ khuôn mặt trước khi lưu ảnh' });
+    expect(toggle).toBeChecked();
+    expect(toggle).toHaveAccessibleDescription(/ảnh chưa làm mờ không được lưu/);
+    fireEvent.change(screen.getByTestId(`upload-${classIds[0]}`), { target: { files: [new File(['a'], 'a.png', { type: 'image/png' })] } });
+    await waitFor(() => expect(codec.fileToStoredImage).toHaveBeenLastCalledWith(expect.any(File), expect.objectContaining({ blurFaces: true })));
+
+    await userEvent.click(toggle);
+    expect(toggle).not.toBeChecked();
+    view.unmount();
+    openProject();
+    expect(await screen.findByRole('checkbox', { name: 'Làm mờ khuôn mặt trước khi lưu ảnh' })).not.toBeChecked();
+    fireEvent.change(screen.getByTestId(`upload-${classIds[0]}`), { target: { files: [new File(['b'], 'b.png', { type: 'image/png' })] } });
+    await waitFor(() => expect(codec.fileToStoredImage).toHaveBeenLastCalledWith(expect.any(File), expect.objectContaining({ blurFaces: false })));
+    window.localStorage.clear();
+  });
+
+  test('sau khi tải ảnh lên báo số khuôn mặt đã làm mờ, hoặc cảnh báo khi không thấy khuôn mặt nào', async () => {
+    window.localStorage.clear();
+    const withFaces = async (_file: Blob, options?: { onFaces?: (n: number) => void }) => {
+      options?.onFaces?.(1);
+      return FAKE_IMAGE;
+    };
+    vi.mocked(codec.fileToStoredImage).mockImplementationOnce(withFaces).mockImplementationOnce(withFaces);
+    await seed();
+    openProject();
+    await screen.findByRole('article', { name: 'Nhựa' });
+    const files = [new File(['a'], 'a.png', { type: 'image/png' }), new File(['b'], 'b.png', { type: 'image/png' })];
+    fireEvent.change(screen.getByTestId(`upload-${classIds[0]}`), { target: { files } });
+    expect(await screen.findByText(/đã thêm 2 ảnh.*đã làm mờ 2 khuôn mặt\./i)).toBeInTheDocument();
+
+    vi.mocked(codec.fileToStoredImage).mockImplementationOnce(async (_file, options) => {
+      options?.onFaces?.(0);
+      return FAKE_IMAGE;
+    });
+    fireEvent.change(screen.getByTestId(`upload-${classIds[0]}`), { target: { files: [new File(['c'], 'c.png', { type: 'image/png' })] } });
+    expect(await screen.findByText(/Không thấy khuôn mặt nào để làm mờ/)).toBeInTheDocument();
+  });
+
+  test('không làm mờ được khuôn mặt thì không lưu ảnh và báo rõ lý do', async () => {
+    vi.mocked(codec.fileToStoredImage).mockRejectedValueOnce(new FaceBlurError('mô hình'));
+    await seed();
+    openProject();
+    await screen.findByRole('article', { name: 'Nhựa' });
+    fireEvent.change(screen.getByTestId(`upload-${classIds[0]}`), { target: { files: [new File(['x'], 'x.png', { type: 'image/png' })] } });
+    expect(await screen.findByRole('alert')).toHaveTextContent(/không làm mờ được khuôn mặt nên không lưu/i);
+    expect(within(panel('Nhựa')).queryAllByRole('listitem')).toHaveLength(0);
   });
 
   test('chuyển ảnh sang ngăn Kiểm tra rồi xóa ảnh', async () => {

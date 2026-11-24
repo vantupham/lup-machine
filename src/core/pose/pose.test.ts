@@ -1,32 +1,11 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-cpu';
 import type { RgbaImage } from '@/core/image/preprocess';
+import { modelFromDisk, photo } from '../../../tests/setup/model-fixtures';
 import { evaluateVectors, prepareVectors, trainVectorModel } from '@/core/ml/vector-classifier';
 import { BODY_KEYPOINTS, createBodyDetector, createHandDetector, HAND_KEYPOINTS, letterboxBox, loadPoseModel } from './detectors';
 import { MIN_KEYPOINT_SCORE, normalizationFrame, packKeypoints, perJoint, poseFeatures, unpackKeypoints } from './features';
 import { BODY_POSES, HAND_POSES, poseDataset, synthesizePose } from './synthetic-poses';
-
-function modelFromDisk(id: string): tf.io.IOHandler {
-  const dir = join(process.cwd(), 'public', 'models', id);
-  const manifest = JSON.parse(readFileSync(join(dir, 'model.json'), 'utf8'));
-  const buf = Buffer.concat(manifest.weightsManifest[0].paths.map((p: string) => readFileSync(join(dir, p))));
-  return tf.io.fromMemory({
-    modelTopology: manifest.modelTopology,
-    weightSpecs: manifest.weightsManifest[0].weights,
-    weightData: buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength),
-    format: manifest.format,
-    signature: manifest.signature,
-  });
-}
-
-function photo(name: string, width: number, height: number): RgbaImage {
-  const raw = readFileSync(join(process.cwd(), 'tests', 'fixtures', 'photos', `${name}.rgb`));
-  const data = new Uint8ClampedArray(width * height * 4);
-  for (let i = 0; i < width * height; i++) data.set([raw[i * 3]!, raw[i * 3 + 1]!, raw[i * 3 + 2]!, 255], i * 4);
-  return { width, height, data };
-}
 
 const idx = (name: string) => (BODY_KEYPOINTS as readonly string[]).indexOf(name);
 

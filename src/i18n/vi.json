@@ -458,7 +458,8 @@
         "too-large": "quá 10 MB",
         "empty": "tệp rỗng",
         "too-many": "quá 100 tệp mỗi lần",
-        "decode": "không đọc được ảnh"
+        "decode": "không đọc được ảnh",
+        "blur": "không làm mờ được khuôn mặt nên không lưu"
       }
     },
     "webcam": {
@@ -471,7 +472,9 @@
       "denied": "Em chưa cho phép dùng camera. Hãy bấm biểu tượng ổ khóa trên thanh địa chỉ để cho phép, rồi thử lại.",
       "unavailable": "Không tìm thấy camera, hoặc trình duyệt không hỗ trợ. Em có thể dùng \"Tải ảnh lên\".",
       "privacy": "Hình ảnh chỉ được xử lý trên máy này.",
-      "full": "Lớp này đã đủ {{max}} ảnh."
+      "full": "Lớp này đã đủ {{max}} ảnh.",
+      "blurError": "Không làm mờ được khuôn mặt nên chưa lưu ảnh này. Hãy kiểm tra kết nối rồi thử lại, hoặc tắt làm mờ.",
+      "snapError": "Không chụp được khung hình. Hãy thử lại."
     },
     "quality": {
       "title": "② Kiểm tra dữ liệu",
@@ -717,6 +720,12 @@
       "needMore": "Cần ít nhất {{count}} ảnh có đặc trưng để dùng UMAP.",
       "axis": "UMAP {{n}} (không có đơn vị)",
       "note": "UMAP với seed {{seed}}: cùng dữ liệu luôn cho cùng bản đồ. Chỉ đọc \"ai gần ai\", đừng đo khoảng cách."
+    },
+    "faceBlur": {
+      "label": "Làm mờ khuôn mặt trước khi lưu ảnh",
+      "hint": "Bảo vệ quyền riêng tư của em và bạn bè: khuôn mặt được phát hiện trong ảnh tải lên hoặc chụp từ camera sẽ bị làm mờ ngay trên máy, ảnh chưa làm mờ không được lưu. Khuôn mặt nhỏ, ở xa hoặc quay nghiêng có thể không được phát hiện, hãy xem lại ảnh sau khi thêm. Tắt đi nếu dự án cần nhìn khuôn mặt (ví dụ nhận biểu cảm).",
+      "blurred": "Đã làm mờ {{count}} khuôn mặt.",
+      "none": "Không thấy khuôn mặt nào để làm mờ. Nếu ảnh có người (nhất là đứng xa, quay nghiêng), hãy xem lại ảnh và xóa nếu cần."
     }
   },
   "samples": {

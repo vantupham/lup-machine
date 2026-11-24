@@ -4,6 +4,20 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Làm mờ khuôn mặt – giai đoạn 5)
+
+- **Studio ảnh làm mờ khuôn mặt trước khi lưu ảnh:**
+  - áp dụng cho ảnh tải lên và ảnh chụp từ webcam, mặc định bật, mỗi dự án một công tắc riêng;
+  - khuôn mặt **được phát hiện** sẽ bị **pixel hóa** (ô lớn, không khôi phục được) ngay trên khung 224×224, nên ảnh chưa làm mờ không bao giờ được ghi vào máy;
+  - sau mỗi lần thêm ảnh báo "Đã làm mờ N khuôn mặt", hoặc cảnh báo khi không thấy khuôn mặt nào (mặt nhỏ, ở xa, quay nghiêng có thể bị sót), để công tắc "đang bật" không tạo cảm giác an toàn giả;
+  - webcam chụp liên tiếp không chạy chồng khi làm mờ chậm, và có báo lỗi;
+  - không làm mờ được (ví dụ không tải được mô hình) thì ảnh **không được lưu** và có báo lý do.
+- **Phát hiện khuôn mặt bằng MediaPipe BlazeFace short-range** (Google, Apache-2.0):
+  - tự lưu trữ trong `public/models/face-detection-short-1`, chỉ 0,2 MB, chỉ tải khi cần;
+  - phần giải mã anchor / NMS tự viết, kiểm thử với mô hình thật trên ảnh phạm vi công cộng: tìm đúng một khuôn mặt bao trọn mũi ở ba tỉ lệ cắt; ô trắng và ảnh bàn tay không có mặt; sau khi pixel hóa thì mô hình không còn thấy mặt;
+  - giới hạn đã biết (mặt quá nhỏ, người đứng xa) được ghi rõ trên giao diện và có kiểm thử.
+- "Dữ liệu của em đi đâu?" thêm lời khuyên về làm mờ khuôn mặt.
+
 ### Thêm (Phòng đạo đức AI – giai đoạn 5)
 
 - Trang **Phòng đạo đức AI** (`#/dao-duc`, có trên thanh điều hướng).

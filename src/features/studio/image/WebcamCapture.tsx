@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { StoredImage } from '@/storage/db';
 import { Dialog } from '@/ui/Dialog';
+import { FaceBlurError } from './face-blur-error';
 
 /** Chụp liên tục khoảng 6–7 ảnh mỗi giây khi giữ nút. */
 const BURST_INTERVAL_MS = 150;
@@ -22,6 +23,10 @@ export function WebcamCapture({ title, remaining, captureFrame, onDone }: Webcam
   const timerRef = useRef<number | null>(null);
   const [state, setState] = useState<CameraState>('starting');
   const [count, setCount] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  /** Một khung hình đang được xử lý (làm mờ, mã hóa): bỏ qua nhịp chụp tiếp theo thay vì chạy chồng. */
+  const busyRef = useRef(false);
+  const [isBusy, setIsBusy] = useState(false);
 
   useEffect(() => {
     let stream: MediaStream | null = null;
@@ -50,14 +55,21 @@ export function WebcamCapture({ title, remaining, captureFrame, onDone }: Webcam
 
   const snap = useCallback(async () => {
     const video = videoRef.current;
-    if (!video || capturedRef.current.length >= remaining) return;
+    if (!video || busyRef.current || capturedRef.current.length >= remaining) return;
+    busyRef.current = true;
+    setIsBusy(true);
     try {
-      capturedRef.current = [...capturedRef.current, await captureFrame(video)];
+      const image = await captureFrame(video);
+      capturedRef.current = [...capturedRef.current, image];
       setCount(capturedRef.current.length);
-    } catch (error: unknown) {
-      console.warn('Không chụp được khung hình', error);
+      setError(null);
+    } catch (err: unknown) {
+      setError(t(err instanceof FaceBlurError ? 'project.webcam.blurError' : 'project.webcam.snapError'));
+    } finally {
+      busyRef.current = false;
+      setIsBusy(false);
     }
-  }, [captureFrame, remaining]);
+  }, [captureFrame, remaining, t]);
 
   const stopBurst = useCallback(() => {
     if (timerRef.current !== null) window.clearInterval(timerRef.current);
@@ -96,6 +108,7 @@ export function WebcamCapture({ title, remaining, captureFrame, onDone }: Webcam
             {t('project.webcam.captured', { count })}
           </p>
           {isFull && <p className="text-sm text-warning">{t('project.webcam.full', { max: count })}</p>}
+          {error && <p role="alert" className="text-sm text-danger">{error}</p>}
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
@@ -109,7 +122,8 @@ export function WebcamCapture({ title, remaining, captureFrame, onDone }: Webcam
             >
               ● {t('project.webcam.hold')}
             </button>
-            <button type="button" className="btn btn-ghost" disabled={state !== 'ready' || isFull} onClick={() => void snap()}>
+            {/* Khóa trong lúc đang xử lý khung trước (làm mờ, mã hóa) để cú bấm không bị bỏ qua âm thầm. */}
+            <button type="button" className="btn btn-ghost" disabled={state !== 'ready' || isFull || isBusy} onClick={() => void snap()}>
               {t('project.webcam.snap')}
             </button>
           </div>

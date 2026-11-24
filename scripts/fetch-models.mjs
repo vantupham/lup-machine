@@ -6,6 +6,7 @@
  *   Trọng số gốc: Keras Applications (Apache-2.0), bản chuyển đổi do Google Teachable Machine phát hành.
  * - movenet-lightning-4: MoveNet SinglePose Lightning v4 (17 khớp cơ thể), TF.js GraphModel, Google, Apache-2.0.
  * - hand-landmark-lite-1: MediaPipe Hand Landmark (lite, 21 điểm bàn tay), TF.js GraphModel, Google, Apache-2.0.
+ * - face-detection-short-1: MediaPipe BlazeFace short-range (phát hiện khuôn mặt gần, 128×128), TF.js GraphModel, Google, Apache-2.0.
  */
 import { createHash } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -31,6 +32,11 @@ const MODELS = [
     id: 'hand-landmark-lite-1',
     format: 'graph-model',
     url: (file) => `https://tfhub.dev/mediapipe/tfjs-model/handpose_3d/landmark/lite/1/${file}?tfjs-format=file`,
+  },
+  {
+    id: 'face-detection-short-1',
+    format: 'graph-model',
+    url: (file) => `https://tfhub.dev/mediapipe/tfjs-model/face_detection/short/1/${file}?tfjs-format=file`,
   },
 ];
 
