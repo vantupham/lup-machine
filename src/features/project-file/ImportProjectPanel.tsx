@@ -2,8 +2,10 @@ import { useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import type { ProjectRecord } from '@/storage/db';
-import { useProjectFileRepository } from '@/storage/repository-context';
 import { PROJECT_FILE_EXTENSION, PROJECT_FILE_LIMITS, ProjectFileError } from '@/storage/project-file/constants';
+import { openAssignmentFile } from '@/features/classroom/classroom-files';
+import { ClassroomFileError } from '@/storage/classroom/errors';
+import { useRepositories } from '@/storage/repository-context';
 import { getErrorMessage } from '@/ui/error-message';
 
 interface ImportProjectPanelProps {
@@ -13,15 +15,21 @@ interface ImportProjectPanelProps {
 type ImportState =
   | { readonly status: 'idle' }
   | { readonly status: 'busy' }
-  | { readonly status: 'done'; readonly project: ProjectRecord }
+  | { readonly status: 'done'; readonly project: ProjectRecord; readonly isAssignment: boolean }
   | { readonly status: 'error'; readonly message: string };
 
 const BYTES_PER_MB = 1024 * 1024;
+const ASSIGNMENT_EXTENSION = '.lupa';
+
+/** Lỗi do nội dung tệp (hiện cho người dùng, không cần ghi nhật ký lỗi lập trình). */
+function isFileContentError(err: unknown): boolean {
+  return err instanceof ProjectFileError || err instanceof ClassroomFileError;
+}
 
 /** Mở tệp .lup thành một dự án mới trên máy này. Tệp được kiểm tra kỹ vì có thể đến từ bất kỳ đâu. */
 export function ImportProjectPanel({ onImported }: ImportProjectPanelProps) {
   const { t } = useTranslation();
-  const projectFiles = useProjectFileRepository();
+  const repos = useRepositories();
   const [state, setState] = useState<ImportState>({ status: 'idle' });
 
   const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +44,15 @@ export function ImportProjectPanel({ onImported }: ImportProjectPanelProps) {
     }
     setState({ status: 'busy' });
     try {
-      const project = await projectFiles.importProject(new Uint8Array(await file.arrayBuffer()));
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const isAssignment = file.name.toLowerCase().endsWith(ASSIGNMENT_EXTENSION);
+      const project = isAssignment
+        ? await openAssignmentFile(repos, bytes, [t('project.defaultClass', { n: 1 }), t('project.defaultClass', { n: 2 })])
+        : await repos.projectFiles.importProject(bytes);
       await onImported();
-      setState({ status: 'done', project });
+      setState({ status: 'done', project, isAssignment });
     } catch (err: unknown) {
-      if (!(err instanceof ProjectFileError)) console.error('Không mở được tệp dự án', err);
+      if (!isFileContentError(err)) console.error('Không mở được tệp', err);
       setState({ status: 'error', message: t('projectFile.importError', { message: getErrorMessage(err) }) });
     }
   };
@@ -57,7 +69,7 @@ export function ImportProjectPanel({ onImported }: ImportProjectPanelProps) {
         {isBusy ? t('projectFile.importing') : t('projectFile.importLabel')}
         <input
           type="file"
-          accept={`${PROJECT_FILE_EXTENSION},application/zip`}
+          accept={`${PROJECT_FILE_EXTENSION},${ASSIGNMENT_EXTENSION},application/zip`}
           className="sr-only"
           onChange={(e) => void handleFile(e)}
           disabled={isBusy}
@@ -65,7 +77,7 @@ export function ImportProjectPanel({ onImported }: ImportProjectPanelProps) {
       </label>
       {state.status === 'done' && (
         <p role="status" className="text-sm">
-          {t('projectFile.imported', { name: state.project.name })}{' '}
+          {t(state.isAssignment ? 'projectFile.importedAssignment' : 'projectFile.imported', { name: state.project.name })}{' '}
           <Link to={`/studio/${state.project.id}`} className="font-medium text-primary underline">
             {t('projectFile.openImported')} →
           </Link>

@@ -12,6 +12,7 @@ import { createDexieTableRepository } from './table-repository';
 import { createDexieExperimentRepository } from './experiment-repository';
 import { createDexieModelCardRepository } from './model-card-repository';
 import { pickModelCardFields } from '../schemas/model-card';
+import { alignAnswers, assignmentSchema, type Assignment } from '../schemas/assignment';
 import type { RepositoryDeps } from './project-repository';
 
 export interface ExportedProjectFile {
@@ -24,6 +25,13 @@ export interface ProjectFileRepository {
   exportProject(projectId: string): Promise<ExportedProjectFile>;
   /** Nhập thành một dự án MỚI (id mới), không ghi đè dự án đang có. */
   importProject(bytes: Uint8Array): Promise<ProjectRecord>;
+  /** Nội dung dự án dạng dữ liệu (dùng cho gói bài tập / bài nộp). */
+  readBundle(projectId: string): Promise<ProjectBundle>;
+  /**
+   * Tạo dự án mới từ nội dung đã kiểm tra. Có `assignment` thì gắn luôn bài tập
+   * trong cùng một giao dịch (lỗi giữa chừng không để lại dự án dở dang).
+   */
+  writeBundle(bundle: ProjectBundle, options?: { readonly assignment?: Assignment }): Promise<ProjectRecord>;
 }
 
 const defaultDeps: RepositoryDeps = {
@@ -43,7 +51,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
   const experiments = createDexieExperimentRepository(db);
   const modelCards = createDexieModelCardRepository(db);
 
-  const readBundle = async (project: ProjectRecord): Promise<ProjectBundle> => {
+  const bundleOf = async (project: ProjectRecord): Promise<ProjectBundle> => {
     const classes = await dataset.listClasses(project.id);
     const classIndex = new Map(classes.map((c, i) => [c.id, i]));
     const indexOf = (classId: string) => {
@@ -98,7 +106,8 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
     };
   };
 
-  const writeBundle = async (bundle: ProjectBundle): Promise<ProjectRecord> => {
+  const writeBundle = async (bundle: ProjectBundle, options: { readonly assignment?: Assignment } = {}): Promise<ProjectRecord> => {
+    const assignment = options.assignment ? assignmentSchema.parse(options.assignment) : null;
     const timestamp = deps.now();
     const project: ProjectRecord = {
       id: deps.newId(),
@@ -155,7 +164,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
     }));
     const table: TableRecord | null = bundle.table ? { projectId: project.id, ...bundle.table, updatedAt: timestamp } : null;
 
-    await db.transaction('rw', [db.projects, db.classes, db.samples, db.audioClips, db.poseSamples, db.dataTables, db.runs, db.modelCards], async () => {
+    await db.transaction('rw', [db.projects, db.classes, db.samples, db.audioClips, db.poseSamples, db.dataTables, db.runs, db.modelCards, db.assignments], async () => {
       await db.projects.add(project);
       await db.classes.bulkAdd(classes);
       await db.samples.bulkAdd(samples);
@@ -164,15 +173,21 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
       await db.runs.bulkAdd(runs);
       if (table) await db.dataTables.add(table);
       if (bundle.modelCard) await db.modelCards.add({ projectId: project.id, fields: bundle.modelCard, updatedAt: timestamp });
+      if (assignment) await db.assignments.add({ projectId: project.id, assignment, answers: alignAnswers(assignment.questions, []), updatedAt: timestamp });
     });
+    return project;
+  };
+
+  const findProject = async (projectId: string): Promise<ProjectRecord> => {
+    const project = await db.projects.get(projectId);
+    if (!project) throw new Error(`Không tìm thấy dự án: ${projectId}`);
     return project;
   };
 
   return {
     async exportProject(projectId) {
-      const project = await db.projects.get(projectId);
-      if (!project) throw new Error(`Không tìm thấy dự án: ${projectId}`);
-      const bundle = await readBundle(project);
+      const project = await findProject(projectId);
+      const bundle = await bundleOf(project);
       // Thư viện zip chỉ tải khi cần (không làm nặng lần mở trang đầu tiên).
       const { encodeBundle } = await import('../project-file/bundle');
       return { fileName: projectFileName(project.name), bytes: encodeBundle(bundle) };
@@ -182,6 +197,12 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
       const { decodeBundle } = await import('../project-file/bundle');
       return writeBundle(decodeBundle(bytes));
     },
+
+    async readBundle(projectId) {
+      return bundleOf(await findProject(projectId));
+    },
+
+    writeBundle,
   };
 }
 

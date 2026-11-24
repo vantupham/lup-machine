@@ -125,6 +125,14 @@ export interface ModelCardRecord {
   readonly updatedAt: string;
 }
 
+/** Bài tập (gói .lupa) gắn với một dự án và câu trả lời của học sinh; kiểm tra bằng zod khi đọc. */
+export interface AssignmentRecord {
+  readonly projectId: string;
+  readonly assignment: unknown;
+  readonly answers: unknown;
+  readonly updatedAt: string;
+}
+
 export const DEFAULT_DB_NAME = 'lup-machine';
 
 /** Cơ sở dữ liệu IndexedDB cục bộ. Dữ liệu chỉ nằm trên máy người dùng. */
@@ -138,6 +146,7 @@ export class LupDatabase extends Dexie {
   audioClips!: EntityTable<AudioClipRecord, 'id'>;
   poseSamples!: EntityTable<PoseSampleRecord, 'id'>;
   modelCards!: EntityTable<ModelCardRecord, 'projectId'>;
+  assignments!: EntityTable<AssignmentRecord, 'projectId'>;
 
   constructor(name: string = DEFAULT_DB_NAME) {
     super(name);
@@ -199,6 +208,18 @@ export class LupDatabase extends Dexie {
       audioClips: 'id, projectId, classId',
       poseSamples: 'id, projectId, classId',
       modelCards: 'projectId',
+    });
+    this.version(9).stores({
+      projects: 'id, updatedAt',
+      classes: 'id, projectId',
+      samples: 'id, projectId, classId',
+      features: '[sampleId+modelId], sampleId, projectId',
+      runs: 'id, projectId',
+      dataTables: 'projectId',
+      audioClips: 'id, projectId, classId',
+      poseSamples: 'id, projectId, classId',
+      modelCards: 'projectId',
+      assignments: 'projectId',
     });
   }
 }

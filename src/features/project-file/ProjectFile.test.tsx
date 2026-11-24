@@ -47,7 +47,7 @@ describe('Xuất / mở tệp dự án .lup ở Xưởng mô hình', () => {
     expect(created[0]?.type).toBe('application/zip');
 
     const file = new File([await created[0]!.arrayBuffer()], 'phan-loai-rac.lup', { type: 'application/zip' });
-    await user.upload(screen.getByLabelText('Chọn tệp .lup'), file);
+    await user.upload(screen.getByLabelText('Chọn tệp .lup hoặc .lupa'), file);
 
     expect(await screen.findByRole('status')).toHaveTextContent('Đã mở dự án "Phân loại rác".');
     const list = screen.getByRole('list', { name: 'Dự án của em' });
@@ -62,7 +62,7 @@ describe('Xuất / mở tệp dự án .lup ở Xưởng mô hình', () => {
     const r = createTestRepository();
     const user = userEvent.setup();
     renderStudio(r);
-    await user.upload(screen.getByLabelText('Chọn tệp .lup'), new File(['xin chào'], 'la.lup'));
+    await user.upload(screen.getByLabelText('Chọn tệp .lup hoặc .lupa'), new File(['xin chào'], 'la.lup'));
     expect(await screen.findByRole('alert')).toHaveTextContent(/Không mở được tệp: .*không phải tệp dự án/);
     expect(await r.repository.findAll()).toHaveLength(0);
   });
@@ -73,7 +73,7 @@ describe('Xuất / mở tệp dự án .lup ở Xưởng mô hình', () => {
     renderStudio(r);
     const big = new File(['x'], 'to.lup');
     Object.defineProperty(big, 'size', { value: 257 * 1024 * 1024 });
-    await user.upload(screen.getByLabelText('Chọn tệp .lup'), big);
+    await user.upload(screen.getByLabelText('Chọn tệp .lup hoặc .lupa'), big);
     expect(await screen.findByRole('alert')).toHaveTextContent('Không mở được tệp: tệp lớn hơn 256 MB');
   });
 

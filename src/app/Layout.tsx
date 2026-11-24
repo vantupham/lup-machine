@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { to: '/studio', key: 'nav.studio', end: false },
   { to: '/playground', key: 'nav.playground', end: false },
   { to: '/lessons', key: 'nav.lessons', end: false },
+  { to: '/giao-vien', key: 'nav.teacher', end: false },
   { to: '/about', key: 'nav.about', end: false },
 ] as const;
 

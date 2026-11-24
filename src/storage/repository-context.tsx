@@ -7,6 +7,7 @@ import type { AudioRepository } from './repositories/audio-repository';
 import type { PoseRepository } from './repositories/pose-repository';
 import type { ProjectFileRepository } from './repositories/project-file-repository';
 import type { ModelCardRepository } from './repositories/model-card-repository';
+import type { AssignmentRepository } from './repositories/assignment-repository';
 
 export interface Repositories {
   readonly projects: ProjectRepository;
@@ -17,6 +18,7 @@ export interface Repositories {
   readonly poses: PoseRepository;
   readonly projectFiles: ProjectFileRepository;
   readonly modelCards: ModelCardRepository;
+  readonly assignments: AssignmentRepository;
 }
 
 const RepositoriesContext = createContext<Repositories | null>(null);
@@ -66,4 +68,8 @@ export function useProjectFileRepository(): ProjectFileRepository {
 
 export function useModelCardRepository(): ModelCardRepository {
   return useRepositories().modelCards;
+}
+
+export function useAssignmentRepository(): AssignmentRepository {
+  return useRepositories().assignments;
 }

@@ -2,7 +2,7 @@ import Dexie from 'dexie';
 import { LupDatabase } from './db';
 
 describe('nâng cấp cơ sở dữ liệu', () => {
-  test('máy đang dùng phiên bản 7 mở bản mới: dữ liệu cũ còn nguyên, có thêm bảng thẻ mô hình', async () => {
+  test('máy đang dùng phiên bản 7 mở bản mới: dữ liệu cũ còn nguyên, có thêm bảng thẻ mô hình và bài tập', async () => {
     const name = `upgrade-${crypto.randomUUID()}`;
     const old = new Dexie(name);
     old.version(7).stores({
@@ -24,7 +24,7 @@ describe('nâng cấp cơ sở dữ liệu', () => {
     expect(await db.classes.where('projectId').equals('p1').count()).toBe(1);
     await db.modelCards.put({ projectId: 'p1', fields: {}, updatedAt: '2026-11-23T00:00:00.000Z' });
     expect(await db.modelCards.count()).toBe(1);
-    expect(db.verno).toBe(8);
+    expect(db.verno).toBe(9);
     await db.delete();
   });
 });
