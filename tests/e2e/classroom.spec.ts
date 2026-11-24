@@ -10,8 +10,8 @@ async function download(page: Page, button: string): Promise<{ name: string; pat
   return { name: file.suggestedFilename(), path };
 }
 
-test('lớp học qua tệp: giáo viên tạo .lupa (kèm dự án mẫu), học sinh ở máy khác làm bài và nộp .lups', async ({ browser }) => {
-  test.setTimeout(120_000);
+test('lớp học qua tệp: giáo viên tạo .lupa (kèm dự án mẫu), học sinh ở máy khác làm bài và nộp .lups, giáo viên chấm và xuất Excel', async ({ browser }) => {
+  test.setTimeout(180_000);
   const vi = () => window.localStorage.setItem('lup.language', 'vi');
 
   // --- máy giáo viên: dự án mẫu ảnh + gói bài tập
@@ -24,7 +24,7 @@ test('lớp học qua tệp: giáo viên tạo .lupa (kèm dự án mẫu), họ
 
   await teacher.getByRole('link', { name: 'Góc giáo viên' }).click();
   await teacher.getByLabel('Tên bài').fill('Nhận dạng hình');
-  await teacher.getByLabel('Giáo viên').fill('Thầy Minh');
+  await teacher.getByLabel('Giáo viên', { exact: true }).fill('Thầy Minh');
   await teacher.getByLabel('Đề bài').fill('Huấn luyện mô hình, thêm ảnh tự vẽ, ghi độ chính xác.');
   await teacher.getByRole('button', { name: '+ Thêm câu hỏi' }).click();
   await teacher.getByLabel('Câu hỏi 1', { exact: true }).fill('Hình nào hay bị nhầm nhất?');
@@ -84,4 +84,32 @@ test('lớp học qua tệp: giáo viên tạo .lupa (kèm dự án mẫu), họ
   // không kèm dữ liệu gốc: dự án bên trong không có ảnh
   expect(Object.keys(unzipSync(files['project.lup']!)).filter((n) => n.startsWith('samples/'))).toEqual([]);
   await studentContext.close();
+
+  // --- máy giáo viên nhận bài, chấm, xuất bảng điểm Excel
+  const gradingContext = await browser.newContext();
+  await gradingContext.addInitScript(vi);
+  const grader = await gradingContext.newPage();
+  await grader.goto('./#/giao-vien?tab=cham-bai');
+  await grader.getByLabel('Chọn tệp .lups').setInputFiles(lups.path);
+  await expect(grader.getByTestId('import-results')).toContainText('nhan-dang-hinh-le-chi.lups (Lê Chi): Đã nhận');
+  await grader.getByRole('button', { name: 'Chấm bài Lê Chi' }).click();
+  const detail = grader.getByRole('region', { name: 'Bài của Lê Chi' });
+  await expect(detail).toContainText('Vuông và tam giác');
+  await expect(detail).toContainText('Hình vẽ nghiêng');
+  await detail.getByLabel(/Dữ liệu \(tối đa 3\)/).fill('2,5');
+  await detail.getByLabel(/Huấn luyện và đánh giá \(tối đa 4\)/).fill('3');
+  await detail.getByLabel(/Thẻ mô hình và phiếu thí nghiệm \(tối đa 3\)/).fill('3');
+  await detail.getByLabel('Nhận xét').fill('Thẻ mô hình trung thực');
+  await detail.getByRole('button', { name: 'Lưu điểm' }).click();
+  await expect(detail.getByText('Đã lưu điểm.')).toBeVisible();
+  await expect(grader.getByTestId('class-stats')).toContainText('Điểm trung bình: 8,5/10');
+
+  if (shots) await grader.screenshot({ path: `${shots}/grading.png`, fullPage: true });
+
+  const xlsx = await download(grader, 'Xuất bảng điểm Excel (.xlsx)');
+  expect(xlsx.name).toBe('nhan-dang-hinh-bang-diem.xlsx');
+  const sheet = new TextDecoder().decode(unzipSync(new Uint8Array(readFileSync(xlsx.path)))['xl/worksheets/sheet1.xml']);
+  expect(sheet).toContain('Lê Chi');
+  expect(sheet).toContain('<v>8.5</v>');
+  await gradingContext.close();
 });

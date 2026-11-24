@@ -4,6 +4,27 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Chấm bài ở Góc giáo viên – giai đoạn 5)
+
+- Góc giáo viên có hai tab **Tạo bài tập** và **Chấm bài** (`#/giao-vien?tab=cham-bai`).
+- **Nhận bài nộp:**
+  - chọn nhiều tệp `.lups` một lần, mỗi tệp báo kết quả riêng (đã nhận, đã cập nhật bài nộp lại, bỏ qua vì cũ hơn, không đọc được);
+  - học sinh nộp lại thì bài mới thay bài cũ, **giữ điểm đã chấm**;
+  - bài nộp lưu trên máy giáo viên (IndexedDB phiên bản 10, bảng `submissions`), nhóm theo bài tập.
+- **Bảng tổng hợp cả lớp:**
+  - học sinh (sắp xếp theo tên tiếng Việt), lớp, thời điểm nộp, có kèm dữ liệu gốc, độ chính xác Kiểm tra;
+  - điểm từng tiêu chí rubric, tổng điểm;
+  - thống kê: số bài đã chấm, điểm trung bình, độ chính xác trung bình.
+- **Chấm từng bài:**
+  - xem câu trả lời phiếu thí nghiệm, thẻ mô hình, số liệu tự động;
+  - nhập điểm từng tiêu chí (nhận cả "3,5" lẫn "3.5", làm tròn tới 0,25, không vượt điểm tối đa) và nhận xét;
+  - **mở dự án của học sinh** thành một dự án trong Xưởng để xem kỹ;
+  - xóa bài nộp, hoặc xóa mọi bài nộp của một bài tập.
+- **Xuất bảng điểm Excel (`.xlsx`)**:
+  - tệp Excel thật, dựng ngay trong trình duyệt; hàng tiêu đề in đậm và được cố định;
+  - điểm là số, tên học sinh luôn là chữ (không bao giờ thành công thức);
+  - không dùng CSV vì Excel cài tiếng Việt dùng dấu `;` phân cột.
+
 ### Thêm (Gói bài tập .lupa và bài nộp .lups – giai đoạn 5)
 
 - **Góc giáo viên** (`#/giao-vien`, có trên thanh điều hướng): tạo **gói bài tập `.lupa`** gồm:

@@ -23,6 +23,7 @@ import { createDexiePoseRepository, type PoseRepository } from '@/storage/reposi
 import { createDexieProjectFileRepository, type ProjectFileRepository } from '@/storage/repositories/project-file-repository';
 import { createDexieModelCardRepository, type ModelCardRepository } from '@/storage/repositories/model-card-repository';
 import { createDexieAssignmentRepository, type AssignmentRepository } from '@/storage/repositories/assignment-repository';
+import { createDexieSubmissionRepository, type SubmissionRepository } from '@/storage/repositories/submission-repository';
 import { LupDatabase } from '@/storage/db';
 import '@/i18n';
 
@@ -37,6 +38,7 @@ export interface TestRepositories {
   readonly projectFiles: ProjectFileRepository;
   readonly modelCards: ModelCardRepository;
   readonly assignments: AssignmentRepository;
+  readonly submissions: SubmissionRepository;
 }
 
 export function createTestRepository(): TestRepositories {
@@ -52,6 +54,7 @@ export function createTestRepository(): TestRepositories {
     projectFiles: createDexieProjectFileRepository(db),
     modelCards: createDexieModelCardRepository(db),
     assignments: createDexieAssignmentRepository(db),
+    submissions: createDexieSubmissionRepository(db),
   };
 }
 
@@ -66,9 +69,10 @@ export function renderApp(
   projectFiles: ProjectFileRepository = createTestRepository().projectFiles,
   modelCards: ModelCardRepository = createTestRepository().modelCards,
   assignments: AssignmentRepository = createTestRepository().assignments,
+  submissions: SubmissionRepository = createTestRepository().submissions,
 ): RenderResult {
   return render(
-    <RepositoriesProvider repositories={{ projects: repository, dataset, experiments, tables, audio, poses, projectFiles, modelCards, assignments }}>
+    <RepositoriesProvider repositories={{ projects: repository, dataset, experiments, tables, audio, poses, projectFiles, modelCards, assignments, submissions }}>
       <MemoryRouter initialEntries={[route]}>
         <AppRoutes />
       </MemoryRouter>
@@ -78,5 +82,5 @@ export function renderApp(
 
 /** Mở ứng dụng với toàn bộ repository dùng chung một cơ sở dữ liệu thử. */
 export function renderWithRepositories(route: string, r: TestRepositories): RenderResult {
-  return renderApp(route, r.repository, r.dataset, r.experiments, r.tables, r.audio, r.poses, r.projectFiles, r.modelCards, r.assignments);
+  return renderApp(route, r.repository, r.dataset, r.experiments, r.tables, r.audio, r.poses, r.projectFiles, r.modelCards, r.assignments, r.submissions);
 }

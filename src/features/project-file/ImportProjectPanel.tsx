@@ -5,6 +5,7 @@ import type { ProjectRecord } from '@/storage/db';
 import { PROJECT_FILE_EXTENSION, PROJECT_FILE_LIMITS, ProjectFileError } from '@/storage/project-file/constants';
 import { openAssignmentFile } from '@/features/classroom/classroom-files';
 import { ClassroomFileError } from '@/storage/classroom/errors';
+import { ASSIGNMENT_FILE_EXTENSION } from '@/storage/classroom/extensions';
 import { useRepositories } from '@/storage/repository-context';
 import { getErrorMessage } from '@/ui/error-message';
 
@@ -19,7 +20,6 @@ type ImportState =
   | { readonly status: 'error'; readonly message: string };
 
 const BYTES_PER_MB = 1024 * 1024;
-const ASSIGNMENT_EXTENSION = '.lupa';
 
 /** Lỗi do nội dung tệp (hiện cho người dùng, không cần ghi nhật ký lỗi lập trình). */
 function isFileContentError(err: unknown): boolean {
@@ -45,7 +45,7 @@ export function ImportProjectPanel({ onImported }: ImportProjectPanelProps) {
     setState({ status: 'busy' });
     try {
       const bytes = new Uint8Array(await file.arrayBuffer());
-      const isAssignment = file.name.toLowerCase().endsWith(ASSIGNMENT_EXTENSION);
+      const isAssignment = file.name.toLowerCase().endsWith(ASSIGNMENT_FILE_EXTENSION);
       const project = isAssignment
         ? await openAssignmentFile(repos, bytes, [t('project.defaultClass', { n: 1 }), t('project.defaultClass', { n: 2 })])
         : await repos.projectFiles.importProject(bytes);
@@ -69,7 +69,7 @@ export function ImportProjectPanel({ onImported }: ImportProjectPanelProps) {
         {isBusy ? t('projectFile.importing') : t('projectFile.importLabel')}
         <input
           type="file"
-          accept={`${PROJECT_FILE_EXTENSION},${ASSIGNMENT_EXTENSION},application/zip`}
+          accept={`${PROJECT_FILE_EXTENSION},${ASSIGNMENT_FILE_EXTENSION},application/zip`}
           className="sr-only"
           onChange={(e) => void handleFile(e)}
           disabled={isBusy}

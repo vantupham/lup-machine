@@ -1,5 +1,9 @@
 import Dexie, { type EntityTable } from 'dexie';
 import type { ProjectType } from './schemas/project';
+import type { Submission } from './schemas/assignment';
+import type { Grade } from './schemas/grade';
+import type { ProjectBundle } from './project-file/bundle';
+import type { ModelCardFields } from './schemas/model-card';
 
 export interface ProjectRecord {
   readonly id: string;
@@ -133,6 +137,29 @@ export interface AssignmentRecord {
   readonly updatedAt: string;
 }
 
+/**
+ * Bài nộp giáo viên đã nhận. Nội dung đã được kiểm tra đầy đủ khi mở tệp .lups
+ * (dữ liệu do chính ứng dụng ghi vào), nên lưu ở dạng có kiểu.
+ */
+export interface SubmissionRecord {
+  readonly id: string;
+  readonly assignmentId: string;
+  /** Họ tên + lớp đã chuẩn hóa: tìm bài nộp lại của cùng học sinh bằng chỉ mục, không quét cả lớp. */
+  readonly studentKey: string;
+  readonly fileName: string;
+  readonly receivedAt: string;
+  readonly submission: Submission;
+  /** Thẻ mô hình chép ra từ dự án để xem nhanh mà không phải đọc cả dự án. */
+  readonly modelCard: ModelCardFields | null;
+  readonly grade: Grade;
+}
+
+/** Dự án đầy đủ của một bài nộp (có thể kèm nhiều ảnh): bảng riêng, chỉ đọc khi giáo viên mở. */
+export interface SubmissionProjectRecord {
+  readonly id: string;
+  readonly project: ProjectBundle;
+}
+
 export const DEFAULT_DB_NAME = 'lup-machine';
 
 /** Cơ sở dữ liệu IndexedDB cục bộ. Dữ liệu chỉ nằm trên máy người dùng. */
@@ -147,6 +174,8 @@ export class LupDatabase extends Dexie {
   poseSamples!: EntityTable<PoseSampleRecord, 'id'>;
   modelCards!: EntityTable<ModelCardRecord, 'projectId'>;
   assignments!: EntityTable<AssignmentRecord, 'projectId'>;
+  submissions!: EntityTable<SubmissionRecord, 'id'>;
+  submissionProjects!: EntityTable<SubmissionProjectRecord, 'id'>;
 
   constructor(name: string = DEFAULT_DB_NAME) {
     super(name);
@@ -220,6 +249,20 @@ export class LupDatabase extends Dexie {
       poseSamples: 'id, projectId, classId',
       modelCards: 'projectId',
       assignments: 'projectId',
+    });
+    this.version(10).stores({
+      projects: 'id, updatedAt',
+      classes: 'id, projectId',
+      samples: 'id, projectId, classId',
+      features: '[sampleId+modelId], sampleId, projectId',
+      runs: 'id, projectId',
+      dataTables: 'projectId',
+      audioClips: 'id, projectId, classId',
+      poseSamples: 'id, projectId, classId',
+      modelCards: 'projectId',
+      assignments: 'projectId',
+      submissions: 'id, assignmentId, [assignmentId+studentKey]',
+      submissionProjects: 'id',
     });
   }
 }
