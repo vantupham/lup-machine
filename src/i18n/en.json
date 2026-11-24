@@ -12,7 +12,8 @@
     "language": "Language",
     "switchTo": "Tiếng Việt",
     "lessons": "Lessons",
-    "teacher": "Teacher corner"
+    "teacher": "Teacher corner",
+    "ethics": "AI ethics"
   },
   "mode": {
     "label": "Learning mode",
@@ -328,6 +329,48 @@
       "no": "No"
     },
     "loadError": "Could not read stored submissions: {{message}}"
+  },
+  "ethics": {
+    "title": "AI Ethics Lab",
+    "lead": "AI learns from data, so missing data can make it fail for one group in ways the overall accuracy hides. Run the experiment yourself, see where your data goes, and discuss real situations.",
+    "exact": "Exact",
+    "exactHint": "A real model is trained right on this page; the scores and the boundary are computed results.",
+    "stepsLabel": "Experiment steps",
+    "resample": "Resample ({{n}}/{{total}})",
+    "predictTitle": "Predict first",
+    "predictRight": "Correct: the model is much worse for mountain leaves.",
+    "predictWrong": "Not quite: the model is much worse for mountain leaves. Let's see why.",
+    "openStudio": "Open the Model Studio",
+    "regions": {
+      "lowland": "Lowland",
+      "mountain": "Mountain"
+    },
+    "scores": {
+      "overall": "Overall",
+      "errorsCaption": "Errors on the Test data by region",
+      "region": "Region",
+      "correct": "Correct",
+      "falseAlarm": "False alarms",
+      "missed": "Missed"
+    },
+    "chart": {
+      "label": "Chart of {{count}} training leaves: yellowness on the horizontal axis, spots on the vertical axis, with the model's boundary",
+      "xAxis": "Leaf yellowness (%)",
+      "yAxis": "Spots",
+      "healthy": "healthy",
+      "sick": "diseased",
+      "boundaryOne": "─ model boundary (right side = \"diseased\")",
+      "boundaryTwo": "─ lowland boundary, ┄ mountain boundary",
+      "allRegions": "both regions",
+      "describe": "Boundary ({{region}}): for a leaf with 4 spots, leaves yellower than {{yellow}}% are predicted diseased."
+    },
+    "flow": {
+      "downloads": "Downloaded to your computer",
+      "stays": "Stays on your computer",
+      "leaves": "When does it leave?"
+    },
+    "lockedStart": "Click \"Train\" to start.",
+    "lockedPredict": "Make a prediction and view the accuracy by region before step ②."
   },
   "about": {
     "title": "About & Privacy",

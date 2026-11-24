@@ -12,7 +12,8 @@
     "language": "Ngôn ngữ",
     "switchTo": "English",
     "lessons": "Bài học",
-    "teacher": "Góc giáo viên"
+    "teacher": "Góc giáo viên",
+    "ethics": "Đạo đức AI"
   },
   "mode": {
     "label": "Chế độ học",
@@ -328,6 +329,48 @@
       "no": "Không"
     },
     "loadError": "Không đọc được bài nộp đã lưu: {{message}}"
+  },
+  "ethics": {
+    "title": "Phòng đạo đức AI",
+    "lead": "AI học từ dữ liệu, nên dữ liệu thiếu thì AI có thể làm kém với một nhóm mà con số \"chính xác chung\" không cho thấy. Ở đây em tự làm thí nghiệm, xem dữ liệu của em đi đâu, và thảo luận những tình huống thật.",
+    "exact": "Chính xác",
+    "exactHint": "Mô hình thật được huấn luyện ngay trên trang; điểm và đường ranh giới là kết quả tính thật.",
+    "stepsLabel": "Các bước thí nghiệm",
+    "resample": "Lấy mẫu lại ({{n}}/{{total}})",
+    "predictTitle": "Dự đoán trước",
+    "predictRight": "Em đoán đúng: mô hình kém hơn hẳn với lá Miền núi.",
+    "predictWrong": "Chưa đúng: mô hình kém hơn hẳn với lá Miền núi. Hãy xem vì sao.",
+    "openStudio": "Mở Xưởng mô hình",
+    "regions": {
+      "lowland": "Đồng bằng",
+      "mountain": "Miền núi"
+    },
+    "scores": {
+      "overall": "Chung",
+      "errorsCaption": "Các lỗi trên ngăn Kiểm tra theo từng vùng",
+      "region": "Vùng",
+      "correct": "Đúng",
+      "falseAlarm": "Báo động nhầm",
+      "missed": "Bỏ sót"
+    },
+    "chart": {
+      "label": "Biểu đồ {{count}} lá dùng để Dạy: độ vàng theo trục ngang, số đốm theo trục đứng, kèm đường ranh giới của mô hình",
+      "xAxis": "Độ vàng lá (%)",
+      "yAxis": "Số đốm",
+      "healthy": "khỏe",
+      "sick": "bệnh",
+      "boundaryOne": "─ ranh giới của mô hình (bên phải là \"bệnh\")",
+      "boundaryTwo": "─ ranh giới Đồng bằng, ┄ ranh giới Miền núi",
+      "allRegions": "cả hai vùng",
+      "describe": "Ranh giới ({{region}}): với lá có 4 đốm, lá vàng hơn {{yellow}}% bị đoán là bệnh."
+    },
+    "flow": {
+      "downloads": "Tải về máy em",
+      "stays": "Ở lại trên máy em",
+      "leaves": "Rời máy em khi nào?"
+    },
+    "lockedStart": "Bấm \"Huấn luyện\" để bắt đầu.",
+    "lockedPredict": "Hãy dự đoán và xem độ chính xác theo từng vùng trước khi sang bước ②."
   },
   "about": {
     "title": "Giới thiệu & Quyền riêng tư",
