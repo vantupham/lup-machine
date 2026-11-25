@@ -186,7 +186,8 @@ describe('Trang dự án ảnh', () => {
     await seed(10, 0);
     openProject();
     await userEvent.click(await screen.findByRole('button', { name: /tự chia/i }));
-    expect(await screen.findByText('Đã chia lại: 16 ảnh Dạy, 4 ảnh Kiểm tra.')).toBeInTheDocument();
+    // Chạy cả bộ song song thì ghi 20 ảnh + nạp lại có thể quá 1 giây mặc định.
+    expect(await screen.findByText('Đã chia lại: 16 ảnh Dạy, 4 ảnh Kiểm tra.', {}, { timeout: 5_000 })).toBeInTheDocument();
   });
 
   test('đổi tên lớp', async () => {
