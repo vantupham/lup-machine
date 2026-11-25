@@ -104,7 +104,8 @@ describe('Trang dự án ảnh', () => {
     ];
     fireEvent.change(screen.getByTestId(`upload-${classIds[0]}`), { target: { files } });
     expect(await screen.findByText(/đã thêm 1 ảnh vào lớp "nhựa".*bỏ qua 1 tệp: sai định dạng/i)).toBeInTheDocument();
-    expect(within(panel('Nhựa')).getAllByRole('listitem')).toHaveLength(1);
+    // Thông báo hiện trước khi danh sách ảnh tải lại xong (máy CI chậm) → chờ danh sách cập nhật.
+    await waitFor(() => expect(within(panel('Nhựa')).getAllByRole('listitem')).toHaveLength(1));
   });
 
   test('ảnh không giải mã được thì báo lỗi', async () => {
