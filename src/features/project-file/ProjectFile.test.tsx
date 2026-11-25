@@ -8,7 +8,7 @@ function renderStudio(r: TestRepositories) {
   return renderApp('/studio', r.repository, r.dataset, r.experiments, r.tables, r.audio, r.poses, r.projectFiles);
 }
 
-describe('Xuất / mở tệp dự án .lup ở Xưởng mô hình', () => {
+describe('Xuất / mở tệp dự án .lup ở trang Mô hình', () => {
   let created: Blob[];
   let clicked: string[];
 

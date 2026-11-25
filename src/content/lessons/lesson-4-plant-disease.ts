@@ -2,7 +2,6 @@ import type { Lesson } from './types';
 
 export const lessonPlantDisease: Lesson = {
   id: 'bac-si-cay-trong',
-  grade: '8–12',
   minutes: 45,
   title: 'AI làm bác sĩ cây trồng',
   summary:

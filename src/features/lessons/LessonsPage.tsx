@@ -19,7 +19,7 @@ export function LessonsPage() {
             <h2 className="font-display text-xl font-bold" lang="vi">{lesson.title}</h2>
             <p className="text-sm text-muted" lang="vi">{lesson.summary}</p>
             <p className="font-mono text-xs">
-              {t('lessons.grade', { grade: lesson.grade })} · {t('lessons.minutes', { minutes: lesson.minutes })}
+              {t('lessons.minutes', { minutes: lesson.minutes })}
             </p>
             <Link to={`/lessons/${lesson.id}`} className="btn btn-primary mt-auto self-start text-sm" aria-label={`${t('lessons.open')}: ${lesson.title}`}>
               {t('lessons.open')} <ArrowRight />

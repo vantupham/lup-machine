@@ -81,7 +81,7 @@ export function SubmissionDetail({ submission, onSaved, onDelete, onClose }: Sub
   );
 }
 
-/** Chép dự án của học sinh thành một dự án trong Xưởng mô hình của giáo viên để xem kỹ. */
+/** Chép dự án của học sinh thành một dự án trong trang Mô hình của giáo viên để xem kỹ. */
 function OpenProjectButton({ submission }: { readonly submission: StoredSubmission }) {
   const { t } = useTranslation();
   const projectFiles = useProjectFileRepository();

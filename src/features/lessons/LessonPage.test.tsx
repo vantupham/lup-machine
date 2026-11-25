@@ -20,11 +20,12 @@ beforeEach(async () => {
 });
 
 describe('Bài học', () => {
-  test('danh sách các bài học, có khối lớp và thời lượng', async () => {
+  test('danh sách các bài học có thời lượng, không ghi khối lớp (bài dùng được cho nhiều khối)', async () => {
     open('/lessons');
     expect(screen.getByRole('heading', { level: 1, name: 'Bài học' })).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /vào bài/i })).toHaveLength(LESSONS.length);
-    expect(screen.getByText(/lớp 9–12 · 45 phút/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/^\d+ phút$/)).toHaveLength(LESSONS.length);
+    expect(screen.queryByText(/lớp \d/i)).toBeNull();
   });
 
   test('bản tiếng Anh báo nội dung chỉ có tiếng Việt', async () => {
@@ -60,7 +61,7 @@ describe('Bài học', () => {
     expect(within(quiz).queryByText(/em trả lời đúng/i)).toBeNull();
   });
 
-  test('tạo dự án mẫu cho bài và chuyển sang Xưởng', async () => {
+  test('tạo dự án mẫu cho bài và chuyển sang trang Mô hình', async () => {
     open('/lessons/day-may-phan-biet-hinh');
     await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án mẫu cho bài này' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'Tròn, vuông, tam giác' })).toBeInTheDocument();
@@ -98,7 +99,7 @@ function serveFromPublic(patch?: (path: string, body: Buffer) => Buffer | null) 
   });
 }
 
-describe('Bộ dữ liệu mẫu trong Xưởng mô hình', () => {
+describe('Bộ dữ liệu mẫu trong trang Mô hình', () => {
   afterEach(() => vi.unstubAllGlobals());
 
   test('3 bộ hình vẽ và 2 bộ ảnh thật có ghi giấy phép', async () => {

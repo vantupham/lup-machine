@@ -81,11 +81,12 @@ describe('Tạo mô hình nhanh từ trang chủ', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Mới nhất' })).toBeInTheDocument();
   });
 
-  test('thanh điều hướng gọn 5 mục, làm nổi Xưởng mô hình; Giới thiệu và đổi ngôn ngữ ở chân trang', () => {
+  test('thanh điều hướng gọn 5 mục, làm nổi Mô hình, không có dòng phụ đề; Giới thiệu và đổi ngôn ngữ ở chân trang', () => {
     renderApp('/', createTestRepository().repository);
+    expect(screen.queryByText('Phòng thí nghiệm AI minh bạch')).toBeNull();
     const nav = screen.getByRole('navigation', { name: 'Điều hướng chính' });
-    expect(within(nav).getAllByRole('link').map((l) => l.textContent)).toEqual(['Xưởng mô hình', 'Sân chơi thuật toán', 'Bài học', 'Đạo đức AI', 'Góc giáo viên']);
-    expect(within(nav).getByRole('link', { name: 'Xưởng mô hình' })).toHaveAttribute('data-featured', 'true');
+    expect(within(nav).getAllByRole('link').map((l) => l.textContent)).toEqual(['Mô hình', 'Thuật toán', 'Bài học', 'Đạo đức AI', 'Góc giáo viên']);
+    expect(within(nav).getByRole('link', { name: 'Mô hình' })).toHaveAttribute('data-featured', 'true');
     expect(within(nav).getByRole('link', { name: 'Bài học' })).not.toHaveAttribute('data-featured');
     const footer = screen.getByRole('contentinfo');
     expect(within(footer).getByRole('link', { name: 'Giới thiệu & Quyền riêng tư' })).toHaveAttribute('href', '/about');
@@ -119,10 +120,10 @@ describe('Đường dẫn tạo nhanh #/studio/moi/:loai', () => {
     expect(await repos.repository.findAll()).toHaveLength(0);
   });
 
-  test('lưu lỗi thì báo và có đường quay về Xưởng', async () => {
+  test('lưu lỗi thì báo và có đường quay về trang Mô hình', async () => {
     const broken = { ...createTestRepository().repository, create: () => Promise.reject(new Error('bị chặn')) } satisfies ProjectRepository;
     renderApp('/studio/moi/anh', broken);
     expect(await screen.findByRole('alert')).toHaveTextContent('Không tạo được dự án: bị chặn');
-    expect(screen.getByRole('link', { name: /Về Xưởng mô hình/ })).toHaveAttribute('href', '/studio');
+    expect(screen.getByRole('link', { name: /Về trang Mô hình/ })).toHaveAttribute('href', '/studio');
   });
 });

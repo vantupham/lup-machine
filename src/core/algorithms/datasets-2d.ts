@@ -1,5 +1,5 @@
 /**
- * Bộ dữ liệu 2D sinh theo seed cho Sân chơi thuật toán. Tọa độ nằm khoảng trong [-1, 1].
+ * Bộ dữ liệu 2D sinh theo seed cho trang Thuật toán. Tọa độ nằm khoảng trong [-1, 1].
  */
 import { createRng, type Rng } from '@/core/random/seeded-rng';
 

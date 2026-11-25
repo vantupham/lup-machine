@@ -20,7 +20,7 @@ import { decodeStoredImage, videoFrameToStoredImage } from './image-codec.browse
 import { ModelLab } from './lab/ModelLab';
 import { ImageLabProvider } from './lab/ImageLabContext';
 import { QuickWorkspace } from './quick/QuickWorkspace';
-import { useModeStore } from '@/ui/mode-store';
+import { useModeStore, useModeSwitch } from '@/ui/mode-store';
 import { useStepDetailsStore } from '@/features/studio/step-details';
 import { ChevronDown, ChevronUp, Plus } from '@/ui/icons';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
@@ -88,6 +88,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
   };
 
   const mode = useModeStore((s) => s.mode);
+  useModeSwitch();
   const isDetailsOpen = useStepDetailsStore((s) => s.isOpen);
   const setDetailsOpen = useStepDetailsStore((s) => s.setOpen);
   /** Khám phá: các bước chi tiết thu gọn tới khi người xem mở (hoặc bấm một bước). Chuyên sâu: luôn mở. */

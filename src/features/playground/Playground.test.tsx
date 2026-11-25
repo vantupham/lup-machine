@@ -7,25 +7,25 @@ function renderRoute(route: string) {
   return renderApp(route, createTestRepository().repository);
 }
 
-describe('trang Sân chơi thuật toán', () => {
+describe('trang Thuật toán', () => {
   test('liệt kê đủ 6 thuật toán và mở được từng trang', async () => {
     renderRoute('/playground');
-    expect(screen.getByRole('heading', { level: 1, name: 'Sân chơi thuật toán' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Thuật toán' })).toBeInTheDocument();
     const links = screen.getAllByRole('link').filter((a) => a.getAttribute('href')?.includes('/playground/'));
     expect(links).toHaveLength(PLAYGROUND_ALGOS.length);
     await userEvent.click(screen.getByRole('link', { name: /Cây quyết định/ }));
     expect(screen.getByRole('heading', { level: 1, name: 'Cây quyết định' })).toBeInTheDocument();
   });
 
-  test('mục điều hướng chính có Sân chơi thuật toán', () => {
+  test('mục điều hướng chính có Thuật toán', () => {
     renderRoute('/');
     const nav = screen.getByRole('navigation', { name: 'Điều hướng chính' });
-    expect(within(nav).getByRole('link', { name: 'Sân chơi thuật toán' })).toBeInTheDocument();
+    expect(within(nav).getByRole('link', { name: 'Thuật toán' })).toBeInTheDocument();
   });
 
   test('thuật toán không tồn tại thì hiện trang không tìm thấy', () => {
     renderRoute('/playground/khong-co');
-    expect(screen.queryByRole('heading', { level: 1, name: 'Sân chơi thuật toán' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 1, name: 'Thuật toán' })).not.toBeInTheDocument();
     expect(screen.queryByText('Chính xác')).not.toBeInTheDocument();
   });
 

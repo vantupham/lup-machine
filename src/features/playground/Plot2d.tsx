@@ -80,7 +80,7 @@ export function ClassMarker({ x, y, label, highlight = false, size = 13 }: {
   );
 }
 
-/** Mặt phẳng tọa độ 2D (SVG) dùng chung cho mọi thuật toán của Sân chơi. */
+/** Mặt phẳng tọa độ 2D (SVG) dùng chung cho mọi thuật toán của trang Thuật toán. */
 export function Plot2d({ label, points, domain = 1.2, background, overlay, onPlotClick }: Plot2dProps) {
   const scale = makeScale(domain);
 

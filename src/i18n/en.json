@@ -1,12 +1,11 @@
 {
   "app": {
-    "name": "LUP Machine",
-    "tagline": "A transparent AI lab"
+    "name": "LUP Machine"
   },
   "nav": {
     "label": "Main navigation",
-    "studio": "Model Studio",
-    "playground": "Playground",
+    "studio": "Models",
+    "playground": "Algorithms",
     "about": "About & Privacy",
     "language": "Language",
     "switchTo": "Tiếng Việt",
@@ -17,9 +16,9 @@
   "mode": {
     "label": "Learning mode",
     "explore": "Explore",
-    "exploreHint": "Lower secondary · visual, few numbers",
+    "exploreHint": "Visual, few numbers",
     "expert": "In depth",
-    "expertHint": "Upper secondary · real numbers, formulas"
+    "expertHint": "Real numbers, formulas"
   },
   "home": {
     "title": "Teach a computer to recognise images, sounds, gestures and words.",
@@ -27,11 +26,11 @@
     "specimenCaption": "This is how a computer sees an image: each cell is one pixel's brightness, from 0 to 255."
   },
   "studio": {
-    "title": "Model Studio",
+    "title": "Models",
     "lead": "Every project is an experiment.",
     "newProject": "New project",
     "nameLabel": "Project name",
-    "namePlaceholder": "e.g. Waste sorting, class 7A",
+    "namePlaceholder": "e.g. Waste sorting",
     "types": {
       "image": "Image",
       "audio": "Audio",
@@ -75,7 +74,7 @@
     "creatingFromLink": "Creating a new project…",
     "error": "Could not create the project: {{message}}",
     "badType": "There is no \"{{slug}}\" project type. Pick one below.",
-    "backToStudio": "Back to the Model Studio",
+    "backToStudio": "Back to Models",
     "recentTitle": "Continue a recent project",
     "recentAll": "See all projects",
     "nameBase": {
@@ -328,7 +327,7 @@
       "saving": "Saving…",
       "saved": "Grade saved.",
       "saveError": "Could not save: {{message}}",
-      "openProject": "Open the student's project in the Studio",
+      "openProject": "Open the student's project",
       "openedProject": "Created project \"{{name}}\".",
       "openProjectLink": "View project",
       "delete": "Delete this submission",
@@ -364,7 +363,7 @@
     "predictTitle": "Predict first",
     "predictRight": "Correct: the model is much worse for mountain leaves.",
     "predictWrong": "Not quite: the model is much worse on Highland leaves. Read on to see why.",
-    "openStudio": "Open the Model Studio",
+    "openStudio": "Open Models",
     "regions": {
       "lowland": "Lowland",
       "mountain": "Mountain"
@@ -430,7 +429,7 @@
     }
   },
   "project": {
-    "back": "Model Studio",
+    "back": "Models",
     "notFound": "This project was not found on this device.",
     "loadError": "Could not read project data.",
     "steps": {
@@ -888,7 +887,6 @@
     "title": "Lessons",
     "lead": "Each lesson has goals, activity steps, prediction questions and a quick check.",
     "onlyVietnamese": "Lesson content is currently available in Vietnamese only.",
-    "grade": "Grade {{grade}}",
     "minutes": "{{minutes}} minutes",
     "open": "Open lesson",
     "back": "All lessons",
@@ -932,9 +930,9 @@
     "sampleNote": "Italic figures are sample values from a verified run. Student results may differ slightly, usually by ±1 image."
   },
   "playground": {
-    "title": "Algorithm Playground",
+    "title": "Algorithms",
     "lead": "Six basic machine-learning algorithms on 2D data, run step by step.",
-    "back": "Algorithm Playground",
+    "back": "Algorithms",
     "exact": "Exact",
     "algos": {
       "knn": {

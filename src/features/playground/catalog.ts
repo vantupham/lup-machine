@@ -1,4 +1,4 @@
-/** Danh sách thuật toán của Sân chơi; id cũng là đường dẫn #/playground/:id. */
+/** Danh sách thuật toán của trang Thuật toán; id cũng là đường dẫn #/playground/:id. */
 export const PLAYGROUND_ALGOS = ['knn', 'decision-tree', 'linear-regression', 'gradient-descent', 'k-means', 'neural-network'] as const;
 
 export type PlaygroundAlgo = (typeof PLAYGROUND_ALGOS)[number];

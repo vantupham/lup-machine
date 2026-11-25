@@ -2,7 +2,6 @@ import type { Lesson } from './types';
 
 export const lessonShortcut: Lesson = {
   id: 'ai-hoc-nham',
-  grade: '9–12',
   minutes: 45,
   title: 'AI học nhầm điều gì?',
   summary: 'Một bộ dữ liệu có cài bẫy: mô hình đạt điểm cao lúc học nhưng thất bại khi kiểm tra. Tìm ra vì sao.',
