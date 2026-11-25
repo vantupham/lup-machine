@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import type { ImageSubject } from './image-subject';
 import { useTranslation } from 'react-i18next';
 import { logitBreakdown } from '@/core/ml/explain';
 import { argmax } from '@/core/ml/metrics';
 import { computeLogits, softmax, type SoftmaxParams } from '@/core/ml/softmax-regression';
-import type { ClassRecord, SampleRecord } from '@/storage/db';
+import type { ClassRecord } from '@/storage/db';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { useModeStore } from '@/ui/mode-store';
 import { CamHeatmap } from './CamHeatmap';
@@ -13,14 +14,16 @@ import { OcclusionMap } from './OcclusionMap';
 const TOP_FEATURES = 5;
 
 interface PredictionExplainerProps {
-  readonly sample: SampleRecord;
+  readonly sample: ImageSubject;
   readonly vector: Float32Array;
   readonly classes: readonly ClassRecord[];
   readonly params: SoftmaxParams;
+  /** Ẩn khi nơi gọi đã hiện xác suất (bước ⑥ hiện xác suất trực tiếp ở trên). */
+  readonly showProbabilities?: boolean;
 }
 
 /** "Vì sao mô hình đoán như vậy?": xác suất, bản đồ nhìn vào đâu, và (Chuyên sâu) đường đi phép tính. */
-export function PredictionExplainer({ sample, vector, classes, params }: PredictionExplainerProps) {
+export function PredictionExplainer({ sample, vector, classes, params, showProbabilities = true }: PredictionExplainerProps) {
   const { t, i18n } = useTranslation();
   const mode = useModeStore((s) => s.mode);
   const logits = computeLogits(params, vector);
@@ -34,22 +37,24 @@ export function PredictionExplainer({ sample, vector, classes, params }: Predict
   return (
     <section aria-label={t('project.explain.title')} className="space-y-4 border-t border-rule pt-4" data-testid="explainer">
       <h4 className="font-semibold">{t('project.explain.title')}</h4>
-      <div>
-        <p className="mb-1 text-xs text-muted">{t('project.explain.probabilities')}</p>
-        <ul className="space-y-1">
-          {names.map((c, i) => (
-            <li key={c.id} className="grid grid-cols-[7rem_1fr_3.5rem] items-center gap-2 text-sm">
-              <span className={`truncate ${i === predicted ? 'font-semibold' : ''}`}>
-                {markerFor(i)} {c.name}
-              </span>
-              <span className="h-2 overflow-hidden rounded-sm bg-rule" aria-hidden="true">
-                <span className="block h-full" style={{ width: `${probs[i]! * 100}%`, backgroundColor: colorFor(i) }} />
-              </span>
-              <span className="text-right font-mono text-xs" data-testid={`prob-${i}`}>{pct(probs[i]!)}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {showProbabilities && (
+        <div>
+          <p className="mb-1 text-xs text-muted">{t('project.explain.probabilities')}</p>
+          <ul className="space-y-1">
+            {names.map((c, i) => (
+              <li key={c.id} className="grid grid-cols-[7rem_1fr_3.5rem] items-center gap-2 text-sm">
+                <span className={`truncate ${i === predicted ? 'font-semibold' : ''}`}>
+                  {markerFor(i)} {c.name}
+                </span>
+                <span className="h-2 overflow-hidden rounded-sm bg-rule" aria-hidden="true">
+                  <span className="block h-full" style={{ width: `${probs[i]! * 100}%`, backgroundColor: colorFor(i) }} />
+                </span>
+                <span className="text-right font-mono text-xs" data-testid={`prob-${i}`}>{pct(probs[i]!)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-1 text-sm" role="group" aria-label={t('project.explain.heatmapFor')}>
         <span className="text-xs text-muted">{t('project.explain.heatmapFor')}:</span>
         {names.map((c, i) => (

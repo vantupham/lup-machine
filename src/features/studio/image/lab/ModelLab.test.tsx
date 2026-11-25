@@ -6,6 +6,7 @@ import { useModeStore } from '@/ui/mode-store';
 import type { StoredImage } from '@/storage/db';
 import { createTestRepository, renderApp, type TestRepositories } from '../../../../../tests/setup/render';
 import * as loader from '../feature-loader.browser';
+import * as codec from '../image-codec.browser';
 
 /** Ảnh giả: byte 0 = "màu" theo lớp, byte 1 = số thứ tự (để các vector hơi khác nhau). */
 const imageOf = (tone: number, n: number): StoredImage => ({ bytes: new Uint8Array([tone, n]).buffer, mime: 'image/jpeg', width: 224, height: 224 });
@@ -418,3 +419,22 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
   });
 });
 
+describe('⑥ Sử dụng', () => {
+  test('sau khi huấn luyện: tải một ảnh mới, mô hình đoán lớp; ảnh thử không được lưu vào dự án', async () => {
+    await seed();
+    open();
+    const use = await screen.findByRole('region', { name: /⑥ Sử dụng/ });
+    expect(within(use).getByText(/huấn luyện mô hình ở bước ④/i)).toBeInTheDocument();
+    expect(within(screen.getByRole('navigation', { name: 'Các bước của dự án' })).getAllByRole('listitem')).toHaveLength(6);
+
+    await extractAll();
+    await trainToEnd();
+    vi.mocked(codec.fileToStoredImage).mockResolvedValueOnce(imageOf(230, 3));
+    await userEvent.upload(within(use).getByLabelText('Tải một ảnh lên để thử'), new File(['x'], 'moi.jpg', { type: 'image/jpeg' }));
+
+    expect(await within(use).findByTestId('probe-verdict')).toHaveTextContent('Giấy');
+    expect(within(use).getByTestId('probe-marker')).toBeInTheDocument();
+    expect(within(use).getByText(/đang dùng mô hình ở epoch 50/i)).toBeInTheDocument();
+    expect(await repos.dataset.listSamples(projectId)).toHaveLength(16);
+  });
+});

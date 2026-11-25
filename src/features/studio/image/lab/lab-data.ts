@@ -1,6 +1,7 @@
-import { argmax, cosineSimilarity } from '@/core/ml/metrics';
+import { argmax } from '@/core/ml/metrics';
 import { predictProba, type SoftmaxParams } from '@/core/ml/softmax-regression';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
+import { nearestTrainToVector, type Neighbor } from './probe';
 import type { TrainingData } from './useTraining';
 
 export type TrainingReadiness =
@@ -66,12 +67,7 @@ export function predictSamples(
   return result;
 }
 
-export interface Neighbor {
-  readonly sample: SampleRecord;
-  readonly similarity: number;
-}
-
-/** "Giải thích bằng ví dụ": các ảnh Dạy có vector đặc trưng giống nhất (độ tương đồng cosine). */
+/** "Giải thích bằng ví dụ" cho một ảnh đã có: các ảnh Dạy giống nhất, không tính chính nó. */
 export function nearestTrainSamples(
   sampleId: string,
   samples: readonly SampleRecord[],
@@ -79,10 +75,5 @@ export function nearestTrainSamples(
   k: number,
 ): Neighbor[] {
   const target = features.get(sampleId);
-  if (!target) return [];
-  return samples
-    .filter((s) => s.split === 'train' && s.id !== sampleId && features.has(s.id))
-    .map((s) => ({ sample: s, similarity: cosineSimilarity(target, features.get(s.id)!) }))
-    .sort((a, b) => b.similarity - a.similarity)
-    .slice(0, k);
+  return target ? nearestTrainToVector(target, samples, features, k, sampleId) : [];
 }

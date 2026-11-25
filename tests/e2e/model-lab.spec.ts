@@ -136,7 +136,25 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   await viewer.getByRole('button', { name: 'Tầng 5' }).click();
   await expect(page.getByTestId('fmap-shape')).toContainText('out_relu: 7 × 7 ô × 1280 kênh');
 
+  // ⑥ Sử dụng: thử ảnh MỚI (không có trong dữ liệu) bằng MobileNet thật; ảnh thử không được lưu.
+  const use = page.getByRole('region', { name: /⑥ Sử dụng/ });
+  const [freshWarm] = await makeImages(page, 'warm', IMAGES_PER_CLASS + 1).then((list) => list.slice(-1));
+  await use.getByLabel('Tải một ảnh lên để thử').setInputFiles({ name: 'moi.png', mimeType: 'image/png', buffer: freshWarm! });
+  await expect(use.getByTestId('probe-verdict')).toContainText('Lớp 1', { timeout: 30_000 });
+  await expect(use.getByTestId('probe-marker')).toBeVisible();
+  await expect(use.getByTestId('cam-heatmap').locator('rect')).toHaveCount(49, { timeout: 30_000 });
+  await expect(map.getByRole('button')).toHaveCount(20); // ảnh thử không được thêm vào dự án
   const shots = process.env.SCREENSHOT_DIR;
+  if (shots) await use.screenshot({ path: `${shots}/use-upload.png` });
+  // Webcam giả của Chromium: nhận dạng liên tục, dừng hình thì có giải thích, tắt camera thì dừng hẳn.
+  await use.getByRole('button', { name: /Bật camera/ }).click();
+  await expect(use.getByTestId('probe-verdict')).toContainText(/Lớp [12]/, { timeout: 30_000 });
+  await use.getByRole('button', { name: /Dừng hình/ }).click();
+  await expect(use.getByTestId('cam-heatmap').locator('rect')).toHaveCount(49, { timeout: 30_000 });
+  if (shots) await use.screenshot({ path: `${shots}/use-webcam.png` });
+  await use.getByRole('button', { name: 'Tắt camera' }).click();
+  await expect(use.locator('video')).toHaveCount(0);
+
   if (shots) {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.getByRole('region', { name: '③ Biểu diễn' }).screenshot({ path: `${shots}/represent.png` });

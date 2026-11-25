@@ -4,6 +4,21 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Bước ⑥ Sử dụng của Studio ảnh)
+
+- Studio ảnh có đủ **6 bước**: bước ⑥ **Sử dụng: thử với ảnh mới** không còn "sắp có". Bước này bị sót khi đóng giai đoạn 1; bốn Studio còn lại đã có từ trước.
+- **Thử với ảnh mô hình chưa từng thấy**, giống Teachable Machine nhưng có giải thích:
+  - **webcam nhận dạng liên tục** khoảng 4 lần mỗi giây, khung sau chỉ chạy khi khung trước xong (không chạy chồng trên máy yếu);
+  - **tải một ảnh lên**, có kiểm tra định dạng và dung lượng như khi thêm dữ liệu;
+  - lớp mô hình đoán, độ tin cậy và xác suất từng lớp cập nhật trực tiếp;
+  - xác suất cao nhất dưới 60% thì nói rõ **mô hình chưa chắc chắn**, kèm lời nhắc rằng mô hình luôn phải chọn một lớp có sẵn.
+- **Dấu ✱ di chuyển trên bản đồ PCA** (đề xuất A4): bản đồ khớp trên các ảnh đã có, giống hệt bước ③, ảnh mới chỉ được chiếu lên nên nền đứng yên. ✱ ra ngoài vùng dữ liệu thì được ghim vào mép và có cảnh báo "ảnh rất khác những ảnh mô hình đã học".
+- **Dừng hình để giải thích** (video cũng dừng theo, để hình trên màn đúng là khung đang được giải thích; hoặc ảnh tải lên): ảnh Dạy giống nhất (cosine), bản đồ CAM 7×7, che thử từng ô và (Chuyên sâu) đường đi phép tính, dùng lại đúng các công cụ của bước ③.
+- **Ảnh thử không bao giờ được lưu** vào dự án và không rời khỏi máy, nên không cần làm mờ khuôn mặt; điều này được ghi ngay trên giao diện.
+- Camera tắt hẳn khi bấm "Tắt camera" hoặc rời trang. Phần bật/tắt camera được tách thành hook dùng chung `useCamera` (đồng thời sửa trường hợp camera được cấp quyền sau khi hộp thoại đã đóng mà luồng hình không được tắt).
+- Kết quả về muộn không ghi đè trạng thái mới: tải hai ảnh liên tiếp thì ảnh sau thắng; bật camera thì bỏ kết quả của ảnh đang tải. Camera vừa bật chưa có khung hình thì chờ, không báo lỗi giả.
+- Kiểm thử: 7 kiểm thử lõi (`probe.ts`), 9 kiểm thử giao diện, 1 kiểm thử tích hợp trong `ModelLab`; E2E với MobileNetV2 thật: tải ảnh mới được đoán đúng lớp, dự án vẫn 20 ảnh, webcam giả nhận dạng liên tục, dừng hình có CAM 49 ô, tắt camera.
+
 ### Thêm (Làm mờ khuôn mặt – giai đoạn 5)
 
 - **Studio ảnh làm mờ khuôn mặt trước khi lưu ảnh:**

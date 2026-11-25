@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { MODEL_INPUT_SIZE } from '@/core/image/preprocess';
 import { occludeImage, occlusionGrid } from '@/core/ml/occlusion';
-import type { SampleRecord } from '@/storage/db';
+import type { ImageSubject } from './image-subject';
 import { getErrorMessage } from '@/ui/error-message';
 import { decodeStoredImage } from '../image-codec.browser';
 import { loadFeatureExtractor } from '../feature-loader.browser';
@@ -17,7 +17,7 @@ export type OcclusionState =
   | { readonly status: 'error'; readonly message: string };
 
 /** Che lần lượt từng ô rồi trích đặc trưng lại — chỉ chạy khi người dùng bấm (50 lượt chạy mô hình). */
-export function useOcclusion(sample: SampleRecord): { state: OcclusionState; run: () => void } {
+export function useOcclusion(sample: ImageSubject): { state: OcclusionState; run: () => void } {
   const [state, setState] = useState<{ id: string; value: OcclusionState } | null>(null);
   const token = useRef(0);
 
