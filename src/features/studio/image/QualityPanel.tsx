@@ -6,6 +6,7 @@ import { useModeStore } from '@/ui/mode-store';
 import { Check, CornerDownRight } from '@/ui/icons';
 import { ClassMarker } from '@/ui/ClassMarker';
 import { StepNumber } from '@/ui/StepNumber';
+import { StepNotebook } from '@/features/notebook/StepNotebook';
 
 interface QualityPanelProps {
   readonly classes: readonly ClassRecord[];
@@ -142,6 +143,7 @@ export function QualityPanel({ classes, counts }: QualityPanelProps) {
           ))}
         </ul>
       )}
+      <StepNotebook step="check" />
     </section>
   );
 }

@@ -47,7 +47,7 @@ const loadPackage = () => import('@/storage/classroom/package');
 
 /** Dự án mẫu gửi cho học sinh không kèm thẻ mô hình của giáo viên (học sinh tự viết). */
 function asStarter(bundle: ProjectBundle, title: string): ProjectBundle {
-  return { ...bundle, manifest: { ...bundle.manifest, name: title }, modelCard: null };
+  return { ...bundle, manifest: { ...bundle.manifest, name: title }, modelCard: null, notes: [] };
 }
 
 export async function createAssignmentFile(
@@ -77,6 +77,7 @@ function emptyBundle(type: ProjectType, name: string, classes: readonly string[]
     table: null,
     runs: [],
     modelCard: null,
+    notes: [],
   };
 }
 

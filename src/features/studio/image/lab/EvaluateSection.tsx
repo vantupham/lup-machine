@@ -9,6 +9,7 @@ import type { SamplePrediction } from './lab-data';
 import { ThresholdPanel } from './ThresholdPanel';
 import { StepNumber } from '@/ui/StepNumber';
 import { ClassMarker } from '@/ui/ClassMarker';
+import { StepNotebook } from '@/features/notebook/StepNotebook';
 
 /** Chênh lệch điểm Huấn luyện − Kiểm tra vượt ngưỡng này thì cảnh báo quá khớp. */
 export const OVERFIT_GAP = 0.15;
@@ -52,6 +53,7 @@ export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions
           />
         </>
       )}
+      <StepNotebook step="evaluate" />
     </section>
   );
 }

@@ -23,6 +23,7 @@ const starter: ProjectBundle = {
   table: null,
   runs: [],
   modelCard: null,
+  notes: [],
 };
 
 const submission: Submission = {

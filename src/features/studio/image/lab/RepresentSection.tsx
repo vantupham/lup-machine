@@ -18,6 +18,7 @@ import { UMAP_SEED, useUmap } from './useUmap';
 import { UMAP_MIN_POINTS } from '@/core/ml/umap-limits';
 import { Check, Circle } from '@/ui/icons';
 import { StepNumber } from '@/ui/StepNumber';
+import { StepNotebook } from '@/features/notebook/StepNotebook';
 
 const NEIGHBOR_COUNT = 3;
 
@@ -61,6 +62,7 @@ export function RepresentSection(props: RepresentSectionProps) {
         {status.phase === 'error' && <p role="alert" className="text-sm text-danger">{t('project.represent.error', { message: status.message })}</p>}
       </div>
       <MapAndDetail {...props} />
+      <StepNotebook step="represent" />
     </section>
   );
 }

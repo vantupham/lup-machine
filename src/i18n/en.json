@@ -601,7 +601,10 @@
       "seriesTrain": "Train set",
       "seriesTest": "Test set",
       "notSaved": "Each training run is recorded in the Experiment log below.",
-      "stale": "The classes changed since the last run. Train again."
+      "stale": "The classes changed since the last run. Train again.",
+      "guessLabel": "Your guess for the Test score (%)",
+      "guessInvalid": "Your guess must be between 0 and 100.",
+      "guessResult": "You guessed {{guess}}%. Actual Test score: {{actual}}% (off by {{diff}} points)."
     },
     "evaluate": {
       "title": "Evaluate",
@@ -655,7 +658,8 @@
       "restored": "Restored run {{n}} by re-running with the same seed {{seed}}.",
       "replaying": "Viewing run {{n}} again.",
       "saveError": "Could not save to the log: {{message}}",
-      "na": "—"
+      "na": "—",
+      "guess": "Guess"
     },
     "explain": {
       "title": "Why did the model predict this?",
@@ -1676,5 +1680,43 @@
     "laser": "Laser (L)",
     "fullscreen": "Full screen (F)",
     "exit": "Exit (Esc)"
+  },
+  "notebook": {
+    "title": "Notebook",
+    "questions": "{{count}} questions",
+    "written": "written",
+    "observe": "Observe",
+    "explain": "Explain",
+    "label": "Your notes",
+    "placeholder": "What do you see, and why do you think so?",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "saveError": "Could not save your notes: {{message}}",
+    "image": {
+      "data": {
+        "observe": "How many images does each class have? How do images in one class differ?",
+        "explain": "Why keep some images aside in the Test split?"
+      },
+      "check": {
+        "observe": "What does the assistant point out about your data?",
+        "explain": "If one class has far fewer images, how could the model go wrong?"
+      },
+      "represent": {
+        "observe": "On the map, which classes stand apart and which overlap?",
+        "explain": "Why do images that look alike end up close together?"
+      },
+      "train": {
+        "observe": "How do accuracy and loss change over the epochs?",
+        "explain": "Why does the model almost guess at random at epoch 0?"
+      },
+      "evaluate": {
+        "observe": "Which off-diagonal cell has the largest number? Click it to see the images.",
+        "explain": "Why does the model confuse those two classes?"
+      },
+      "use": {
+        "observe": "Which new images make the model wrong or unsure?",
+        "explain": "How does the region the model looks at explain that mistake?"
+      }
+    }
   }
 }

@@ -28,6 +28,8 @@ import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { BackLink } from '@/ui/BackLink';
 import { StepNumber } from '@/ui/StepNumber';
 import { nextClassName } from '@/features/studio/next-class-name';
+import { NotebookProvider } from '@/features/notebook/NotebookContext';
+import { StepNotebook } from '@/features/notebook/StepNotebook';
 
 /** Lớp phân biệt bằng cả ký hiệu, không chỉ màu (thân thiện người mù màu). */
 export const SPLIT_SEED = 42;
@@ -158,6 +160,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
 
   return (
     <ImageLabProvider projectId={projectId} classes={classes} samples={samples}>
+    <NotebookProvider projectId={projectId} projectType="image">
     <div className="space-y-8">
       <header className="space-y-4">
         <BackLink to="/studio">{t('project.back')}</BackLink>
@@ -258,6 +261,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
               onDeleteSample={(s) => void run(async () => { await dataset.deleteSample(s.id); return null; })}
             />
           ))}
+          <StepNotebook step="data" />
         </section>
         <QualityPanel classes={classes} counts={counts} />
       </div>
@@ -283,6 +287,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         />
       )}
     </div>
+    </NotebookProvider>
     </ImageLabProvider>
   );
 }

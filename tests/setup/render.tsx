@@ -24,6 +24,7 @@ import { createDexieProjectFileRepository, type ProjectFileRepository } from '@/
 import { createDexieModelCardRepository, type ModelCardRepository } from '@/storage/repositories/model-card-repository';
 import { createDexieAssignmentRepository, type AssignmentRepository } from '@/storage/repositories/assignment-repository';
 import { createDexieSubmissionRepository, type SubmissionRepository } from '@/storage/repositories/submission-repository';
+import { createDexieNotebookRepository, type NotebookRepository } from '@/storage/repositories/notebook-repository';
 import { LupDatabase } from '@/storage/db';
 import '@/i18n';
 
@@ -39,6 +40,7 @@ export interface TestRepositories {
   readonly modelCards: ModelCardRepository;
   readonly assignments: AssignmentRepository;
   readonly submissions: SubmissionRepository;
+  readonly notebook: NotebookRepository;
 }
 
 export function createTestRepository(): TestRepositories {
@@ -55,6 +57,7 @@ export function createTestRepository(): TestRepositories {
     modelCards: createDexieModelCardRepository(db),
     assignments: createDexieAssignmentRepository(db),
     submissions: createDexieSubmissionRepository(db),
+    notebook: createDexieNotebookRepository(db),
   };
 }
 
@@ -70,9 +73,10 @@ export function renderApp(
   modelCards: ModelCardRepository = createTestRepository().modelCards,
   assignments: AssignmentRepository = createTestRepository().assignments,
   submissions: SubmissionRepository = createTestRepository().submissions,
+  notebook: NotebookRepository = createTestRepository().notebook,
 ): RenderResult {
   return render(
-    <RepositoriesProvider repositories={{ projects: repository, dataset, experiments, tables, audio, poses, projectFiles, modelCards, assignments, submissions }}>
+    <RepositoriesProvider repositories={{ projects: repository, dataset, experiments, tables, audio, poses, projectFiles, modelCards, assignments, submissions, notebook }}>
       <MemoryRouter initialEntries={[route]}>
         <AppRoutes />
       </MemoryRouter>
@@ -82,5 +86,5 @@ export function renderApp(
 
 /** Mở ứng dụng với toàn bộ repository dùng chung một cơ sở dữ liệu thử. */
 export function renderWithRepositories(route: string, r: TestRepositories): RenderResult {
-  return renderApp(route, r.repository, r.dataset, r.experiments, r.tables, r.audio, r.poses, r.projectFiles, r.modelCards, r.assignments, r.submissions);
+  return renderApp(route, r.repository, r.dataset, r.experiments, r.tables, r.audio, r.poses, r.projectFiles, r.modelCards, r.assignments, r.submissions, r.notebook);
 }

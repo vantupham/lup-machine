@@ -29,6 +29,7 @@ export {
   Lightbulb,
   Lock,
   MessageSquareText,
+  NotebookPen,
   Pause,
   Pencil,
   PersonStanding,

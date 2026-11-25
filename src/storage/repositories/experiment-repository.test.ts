@@ -43,6 +43,16 @@ describe('ExperimentRepository', () => {
     expect(runs[0]!.metrics[1]!.testAccuracy).toBeNull();
   });
 
+  test('lưu điểm Kiểm tra học sinh đoán trước khi huấn luyện', async () => {
+    const r = repo();
+    await r.addRun({ ...run(), guess: { testAccuracy: 0.75 } });
+    await r.addRun(run());
+    const [plain, guessed] = await r.listRuns('p1');
+    expect(guessed!.guess).toEqual({ testAccuracy: 0.75 });
+    expect(plain!.guess).toBeUndefined();
+    await expect(r.addRun({ ...run(), guess: { testAccuracy: 1.5 } })).rejects.toThrow();
+  });
+
   test('từ chối dữ liệu không hợp lệ', async () => {
     await expect(repo().addRun({ ...run(), metrics: [] })).rejects.toThrow();
     await expect(repo().addRun({ ...run(), options: { ...run().options, epochs: 0 } })).rejects.toThrow();

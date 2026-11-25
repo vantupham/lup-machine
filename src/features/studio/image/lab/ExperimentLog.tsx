@@ -53,6 +53,7 @@ export function ExperimentLog({ runs, fingerprint, canReplay, onReplay, onDelete
                 <th>{t('project.experiments.data')}</th>
                 <th>{t('project.experiments.trainScore')}</th>
                 <th>{t('project.experiments.testScore')}</th>
+                <th>{t('project.experiments.guess')}</th>
                 <th />
               </tr>
             </thead>
@@ -81,6 +82,7 @@ export function ExperimentLog({ runs, fingerprint, canReplay, onReplay, onDelete
                     </td>
                     <td className="font-mono">{pct(last?.trainAccuracy)}</td>
                     <td className="font-mono font-semibold">{pct(last?.testAccuracy)}</td>
+                    <td className="font-mono">{pct(run.guess?.testAccuracy)}</td>
                     <td className="space-x-2 whitespace-nowrap text-right">
                       {isSameData ? (
                         <button

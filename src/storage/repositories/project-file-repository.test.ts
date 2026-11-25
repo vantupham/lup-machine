@@ -10,6 +10,7 @@ import { createDexiePoseRepository } from './pose-repository';
 import { createDexieTableRepository } from './table-repository';
 import { createDexieExperimentRepository } from './experiment-repository';
 import { createDexieModelCardRepository } from './model-card-repository';
+import { createDexieNotebookRepository } from './notebook-repository';
 import { createDexieProjectFileRepository, projectFileName, ProjectFileError } from './project-file-repository';
 
 let db: LupDatabase;
@@ -21,6 +22,7 @@ const repos = () => ({
   tables: createDexieTableRepository(db),
   experiments: createDexieExperimentRepository(db),
   cards: createDexieModelCardRepository(db),
+  notebook: createDexieNotebookRepository(db),
   files: createDexieProjectFileRepository(db),
 });
 
@@ -89,6 +91,24 @@ describe('ProjectFileRepository', () => {
     await r.cards.save(project.id, card);
     const copy = await r.files.importProject((await r.files.exportProject(project.id)).bytes);
     expect(await r.cards.get(copy.id)).toMatchObject(card);
+  });
+
+  test('sổ tay ghi chép và điểm đoán trước đi theo tệp .lup', async () => {
+    const r = repos();
+    const project = await r.projects.create({ name: 'Có sổ tay', projectType: 'image' });
+    await r.notebook.save(project.id, 'represent', 'Mèo nằm bên trái bản đồ');
+    await r.experiments.addRun({
+      projectId: project.id,
+      fingerprint: 'abcd1234',
+      options: { epochs: 2, learningRate: 0.001, batchSize: 16, seed: 42 },
+      classNames: ['A', 'B'],
+      counts: { train: 0, test: 0 },
+      metrics: [{ epoch: 0, trainLoss: 0.7, trainAccuracy: 0.5, testLoss: 0.7, testAccuracy: 0.5 }],
+      guess: { testAccuracy: 0.9 },
+    });
+    const copy = await r.files.importProject((await r.files.exportProject(project.id)).bytes);
+    expect(await r.notebook.list(copy.id)).toEqual([{ step: 'represent', text: 'Mèo nằm bên trái bản đồ' }]);
+    expect((await r.experiments.listRuns(copy.id))[0]?.guess).toEqual({ testAccuracy: 0.9 });
   });
 
   test('dự án âm thanh và tư thế', async () => {
