@@ -88,12 +88,25 @@ describe('Xưởng mô hình', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('đầy bộ nhớ');
   });
 
-  test('đầu trang là hàng thẻ "Dự án mới", form đặt tên riêng nằm bên cạnh danh sách', async () => {
+  test('"Tạo với tên riêng" nằm trên cùng, trước hàng thẻ "Dự án mới"', async () => {
     renderApp('/studio', createTestRepository().repository);
+    const named = screen.getByRole('form', { name: 'Tạo với tên riêng' });
     const fresh = screen.getByRole('region', { name: 'Dự án mới' });
+    expect(named.compareDocumentPosition(fresh) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(within(fresh).getByRole('button', { name: 'Tạo dự án Ảnh mới' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Tạo với tên riêng' })).toBeInTheDocument();
     expect(await screen.findByText(/chưa có dự án nào/i)).toBeInTheDocument();
+  });
+
+  test('mỗi loại dữ liệu là một ô có biểu tượng; ô đang chọn được đánh dấu', async () => {
+    renderApp('/studio', createTestRepository().repository);
+    const types = screen.getByRole('group', { name: 'Loại dữ liệu' });
+    const radios = within(types).getAllByRole('radio');
+    expect(radios).toHaveLength(5);
+    for (const radio of radios) expect(radio.closest('label')?.querySelector('svg')).not.toBeNull();
+    expect(within(types).getByRole('radio', { name: 'Ảnh' })).toBeChecked();
+    await userEvent.click(within(types).getByRole('radio', { name: 'Tư thế' }));
+    expect(within(types).getByRole('radio', { name: 'Tư thế' })).toBeChecked();
+    expect(within(types).getByRole('radio', { name: 'Ảnh' })).not.toBeChecked();
   });
 
   test('thẻ dự án ảnh cho biết số lớp, số ảnh, số lần huấn luyện và có ảnh thu nhỏ', async () => {

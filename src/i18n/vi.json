@@ -63,7 +63,7 @@
     "lead": "Mỗi dự án là một thí nghiệm. Dự án được lưu ngay trên trình duyệt của máy này.",
     "newProject": "Dự án mới",
     "nameLabel": "Tên dự án",
-    "namePlaceholder": "Để trống: tự đặt tên (ví dụ: Dự án ảnh 1)",
+    "namePlaceholder": "Ví dụ: Phân loại rác lớp 7A",
     "typeLabel": "Loại dữ liệu",
     "create": "Tạo dự án",
     "creating": "Đang tạo…",
@@ -98,7 +98,10 @@
       },
       "runs": "Đã huấn luyện {{count}} lần"
     },
-    "deleteError": "Không xóa được dự án \"{{name}}\": {{message}}"
+    "deleteError": "Không xóa được dự án \"{{name}}\": {{message}}",
+    "namedEyebrow": "Bắt đầu thí nghiệm mới",
+    "nameHint": "Không bắt buộc. Để trống thì máy tự đặt, ví dụ \"Dự án ảnh 1\"; đổi tên sau lúc nào cũng được.",
+    "namedFooter": "Tạo xong là vào thẳng dự án."
   },
   "quickStart": {
     "title": "Em muốn dạy máy nhận ra gì?",
