@@ -2,7 +2,6 @@ import type { Lesson } from './types';
 
 export const lessonTraining: Lesson = {
   id: 'day-may-phan-biet-hinh',
-  grade: '8–11',
   minutes: 90,
   title: 'Dạy máy phân biệt hình',
   summary: 'Đi qua cả quy trình học máy: dữ liệu, biểu diễn, huấn luyện và đánh giá trên ba lớp hình.',
@@ -151,7 +150,7 @@ export const lessonTraining: Lesson = {
   teacherNotes: [
     'Bài dài 2 tiết: tiết 1 đến hết bước 3, tiết 2 từ bước 4.',
     'Kết quả huấn luyện tái lập được (seed cố định): cả lớp làm cùng bộ dữ liệu sẽ ra cùng con số hoặc chỉ lệch rất nhỏ giữa các máy, tiện cho việc so sánh.',
-    'Học sinh THPT có thể dùng chế độ Chuyên sâu để xem công thức W·x + b và bảng precision / recall.',
+    'Học sinh có thể dùng chế độ Chuyên sâu để xem công thức W·x + b và bảng precision / recall.',
     'Đã kiểm chứng với MobileNetV2: epoch 0 Dạy 44,4% / Kiểm tra 22,2%; epoch 5 98,1% / 77,8% (nhầm 3 vuông → tam giác, 1 tam giác → vuông); epoch 50 đạt 100% / 100%. Chạy 3 epoch: 94,4% / 72,2%.',
   ],
 };

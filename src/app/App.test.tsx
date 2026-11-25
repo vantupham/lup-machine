@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import i18n from '@/i18n';
 import { useModeStore } from '@/ui/mode-store';
 import { useOfflineStore } from '@/ui/offline';
-import { createTestRepository, renderApp } from '../../tests/setup/render';
+import { createTestRepository, renderApp, renderWithRepositories } from '../../tests/setup/render';
 
 describe('Khung ứng dụng', () => {
   beforeEach(async () => {
@@ -19,11 +19,11 @@ describe('Khung ứng dụng', () => {
     expect(screen.getByRole('region', { name: 'Em muốn dạy máy nhận ra gì?' })).toBeInTheDocument();
   });
 
-  test('điều hướng sang Xưởng mô hình', async () => {
+  test('điều hướng sang trang Mô hình', async () => {
     renderApp('/', createTestRepository().repository);
     const nav = screen.getByRole('navigation', { name: 'Điều hướng chính' });
-    await userEvent.click(within(nav).getByRole('link', { name: 'Xưởng mô hình' }));
-    expect(screen.getByRole('heading', { level: 1, name: 'Xưởng mô hình' })).toBeInTheDocument();
+    await userEvent.click(within(nav).getByRole('link', { name: 'Mô hình' }));
+    expect(screen.getByRole('heading', { level: 1, name: 'Mô hình' })).toBeInTheDocument();
   });
 
   test('chuyển ngôn ngữ sang tiếng Anh và ghi nhớ', async () => {
@@ -34,12 +34,33 @@ describe('Khung ứng dụng', () => {
     expect(document.documentElement.lang).toBe('en');
   });
 
-  test('chuyển chế độ học', async () => {
-    renderApp('/', createTestRepository().repository);
+  test('chuyển chế độ học ở trang có nội dung đổi theo chế độ (Đạo đức AI)', async () => {
+    renderApp('/dao-duc', createTestRepository().repository);
     const expert = screen.getByRole('radio', { name: /chuyên sâu/i });
     await userEvent.click(expert);
     expect(expert).toBeChecked();
     expect(useModeStore.getState().mode).toBe('expert');
+  });
+
+  test.each(['/', '/studio', '/playground', '/lessons', '/giao-vien', '/about'])(
+    'trang %s không đổi theo chế độ học nên không hiện công tắc Khám phá / Chuyên sâu',
+    (route) => {
+      renderApp(route, createTestRepository().repository);
+      expect(screen.queryByRole('group', { name: 'Chế độ học' })).toBeNull();
+      expect(screen.queryByRole('radio', { name: /chuyên sâu/i })).toBeNull();
+    },
+  );
+
+  test('dự án ảnh hiện công tắc chế độ học; dự án văn bản thì không (không có nội dung đổi theo chế độ)', async () => {
+    const repos = createTestRepository();
+    const image = await repos.repository.create({ name: 'Ảnh', projectType: 'image' });
+    const text = await repos.repository.create({ name: 'Câu', projectType: 'text' });
+    const imageView = renderWithRepositories(`/studio/${image.id}`, repos);
+    expect(await screen.findByRole('radio', { name: /chuyên sâu/i })).toBeInTheDocument();
+    imageView.unmount();
+    renderWithRepositories(`/studio/${text.id}`, repos);
+    expect(await screen.findByRole('heading', { level: 1, name: 'Câu' })).toBeInTheDocument();
+    expect(screen.queryByRole('radio', { name: /chuyên sâu/i })).toBeNull();
   });
 
   test('trang không tồn tại', () => {

@@ -10,7 +10,7 @@ const RECENT_LIMIT = 3;
 
 /**
  * "Tiếp tục dự án gần đây" ở trang chủ. Chưa có dự án hoặc không đọc được lưu trữ thì ẩn hẳn:
- * trang Xưởng mô hình mới là nơi báo lỗi lưu trữ cho người dùng.
+ * trang Mô hình mới là nơi báo lỗi lưu trữ cho người dùng.
  */
 export function RecentProjects() {
   const { t, i18n } = useTranslation();

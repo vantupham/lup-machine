@@ -67,7 +67,7 @@ describe('Lớp học qua tệp: giáo viên tạo gói, học sinh làm và n�
     expect(decodeAssignmentPackage(lupa).assignment).toMatchObject({ title: 'Phân loại ý kiến', teacher: 'Cô Hà', projectType: 'text', questions: ['Câu nào máy hay đoán sai?'] });
     teacherView.unmount();
 
-    // học sinh mở gói ở Xưởng mô hình
+    // học sinh mở gói ở trang Mô hình
     const student = createTestRepository();
     const studio = renderWithRepositories('/studio', student);
     await user.upload(screen.getByLabelText('Chọn tệp .lup hoặc .lupa'), new File([lupa as Uint8Array<ArrayBuffer>], 'phan-loai-y-kien.lupa'));

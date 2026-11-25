@@ -78,10 +78,10 @@ describe('BackLink', () => {
   test('liên kết quay lại có icon mũi tên nhưng tên chỉ là chữ', () => {
     render(
       <MemoryRouter>
-        <BackLink to="/studio">Xưởng mô hình</BackLink>
+        <BackLink to="/studio">Mô hình</BackLink>
       </MemoryRouter>,
     );
-    const link = screen.getByRole('link', { name: 'Xưởng mô hình' });
+    const link = screen.getByRole('link', { name: 'Mô hình' });
     expect(link).toHaveAttribute('href', '/studio');
     expect(link.querySelector('svg')).not.toBeNull();
   });

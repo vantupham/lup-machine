@@ -5,7 +5,7 @@ import type { ProjectRepository } from '@/storage/repositories/project-repositor
 import { createTestRepository, renderApp } from '../../../tests/setup/render';
 import { UNDO_DELETE_MS } from '@/features/studio/project-list/useUndoableDelete';
 
-describe('Xưởng mô hình', () => {
+describe('trang Mô hình', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('vi');
   });
@@ -97,7 +97,7 @@ describe('Xưởng mô hình', () => {
     expect(screen.getByRole('listitem', { name: 'Ba' })).toBeInTheDocument();
   });
 
-  test('rời Xưởng khi còn đang chờ hoàn tác thì vẫn xóa thật', async () => {
+  test('rời trang Mô hình khi còn đang chờ hoàn tác thì vẫn xóa thật', async () => {
     const { repository } = createTestRepository();
     await repository.create({ name: 'Rời đi', projectType: 'image' });
     const view = renderApp('/studio', repository);

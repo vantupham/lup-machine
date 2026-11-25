@@ -88,7 +88,7 @@ describe('Studio dữ liệu bảng', () => {
   });
 });
 
-describe('Xưởng mô hình tạo được dự án dữ liệu bảng', () => {
+describe('trang Mô hình tạo được dự án dữ liệu bảng', () => {
   test('chọn loại "Bảng số" rồi mở dự án', async () => {
     const repos = createTestRepository();
     renderApp('/studio', repos.repository, repos.dataset, repos.experiments, repos.tables);

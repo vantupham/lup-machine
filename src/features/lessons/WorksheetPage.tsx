@@ -63,7 +63,7 @@ function Sheet({ lesson, isTeacher }: { readonly lesson: Lesson; readonly isTeac
     <article aria-label={`${label}: ${lesson.title}`} lang="vi" className="worksheet space-y-6 bg-surface p-6 shadow-card print:bg-transparent print:p-0 print:shadow-none">
       <header className="space-y-2 border-b-2 border-ink pb-3">
         <p className="font-mono text-xs uppercase tracking-widest">
-          {label} · {t('lessons.grade', { grade: lesson.grade })} · {t('lessons.minutes', { minutes: lesson.minutes })}
+          {label} · {t('lessons.minutes', { minutes: lesson.minutes })}
         </p>
         <h1 className="font-display text-3xl font-bold">{lesson.title}</h1>
         {!isTeacher && (

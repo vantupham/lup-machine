@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ProjectTypeCards } from './ProjectTypeCards';
 
-/** Tạo dự án ở Xưởng mô hình: gõ tên nếu muốn, rồi bấm một loại dữ liệu là tạo ngay. */
+/** Tạo dự án ở trang Mô hình: gõ tên nếu muốn, rồi bấm một loại dữ liệu là tạo ngay. */
 export function CreateProjectPanel() {
   const { t } = useTranslation();
   const [name, setName] = useState('');

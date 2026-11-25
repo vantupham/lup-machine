@@ -72,7 +72,7 @@ describe('Studio âm thanh', () => {
     vi.restoreAllMocks();
   }, SLOW_TEST_MS);
 
-  test('Xưởng mô hình tạo được dự án Âm thanh (không tạo sẵn nhóm)', async () => {
+  test('trang Mô hình tạo được dự án Âm thanh (không tạo sẵn nhóm)', async () => {
     const repos = createTestRepository();
     renderApp('/studio', repos.repository, repos.dataset, repos.experiments, repos.tables, repos.audio);
     await userEvent.type(await screen.findByLabelText('Tên dự án'), 'Âm thanh lớp 7');

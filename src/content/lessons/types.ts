@@ -44,7 +44,6 @@ export interface QuizQuestion {
 /** Bài học (nội dung tiếng Việt, giấy phép CC BY 4.0). */
 export interface Lesson {
   readonly id: string;
-  readonly grade: string;
   readonly minutes: number;
   readonly title: string;
   readonly summary: string;

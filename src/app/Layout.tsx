@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ModeSwitch } from '@/ui/ModeSwitch';
+import { useModeSwitchStore } from '@/ui/mode-store';
 import { PresentationController, PresentationToggle } from '@/ui/PresentationMode';
 import { useOfflineStore } from '@/ui/offline';
 import { rememberLanguage, type Language } from '@/i18n';
@@ -18,6 +19,8 @@ const NAV_ITEMS = [
 export function Layout() {
   const { t, i18n } = useTranslation();
   const offline = useOfflineStore((s) => s.status);
+  /** Chỉ trang có nội dung đổi theo chế độ học (Studio ảnh, Đạo đức AI) mới hiện công tắc. */
+  const showModeSwitch = useModeSwitchStore((s) => s.users > 0);
 
   const toggleLanguage = () => {
     const next: Language = i18n.language === 'vi' ? 'en' : 'vi';
@@ -32,9 +35,6 @@ export function Layout() {
           <NavLink to="/" className="group flex items-baseline gap-2">
             <span className="font-display text-2xl font-bold tracking-tight">
               LUP<span className="text-primary">·</span>Machine
-            </span>
-            <span className="hidden text-sm text-muted sm:inline">
-              {t('app.tagline')}
             </span>
           </NavLink>
 
@@ -64,7 +64,7 @@ export function Layout() {
           </nav>
 
           <div className="ml-auto flex items-center gap-3">
-            <ModeSwitch />
+            {showModeSwitch && <ModeSwitch />}
             <PresentationToggle />
           </div>
         </div>

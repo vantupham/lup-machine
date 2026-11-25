@@ -3,7 +3,7 @@ import { useModeStore, type LearningMode } from './mode-store';
 
 const MODES: readonly LearningMode[] = ['explore', 'expert'];
 
-/** Công tắc chế độ học: Khám phá (THCS) / Chuyên sâu (THPT). */
+/** Công tắc chế độ học: Khám phá / Chuyên sâu. */
 export function ModeSwitch() {
   const { t } = useTranslation();
   const mode = useModeStore((s) => s.mode);

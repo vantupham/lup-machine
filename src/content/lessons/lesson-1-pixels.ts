@@ -2,7 +2,6 @@ import type { Lesson } from './types';
 
 export const lessonPixels: Lesson = {
   id: 'may-tinh-nhin-anh',
-  grade: '6–9',
   minutes: 45,
   title: 'Máy tính nhìn ảnh như thế nào?',
   summary: 'Khám phá vì sao với máy tính, một bức ảnh chỉ là một bảng rất nhiều con số.',
@@ -108,6 +107,6 @@ export const lessonPixels: Lesson = {
   teacherNotes: [
     'Không cần webcam: dự án mẫu dùng ảnh hình học do máy vẽ, không có ảnh học sinh.',
     'Có thể cho học sinh làm theo cặp: một em đọc số, một em đoán màu.',
-    'Chế độ Chuyên sâu (THPT) hiển thị thêm giá trị sau chuẩn hóa về [−1, 1] để mở rộng.',
+    'Chế độ Chuyên sâu hiển thị thêm giá trị sau chuẩn hóa về [−1, 1] để mở rộng.',
   ],
 };

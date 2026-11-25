@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { biasExperimentData, scoreByRegion, trainLeafModel } from '@/core/ethics/rice-leaves';
 import { BIAS_INTRO, BIAS_PREDICT, BIAS_STEPS } from '@/content/ethics/ethics';
 import { ExactBadge } from '@/ui/ExactBadge';
-import { useModeStore } from '@/ui/mode-store';
+import { useModeStore, useModeSwitch } from '@/ui/mode-store';
 import { GroupScores } from './GroupScores';
 import { LeafScatter } from './LeafScatter';
 import { StepNumber } from '@/ui/StepNumber';
@@ -18,6 +18,7 @@ type Step = 0 | 1 | 2;
 export function BiasLab() {
   const { t } = useTranslation();
   const isExpert = useModeStore((s) => s.mode) === 'expert';
+  useModeSwitch();
   const [step, setStep] = useState<Step | null>(null);
   const [sampling, setSampling] = useState(0);
   const [prediction, setPrediction] = useState<number | null>(null);

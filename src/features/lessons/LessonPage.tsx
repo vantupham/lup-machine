@@ -33,7 +33,7 @@ export function LessonPage() {
         <BackLink to="/lessons">{t('lessons.back')}</BackLink>
         <h1 className="font-display text-4xl font-bold">{lesson.title}</h1>
         <p className="font-mono text-xs">
-          {t('lessons.grade', { grade: lesson.grade })} · {t('lessons.minutes', { minutes: lesson.minutes })}
+          {t('lessons.minutes', { minutes: lesson.minutes })}
         </p>
         <p className="text-lg text-muted">{lesson.summary}</p>
         <Link to={`/lessons/${lesson.id}/phieu-bai-tap`} className="inline-flex items-center gap-1 text-sm text-primary hover:underline">

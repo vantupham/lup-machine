@@ -69,7 +69,7 @@ describe('Studio văn bản tiếng Việt', () => {
     expect(screen.queryByTestId('text-total')).not.toBeInTheDocument();
   });
 
-  test('Xưởng mô hình tạo được dự án Văn bản', async () => {
+  test('trang Mô hình tạo được dự án Văn bản', async () => {
     const repos = createTestRepository();
     renderApp('/studio', repos.repository, repos.dataset, repos.experiments, repos.tables);
     await userEvent.type(await screen.findByLabelText('Tên dự án'), 'Góp ý căng tin');

@@ -115,13 +115,13 @@ describe('Góc giáo viên – chấm bài', () => {
     expect(sheet).toContain('Thẻ mô hình tốt');
   }, 30_000);
 
-  test('mở dự án của học sinh thành dự án trong Xưởng của giáo viên', async () => {
+  test('mở dự án của học sinh thành dự án trong trang Mô hình của giáo viên', async () => {
     const user = userEvent.setup();
     const r = createTestRepository();
     renderWithRepositories('/giao-vien?tab=cham-bai', r);
     await user.upload(screen.getByLabelText('Chọn tệp .lups'), [lups('Chi', 0.8)]);
     await user.click(await screen.findByRole('button', { name: 'Chấm bài Chi' }));
-    await user.click(screen.getByRole('button', { name: 'Mở dự án của học sinh trong Xưởng' }));
+    await user.click(screen.getByRole('button', { name: 'Mở dự án của học sinh' }));
     expect(await screen.findByText(/Đã tạo dự án "Chi – Phân loại rác bằng ảnh"/)).toBeInTheDocument();
     const [created] = await r.repository.findAll();
     expect(created?.name).toBe('Chi – Phân loại rác bằng ảnh');

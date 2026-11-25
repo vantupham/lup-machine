@@ -10,7 +10,7 @@ const ICONS: Readonly<Record<PlaygroundAlgo, IconComponent>> = {
   'neural-network': BrainCircuit,
 };
 
-/** Icon của một thuật toán trên thẻ Sân chơi. */
+/** Icon của một thuật toán trên thẻ của trang Thuật toán. */
 export function AlgoIcon({ algo }: { readonly algo: PlaygroundAlgo }) {
   const Icon = ICONS[algo];
   return <Icon className="size-8 text-primary" strokeWidth={1.75} />;

@@ -22,7 +22,7 @@ function Bar({ label, group, testId }: { readonly label: string; readonly group:
   );
 }
 
-/** Độ chính xác chung và theo từng vùng; chế độ Chuyên sâu (THPT) thêm số báo động nhầm / bỏ sót. */
+/** Độ chính xác chung và theo từng vùng; chế độ Chuyên sâu thêm số báo động nhầm / bỏ sót. */
 export function GroupScores({ scores, showGroups }: GroupScoresProps) {
   const { t } = useTranslation();
   const isExpert = useModeStore((s) => s.mode) === 'expert';

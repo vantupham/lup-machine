@@ -1,12 +1,11 @@
 {
   "app": {
-    "name": "LUP Machine",
-    "tagline": "Phòng thí nghiệm AI minh bạch"
+    "name": "LUP Machine"
   },
   "nav": {
     "label": "Điều hướng chính",
-    "studio": "Xưởng mô hình",
-    "playground": "Sân chơi thuật toán",
+    "studio": "Mô hình",
+    "playground": "Thuật toán",
     "about": "Giới thiệu & Quyền riêng tư",
     "language": "Ngôn ngữ",
     "switchTo": "English",
@@ -17,9 +16,9 @@
   "mode": {
     "label": "Chế độ học",
     "explore": "Khám phá",
-    "exploreHint": "THCS · trực quan, ít số liệu",
+    "exploreHint": "Trực quan, ít số liệu",
     "expert": "Chuyên sâu",
-    "expertHint": "THPT · số liệu thật, công thức"
+    "expertHint": "Số liệu thật, công thức"
   },
   "home": {
     "title": "Dạy máy tính nhận ra ảnh, âm thanh, cử chỉ và câu chữ.",
@@ -27,11 +26,11 @@
     "specimenCaption": "Máy tính thấy ảnh như thế này: mỗi ô là độ sáng của một điểm ảnh, từ 0 đến 255."
   },
   "studio": {
-    "title": "Xưởng mô hình",
+    "title": "Mô hình",
     "lead": "Mỗi dự án là một thí nghiệm.",
     "newProject": "Dự án mới",
     "nameLabel": "Tên dự án",
-    "namePlaceholder": "Ví dụ: Phân loại rác lớp 7A",
+    "namePlaceholder": "Ví dụ: Phân loại rác",
     "types": {
       "image": "Ảnh",
       "audio": "Âm thanh",
@@ -75,7 +74,7 @@
     "creatingFromLink": "Đang tạo dự án mới…",
     "error": "Không tạo được dự án: {{message}}",
     "badType": "Không có loại dự án \"{{slug}}\". Chọn một loại bên dưới.",
-    "backToStudio": "Về Xưởng mô hình",
+    "backToStudio": "Về trang Mô hình",
     "recentTitle": "Tiếp tục dự án gần đây",
     "recentAll": "Xem tất cả dự án",
     "nameBase": {
@@ -328,7 +327,7 @@
       "saving": "Đang lưu…",
       "saved": "Đã lưu điểm.",
       "saveError": "Không lưu được: {{message}}",
-      "openProject": "Mở dự án của học sinh trong Xưởng",
+      "openProject": "Mở dự án của học sinh",
       "openedProject": "Đã tạo dự án \"{{name}}\".",
       "openProjectLink": "Xem dự án",
       "delete": "Xóa bài nộp này",
@@ -364,7 +363,7 @@
     "predictTitle": "Dự đoán trước",
     "predictRight": "Em đoán đúng: mô hình kém hơn hẳn với lá Miền núi.",
     "predictWrong": "Chưa đúng: mô hình kém hơn hẳn với lá Miền núi. Xem tiếp để biết vì sao.",
-    "openStudio": "Mở Xưởng mô hình",
+    "openStudio": "Mở trang Mô hình",
     "regions": {
       "lowland": "Đồng bằng",
       "mountain": "Miền núi"
@@ -430,7 +429,7 @@
     }
   },
   "project": {
-    "back": "Xưởng mô hình",
+    "back": "Mô hình",
     "notFound": "Không tìm thấy dự án này trên máy.",
     "loadError": "Không đọc được dữ liệu dự án.",
     "steps": {
@@ -888,7 +887,6 @@
     "title": "Bài học",
     "lead": "Mỗi bài có mục tiêu, các bước làm, câu hỏi dự đoán và câu hỏi kiểm tra nhanh.",
     "onlyVietnamese": "",
-    "grade": "Lớp {{grade}}",
     "minutes": "{{minutes}} phút",
     "open": "Vào bài",
     "back": "Tất cả bài học",
@@ -932,9 +930,9 @@
     "sampleNote": "Chữ nghiêng là số liệu mẫu từ lần chạy kiểm chứng. Máy học sinh có thể lệch nhẹ, nhất là ±1 ảnh."
   },
   "playground": {
-    "title": "Sân chơi thuật toán",
+    "title": "Thuật toán",
     "lead": "Sáu thuật toán học máy cơ bản trên dữ liệu 2 chiều, chạy từng bước.",
-    "back": "Sân chơi thuật toán",
+    "back": "Thuật toán",
     "exact": "Chính xác",
     "algos": {
       "knn": {

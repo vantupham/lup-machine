@@ -55,7 +55,7 @@ describe('Studio tư thế & bàn tay', () => {
     expect(within(screen.getByTestId('pose-table')).getByRole('rowheader', { name: 'đầu ngón trỏ' })).toBeInTheDocument();
   }, SLOW_TEST_MS);
 
-  test('Xưởng mô hình tạo được dự án Tư thế; trợ lý báo nhóm chưa có mẫu', async () => {
+  test('trang Mô hình tạo được dự án Tư thế; trợ lý báo nhóm chưa có mẫu', async () => {
     const repos = createTestRepository();
     renderApp('/studio', repos.repository, repos.dataset, repos.experiments, repos.tables, repos.audio, repos.poses);
     await userEvent.type(await screen.findByLabelText('Tên dự án'), 'Cử chỉ');
