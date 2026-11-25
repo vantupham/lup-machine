@@ -44,7 +44,7 @@ describe('Lớp học qua tệp: giáo viên tạo gói, học sinh làm và n�
     expect(await screen.findByText('Cần đặt tên bài.')).toHaveAttribute('role', 'alert');
     await user.click(screen.getByRole('button', { name: 'Xóa tiêu chí 3' }));
     expect(screen.getByTestId('rubric-total')).toHaveTextContent('Tổng: 7 điểm');
-    await user.click(screen.getByRole('button', { name: '+ Thêm câu hỏi' }));
+    await user.click(screen.getByRole('button', { name: 'Thêm câu hỏi' }));
     await user.type(screen.getByLabelText('Tên bài'), 'Bài 1');
     await user.click(screen.getByRole('button', { name: 'Tải gói bài tập (.lupa)' }));
     expect(await screen.findByText('Câu hỏi không được để trống.')).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('Lớp học qua tệp: giáo viên tạo gói, học sinh làm và n�
     await user.type(screen.getByLabelText('Giáo viên'), 'Cô Hà');
     await user.click(screen.getByRole('radio', { name: 'Văn bản' }));
     await user.type(screen.getByLabelText('Đề bài'), 'Dạy máy phân biệt khen và chê.');
-    await user.click(screen.getByRole('button', { name: '+ Thêm câu hỏi' }));
+    await user.click(screen.getByRole('button', { name: 'Thêm câu hỏi' }));
     await user.type(screen.getByLabelText('Câu hỏi 1'), 'Câu nào máy hay đoán sai?');
     await user.click(screen.getByRole('button', { name: 'Tải gói bài tập (.lupa)' }));
     expect(await screen.findByText('Đã tạo phan-loai-y-kien.lupa. Gửi tệp này cho học sinh.')).toBeInTheDocument();

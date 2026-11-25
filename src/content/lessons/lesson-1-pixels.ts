@@ -17,7 +17,7 @@ export const lessonPixels: Lesson = {
     {
       title: 'Khởi động',
       body: [
-        'Hãy tưởng tượng em phải gọi điện thoại để mô tả một bức tranh cho bạn vẽ lại, nhưng chỉ được đọc các con số.',
+        'Thử tưởng tượng em phải gọi điện thoại để mô tả một bức tranh cho bạn vẽ lại, nhưng chỉ được đọc các con số.',
       ],
       predict: {
         question: 'Em sẽ dùng các con số để mô tả bức tranh như thế nào?',

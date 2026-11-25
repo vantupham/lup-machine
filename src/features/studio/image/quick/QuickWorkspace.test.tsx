@@ -124,10 +124,10 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     expect(rows[1]).toHaveTextContent(/Nhựa\s*\d+%$/);
   });
 
-  test('"+ Thêm lớp" tạo lớp mới tên chưa dùng', async () => {
+  test('"Thêm lớp" tạo lớp mới tên chưa dùng', async () => {
     await seed();
     open();
-    await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: '+ Thêm lớp' }));
+    await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: 'Thêm lớp' }));
     await waitFor(async () => expect((await repos.dataset.listClasses(projectId)).map((c) => c.name)).toEqual(['Nhựa', 'Giấy', 'Lớp 3']));
     expect(await within(quick()).findByRole('group', { name: 'Lớp 3' })).toBeInTheDocument();
   });

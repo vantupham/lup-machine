@@ -22,36 +22,9 @@
     "expertHint": "Upper secondary · real numbers, formulas"
   },
   "home": {
-    "eyebrow": "Teaching and learning AI for grades 6–12",
-    "title": "Don't just watch AI guess right.",
-    "titleMark": "See how it does it.",
+    "title": "Teach a computer to recognise images, sounds, gestures and words.",
     "lead": "Teach the computer with your own data, then see how it learns, step by step.",
-    "pipelineTitle": "Six steps, each one can be opened up",
-    "steps": {
-      "data": "Data",
-      "check": "Check data",
-      "represent": "Represent",
-      "train": "Train",
-      "evaluate": "Evaluate",
-      "use": "Use"
-    },
-    "stepHints": {
-      "data": "Collect images, split Train / Test",
-      "check": "Spot imbalance, duplicates, gaps",
-      "represent": "Image → grid of numbers → vector",
-      "train": "Guess, compare, correct",
-      "evaluate": "Where it fails, and why",
-      "use": "Try it live, export the model"
-    },
-    "promisesTitle": "Three promises",
-    "promises": {
-      "privacyTitle": "Your data stays on this device",
-      "privacyBody": "No server, no account, no tracking. Your photos are never sent anywhere.",
-      "honestTitle": "Honest about AI",
-      "honestBody": "Every visualisation says whether it is exact or approximate, and how it was made.",
-      "openTitle": "Open source, free",
-      "openBody": "Teachers can read, review and contribute lessons on GitHub."
-    }
+    "specimenCaption": "This is how a computer sees an image: each cell is one pixel's brightness, from 0 to 255."
   },
   "studio": {
     "title": "Model Studio",
@@ -96,7 +69,6 @@
   "quickStart": {
     "title": "What do you want to teach the computer?",
     "lead": "Pick a data type to start right away.",
-    "popular": "Most used",
     "start": "Start",
     "startAria": "Create new {{type}} project",
     "creating": "Creating…",
@@ -231,14 +203,14 @@
       "questionsTitle": "Lab sheet questions",
       "questionsHint": "Students must answer all of them before submitting. Up to {{max}} questions.",
       "questionLabel": "Question {{n}}",
-      "addQuestion": "+ Add question",
+      "addQuestion": "Add question",
       "removeQuestion": "Remove question {{n}}",
       "rubricTitle": "Grading rubric",
       "rubricTotal": "Total: {{total}} points",
       "criterionLabel": "Criterion {{n}}",
       "descriptionLabel": "Criterion {{n}} description",
       "pointsLabel": "Criterion {{n}} max points",
-      "addCriterion": "+ Add criterion",
+      "addCriterion": "Add criterion",
       "removeCriterion": "Remove criterion {{n}}",
       "starterLabel": "Starter project",
       "starterNone": "None, students start from an empty project",
@@ -835,7 +807,7 @@
       "captureShort": "Capture",
       "upload": "Upload images for class {{name}}",
       "uploadShort": "Upload",
-      "addClass": "+ Add class",
+      "addClass": "Add class",
       "train": "Quick train",
       "needClasses": "At least 2 classes need images.",
       "defaults": "Uses the default settings ({{epochs}} epochs). To tune them, see step 4.",
@@ -960,7 +932,6 @@
     "sampleNote": "Italic figures are sample values from a verified run. Student results may differ slightly, usually by ±1 image."
   },
   "playground": {
-    "eyebrow": "Hand-written algorithms · step by step",
     "title": "Algorithm Playground",
     "lead": "Six basic machine-learning algorithms on 2D data, run step by step.",
     "back": "Algorithm Playground",

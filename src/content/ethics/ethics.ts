@@ -85,7 +85,7 @@ export interface Scenario {
 }
 
 export const SCENARIOS_TITLE = 'Tình huống thảo luận';
-export const SCENARIOS_LEAD = 'Không có đáp án duy nhất. Hãy thảo luận theo nhóm, rồi liên hệ với dự án em vừa làm: ghi điều em nghĩ vào câu 4 và câu 5 của Thẻ mô hình.';
+export const SCENARIOS_LEAD = 'Không có đáp án duy nhất. Thảo luận theo nhóm, rồi ghi điều em nghĩ vào câu 4 và câu 5 trong Thẻ mô hình của dự án em vừa làm.';
 
 export const SCENARIOS: readonly Scenario[] = [
   {

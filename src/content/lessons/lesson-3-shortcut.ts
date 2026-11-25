@@ -5,7 +5,7 @@ export const lessonShortcut: Lesson = {
   grade: '9–12',
   minutes: 45,
   title: 'AI học nhầm điều gì?',
-  summary: 'Một bộ dữ liệu có cài bẫy: mô hình đạt điểm cao lúc học nhưng thất bại khi kiểm tra. Hãy tìm ra vì sao.',
+  summary: 'Một bộ dữ liệu có cài bẫy: mô hình đạt điểm cao lúc học nhưng thất bại khi kiểm tra. Tìm ra vì sao.',
   dataset: 'background-trap',
   goals: [
     'Nhận ra hiện tượng "học lối tắt": mô hình dựa vào một dấu hiệu tình cờ thay vì đặc điểm thật.',
@@ -22,7 +22,7 @@ export const lessonShortcut: Lesson = {
       ],
       predict: {
         question: 'Sau khi huấn luyện, em đoán điểm trên tập Kiểm tra sẽ khoảng bao nhiêu?',
-        answer: 'Hãy ghi lại dự đoán, rồi huấn luyện để kiểm chứng.',
+        answer: 'Ghi lại dự đoán, rồi huấn luyện để kiểm chứng.',
       },
     },
     {
@@ -34,7 +34,7 @@ export const lessonShortcut: Lesson = {
       predict: {
         question: 'Vì sao điểm bài đã học rất cao mà điểm bài chưa học lại thấp?',
         answer:
-          'Hãy so sánh NỀN của ảnh: lúc Dạy, hình tròn luôn trên nền sáng, hình vuông luôn trên nền tối. Ở tập Kiểm tra thì ngược lại. Mô hình đã học "nền sáng → tròn, nền tối → vuông" — một lối tắt dễ hơn việc nhận ra hình dạng.',
+          'So sánh NỀN của ảnh: lúc Dạy, hình tròn luôn trên nền sáng, hình vuông luôn trên nền tối. Ở tập Kiểm tra thì ngược lại. Mô hình đã học "nền sáng → tròn, nền tối → vuông" — một lối tắt dễ hơn việc nhận ra hình dạng.',
       },
       record: [
         { kind: 'fields', title: 'Em ghi lại', fields: ['Điểm Dạy:', 'Điểm Kiểm tra:'], answers: ['100%', '0%'] },

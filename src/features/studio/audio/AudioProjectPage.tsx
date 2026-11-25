@@ -49,7 +49,7 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
     <div className="space-y-8">
       <header className="space-y-2">
         <BackLink to="/studio">{t('project.back')}</BackLink>
-        <p className="font-mono text-xs uppercase text-accent">{t('studio.types.audio')}</p>
+        <p className="text-sm text-muted">{t('studio.types.audio')}</p>
         <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={() => void reload()} />
         <AssignmentBanner projectId={projectId} />
         <ModelCardLink projectId={projectId} />

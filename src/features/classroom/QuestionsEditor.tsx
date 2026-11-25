@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ASSIGNMENT_LIMITS } from '@/storage/schemas/assignment';
-import { X } from '@/ui/icons';
+import { Plus, X } from '@/ui/icons';
 
 interface QuestionsEditorProps {
   readonly questions: readonly string[];
@@ -39,7 +39,7 @@ export function QuestionsEditor({ questions, onChange }: QuestionsEditorProps) {
       </ol>
       {questions.length < ASSIGNMENT_LIMITS.questions && (
         <button type="button" onClick={() => onChange([...questions, ''])} className="btn btn-ghost text-sm">
-          {t('classroom.create.addQuestion')}
+          <Plus /> {t('classroom.create.addQuestion')}
         </button>
       )}
     </fieldset>

@@ -25,7 +25,7 @@ export function ProjectCard({ project, onDelete }: ProjectCardProps) {
       <div className="flex gap-3">
         <Preview project={project} thumbnails={summary?.thumbnails ?? []} />
         <div className="min-w-0">
-          <span className="font-mono text-xs uppercase text-accent">{t(`studio.types.${project.projectType}`)}</span>
+          <span className="text-xs text-muted">{t(`studio.types.${project.projectType}`)}</span>
           <p className="truncate text-lg font-semibold">{project.name}</p>
           {summary && <SummaryLine project={project} summary={summary} />}
           <p className="text-xs text-muted">{t('studio.updatedAt', { date })}</p>

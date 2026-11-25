@@ -11,11 +11,12 @@ describe('Khung ứng dụng', () => {
     useModeStore.setState({ mode: 'explore' });
   });
 
-  test('trang chủ hiển thị tiêu đề và 6 bước quy trình', () => {
+  test('trang chủ: tiêu đề là một câu bình thường, không còn khối "Sáu bước" và "Ba cam kết"', () => {
     renderApp('/', createTestRepository().repository);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Xem nó làm thế nào');
-    const pipeline = screen.getByRole('list', { name: /sáu bước/i });
-    expect(within(pipeline).getAllByRole('listitem')).toHaveLength(6);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Dạy máy tính nhận ra ảnh, âm thanh, cử chỉ và câu chữ.');
+    expect(screen.queryByRole('list', { name: /sáu bước/i })).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Ba cam kết' })).toBeNull();
+    expect(screen.getByRole('region', { name: 'Em muốn dạy máy nhận ra gì?' })).toBeInTheDocument();
   });
 
   test('điều hướng sang Xưởng mô hình', async () => {
@@ -28,7 +29,7 @@ describe('Khung ứng dụng', () => {
   test('chuyển ngôn ngữ sang tiếng Anh và ghi nhớ', async () => {
     renderApp('/', createTestRepository().repository);
     await userEvent.click(screen.getByRole('button', { name: 'English' }));
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('See how it does it');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Teach a computer to recognise images, sounds, gestures and words.');
     expect(window.localStorage.getItem('lup.language')).toBe('en');
     expect(document.documentElement.lang).toBe('en');
   });
