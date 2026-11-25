@@ -9,7 +9,7 @@ export const lessonPlantDisease: Lesson = {
   dataset: 'beans-3',
   goals: [
     'Thấy sự khác biệt giữa dữ liệu thật (đa dạng, nhiễu, các lớp giống nhau) và dữ liệu đơn giản.',
-    'Nhận ra hiện tượng quá khớp: điểm Dạy rất cao nhưng điểm Kiểm tra thấp hơn nhiều, và huấn luyện thêm không giúp được.',
+    'Nhận ra hiện tượng quá khớp: điểm Huấn luyện rất cao nhưng điểm Kiểm tra thấp hơn nhiều, và huấn luyện thêm không giúp được.',
     'Đọc ma trận nhầm lẫn để tìm lỗi hay gặp nhất, và đánh giá lỗi nào gây hại nhiều nhất trong thực tế.',
     'Dùng ngưỡng tin cậy để AI chỉ trả lời khi đủ chắc, phần còn lại chuyển cho chuyên gia.',
   ],
@@ -41,20 +41,20 @@ export const lessonPlantDisease: Lesson = {
     {
       title: 'Huấn luyện: mô hình học thuộc bài',
       body: [
-        'Huấn luyện với cài đặt mặc định. So sánh điểm trên bài đã học (Dạy) và bài chưa học (Kiểm tra). Đọc cảnh báo hiện ra.',
+        'Huấn luyện với cài đặt mặc định. So sánh điểm trên bài đã học (Huấn luyện) và bài chưa học (Kiểm tra). Đọc cảnh báo hiện ra.',
         'Kéo thanh "Phát lại" từ epoch 0 đến 50 và quan sát hai đường trên biểu đồ độ chính xác.',
         'Lưu ý: tập Kiểm tra chỉ có 18 ảnh, nên mỗi ảnh đúng hay sai làm điểm thay đổi khoảng 5,6%.',
       ],
       predict: {
         question: 'Nếu huấn luyện lâu hơn nữa (nhiều epoch hơn), điểm Kiểm tra có tăng lên không?',
         answer:
-          'Không đáng kể. Điểm Dạy tăng dần lên 100% (mô hình nhớ hết 72 ảnh đã học), nhưng điểm Kiểm tra chỉ dừng quanh 70–80% từ khá sớm. Đó là quá khớp: học thuộc bài chứ chưa hiểu bài. Cách chữa thật sự là có thêm nhiều ảnh đa dạng hơn, không phải học lâu hơn.',
+          'Không đáng kể. Điểm Huấn luyện tăng dần lên 100% (mô hình nhớ hết 72 ảnh đã học), nhưng điểm Kiểm tra chỉ dừng quanh 70–80% từ khá sớm. Đó là quá khớp: học thuộc bài chứ chưa hiểu bài. Cách chữa thật sự là có thêm nhiều ảnh đa dạng hơn, không phải học lâu hơn.',
       },
       record: [
         {
           kind: 'table',
           title: 'Kéo thanh "Phát lại" tới từng epoch và ghi điểm',
-          columns: ['Epoch', 'Điểm Dạy (%)', 'Điểm Kiểm tra (%)'],
+          columns: ['Epoch', 'Điểm Huấn luyện (%)', 'Điểm Kiểm tra (%)'],
           rows: ['0', '10', '50'],
           answers: [
             ['37,5', '44,4'],
@@ -155,14 +155,14 @@ export const lessonPlantDisease: Lesson = {
   ],
   quiz: [
     {
-      question: 'Mô hình đạt 100% điểm Dạy nhưng chỉ khoảng 72% điểm Kiểm tra. Điều đó cho thấy gì?',
+      question: 'Mô hình đạt 100% điểm Huấn luyện nhưng chỉ khoảng 72% điểm Kiểm tra. Điều đó cho thấy gì?',
       options: [
         'Mô hình đã hoàn hảo',
         'Mô hình quá khớp: nhớ rất tốt ảnh đã học nhưng chưa làm tốt với ảnh mới',
         'Tập Kiểm tra bị gắn nhãn sai hết',
       ],
       correct: 1,
-      explanation: 'Khoảng cách lớn giữa điểm Dạy và điểm Kiểm tra là dấu hiệu quá khớp. Điểm trên ảnh chưa thấy mới cho biết mô hình dùng được thật hay không.',
+      explanation: 'Khoảng cách lớn giữa điểm Huấn luyện và điểm Kiểm tra là dấu hiệu quá khớp. Điểm trên ảnh chưa thấy mới cho biết mô hình dùng được thật hay không.',
     },
     {
       question: 'Với ứng dụng phát hiện bệnh cây, lỗi nào thường nguy hiểm nhất?',
@@ -179,7 +179,7 @@ export const lessonPlantDisease: Lesson = {
       options: [
         'Để mô hình chạy nhanh hơn',
         'Để mô hình chỉ trả lời khi đủ chắc; trường hợp khó chuyển cho con người',
-        'Để điểm Dạy tăng lên',
+        'Để điểm Huấn luyện tăng lên',
       ],
       correct: 1,
       explanation: 'Ngưỡng cao làm mô hình trả lời ít hơn nhưng đúng hơn. AI là trợ lý, chuyên gia vẫn quyết định ở những ca khó.',
@@ -189,7 +189,7 @@ export const lessonPlantDisease: Lesson = {
       options: [
         'Huấn luyện thêm thật nhiều epoch trên 72 ảnh hiện có',
         'Thu thêm nhiều ảnh đa dạng, được chuyên gia gắn nhãn đúng',
-        'Bỏ tập Kiểm tra đi để có thêm ảnh Dạy',
+        'Bỏ tập Kiểm tra đi để có thêm ảnh Huấn luyện',
       ],
       correct: 1,
       explanation: 'Học lâu hơn trên ít ảnh chỉ làm mô hình học thuộc thêm. Dữ liệu nhiều và đa dạng mới giúp mô hình nhận ra đặc điểm thật của từng bệnh.',
@@ -198,7 +198,7 @@ export const lessonPlantDisease: Lesson = {
   wrapUp:
     'Với dữ liệu thật, mô hình dễ học thuộc những ảnh đã thấy mà chưa làm tốt với ảnh mới. Người làm AI phải nhìn vào điểm trên dữ liệu chưa thấy, tìm xem lỗi nào gây hại nhất, và thiết kế để AI biết nói "không chắc", nhường quyết định khó cho con người.',
   teacherNotes: [
-    'Đã kiểm chứng với MobileNetV2 (cài đặt mặc định): điểm Dạy 100%, điểm Kiểm tra khoảng 72% (13/18 ảnh); cảnh báo quá khớp hiện ra.',
+    'Đã kiểm chứng với MobileNetV2 (cài đặt mặc định): điểm Huấn luyện 100%, điểm Kiểm tra khoảng 72% (13/18 ảnh); cảnh báo quá khớp hiện ra.',
     'Lỗi hay gặp nhất là lá gỉ sắt bị đoán thành đốm góc (3/6 ảnh gỉ sắt trong lần chạy kiểm chứng); không có lá bệnh nào bị đoán là khỏe. Ở ngưỡng 90%, mô hình trả lời 10/18 ảnh và đúng 90%.',
     'Kết quả có thể lệch rất nhỏ giữa các máy (card đồ họa tính số thực hơi khác). Tập Kiểm tra chỉ 18 ảnh, nên mỗi ảnh tương đương khoảng 5,6 điểm phần trăm: nhắc học sinh không kết luận quá mạnh từ chênh lệch 1 ảnh.',
     'Bước "Mô hình nhìn vào đâu?" là câu hỏi mở: hãy để học sinh tự quan sát và tranh luận, không có đáp án duy nhất.',

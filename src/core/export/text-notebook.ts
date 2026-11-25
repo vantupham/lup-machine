@@ -1,6 +1,6 @@
 /**
  * Notebook Colab cho dự án văn bản: dựng lại đúng bộ từ vựng, TF-IDF / số lần xuất hiện và mô hình
- * bằng scikit-learn, trên cùng các câu và cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine.
+ * bằng scikit-learn, trên cùng các câu và cùng cách chia Huấn luyện / Kiểm tra, rồi so kết quả với LUP Machine.
  */
 import type { TextData, TextEvaluation, TextModelSettings } from '@/core/text/text-model';
 import { code, markdown, notebook, pyList, pyNumber, pyString, type Notebook } from './notebook';
@@ -26,10 +26,10 @@ export function textNotebook(input: TextNotebookInput): Notebook {
     markdown(
       `# ${input.projectName} — notebook xuất từ LUP Machine`,
       '',
-      'Notebook này dựng lại mô hình phân loại câu tiếng Việt của em bằng **Python và scikit-learn**, trên **cùng các câu** và **cùng cách chia** tập Dạy / Kiểm tra, rồi so kết quả với LUP Machine.',
+      'Notebook này dựng lại mô hình phân loại câu tiếng Việt của em bằng **Python và scikit-learn**, trên **cùng các câu** và **cùng cách chia** tập Huấn luyện / Kiểm tra, rồi so kết quả với LUP Machine.',
       '',
       '- **Cách chạy:** trong Colab chọn *Thời gian chạy → Chạy tất cả* (Runtime → Run all).',
-      `- **Dữ liệu:** ${data.train.texts.length} câu Dạy và ${data.test.texts.length} câu Kiểm tra, nằm ngay trong notebook.`,
+      `- **Dữ liệu:** ${data.train.texts.length} câu Huấn luyện và ${data.test.texts.length} câu Kiểm tra, nằm ngay trong notebook.`,
       `- Xuất lúc ${input.exportedAt} từ LUP Machine ${input.appVersion}.`,
     ),
     code(
@@ -46,12 +46,12 @@ export function textNotebook(input: TextNotebookInput): Notebook {
       `y_train = np.array(${pyList(data.train.y)})`,
       `test_texts = ${pyList(data.test.texts)}`,
       `y_test = np.array(${pyList(data.test.y)})`,
-      'print(f"{len(train_texts)} câu Dạy, {len(test_texts)} câu Kiểm tra")',
+      'print(f"{len(train_texts)} câu Huấn luyện, {len(test_texts)} câu Kiểm tra")',
     ),
     markdown(
       '## 2. Biến câu thành vector',
       '',
-      'Tách âm tiết bằng mẫu `\\w+` (giữ cả âm tiết một chữ cái như "ở", "à"), đổi sang chữ thường. Bộ từ vựng chỉ dựng từ **tập Dạy**.',
+      'Tách âm tiết bằng mẫu `\\w+` (giữ cả âm tiết một chữ cái như "ở", "à"), đổi sang chữ thường. Bộ từ vựng chỉ dựng từ **tập Huấn luyện**.',
       isNb ? 'Naive Bayes dùng **số lần** mỗi từ xuất hiện.' : 'Hồi quy logistic dùng **TF-IDF**: số lần × độ hiếm của từ, rồi chuẩn hóa độ dài.',
     ),
     code(

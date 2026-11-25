@@ -38,7 +38,7 @@ export interface TestCoverageIssue {
   readonly label: string;
 }
 
-/** Lớp có ảnh Dạy nhưng không có ảnh Kiểm tra thì không thể đánh giá khách quan. */
+/** Lớp có ảnh Huấn luyện nhưng không có ảnh Kiểm tra thì không thể đánh giá khách quan. */
 export function checkTestCoverage(
   counts: Readonly<Record<string, { readonly train: number; readonly test: number }>>,
 ): TestCoverageIssue[] {

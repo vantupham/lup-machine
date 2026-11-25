@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useRef, useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { normalizationFrame, unpackKeypoints, type PoseKind } from '@/core/pose/features';
 import { BODY_POSES, HAND_POSES, poseDataset } from '@/core/pose/synthetic-poses';
@@ -11,6 +11,8 @@ import { PoseCamera } from './PoseCamera';
 import { grabFrame, imageFromFile, loadDetector, type PoseDetection } from './pose-io.browser';
 import { Skeleton } from './Skeleton';
 import { ClassMarker } from '@/ui/ClassMarker';
+import { nextClassName } from '@/features/studio/next-class-name';
+import { Plus, Trash2 } from '@/ui/icons';
 
 const THUMBS_SHOWN = 12;
 /** "Ghi liên tiếp": số mẫu và khoảng cách giữa hai mẫu; có 3 giây đếm ngược để kịp tạo dáng. */
@@ -44,7 +46,6 @@ export function PoseDataSection({ projectId, kind, kindLocked, onKindChange, cla
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ kind: 'info' | 'error'; text: string } | null>(null);
   const [countdown, setCountdown] = useState<number | null>(null);
-  const [newClass, setNewClass] = useState('');
   const latest = useRef<PoseDetection | null>(null);
 
   const run = async (task: () => Promise<string | null>) => {
@@ -110,16 +111,12 @@ export function PoseDataSection({ projectId, kind, kindLocked, onKindChange, cla
       return null;
     });
 
-  const addClass = (event: FormEvent) => {
-    event.preventDefault();
-    const name = newClass.trim();
-    if (!name) return;
+  /** Thêm "Nhóm n" (số tăng dần); đổi tên ngay trong ô tên của nhóm. */
+  const addClass = () =>
     void run(async () => {
-      await dataset.addClass(projectId, name);
-      setNewClass('');
+      await dataset.addClass(projectId, nextClassName(classes.map((c) => c.name), (n) => t('audio.data.defaultClass', { n })));
       return null;
     });
-  };
 
   return (
     <div className="space-y-4">
@@ -163,7 +160,12 @@ export function PoseDataSection({ projectId, kind, kindLocked, onKindChange, cla
             <li key={cls.id} className="lab-card space-y-3 p-4">
               <div className="flex items-center gap-2">
                 <ClassMarker index={i} />
-                <span className="flex-1 font-semibold">{cls.name}</span>
+                <GroupNameInput
+                  key={cls.name}
+                  name={cls.name}
+                  label={t('audio.data.className', { n: i + 1 })}
+                  onRename={(name) => void run(async () => (await dataset.renameClass(cls.id, name), null))}
+                />
                 <span className="font-mono text-xs text-muted" data-testid={`pose-count-${i}`}>{t('pose.data.poseCount', { n: mine.length })}</span>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -178,10 +180,16 @@ export function PoseDataSection({ projectId, kind, kindLocked, onKindChange, cla
                     if (files.length) void upload(cls.id, files);
                   }} />
                 </label>
-                <button type="button" className="btn btn-ghost ml-auto text-xs" onClick={() => {
-                  if (window.confirm(t('pose.data.confirmDeleteClass', { name: cls.name }))) void run(async () => (await dataset.deleteClass(cls.id), null));
-                }}>
-                  {t('audio.data.deleteClass')}
+                <button
+                  type="button"
+                  className="ml-auto rounded p-1.5 text-muted transition-colors hover:bg-danger/10 hover:text-danger"
+                  aria-label={t('audio.data.deleteClassAria', { name: cls.name })}
+                  title={t('audio.data.deleteClass')}
+                  onClick={() => {
+                    if (window.confirm(t('pose.data.confirmDeleteClass', { name: cls.name }))) void run(async () => (await dataset.deleteClass(cls.id), null));
+                  }}
+                >
+                  <Trash2 />
                 </button>
               </div>
               <ul className="grid grid-cols-4 gap-2 sm:grid-cols-6">
@@ -197,15 +205,38 @@ export function PoseDataSection({ projectId, kind, kindLocked, onKindChange, cla
           );
         })}
       </ul>
-      <form onSubmit={addClass} className="flex flex-wrap items-end gap-2">
-        <label className="text-sm font-medium">
-          {t('audio.data.newClass')}
-          <input value={newClass} onChange={(e) => setNewClass(e.target.value)} maxLength={40} className="mt-1 block rounded border border-rule bg-paper px-2 py-1" />
-        </label>
-        <button type="submit" className="btn btn-ghost text-sm" disabled={busy || newClass.trim() === ''}>{t('audio.data.addClass')}</button>
-      </form>
+      <button type="button" className="btn btn-ghost text-sm" disabled={busy} onClick={addClass}>
+        <Plus /> {t('audio.data.addClass')}
+      </button>
       {message && <p role={message.kind === 'error' ? 'alert' : 'status'} className={`text-sm ${message.kind === 'error' ? 'text-danger' : 'text-accent'}`}>{message.text}</p>}
       <p className="text-xs text-muted">{t('pose.data.privacy')}</p>
     </div>
+  );
+}
+
+interface GroupNameInputProps {
+  readonly name: string;
+  readonly label: string;
+  readonly onRename: (name: string) => void;
+}
+
+/** Tên nhóm sửa được ngay tại chỗ: rời ô (hoặc Enter) là lưu, để trống thì giữ tên cũ. */
+function GroupNameInput({ name, label, onRename }: GroupNameInputProps) {
+  const [draft, setDraft] = useState(name);
+  const commit = () => {
+    const next = draft.trim();
+    if (next && next !== name) onRename(next);
+    else setDraft(name);
+  };
+  return (
+    <input
+      aria-label={label}
+      value={draft}
+      maxLength={40}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+      className="min-w-0 flex-1 rounded border border-transparent bg-transparent px-2 py-1 font-semibold hover:border-rule focus:border-rule focus:bg-paper"
+    />
   );
 }

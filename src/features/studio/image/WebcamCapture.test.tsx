@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import i18n from '@/i18n';
 import type { StoredImage } from '@/storage/db';
@@ -46,6 +46,32 @@ describe('WebcamCapture', () => {
     expect(captureFrame).toHaveBeenCalledTimes(2);
     await act(async () => release(IMAGE));
     expect(await screen.findByText('Đã chụp 2 ảnh')).toBeInTheDocument();
+  });
+
+  test('giữ nút chụp liên tục: ảnh vừa chụp hiện ngay thành dải ảnh nhỏ trong hộp, ảnh mới nhất đứng đầu', async () => {
+    const created: Blob[] = [];
+    vi.spyOn(URL, 'createObjectURL').mockImplementation((blob) => {
+      created.push(blob as Blob);
+      return `blob:shot-${created.length}`;
+    });
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined);
+    const frames = [1, 2, 3].map((n): StoredImage => ({ ...IMAGE, bytes: new Uint8Array([n]).buffer }));
+    let next = 0;
+    const captureFrame = vi.fn(async () => frames[next++ % frames.length]!);
+    render(<WebcamCapture title="Lớp 1" remaining={3} captureFrame={captureFrame} onDone={vi.fn()} />);
+    expect(screen.queryByRole('list', { name: 'Ảnh vừa chụp' })).toBeNull();
+
+    const hold = await screen.findByRole('button', { name: /Giữ để chụp liên tục/ });
+    await waitFor(() => expect(hold).toBeEnabled());
+    fireEvent.pointerDown(hold);
+    await waitFor(() => expect(screen.getByText('Đã chụp 3 ảnh')).toBeInTheDocument(), { timeout: 3000 });
+    fireEvent.pointerUp(hold);
+
+    const strip = screen.getByRole('list', { name: 'Ảnh vừa chụp' });
+    const thumbs = [...strip.querySelectorAll('img')];
+    expect(thumbs).toHaveLength(3);
+    expect(thumbs[0]).toHaveAttribute('src', 'blob:shot-3');
+    expect(captureFrame).toHaveBeenCalledTimes(3);
   });
 
   test('không làm mờ được khuôn mặt thì báo rõ, khung hình không được giữ lại', async () => {

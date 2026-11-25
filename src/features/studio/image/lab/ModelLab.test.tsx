@@ -122,15 +122,15 @@ describe('Bước 3: Biểu diễn', () => {
     expect(await screen.findByText(/tất cả ảnh đã có vector/i)).toBeInTheDocument();
   });
 
-  test('bấm một chấm: xem 1280 con số và các ảnh Dạy giống nhất', async () => {
+  test('bấm một chấm: xem 1280 con số và các ảnh Huấn luyện giống nhất', async () => {
     await seed();
     open();
     await extractAll();
     const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
-    await userEvent.click(within(map).getAllByRole('button', { name: /ảnh lớp nhựa, ngăn dạy/i })[0]!);
+    await userEvent.click(within(map).getAllByRole('button', { name: /ảnh lớp nhựa, ngăn huấn luyện/i })[0]!);
     const detail = await screen.findByTestId('selected-detail');
     expect(within(detail).getByTestId('feature-strip').querySelectorAll('rect')).toHaveLength(1280);
-    expect(within(detail).getByText(/ảnh dạy giống nhất/i)).toBeInTheDocument();
+    expect(within(detail).getByText(/ảnh huấn luyện giống nhất/i)).toBeInTheDocument();
     expect(within(detail).getAllByText(/^Nhựa · /)).toHaveLength(3);
   });
 
@@ -144,7 +144,7 @@ describe('Bước 3: Biểu diễn', () => {
 });
 
 describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
-  test('huấn luyện, xem điểm Dạy / Kiểm tra và ma trận nhầm lẫn bấm được', async () => {
+  test('huấn luyện, xem điểm Huấn luyện / Kiểm tra và ma trận nhầm lẫn bấm được', async () => {
     await seed();
     open();
     expect(await screen.findByText('Huấn luyện ở bước 4 để xem kết quả.')).toBeInTheDocument();
@@ -216,7 +216,7 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     open();
     await extractAll();
     await trainToEnd();
-    await userEvent.type(screen.getByLabelText('Tên lớp mới'), 'Kim loại{Enter}');
+    await userEvent.click(within(screen.getByRole('region', { name: 'Dữ liệu' })).getByRole('button', { name: 'Thêm lớp' }));
     expect(await screen.findByText(/các lớp đã đổi/i)).toBeInTheDocument();
     expect(screen.getByText('Huấn luyện ở bước 4 để xem kết quả.')).toBeInTheDocument();
     // mô hình cũ không còn khớp dữ liệu: không cho xuất notebook
@@ -411,7 +411,7 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     expect(screen.getByTestId('threshold-summary').textContent).not.toBe('Trả lời 4/4 ảnh (100%) · đúng 100% trong số đã trả lời');
   });
 
-  test('chỉ có 1 lớp có ảnh Dạy thì chưa huấn luyện được', async () => {
+  test('chỉ có 1 lớp có ảnh Huấn luyện thì chưa huấn luyện được', async () => {
     repos = createTestRepository();
     projectId = (await repos.repository.create({ name: 'Một lớp', projectType: 'image' })).id;
     const c = await repos.dataset.addClass(projectId, 'A');
@@ -419,7 +419,7 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     await repos.dataset.addSamples([0, 1].map((n) => ({ projectId, classId: c.id, split: 'train' as const, source: 'upload' as const, image: imageOf(10, n) })));
     open();
     await userEvent.click(await screen.findByRole('button', { name: /biến ảnh thành vector/i }));
-    expect(await screen.findByText('Cần ít nhất 2 lớp có ảnh Dạy.')).toBeInTheDocument();
+    expect(await screen.findByText('Cần ít nhất 2 lớp có ảnh Huấn luyện.')).toBeInTheDocument();
   });
 });
 

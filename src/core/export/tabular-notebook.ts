@@ -1,6 +1,6 @@
 /**
  * Notebook Colab cho dự án dữ liệu bảng: dựng lại ĐÚNG mô hình bằng pandas + scikit-learn
- * trên cùng dữ liệu và cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine.
+ * trên cùng dữ liệu và cùng cách chia Huấn luyện / Kiểm tra, rồi so kết quả với LUP Machine.
  */
 import type { ParsedTable } from '@/core/tabular/csv';
 import { parseNumber } from '@/core/tabular/columns';
@@ -25,7 +25,7 @@ function csvCell(value: string): string {
   return /[",\n\r]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
 }
 
-/** Bảng đã làm sạch: chỉ các cột dùng tới, chỉ các dòng dùng được, số viết bằng dấu chấm, thêm cột Dạy / Kiểm tra. */
+/** Bảng đã làm sạch: chỉ các cột dùng tới, chỉ các dòng dùng được, số viết bằng dấu chấm, thêm cột Huấn luyện / Kiểm tra. */
 export function cleanedCsv(table: ParsedTable, data: PreparedData): string {
   const index = (name: string) => table.headers.indexOf(name);
   const featureIdx = data.encoders.map((e) => index(e.name));
@@ -89,12 +89,12 @@ const EXPLAIN_CODE: Record<TabularModelSettings['kind'], string[]> = {
     'weights["độ lệch"] = model.intercept_',
     'weights.round(3)',
   ],
-  knn: ['print(f"k-NN không học trọng số: nó ghi nhớ {len(X_train)} dòng Dạy và tìm {model.n_neighbors} dòng gần nhất mỗi lần dự đoán.")'],
+  knn: ['print(f"k-NN không học trọng số: nó ghi nhớ {len(X_train)} dòng Huấn luyện và tìm {model.n_neighbors} dòng gần nhất mỗi lần dự đoán.")'],
   linear: [
     'print(f"độ lệch = {model.intercept_:.4f}")',
     'pd.Series(model.coef_, index=X_train.columns, name="hệ số").round(4)',
   ],
-  'knn-regression': ['print(f"k-NN không học trọng số: nó lấy trung bình {model.n_neighbors} dòng Dạy gần nhất.")'],
+  'knn-regression': ['print(f"k-NN không học trọng số: nó lấy trung bình {model.n_neighbors} dòng Huấn luyện gần nhất.")'],
 };
 
 function lupResults(evaluation: Evaluation): [string, number][] {
@@ -118,21 +118,21 @@ export function tabularNotebook(input: TabularNotebookInput): Notebook {
     markdown(
       `# ${input.projectName} — notebook xuất từ LUP Machine`,
       '',
-      'Notebook này dựng lại mô hình em đã huấn luyện trên LUP Machine bằng **Python, pandas và scikit-learn**, trên **cùng dữ liệu** và **cùng cách chia** tập Dạy / Kiểm tra, rồi so kết quả với LUP Machine.',
+      'Notebook này dựng lại mô hình em đã huấn luyện trên LUP Machine bằng **Python, pandas và scikit-learn**, trên **cùng dữ liệu** và **cùng cách chia** tập Huấn luyện / Kiểm tra, rồi so kết quả với LUP Machine.',
       '',
       '- **Cách chạy:** trong Colab chọn *Thời gian chạy → Chạy tất cả* (Runtime → Run all).',
       `- **Dữ liệu:** ${total} dòng dùng được, nằm ngay trong notebook (không tải từ đâu về).${data.dropped > 0 ? ` ${data.dropped} dòng thiếu giá trị đã được bỏ, giống trên LUP Machine.` : ''}`,
       `- Xuất lúc ${input.exportedAt} từ LUP Machine ${input.appVersion}.`,
     ),
     code('import io', 'import numpy as np', 'import pandas as pd', 'from sklearn.preprocessing import StandardScaler', 'from sklearn.metrics import accuracy_score, confusion_matrix, mean_squared_error, r2_score'),
-    markdown('## 1. Dữ liệu', '', `Cột \`${SPLIT_COLUMN}\` ghi mỗi dòng thuộc tập Dạy (\`train\`) hay Kiểm tra (\`test\`), đúng như trên LUP Machine.`),
+    markdown('## 1. Dữ liệu', '', `Cột \`${SPLIT_COLUMN}\` ghi mỗi dòng thuộc tập Huấn luyện (\`train\`) hay Kiểm tra (\`test\`), đúng như trên LUP Machine.`),
     code(
       `CSV = ${pyString(cleanedCsv(input.table, data))}`,
       '',
       `TARGET = ${pyString(data.target)}  # cột cần dự đoán`,
       `FEATURES = ${pyList(data.encoders.map((e) => e.name))}  # các cột máy được dùng`,
       `NUMERIC = ${pyList(numeric)}`,
-      'CATEGORIES = {  # cột chữ và các giá trị gặp trong tập Dạy',
+      'CATEGORIES = {  # cột chữ và các giá trị gặp trong tập Huấn luyện',
       ...categories,
       '}',
       ...(isClassification ? [`CLASS_NAMES = ${pyList(data.classNames)}`] : []),
@@ -140,10 +140,10 @@ export function tabularNotebook(input: TabularNotebookInput): Notebook {
       `df = pd.read_csv(io.StringIO(CSV), dtype={c: str for c in ${pyList(stringColumns)}}, keep_default_na=False)`,
       `train = df[df[${pyString(SPLIT_COLUMN)}] == "train"]`,
       `test = df[df[${pyString(SPLIT_COLUMN)}] == "test"]`,
-      'print(f"{len(train)} dòng Dạy, {len(test)} dòng Kiểm tra")',
+      'print(f"{len(train)} dòng Huấn luyện, {len(test)} dòng Kiểm tra")',
       'df.head()',
     ),
-    markdown('## 2. Biến bảng thành các con số', '', 'Cột số giữ nguyên ("thô") hoặc chuẩn hóa *z = (x − trung bình) / độ lệch chuẩn* (tính trên tập Dạy). Cột chữ được mã hóa **one-hot**: mỗi giá trị thành một cột 0/1.'),
+    markdown('## 2. Biến bảng thành các con số', '', 'Cột số giữ nguyên ("thô") hoặc chuẩn hóa *z = (x − trung bình) / độ lệch chuẩn* (tính trên tập Huấn luyện). Cột chữ được mã hóa **one-hot**: mỗi giá trị thành một cột 0/1.'),
     code(
       'def to_matrix(part):',
       '    columns = {}',
@@ -191,7 +191,7 @@ export function tabularNotebook(input: TabularNotebookInput): Notebook {
     ),
     markdown(
       'Hai bên dùng cùng thuật toán nên kết quả thường **khớp**. Nếu có chỗ lệch nhỏ, lý do có thể là:',
-      '- **k-NN:** khi hai dòng Dạy cách đều điểm cần đoán, mỗi chương trình chọn một dòng khác nhau.',
+      '- **k-NN:** khi hai dòng Huấn luyện cách đều điểm cần đoán, mỗi chương trình chọn một dòng khác nhau.',
       '- **Cây quyết định:** khi hai câu hỏi tốt ngang nhau, scikit-learn chọn ngẫu nhiên (theo `random_state`), còn LUP Machine chọn cột đứng trước.',
       '- **Hồi quy logistic:** hai bên tối ưu tới sai số rất nhỏ nhưng không bằng 0.',
     ),

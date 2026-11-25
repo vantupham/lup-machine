@@ -29,7 +29,7 @@ export interface Neighbor {
   readonly similarity: number;
 }
 
-/** "Giải thích bằng ví dụ": các ảnh Dạy có vector giống `target` nhất (độ tương đồng cosine). */
+/** "Giải thích bằng ví dụ": các ảnh Huấn luyện có vector giống `target` nhất (độ tương đồng cosine). */
 export function nearestTrainToVector(
   target: Float32Array,
   samples: readonly SampleRecord[],

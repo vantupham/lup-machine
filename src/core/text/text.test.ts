@@ -32,7 +32,7 @@ describe('đối chiếu scikit-learn', () => {
         idf.forEach((v, i) => expect(v).toBeCloseTo(c.idf[i]!, 12));
       });
 
-      test('vector TF-IDF của câu Dạy và câu mới khớp', () => {
+      test('vector TF-IDF của câu Huấn luyện và câu mới khớp', () => {
         counts.forEach((row, n) => tfidfVector(row, idf).forEach((v, j) => expect(v).toBeCloseTo(c.tfidf[n]![j]!, 12)));
         queries.forEach((row, n) => tfidfVector(row, idf).forEach((v, j) => expect(v).toBeCloseTo(c.queryTfidf[n]![j]!, 12)));
       });

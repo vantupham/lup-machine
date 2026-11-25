@@ -41,6 +41,7 @@ export {
   Table,
   Target,
   Triangle,
+  Trash2,
   TrendingDown,
   X,
 } from 'lucide-react';

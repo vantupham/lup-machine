@@ -6,7 +6,7 @@ import {
 } from './quality-checks';
 
 describe('checkTestCoverage', () => {
-  test('cảnh báo lớp có ảnh Dạy nhưng chưa có ảnh Kiểm tra', () => {
+  test('cảnh báo lớp có ảnh Huấn luyện nhưng chưa có ảnh Kiểm tra', () => {
     expect(
       checkTestCoverage({ meo: { train: 20, test: 0 }, cho: { train: 20, test: 4 } }),
     ).toEqual([{ code: 'no-test-samples', severity: 'warning', label: 'meo' }]);

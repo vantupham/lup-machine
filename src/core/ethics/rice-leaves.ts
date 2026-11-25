@@ -63,7 +63,7 @@ export const EXPERIMENT_SIZES = {
   testPerRegion: 50,
 } as const;
 
-/** Seed cố định cho từng phần: dữ liệu Kiểm tra không bao giờ trùng dữ liệu Dạy. */
+/** Seed cố định cho từng phần: dữ liệu Kiểm tra không bao giờ trùng dữ liệu Huấn luyện. */
 const SEEDS = { lowland: 11, mountainFew: 23, mountainMore: 37, testLowland: 101, testMountain: 103 } as const;
 
 export interface BiasExperimentData {
@@ -88,7 +88,7 @@ export function biasExperimentData(offset = 0): BiasExperimentData {
 }
 
 /**
- * Mô hình hồi quy logistic, chuẩn hóa theo dữ liệu Dạy.
+ * Mô hình hồi quy logistic, chuẩn hóa theo dữ liệu Huấn luyện.
  * Mặc định chỉ nhìn 2 số đo (không biết lá ở vùng nào); `useRegion` thêm cột "ở Miền núi" (0/1).
  */
 export interface LeafModel {

@@ -95,7 +95,7 @@ describe('Bước 6: Sử dụng (Studio ảnh)', () => {
     expect(getUserMedia).not.toHaveBeenCalled();
   });
 
-  test('tải một ảnh mới: đoán lớp, đặt dấu hoa thị lên bản đồ, chỉ ra ảnh Dạy giống nhất và giải thích', async () => {
+  test('tải một ảnh mới: đoán lớp, đặt dấu hoa thị lên bản đồ, chỉ ra ảnh Huấn luyện giống nhất và giải thích', async () => {
     vi.mocked(codec.fileToStoredImage).mockResolvedValue(imageOf(240));
     renderUse();
     const input = screen.getByLabelText(/tải một ảnh lên để thử/i);
@@ -106,7 +106,7 @@ describe('Bước 6: Sử dụng (Studio ảnh)', () => {
     // ảnh thử không bao giờ được làm mờ / lưu: gọi không kèm tùy chọn làm mờ
     expect(codec.fileToStoredImage).toHaveBeenCalledWith(expect.any(File));
     expect(screen.getByTestId('probe-marker')).toHaveAccessibleName(/ảnh đang thử.*Giấy/i);
-    const neighbors = screen.getByRole('list', { name: /ảnh dạy giống nhất/i });
+    const neighbors = screen.getByRole('list', { name: /ảnh huấn luyện giống nhất/i });
     expect(within(neighbors).getAllByRole('listitem')[0]).toHaveTextContent('Giấy');
     expect(await screen.findByTestId('cam-heatmap')).toBeInTheDocument();
     expect(screen.getByText(/không lưu vào dự án/i)).toBeInTheDocument();

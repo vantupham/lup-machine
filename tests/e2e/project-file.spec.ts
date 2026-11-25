@@ -43,7 +43,7 @@ test('dự án ảnh: xuất .lup, xóa, mở lại tệp → đủ lớp và �
 
   await expect(page.getByRole('heading', { level: 1, name: 'Tròn, vuông, tam giác' })).toBeVisible();
   for (const name of ['Hình tròn', 'Hình vuông', 'Tam giác']) {
-    await expect(page.getByRole('article', { name }).getByRole('tab', { name: 'Dạy (18)' })).toBeVisible();
+    await expect(page.getByRole('article', { name }).getByRole('tab', { name: 'Huấn luyện (18)' })).toBeVisible();
   }
   // ảnh JPEG đi qua tệp zip vẫn giải mã được trong trình duyệt
   const firstImage = page.getByRole('article', { name: 'Hình tròn' }).locator('img').first();

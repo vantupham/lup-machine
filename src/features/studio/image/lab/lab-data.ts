@@ -16,7 +16,7 @@ export type TrainingReadiness =
 
 const MIN_TRAINABLE_CLASSES = 2;
 
-/** Dựng tập Dạy / Kiểm tra cho bộ phân loại: nhãn = vị trí của lớp trong danh sách lớp. */
+/** Dựng tập Huấn luyện / Kiểm tra cho bộ phân loại: nhãn = vị trí của lớp trong danh sách lớp. */
 export function buildTrainingData(
   classes: readonly ClassRecord[],
   samples: readonly SampleRecord[],
@@ -67,7 +67,7 @@ export function predictSamples(
   return result;
 }
 
-/** "Giải thích bằng ví dụ" cho một ảnh đã có: các ảnh Dạy giống nhất, không tính chính nó. */
+/** "Giải thích bằng ví dụ" cho một ảnh đã có: các ảnh Huấn luyện giống nhất, không tính chính nó. */
 export function nearestTrainSamples(
   sampleId: string,
   samples: readonly SampleRecord[],

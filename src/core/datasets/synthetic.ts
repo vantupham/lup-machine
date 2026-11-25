@@ -56,7 +56,7 @@ const hsl = (h: number, s: number, l: number) => `hsl(${round(h)} ${round(s)}% $
 
 function backgroundLightness(rng: Rng, rule: BackgroundRule, classIndex: number, split: 'train' | 'test'): number {
   if (rule === 'varied') return rng() < 0.5 ? between(rng, LIGHT_BG) : between(rng, DARK_BG);
-  // Bẫy: lúc Dạy lớp 0 luôn nền sáng, lớp 1 luôn nền tối; lúc Kiểm tra thì đảo ngược.
+  // Bẫy: trong tập Huấn luyện lớp 0 luôn nền sáng, lớp 1 luôn nền tối; lúc Kiểm tra thì đảo ngược.
   const isLight = (classIndex === 0) === (split === 'train');
   return between(rng, isLight ? LIGHT_BG : DARK_BG);
 }

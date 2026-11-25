@@ -59,8 +59,8 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
 
   await upload(page, 'Lớp 1', await makeImages(page, 'warm', IMAGES_PER_CLASS));
   await upload(page, 'Lớp 2', await makeImages(page, 'cool', IMAGES_PER_CLASS));
-  await page.getByRole('button', { name: /Tự chia Dạy/ }).click();
-  await expect(page.getByText('Đã chia lại: 16 ảnh Dạy, 4 ảnh Kiểm tra.')).toBeVisible();
+  await page.getByRole('button', { name: /Tự chia Huấn luyện/ }).click();
+  await expect(page.getByText('Đã chia lại: 16 ảnh Huấn luyện, 4 ảnh Kiểm tra.')).toBeVisible();
 
   // Đo khoảng "đứng hình" dài nhất của luồng giao diện trong lúc MobileNet làm việc.
   await page.evaluate(() => {

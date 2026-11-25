@@ -12,7 +12,7 @@ describe('Bộ dữ liệu mẫu tổng hợp', () => {
     expect(generateDataset(byId('shapes-3'))).toEqual(generateDataset(byId('shapes-3')));
   });
 
-  test.each(SAMPLE_DATASETS.map((d) => [d.id, d] as const))('%s: đúng số ảnh mỗi lớp, mỗi lớp có cả ảnh Dạy và Kiểm tra', (_id, def) => {
+  test.each(SAMPLE_DATASETS.map((d) => [d.id, d] as const))('%s: đúng số ảnh mỗi lớp, mỗi lớp có cả ảnh Huấn luyện và Kiểm tra', (_id, def) => {
     const data = generateDataset(def);
     for (const key of def.classKeys) {
       const ofClass = data.filter((s) => s.classKey === key);
@@ -37,7 +37,7 @@ describe('Bộ dữ liệu mẫu tổng hợp', () => {
     for (const s of generateDataset(byId('shapes-3'))) expect(s.shape.kind).toBe(s.classKey);
   });
 
-  test('bẫy nền: Dạy = tròn nền sáng / vuông nền tối; Kiểm tra thì đảo ngược', () => {
+  test('bẫy nền: Huấn luyện = tròn nền sáng / vuông nền tối; Kiểm tra thì đảo ngược', () => {
     const data = generateDataset(byId('background-trap'));
     const bg = (classKey: string, split: string) =>
       data.filter((s) => s.classKey === classKey && s.split === split).map((s) => lightness(s.shape.background));

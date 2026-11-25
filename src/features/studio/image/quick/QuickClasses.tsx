@@ -16,7 +16,7 @@ interface QuickClassesProps {
   readonly onAddClass: () => void;
 }
 
-/** Cột 1: mỗi lớp một dòng gọn, chụp hoặc tải ảnh thẳng vào ngăn Dạy. */
+/** Cột 1: mỗi lớp một dòng gọn, chụp hoặc tải ảnh thẳng vào ngăn Huấn luyện. */
 export function QuickClasses({ classes, samplesByClass, onWebcam, onUpload, onAddClass }: QuickClassesProps) {
   const { t } = useTranslation();
   return (

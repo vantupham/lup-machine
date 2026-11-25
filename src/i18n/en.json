@@ -445,8 +445,6 @@
       "title": "Data",
       "lead": "Each class is a group to tell apart. Train images teach; Test images are kept aside for scoring.",
       "addClass": "Add class",
-      "newClassPlaceholder": "New class name, e.g. Paper",
-      "newClassLabel": "New class name",
       "autoSplit": "Auto-split Train / Test (80/20)",
       "autoSplitDone": "Re-split: {{train}} Train images, {{test}} Test images.",
       "autoSplitHint": "Random but with a fixed seed ({{seed}}), so splitting again gives exactly the same result.",
@@ -469,7 +467,9 @@
       "moveToTrain": "Move to Train",
       "deleteSample": "Delete image",
       "count": "{{train}} Train · {{test}} Test",
-      "sample": "Image {{n}}"
+      "sample": "Image {{n}}",
+      "renameAria": "Rename class {{name}}",
+      "deleteAria": "Delete class {{name}}"
     },
     "upload": {
       "processing": "Processing {{done}}/{{total}} images…",
@@ -496,7 +496,8 @@
       "privacy": "Images are processed only on this device.",
       "full": "This class already has {{max}} images.",
       "blurError": "Could not blur faces, so this image was not saved. Check your connection and try again, or turn blurring off.",
-      "snapError": "Could not capture the frame. Try again."
+      "snapError": "Could not capture the frame. Try again.",
+      "shotsLabel": "Images just captured"
     },
     "quality": {
       "title": "Check data",
@@ -1425,11 +1426,12 @@
       "deleteClip": "Delete this clip",
       "play": "Play clip {{n}}",
       "moreClips": "… and {{n}} older clips.",
-      "newClass": "New group name",
       "addClass": "Add group",
       "error": "Could not process the audio: {{message}}",
       "unsupported": "This browser does not support Web Audio, so it cannot record or read sound. Use a recent Chrome or Edge.",
-      "privacy": "Sound is stored on this device as 1-second, 16 kHz clips; original files are not kept."
+      "privacy": "Sound is stored on this device as 1-second, 16 kHz clips; original files are not kept.",
+      "defaultClass": "Group {{n}}",
+      "deleteClassAria": "Delete group {{name}}"
     },
     "live": {
       "badge": "Approximate",

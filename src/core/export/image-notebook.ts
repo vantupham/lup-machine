@@ -52,7 +52,7 @@ export function imageNotebook(input: ImageNotebookInput): Notebook {
       `y_train = np.array(${pyList(input.train.ys)}, dtype="int64")`,
       `X_test = decode(${pyString(float32ToBase64(test.xs))})`,
       `y_test = np.array(${pyList(test.ys)}, dtype="int64")`,
-      'print(f"Dạy: {X_train.shape}, Kiểm tra: {X_test.shape}")',
+      'print(f"Huấn luyện: {X_train.shape}, Kiểm tra: {X_test.shape}")',
     ),
     markdown(
       '## 2. Huấn luyện tầng phân loại',

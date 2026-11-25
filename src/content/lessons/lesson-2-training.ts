@@ -8,7 +8,7 @@ export const lessonTraining: Lesson = {
   dataset: 'shapes-3',
   goals: [
     'Nêu được các bước của quy trình học máy: dữ liệu → biểu diễn → huấn luyện → đánh giá.',
-    'Giải thích vì sao cần tách riêng tập Dạy và tập Kiểm tra.',
+    'Giải thích vì sao cần tách riêng tập Huấn luyện và tập Kiểm tra.',
     'Mô tả huấn luyện là quá trình đoán, so với đáp án và sửa lỗi lặp lại qua nhiều epoch.',
     'Đọc được ma trận nhầm lẫn để biết mô hình hay nhầm lớp nào với lớp nào.',
   ],
@@ -16,7 +16,7 @@ export const lessonTraining: Lesson = {
     {
       title: 'Bước 1 và 2: Dữ liệu, Kiểm tra dữ liệu',
       body: [
-        'Bấm "Tạo dự án mẫu cho bài này". Dự án có 3 lớp: Hình tròn, Hình vuông, Tam giác; mỗi lớp 18 ảnh Dạy và 6 ảnh Kiểm tra.',
+        'Bấm "Tạo dự án mẫu cho bài này". Dự án có 3 lớp: Hình tròn, Hình vuông, Tam giác; mỗi lớp 18 ảnh Huấn luyện và 6 ảnh Kiểm tra.',
         'Xem bảng "Kiểm tra dữ liệu": số ảnh các lớp có cân bằng không?',
       ],
       predict: {
@@ -29,7 +29,7 @@ export const lessonTraining: Lesson = {
       title: 'Bước 3: Biểu diễn',
       body: [
         'Bấm "Biến ảnh thành vector". Mỗi ảnh được MobileNetV2 tóm lại thành 1.280 con số đặc trưng.',
-        'Quan sát Bản đồ dữ liệu 2D. Bấm vào vài chấm để xem ảnh và 3 ảnh Dạy giống nhất.',
+        'Quan sát Bản đồ dữ liệu 2D. Bấm vào vài chấm để xem ảnh và 3 ảnh Huấn luyện giống nhất.',
       ],
       predict: {
         question: 'Trên bản đồ, các chấm cùng một lớp sẽ nằm gần nhau hay rải rác khắp nơi?',
@@ -53,7 +53,7 @@ export const lessonTraining: Lesson = {
         {
           kind: 'table',
           title: 'Kéo thanh "Phát lại" tới từng epoch và ghi điểm',
-          columns: ['Epoch', 'Điểm Dạy (%)', 'Điểm Kiểm tra (%)'],
+          columns: ['Epoch', 'Điểm Huấn luyện (%)', 'Điểm Kiểm tra (%)'],
           rows: ['0', '5', '50'],
           answers: [
             ['44,4', '22,2'],
@@ -71,7 +71,7 @@ export const lessonTraining: Lesson = {
         'Kéo dần thanh Phát lại lên epoch 50 để thấy các ô ngoài đường chéo giảm dần về 0.',
       ],
       predict: {
-        question: 'Điểm trên tập Kiểm tra thường cao hơn hay thấp hơn tập Dạy?',
+        question: 'Điểm trên tập Kiểm tra thường cao hơn hay thấp hơn tập Huấn luyện?',
         answer: 'Thường thấp hơn hoặc bằng, vì đó là những ảnh mô hình chưa từng thấy. Chênh lệch quá lớn là dấu hiệu "quá khớp".',
       },
       record: [
@@ -103,7 +103,7 @@ export const lessonTraining: Lesson = {
         {
           kind: 'table',
           title: 'So sánh hai lần chạy trong Nhật ký thí nghiệm',
-          columns: ['Số epoch', 'Điểm Dạy (%)', 'Điểm Kiểm tra (%)'],
+          columns: ['Số epoch', 'Điểm Huấn luyện (%)', 'Điểm Kiểm tra (%)'],
           rows: ['50', '3'],
           answers: [
             ['100', '100'],
@@ -117,12 +117,12 @@ export const lessonTraining: Lesson = {
     {
       question: 'Một "epoch" là gì?',
       options: [
-        'Một lượt mô hình học qua toàn bộ ảnh Dạy',
+        'Một lượt mô hình học qua toàn bộ ảnh Huấn luyện',
         'Một bức ảnh trong tập Kiểm tra',
         'Số lớp của dự án',
       ],
       correct: 0,
-      explanation: 'Mỗi epoch, mô hình đi qua hết các ảnh Dạy một lần và điều chỉnh trọng số.',
+      explanation: 'Mỗi epoch, mô hình đi qua hết các ảnh Huấn luyện một lần và điều chỉnh trọng số.',
     },
     {
       question: 'Trong ma trận nhầm lẫn, ô ở hàng "Hình vuông", cột "Tam giác" có số 2 nghĩa là gì?',
@@ -135,7 +135,7 @@ export const lessonTraining: Lesson = {
       explanation: 'Hàng là lớp thật, cột là lớp máy đoán.',
     },
     {
-      question: 'Vì sao điểm trên tập Kiểm tra đáng tin hơn điểm trên tập Dạy?',
+      question: 'Vì sao điểm trên tập Kiểm tra đáng tin hơn điểm trên tập Huấn luyện?',
       options: [
         'Vì tập Kiểm tra có nhiều ảnh hơn',
         'Vì đó là ảnh mô hình chưa từng học, giống như đề thi mới',
@@ -151,6 +151,6 @@ export const lessonTraining: Lesson = {
     'Bài dài 2 tiết: tiết 1 đến hết bước 3, tiết 2 từ bước 4.',
     'Kết quả huấn luyện tái lập được (seed cố định): cả lớp làm cùng bộ dữ liệu sẽ ra cùng con số hoặc chỉ lệch rất nhỏ giữa các máy, tiện cho việc so sánh.',
     'Học sinh có thể dùng chế độ Chuyên sâu để xem công thức W·x + b và bảng precision / recall.',
-    'Đã kiểm chứng với MobileNetV2: epoch 0 Dạy 44,4% / Kiểm tra 22,2%; epoch 5 98,1% / 77,8% (nhầm 3 vuông → tam giác, 1 tam giác → vuông); epoch 50 đạt 100% / 100%. Chạy 3 epoch: 94,4% / 72,2%.',
+    'Đã kiểm chứng với MobileNetV2: epoch 0 Huấn luyện 44,4% / Kiểm tra 22,2%; epoch 5 98,1% / 77,8% (nhầm 3 vuông → tam giác, 1 tam giác → vuông); epoch 50 đạt 100% / 100%. Chạy 3 epoch: 94,4% / 72,2%.',
   ],
 };

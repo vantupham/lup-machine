@@ -52,10 +52,11 @@ describe('Studio âm thanh', () => {
     render(repos, projectId);
     await userEvent.click(await screen.findByRole('button', { name: /Dùng âm thanh mẫu/ }));
     await screen.findByTestId('clip-count-2');
-    await userEvent.type(screen.getByLabelText('Tên nhóm mới'), 'Tiếng vỗ tay');
+    expect(screen.queryByLabelText('Tên nhóm mới')).toBeNull();
     await userEvent.click(screen.getByRole('button', { name: 'Thêm nhóm' }));
     expect(await screen.findByTestId('clip-count-3')).toHaveTextContent('0 đoạn');
-    expect(screen.getByTestId('audio-issues')).toHaveTextContent('Nhóm "Tiếng vỗ tay" mới có 0 đoạn');
+    expect(screen.getByRole('textbox', { name: 'Tên nhóm 4' })).toHaveValue('Nhóm 4');
+    expect(screen.getByTestId('audio-issues')).toHaveTextContent('Nhóm "Nhóm 4" mới có 0 đoạn');
 
     const name = screen.getByRole('textbox', { name: 'Tên nhóm 1' });
     await userEvent.clear(name);
@@ -66,7 +67,7 @@ describe('Studio âm thanh', () => {
 
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     const card = screen.getByTestId('clip-count-3').closest('li')!;
-    await userEvent.click(within(card).getByRole('button', { name: 'Xóa nhóm' }));
+    await userEvent.click(within(card).getByRole('button', { name: 'Xóa nhóm Nhóm 4' }));
     expect(await screen.findByText('Chưa thấy vấn đề nào.')).toBeInTheDocument();
     expect((await repos.dataset.listClasses(projectId)).map((c) => c.name)).toEqual(['Chuông chùa', 'Còi', 'Trống']);
     vi.restoreAllMocks();

@@ -29,13 +29,13 @@ describe('stratifiedSplit', () => {
     expect(r1.test.map((x) => x.id)).toEqual(r2.test.map((x) => x.id));
   });
 
-  test('lớp có 1 mẫu: giữ ở tập Dạy', () => {
+  test('lớp có 1 mẫu: giữ ở tập Huấn luyện', () => {
     const { train, test } = stratifiedSplit(makeItems({ a: 1 }), { testRatio: 0.5, seed: 1 });
     expect(train).toHaveLength(1);
     expect(test).toHaveLength(0);
   });
 
-  test('lớp có từ 2 mẫu luôn có ít nhất 1 mẫu Kiểm tra và 1 mẫu Dạy', () => {
+  test('lớp có từ 2 mẫu luôn có ít nhất 1 mẫu Kiểm tra và 1 mẫu Huấn luyện', () => {
     const { train, test } = stratifiedSplit(makeItems({ a: 2, b: 3 }), {
       testRatio: 0.1,
       seed: 1,
@@ -45,7 +45,7 @@ describe('stratifiedSplit', () => {
     expect(train.filter((x) => x.label === 'a')).toHaveLength(1);
   });
 
-  test('testRatio = 0: toàn bộ vào tập Dạy', () => {
+  test('testRatio = 0: toàn bộ vào tập Huấn luyện', () => {
     const { train, test } = stratifiedSplit(makeItems({ a: 5 }), { testRatio: 0, seed: 1 });
     expect(train).toHaveLength(5);
     expect(test).toHaveLength(0);

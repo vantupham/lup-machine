@@ -17,12 +17,12 @@ export interface SplitResult<T> {
 }
 
 /**
- * Chia dữ liệu thành tập Dạy / Kiểm tra theo từng lớp (phân tầng),
+ * Chia dữ liệu thành tập Huấn luyện / Kiểm tra theo từng lớp (phân tầng),
  * để mỗi lớp đều có mặt ở cả hai tập với cùng tỉ lệ.
  *
  * Quy tắc cho lớp ít mẫu:
- * - 1 mẫu: giữ ở tập Dạy.
- * - từ 2 mẫu và testRatio > 0: luôn có ít nhất 1 mẫu Kiểm tra và 1 mẫu Dạy.
+ * - 1 mẫu: giữ ở tập Huấn luyện.
+ * - từ 2 mẫu và testRatio > 0: luôn có ít nhất 1 mẫu Kiểm tra và 1 mẫu Huấn luyện.
  */
 export function stratifiedSplit<T extends LabeledItem>(
   items: readonly T[],

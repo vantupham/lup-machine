@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type FormEvent } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { stratifiedSplit } from '@/core/data/split';
@@ -27,6 +27,7 @@ import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { BackLink } from '@/ui/BackLink';
 import { StepNumber } from '@/ui/StepNumber';
+import { nextClassName } from '@/features/studio/next-class-name';
 
 /** Lớp phân biệt bằng cả ký hiệu, không chỉ màu (thân thiện người mù màu). */
 export const SPLIT_SEED = 42;
@@ -110,7 +111,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
     return result;
   }, [byClass]);
 
-  /** Bước Dữ liệu xong khi ít nhất 2 lớp có ảnh để dạy. */
+  /** Bước Dữ liệu xong khi ít nhất 2 lớp có ảnh huấn luyện. */
   const dataReady = Object.values(counts).filter((c) => c.train > 0).length >= 2;
 
   const autoSplit = () =>
@@ -131,13 +132,12 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
     setMessage({ kind: 'error', text: t('project.data.actionError', { message: getErrorMessage(error) }) });
   };
 
-  /** Tên "Lớp n" đầu tiên chưa có trong dự án (cho nút "+ Thêm lớp" của khối làm nhanh). */
-  const nextClassName = () => {
-    const taken = new Set(classes.map((c) => c.name.trim().toLocaleLowerCase('vi')));
-    let n = classes.length + 1;
-    while (taken.has(t('project.defaultClass', { n }).toLocaleLowerCase('vi'))) n++;
-    return t('project.defaultClass', { n });
-  };
+  /** Thêm "Lớp n" (số tăng dần, không trùng tên đã có); đổi tên sau bằng nút bút chì. */
+  const addNextClass = () =>
+    run(async () => {
+      await dataset.addClass(projectId, nextClassName(classes.map((c) => c.name), (n) => t('project.defaultClass', { n })));
+      return null;
+    });
 
   /** Số khuôn mặt đã làm mờ trong lần chụp webcam đang mở. */
   const webcamFaces = useRef(0);
@@ -187,7 +187,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
             setWebcam({ cls: c, split: 'train' });
           }}
           onUpload={(c, files) => upload(c, [...files], 'train', byClass.get(c.id)?.length ?? 0).catch(logActionError)}
-          onAddClass={() => run(async () => { await dataset.addClass(projectId, nextClassName()); return null; }).catch(logActionError)}
+          onAddClass={() => addNextClass().catch(logActionError)}
           isCapturing={webcam !== null}
         />
       )}
@@ -220,7 +220,9 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
             <p id="blur-faces-hint" className="mt-1 pl-6 text-sm text-muted">{t('project.faceBlur.hint')}</p>
           </div>
           <div className="flex flex-wrap items-end gap-3">
-            <AddClassForm onAdd={(name) => run(async () => { await dataset.addClass(projectId, name); return null; })} />
+            <button type="button" className="btn btn-primary" onClick={() => void addNextClass()}>
+              <Plus /> {t('project.data.addClass')}
+            </button>
             <button type="button" className="btn btn-ghost" onClick={() => void autoSplit()} disabled={samples.length === 0} title={t('project.data.autoSplitHint', { seed: SPLIT_SEED })}>
               {t('project.data.autoSplit')}
             </button>
@@ -282,31 +284,5 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
       )}
     </div>
     </ImageLabProvider>
-  );
-}
-
-function AddClassForm({ onAdd }: { readonly onAdd: (name: string) => Promise<void> }) {
-  const { t } = useTranslation();
-  const [name, setName] = useState('');
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-    await onAdd(name);
-    setName('');
-  };
-  return (
-    <form onSubmit={submit} className="flex gap-2">
-      <input
-        aria-label={t('project.data.newClassLabel')}
-        value={name}
-        maxLength={40}
-        onChange={(e) => setName(e.target.value)}
-        placeholder={t('project.data.newClassPlaceholder')}
-        className="rounded border border-rule bg-surface px-3 py-2"
-      />
-      <button type="submit" className="btn btn-primary">
-        <Plus /> {t('project.data.addClass')}
-      </button>
-    </form>
   );
 }

@@ -1,5 +1,5 @@
 /**
- * "Dấu vân tay" của tập dữ liệu: đổi khi thêm/xóa ảnh, đổi ngăn Dạy/Kiểm tra hoặc đổi thứ tự lớp.
+ * "Dấu vân tay" của tập dữ liệu: đổi khi thêm/xóa ảnh, đổi ngăn Huấn luyện/Kiểm tra hoặc đổi thứ tự lớp.
  * Dùng để biết một lần huấn luyện cũ có chạy lại được trên đúng dữ liệu đó không.
  */
 interface SampleKey {

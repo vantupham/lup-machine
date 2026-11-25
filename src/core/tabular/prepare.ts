@@ -1,6 +1,6 @@
 /**
  * Biến bảng dữ liệu thành ma trận số cho mô hình:
- * - cột số giữ nguyên ("thô") và được chuẩn hóa z = (x − trung bình) / độ lệch chuẩn (tính trên tập Dạy);
+ * - cột số giữ nguyên ("thô") và được chuẩn hóa z = (x − trung bình) / độ lệch chuẩn (tính trên tập Huấn luyện);
  * - cột phân loại được mã hóa one-hot: mỗi giá trị thành một cột 0/1;
  * - dòng thiếu giá trị ở cột cần dự đoán hoặc cột đặc trưng bị loại (có đếm để báo cho học sinh).
  */
@@ -102,7 +102,7 @@ export function encodeCells(encoders: readonly FeatureEncoder[], cells: readonly
       raw.push(v);
       scaled.push((v - e.mean) / e.std);
     } else {
-      // giá trị chưa gặp trong tập Dạy: mọi cột one-hot bằng 0
+      // giá trị chưa gặp trong tập Huấn luyện: mọi cột one-hot bằng 0
       for (const c of e.categories) {
         const bit = c === cell.trim() ? 1 : 0;
         raw.push(bit);

@@ -38,7 +38,7 @@ export interface DepthScore {
   readonly test: number;
 }
 
-/** Độ chính xác trên tập Dạy và tập Kiểm tra khi giới hạn độ sâu 1..maxDepth (thấy rõ quá khớp). */
+/** Độ chính xác trên tập Huấn luyện và tập Kiểm tra khi giới hạn độ sâu 1..maxDepth (thấy rõ quá khớp). */
 export function scoresByDepth(
   train: { xs: readonly Vector[]; ys: readonly number[] },
   test: { xs: readonly Vector[]; ys: readonly number[] },

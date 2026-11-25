@@ -1,7 +1,7 @@
 /**
  * Bộ phân loại dùng chung cho các vector đặc trưng có ý nghĩa rõ ràng (âm thanh: 160 ô ảnh phổ mel;
  * tư thế: tọa độ các khớp đã chuẩn hóa). Ví dụ với âm thanh:
- * hồi quy logistic (trên số đã chuẩn hóa theo tập Dạy, để tối ưu ổn định) hoặc k-NN (trên dB gốc:
+ * hồi quy logistic (trên số đã chuẩn hóa theo tập Huấn luyện, để tối ưu ổn định) hoặc k-NN (trên dB gốc:
  * khoảng cách "khác nhau bao nhiêu dB" có ý nghĩa vật lý, còn chuẩn hóa sẽ phóng to tiếng ồn ở các ô im lặng).
  * Với hồi quy logistic, trọng số đọc ngược được thành bản đồ "đặc trưng nào quan trọng" CHÍNH XÁC (từng ô / từng khớp).
  */
@@ -27,7 +27,7 @@ export interface VectorSplit {
   readonly ids: string[];
   /** Đặc trưng gốc (dB). */
   readonly raw: number[][];
-  /** Đặc trưng đã chuẩn hóa theo tập Dạy. */
+  /** Đặc trưng đã chuẩn hóa theo tập Huấn luyện. */
   readonly xs: number[][];
   readonly ys: number[];
 }
@@ -48,7 +48,7 @@ export interface VectorData {
 
 export type VectorPrepareError = { readonly code: 'too-few-samples'; readonly count: number } | { readonly code: 'single-class' };
 
-/** Cần ít nhất ngần này mẫu để chia Dạy / Kiểm tra và huấn luyện. */
+/** Cần ít nhất ngần này mẫu để chia Huấn luyện / Kiểm tra và huấn luyện. */
 export const MIN_VECTOR_SAMPLES = 6;
 
 export function standardize(data: Pick<VectorData, 'mean' | 'std'>, features: ArrayLike<number>): number[] {

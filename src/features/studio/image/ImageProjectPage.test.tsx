@@ -69,7 +69,7 @@ describe('Trang dự án ảnh', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Phân loại rác' })).toBeInTheDocument();
     expect(panel('Nhựa')).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Các bước của dự án' })).toBeInTheDocument();
-    expect(screen.getByText('Lớp "Nhựa" chưa có ảnh Dạy nào.')).toBeInTheDocument();
+    expect(screen.getByText('Lớp "Nhựa" chưa có ảnh Huấn luyện nào.')).toBeInTheDocument();
   });
 
   test('dữ liệu đủ và cân bằng thì trợ lý báo ổn', async () => {
@@ -86,14 +86,20 @@ describe('Trang dự án ảnh', () => {
     await waitFor(() => expect(screen.queryByText(/chụp thêm ở nhiều góc/i)).toBeNull());
   });
 
-  test('thêm lớp mới và báo lỗi khi trùng tên', async () => {
+  test('thêm lớp một chạm: tên "Lớp n" tăng dần, không cần gõ tên trước; đổi tên sau bằng nút bút chì', async () => {
     await seed();
     openProject();
-    const input = await screen.findByLabelText('Tên lớp mới');
+    const data = await screen.findByRole('region', { name: 'Dữ liệu' });
+    expect(within(data).queryByRole('textbox')).toBeNull();
+    await userEvent.click(within(data).getByRole('button', { name: 'Thêm lớp' }));
+    expect(await screen.findByRole('article', { name: 'Lớp 3' })).toBeInTheDocument();
+    await userEvent.click(within(data).getByRole('button', { name: 'Thêm lớp' }));
+    expect(await screen.findByRole('article', { name: 'Lớp 4' })).toBeInTheDocument();
+    await userEvent.click(within(screen.getByRole('article', { name: 'Lớp 4' })).getByRole('button', { name: 'Đổi tên lớp Lớp 4' }));
+    const input = screen.getByLabelText('Tên lớp');
+    await userEvent.clear(input);
     await userEvent.type(input, 'Kim loại{Enter}');
     expect(await screen.findByRole('article', { name: 'Kim loại' })).toBeInTheDocument();
-    await userEvent.type(input, 'nhựa{Enter}');
-    expect(await screen.findByRole('alert')).toHaveTextContent(/đã có/i);
   });
 
   test('tải ảnh lên: nhận ảnh hợp lệ, báo tệp bị bỏ qua và lý do', async () => {
@@ -184,18 +190,18 @@ describe('Trang dự án ảnh', () => {
     await waitFor(async () => expect(await repos.dataset.listSamples(projectId)).toHaveLength(1));
   });
 
-  test('tự chia Dạy / Kiểm tra theo tỉ lệ 80/20', async () => {
+  test('tự chia Huấn luyện / Kiểm tra theo tỉ lệ 80/20', async () => {
     await seed(10, 0);
     openProject();
     await userEvent.click(await screen.findByRole('button', { name: /tự chia/i }));
     // Chạy cả bộ song song thì ghi 20 ảnh + nạp lại có thể quá 1 giây mặc định.
-    expect(await screen.findByText('Đã chia lại: 16 ảnh Dạy, 4 ảnh Kiểm tra.', {}, { timeout: 5_000 })).toBeInTheDocument();
+    expect(await screen.findByText('Đã chia lại: 16 ảnh Huấn luyện, 4 ảnh Kiểm tra.', {}, { timeout: 5_000 })).toBeInTheDocument();
   });
 
   test('đổi tên lớp', async () => {
     await seed();
     openProject();
-    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Đổi tên' }));
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Đổi tên lớp Nhựa' }));
     const input = screen.getByLabelText('Tên lớp');
     await userEvent.clear(input);
     await userEvent.type(input, 'Chai nhựa{Enter}');
@@ -205,7 +211,7 @@ describe('Trang dự án ảnh', () => {
   test('đổi tên trùng thì báo lỗi và giữ ô nhập', async () => {
     await seed();
     openProject();
-    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Đổi tên' }));
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Đổi tên lớp Nhựa' }));
     const input = screen.getByLabelText('Tên lớp');
     await userEvent.clear(input);
     await userEvent.type(input, 'Giấy{Enter}');
@@ -219,7 +225,7 @@ describe('Trang dự án ảnh', () => {
     await seed(2, 0);
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     openProject();
-    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Xóa lớp' }));
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Xóa lớp Nhựa' }));
     await waitFor(() => expect(screen.queryByRole('article', { name: 'Nhựa' })).toBeNull());
   });
 

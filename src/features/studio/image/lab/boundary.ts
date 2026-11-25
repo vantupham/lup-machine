@@ -30,7 +30,7 @@ export function pointBounds(points: readonly { x: number; y: number }[]): Bounds
   return { minX: Math.min(...xs) - padX, maxX: Math.max(...xs) + padX, minY: Math.min(...ys) - padY, maxY: Math.max(...ys) + padY };
 }
 
-/** null nếu chưa đủ ít nhất 2 lớp có điểm Dạy. */
+/** null nếu chưa đủ ít nhất 2 lớp có điểm Huấn luyện. */
 export function trainBoundary(trainPoints: readonly LabeledPoint[], bounds: Bounds): Boundary2D | null {
   if (new Set(trainPoints.map((p) => p.label)).size < 2) return null;
   // Chuẩn hóa tọa độ để tốc độ học ổn định, rồi gộp phép chuẩn hóa vào trọng số → mô hình trên tọa độ gốc.

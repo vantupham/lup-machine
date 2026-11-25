@@ -10,7 +10,7 @@ import { ThresholdPanel } from './ThresholdPanel';
 import { StepNumber } from '@/ui/StepNumber';
 import { ClassMarker } from '@/ui/ClassMarker';
 
-/** Chênh lệch điểm Dạy − Kiểm tra vượt ngưỡng này thì cảnh báo quá khớp. */
+/** Chênh lệch điểm Huấn luyện − Kiểm tra vượt ngưỡng này thì cảnh báo quá khớp. */
 export const OVERFIT_GAP = 0.15;
 
 interface EvaluateSectionProps {

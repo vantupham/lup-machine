@@ -50,7 +50,7 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test('bài 3 "AI học nhầm": mô hình học theo nền — điểm Dạy cao, điểm Kiểm tra thấp', async ({ page }) => {
+test('bài 3 "AI học nhầm": mô hình học theo nền — điểm Huấn luyện cao, điểm Kiểm tra thấp', async ({ page }) => {
   test.setTimeout(240_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -61,39 +61,39 @@ test('bài 3 "AI học nhầm": mô hình học theo nền — điểm Dạy cao
   await extractAndTrain(page);
 
   const trap = await scores(page);
-  console.warn(`[bẫy] Dạy ${trap.train}% / Kiểm tra ${trap.test}%`);
+  console.warn(`[bẫy] Huấn luyện ${trap.train}% / Kiểm tra ${trap.test}%`);
   expect(trap.train).toBeGreaterThanOrEqual(95);
   expect(trap.test).toBeLessThanOrEqual(50);
   expect(await page.getByTestId('wrong-ring').count()).toBeGreaterThanOrEqual(6);
   await expectConfusionNear(page, ['Hình tròn', 'Hình vuông'], recordOf(lessonShortcut, 'confusion').answers!);
-  // Đáp án mẫu bước "Tìm bằng chứng": ảnh Dạy giống nhất của hình tròn bị đoán sai đều là hình vuông.
+  // Đáp án mẫu bước "Tìm bằng chứng": ảnh Huấn luyện giống nhất của hình tròn bị đoán sai đều là hình vuông.
   const map = page.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
   await map.getByRole('button', { name: /ảnh lớp hình tròn, ngăn kiểm tra/i }).first().click();
   const neighbors = await page.getByTestId('selected-detail').getByText(/^(Hình tròn|Hình vuông) · /).allTextContents();
-  console.warn('[bẫy] ảnh Dạy giống nhất:', neighbors.join(' | '));
+  console.warn('[bẫy] ảnh Huấn luyện giống nhất:', neighbors.join(' | '));
   expect(neighbors).toHaveLength(3);
   expect(neighbors.every((n) => n.startsWith('Hình vuông'))).toBe(true);
 
-  // Bước "sửa dữ liệu" trong bài: chuyển 3/6 ảnh Kiểm tra mỗi lớp sang ngăn Dạy rồi huấn luyện lại.
+  // Bước "sửa dữ liệu" trong bài: chuyển 3/6 ảnh Kiểm tra mỗi lớp sang ngăn Huấn luyện rồi huấn luyện lại.
   for (const name of ['Hình tròn', 'Hình vuông']) {
     const panel = page.getByRole('article', { name });
     await panel.getByRole('tab', { name: /Kiểm tra/ }).click();
     for (let i = 0; i < 3; i++) {
       await panel.getByRole('listitem').first().hover();
-      await panel.getByRole('button', { name: /Chuyển sang Dạy/ }).first().click();
+      await panel.getByRole('button', { name: /Chuyển sang Huấn luyện/ }).first().click();
       await expect(panel.getByRole('tab', { name: `Kiểm tra (${5 - i})` })).toBeVisible();
     }
   }
   await page.getByRole('button', { name: /^(Bắt đầu huấn luyện|Huấn luyện lại)$/ }).click();
   await expect(page.getByText('Xong 50 epoch.')).toBeVisible({ timeout: 60_000 });
   const fixed = await scores(page);
-  console.warn(`[sau khi sửa] Dạy ${fixed.train}% / Kiểm tra ${fixed.test}%`);
+  console.warn(`[sau khi sửa] Huấn luyện ${fixed.train}% / Kiểm tra ${fixed.test}%`);
   test.info().annotations.push({ type: 'scores', description: `bẫy: ${trap.train}/${trap.test} → sau khi sửa: ${fixed.train}/${fixed.test}` });
   expect(fixed.test).toBeGreaterThan(trap.test);
   const [before, after] = recordOf(lessonShortcut, 'table').answers!;
-  expect(Math.abs(trap.train - num(before![0]!))).toBeLessThanOrEqual(2.1); // 1 trong 48 ảnh Dạy
+  expect(Math.abs(trap.train - num(before![0]!))).toBeLessThanOrEqual(2.1); // 1 trong 48 ảnh Huấn luyện
   expect(Math.abs(trap.test - num(before![1]!))).toBeLessThanOrEqual(8.4); // 1 trong 12 ảnh Kiểm tra
-  expect(Math.abs(fixed.train - num(after![0]!))).toBeLessThanOrEqual(2.4); // 1 trong 42 ảnh Dạy
+  expect(Math.abs(fixed.train - num(after![0]!))).toBeLessThanOrEqual(2.4); // 1 trong 42 ảnh Huấn luyện
   expect(Math.abs(fixed.test - num(after![1]!))).toBeLessThanOrEqual(16.7); // 1 trong 6 ảnh Kiểm tra
 
   expect(errors).toEqual([]);
@@ -104,7 +104,7 @@ test('bộ "Tròn, vuông, tam giác": ảnh vẽ đúng và mô hình học đ�
   await page.goto('./#/studio');
   await page.getByRole('region', { name: /bộ dữ liệu mẫu/i }).getByRole('button', { name: 'Tạo dự án mẫu' }).nth(1).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Tròn, vuông, tam giác' })).toBeVisible({ timeout: 30_000 });
-  await expect(page.getByRole('article', { name: 'Tam giác' }).getByRole('tab', { name: 'Dạy (18)' })).toBeVisible();
+  await expect(page.getByRole('article', { name: 'Tam giác' }).getByRole('tab', { name: 'Huấn luyện (18)' })).toBeVisible();
 
   const shots = process.env.SCREENSHOT_DIR;
   if (shots) await page.getByRole('article', { name: 'Hình tròn' }).screenshot({ path: `${shots}/samples.png` });
@@ -133,9 +133,9 @@ test('bài 4 "AI làm bác sĩ cây trồng": mọi khẳng định của bài �
   await page.getByRole('button', { name: 'Bắt đầu huấn luyện' }).click();
   await expect(page.getByText('Xong 50 epoch.')).toBeVisible({ timeout: 60_000 });
 
-  // Bước 3: quá khớp — Dạy ~100%, Kiểm tra quanh 70–80%, có cảnh báo; học lâu hơn không giúp.
+  // Bước 3: quá khớp — Huấn luyện ~100%, Kiểm tra quanh 70–80%, có cảnh báo; học lâu hơn không giúp.
   const finalTest = await pct('score-test');
-  console.warn(`[bài 4] Dạy ${await pct('score-train')}% / Kiểm tra ${finalTest}%`);
+  console.warn(`[bài 4] Huấn luyện ${await pct('score-train')}% / Kiểm tra ${finalTest}%`);
   expect(await pct('score-train')).toBeGreaterThanOrEqual(95);
   expect(finalTest).toBeGreaterThanOrEqual(60);
   expect(finalTest).toBeLessThanOrEqual(85);
@@ -217,7 +217,7 @@ test('bài 2: số liệu mẫu (bản đồ, điểm theo epoch, ma trận epoc
   const slider = page.getByRole('slider', { name: /phát lại/i });
   for (const [i, epoch] of epochs.rows.entries()) {
     await slider.fill(epoch);
-    expect(Math.abs((await pctOf(page, 'score-train')) - num(epochs.answers![i]![0]!)), `Dạy epoch ${epoch}`).toBeLessThanOrEqual(1.9); // 1/54 ảnh
+    expect(Math.abs((await pctOf(page, 'score-train')) - num(epochs.answers![i]![0]!)), `Huấn luyện epoch ${epoch}`).toBeLessThanOrEqual(1.9); // 1/54 ảnh
     expect(Math.abs((await pctOf(page, 'score-test')) - num(epochs.answers![i]![1]!)), `Kiểm tra epoch ${epoch}`).toBeLessThanOrEqual(5.6); // 1/18 ảnh
   }
   await slider.fill('5');

@@ -1,4 +1,4 @@
-import { configure, screen, within } from '@testing-library/react';
+import { configure, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createTestRepository, renderApp, type TestRepositories } from '../../../../tests/setup/render';
 
@@ -62,8 +62,15 @@ describe('Studio tư thế & bàn tay', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án Tư thế mới' }));
     await userEvent.click(await screen.findByRole('button', { name: /Dùng tư thế mẫu/ }));
     await screen.findByTestId('pose-count-3');
-    await userEvent.type(screen.getByLabelText('Tên nhóm mới'), 'Ngồi xổm');
     await userEvent.click(screen.getByRole('button', { name: 'Thêm nhóm' }));
-    expect(await screen.findByTestId('pose-issues')).toHaveTextContent('Nhóm "Ngồi xổm" mới có 0 mẫu');
+    expect(await screen.findByTestId('pose-issues')).toHaveTextContent('Nhóm "Nhóm 5" mới có 0 mẫu');
+    const name = screen.getByRole('textbox', { name: 'Tên nhóm 5' });
+    await userEvent.clear(name);
+    await userEvent.type(name, 'Ngồi xổm{Enter}');
+    await waitFor(() => expect(screen.getByTestId('pose-issues')).toHaveTextContent('Nhóm "Ngồi xổm" mới có 0 mẫu'));
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    await userEvent.click(screen.getByRole('button', { name: 'Xóa nhóm Ngồi xổm' }));
+    await waitFor(() => expect(screen.queryByRole('textbox', { name: 'Tên nhóm 5' })).toBeNull());
+    vi.restoreAllMocks();
   }, SLOW_TEST_MS);
 });

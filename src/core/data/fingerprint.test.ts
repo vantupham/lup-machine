@@ -14,7 +14,7 @@ describe('datasetFingerprint', () => {
 
   test.each([
     ['thêm mẫu', classes, [...samples, { id: 's3', classId: 'a', split: 'train' as const }]],
-    ['đổi ngăn Dạy/Kiểm tra', classes, [samples[0]!, { ...samples[1]!, split: 'train' as const }]],
+    ['đổi ngăn Huấn luyện/Kiểm tra', classes, [samples[0]!, { ...samples[1]!, split: 'train' as const }]],
     ['đổi thứ tự lớp (đổi nhãn)', ['b', 'a'], samples],
   ])('thay đổi khi %s', (_name, cls, smp) => {
     expect(datasetFingerprint(cls, smp)).not.toBe(datasetFingerprint(classes, samples));
