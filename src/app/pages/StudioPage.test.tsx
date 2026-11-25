@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import i18n from '@/i18n';
 import type { ProjectRepository } from '@/storage/repositories/project-repository';
@@ -155,8 +155,9 @@ describe('Xưởng mô hình', () => {
     renderApp('/studio', repository);
     await userEvent.type(await screen.findByRole('searchbox', { name: 'Tìm dự án' }), 'năm');
     await userEvent.click(screen.getByRole('button', { name: 'Xóa Năm' }));
-    const list = await screen.findByRole('list', { name: 'Dự án của em' });
-    expect(screen.queryByRole('searchbox')).toBeNull();
+    // Danh sách đã có sẵn trước khi xóa, nên phải chờ chính hệ quả của việc xóa (xóa là bất đồng bộ).
+    await waitFor(() => expect(screen.queryByRole('searchbox')).toBeNull());
+    const list = screen.getByRole('list', { name: 'Dự án của em' });
     expect(within(list).getAllByRole('listitem')).toHaveLength(4);
   });
 
