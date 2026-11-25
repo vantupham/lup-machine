@@ -29,7 +29,7 @@ test('lớp học qua tệp: giáo viên tạo .lupa (kèm dự án mẫu), họ
   await teacher.getByLabel('Tên bài').fill('Nhận dạng hình');
   await teacher.getByLabel('Giáo viên', { exact: true }).fill('Thầy Minh');
   await teacher.getByLabel('Đề bài').fill('Huấn luyện mô hình, thêm ảnh tự vẽ, ghi độ chính xác.');
-  await teacher.getByRole('button', { name: '+ Thêm câu hỏi' }).click();
+  await teacher.getByRole('button', { name: 'Thêm câu hỏi', exact: true }).click();
   await teacher.getByLabel('Câu hỏi 1', { exact: true }).fill('Hình nào hay bị nhầm nhất?');
   await teacher.getByLabel('Dự án mẫu').selectOption({ label: 'Tròn, vuông, tam giác' });
   const lupa = await download(teacher, 'Tải gói bài tập (.lupa)');

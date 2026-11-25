@@ -111,7 +111,7 @@ function ModelCardEditor({ project, facts, saved, updatedAt, onSaved }: EditorPr
         <BackLink to={`/studio/${project.id}`} className="print:hidden">
           {t('modelCard.backToProject')}
         </BackLink>
-        <p className="font-mono text-xs uppercase text-accent">{t('modelCard.title')}</p>
+        <p className="text-sm text-muted">{t('modelCard.title')}</p>
         <h1 className="font-display text-4xl font-bold">{project.name}</h1>
         <p className="max-w-3xl text-muted print:hidden">{t('modelCard.lead')}</p>
         {updatedAt && <p className="text-xs text-muted">{t('modelCard.updatedAt', { date: new Date(updatedAt).toLocaleString(i18n.language) })}</p>}

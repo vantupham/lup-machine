@@ -33,7 +33,7 @@ export function Layout() {
             <span className="font-display text-2xl font-bold tracking-tight">
               LUP<span className="text-primary">·</span>Machine
             </span>
-            <span className="hidden text-xs uppercase tracking-[0.18em] text-muted sm:inline">
+            <span className="hidden text-sm text-muted sm:inline">
               {t('app.tagline')}
             </span>
           </NavLink>

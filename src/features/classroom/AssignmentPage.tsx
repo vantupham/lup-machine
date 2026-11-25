@@ -46,7 +46,7 @@ export function AssignmentPage() {
     <div className="space-y-6">
       <header className="space-y-2">
         <BackLink to={`/studio/${projectId}`}>{t('classroom.assignment.back')}</BackLink>
-        <p className="font-mono text-xs uppercase text-accent">{t('classroom.assignment.eyebrow')}</p>
+        <p className="text-sm text-muted">{t('classroom.assignment.eyebrow')}</p>
         <h1 className="font-display text-4xl font-bold">{assignment.title}</h1>
         {assignment.teacher && <p className="text-muted">{t('classroom.banner.by', { teacher: assignment.teacher })}</p>}
       </header>

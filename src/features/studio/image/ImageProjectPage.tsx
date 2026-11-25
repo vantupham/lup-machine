@@ -22,7 +22,7 @@ import { ImageLabProvider } from './lab/ImageLabContext';
 import { QuickWorkspace } from './quick/QuickWorkspace';
 import { useModeStore } from '@/ui/mode-store';
 import { useStepDetailsStore } from '@/features/studio/step-details';
-import { ChevronDown, ChevronUp } from '@/ui/icons';
+import { ChevronDown, ChevronUp, Plus } from '@/ui/icons';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { BackLink } from '@/ui/BackLink';
@@ -304,7 +304,7 @@ function AddClassForm({ onAdd }: { readonly onAdd: (name: string) => Promise<voi
         className="rounded border border-rule bg-surface px-3 py-2"
       />
       <button type="submit" className="btn btn-primary">
-        + {t('project.data.addClass')}
+        <Plus /> {t('project.data.addClass')}
       </button>
     </form>
   );

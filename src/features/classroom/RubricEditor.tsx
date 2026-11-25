@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ASSIGNMENT_LIMITS, rubricTotal, type RubricCriterion } from '@/storage/schemas/assignment';
-import { X } from '@/ui/icons';
+import { Plus, X } from '@/ui/icons';
 
 interface RubricEditorProps {
   readonly rubric: readonly RubricCriterion[];
@@ -61,7 +61,7 @@ export function RubricEditor({ rubric, onChange }: RubricEditorProps) {
       <div className="flex flex-wrap items-center gap-3">
         {rubric.length < ASSIGNMENT_LIMITS.rubric && (
           <button type="button" onClick={() => onChange([...rubric, { criterion: '', description: '', maxPoints: 1 }])} className="btn btn-ghost text-sm">
-            {t('classroom.create.addCriterion')}
+            <Plus /> {t('classroom.create.addCriterion')}
           </button>
         )}
         <span className="font-mono text-sm" data-testid="rubric-total">{t('classroom.create.rubricTotal', { total: rubricTotal(rubric) })}</span>

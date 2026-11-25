@@ -8,7 +8,6 @@ export function PlaygroundPage() {
   return (
     <div className="space-y-10">
       <header className="max-w-3xl">
-        <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-accent">{t('playground.eyebrow')}</p>
         <h1 className="font-display text-4xl font-bold">{t('playground.title')}</h1>
         <p className="mt-3 text-lg text-muted">{t('playground.lead')}</p>
       </header>

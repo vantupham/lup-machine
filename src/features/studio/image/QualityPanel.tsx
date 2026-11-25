@@ -84,7 +84,7 @@ export function QualityPanel({ classes, counts }: QualityPanelProps) {
       </div>
 
       <figure>
-        <figcaption className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
+        <figcaption className="mb-2 text-xs font-medium text-muted">
           {t('project.quality.chartLabel')}
         </figcaption>
         <ul className="space-y-1.5">

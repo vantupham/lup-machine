@@ -22,36 +22,9 @@
     "expertHint": "THPT · số liệu thật, công thức"
   },
   "home": {
-    "eyebrow": "Dạy và học AI cho THCS · THPT",
-    "title": "Đừng chỉ xem AI đoán đúng.",
-    "titleMark": "Xem nó làm thế nào.",
+    "title": "Dạy máy tính nhận ra ảnh, âm thanh, cử chỉ và câu chữ.",
     "lead": "Tự dạy máy bằng dữ liệu của em, rồi xem từng bước máy học thế nào.",
-    "pipelineTitle": "Sáu bước, bước nào cũng mở nắp được",
-    "steps": {
-      "data": "Dữ liệu",
-      "check": "Kiểm tra dữ liệu",
-      "represent": "Biểu diễn",
-      "train": "Huấn luyện",
-      "evaluate": "Đánh giá",
-      "use": "Sử dụng"
-    },
-    "stepHints": {
-      "data": "Thu ảnh, chia Dạy / Kiểm tra",
-      "check": "Phát hiện lệch, trùng, thiếu",
-      "represent": "Ảnh → bảng số → vector",
-      "train": "Đoán, so đáp án, sửa lỗi",
-      "evaluate": "Sai ở đâu, vì sao",
-      "use": "Thử trực tiếp, xuất mô hình"
-    },
-    "promisesTitle": "Ba cam kết",
-    "promises": {
-      "privacyTitle": "Dữ liệu ở lại trên máy",
-      "privacyBody": "Không máy chủ, không tài khoản, không theo dõi. Ảnh của em không được gửi đi đâu cả.",
-      "honestTitle": "Nói thật về AI",
-      "honestBody": "Mỗi hình minh họa đều ghi rõ là chính xác hay xấp xỉ, kèm cách nó được tạo ra.",
-      "openTitle": "Mã nguồn mở, miễn phí",
-      "openBody": "Giáo viên có thể xem, góp ý và đóng góp bài học trên GitHub."
-    }
+    "specimenCaption": "Máy tính thấy ảnh như thế này: mỗi ô là độ sáng của một điểm ảnh, từ 0 đến 255."
   },
   "studio": {
     "title": "Xưởng mô hình",
@@ -96,7 +69,6 @@
   "quickStart": {
     "title": "Em muốn dạy máy nhận ra gì?",
     "lead": "Bấm một loại dữ liệu là vào làm ngay.",
-    "popular": "Hay dùng nhất",
     "start": "Bắt đầu",
     "startAria": "Tạo dự án {{type}} mới",
     "creating": "Đang tạo…",
@@ -231,14 +203,14 @@
       "questionsTitle": "Câu hỏi phiếu thí nghiệm",
       "questionsHint": "Học sinh phải trả lời hết trước khi nộp. Tối đa {{max}} câu.",
       "questionLabel": "Câu hỏi {{n}}",
-      "addQuestion": "+ Thêm câu hỏi",
+      "addQuestion": "Thêm câu hỏi",
       "removeQuestion": "Xóa câu hỏi {{n}}",
       "rubricTitle": "Rubric chấm điểm",
       "rubricTotal": "Tổng: {{total}} điểm",
       "criterionLabel": "Tiêu chí {{n}}",
       "descriptionLabel": "Mô tả tiêu chí {{n}}",
       "pointsLabel": "Điểm tối đa tiêu chí {{n}}",
-      "addCriterion": "+ Thêm tiêu chí",
+      "addCriterion": "Thêm tiêu chí",
       "removeCriterion": "Xóa tiêu chí {{n}}",
       "starterLabel": "Dự án mẫu",
       "starterNone": "Không, học sinh bắt đầu từ dự án trống",
@@ -835,7 +807,7 @@
       "captureShort": "Chụp",
       "upload": "Tải ảnh cho lớp {{name}}",
       "uploadShort": "Tải ảnh",
-      "addClass": "+ Thêm lớp",
+      "addClass": "Thêm lớp",
       "train": "Huấn luyện nhanh",
       "needClasses": "Cần ít nhất 2 lớp có ảnh.",
       "defaults": "Dùng thiết lập mặc định ({{epochs}} lượt). Muốn tự chỉnh, xem bước 4.",
@@ -960,7 +932,6 @@
     "sampleNote": "Chữ nghiêng là số liệu mẫu từ lần chạy kiểm chứng. Máy học sinh có thể lệch nhẹ, nhất là ±1 ảnh."
   },
   "playground": {
-    "eyebrow": "Thuật toán tự cài đặt · chạy từng bước",
     "title": "Sân chơi thuật toán",
     "lead": "Sáu thuật toán học máy cơ bản trên dữ liệu 2 chiều, chạy từng bước.",
     "back": "Sân chơi thuật toán",

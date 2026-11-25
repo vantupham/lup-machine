@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import en from './en.json';
 import vi from './vi.json';
 
@@ -60,5 +62,25 @@ describe('văn phong tiếng Việt', () => {
   test('không nhắc tên công cụ phát triển hay sản phẩm khác trong lời dẫn', () => {
     const dev = entries.filter(([, v]) => /(TypeScript|Teachable Machine|Phiên bản \{\{version\}\})/.test(v));
     expect(show(dev)).toEqual([]);
+  });
+});
+
+describe('văn phong nội dung bài học và Đạo đức AI (src/content)', () => {
+  const contentFiles = (dir: string): string[] =>
+    readdirSync(dir).flatMap((name) => {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) return contentFiles(full);
+      return name.endsWith('.ts') && !name.endsWith('.test.ts') ? [full] : [];
+    });
+
+  test('không mở đầu mệnh lệnh bằng "Hãy"', () => {
+    const offenders = contentFiles(join(__dirname, '..', 'content')).flatMap((file) =>
+      readFileSync(file, 'utf8')
+        .split(/\r?\n/)
+        .filter((line) => !line.trim().startsWith('//') && !line.trim().startsWith('*'))
+        .filter((line) => /['"`](?:[^'"`]*[\s.:])?Hãy\s/.test(line))
+        .map((line) => `${file}: ${line.trim()}`),
+    );
+    expect(offenders).toEqual([]);
   });
 });

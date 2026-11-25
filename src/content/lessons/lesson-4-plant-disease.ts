@@ -24,7 +24,7 @@ export const lessonPlantDisease: Lesson = {
       ],
       predict: {
         question: 'Theo em, máy sẽ khó phân biệt cặp lớp nào nhất?',
-        answer: 'Hãy ghi lại dự đoán. Nhiều người đoán là hai bệnh, vì cả hai đều là đốm nâu trên lá xanh. Ta sẽ kiểm chứng bằng ma trận nhầm lẫn ở bước 4.',
+        answer: 'Ghi lại dự đoán. Nhiều người đoán là hai bệnh, vì cả hai đều là đốm nâu trên lá xanh. Ta sẽ kiểm chứng bằng ma trận nhầm lẫn ở bước 4.',
       },
     },
     {

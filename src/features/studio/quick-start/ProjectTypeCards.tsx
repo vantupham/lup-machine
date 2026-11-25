@@ -47,20 +47,13 @@ export function ProjectTypeCards({ name = '' }: ProjectTypeCardsProps) {
               aria-describedby={`quick-start-${type}-desc`}
               className="lab-card lab-card-interactive group flex h-full w-full flex-col gap-3 p-5 text-left disabled:cursor-wait disabled:opacity-60"
             >
-              <span className="flex items-center justify-between">
-                <span className="flex size-12 items-center justify-center rounded-md border border-primary/30 bg-primary/10 text-primary">
-                  <ProjectTypeIcon type={type} />
-                </span>
-                {i === 0 && (
-                  <span className="rounded-full bg-highlight px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider">
-                    {t('quickStart.popular')}
-                  </span>
-                )}
+              <span className="flex size-12 items-center justify-center rounded-md bg-primary/10 text-primary">
+                <ProjectTypeIcon type={type} />
               </span>
               <span className="font-display text-2xl font-bold">{t(`studio.types.${type}`)}</span>
               <span id={`quick-start-${type}-desc`} className="text-sm leading-relaxed text-muted">
                 {t(`quickStart.types.${type}.description`)}
-                <span className="mt-2 block font-mono text-xs text-ink/70">{t(`quickStart.types.${type}.example`)}</span>
+                <span className="mt-2 block text-xs text-ink/70">{t(`quickStart.types.${type}.example`)}</span>
               </span>
               <span className="mt-auto pt-2 text-sm font-semibold text-primary">
                 {creating === type ? t('quickStart.creating') : t('quickStart.start')}{' '}

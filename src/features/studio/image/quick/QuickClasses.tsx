@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { ACCEPTED_IMAGE_TYPES } from '../image-file';
 import { useObjectUrl } from '../useObjectUrl';
-import { Camera, ImageUp } from '@/ui/icons';
+import { Camera, ImageUp, Plus } from '@/ui/icons';
 import { ClassMarker } from '@/ui/ClassMarker';
 
 /** Số ảnh thu nhỏ hiện cho mỗi lớp (ảnh mới nhất), đủ để thấy vừa chụp được gì. */
@@ -24,7 +24,7 @@ export function QuickClasses({ classes, samplesByClass, onWebcam, onUpload, onAd
       {classes.map((cls, i) => {
         const list = samplesByClass.get(cls.id) ?? [];
         return (
-          <div key={cls.id} role="group" aria-label={cls.name} className="rounded border border-rule bg-paper p-3">
+          <div key={cls.id} role="group" aria-label={cls.name} className="border-t border-rule pt-3 first:border-t-0 first:pt-0">
             <div className="flex items-baseline justify-between gap-2">
               <p className="truncate font-semibold">
                 <ClassMarker index={i} className="mr-1.5" />
@@ -64,7 +64,7 @@ export function QuickClasses({ classes, samplesByClass, onWebcam, onUpload, onAd
         );
       })}
       <button type="button" className="btn btn-ghost w-full justify-center border-dashed text-sm" onClick={onAddClass}>
-        {t('project.quick.addClass')}
+        <Plus /> {t('project.quick.addClass')}
       </button>
     </div>
   );

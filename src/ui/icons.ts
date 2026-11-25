@@ -33,6 +33,7 @@ export {
   Pencil,
   PersonStanding,
   Play,
+  Plus,
   Printer,
   RotateCcw,
   Square,

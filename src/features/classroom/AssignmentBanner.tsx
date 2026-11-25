@@ -30,7 +30,7 @@ export function AssignmentBanner({ projectId }: AssignmentBannerProps) {
   if (!assignment) return null;
   return (
     <aside aria-label={t('classroom.banner.label')} className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded border-l-4 border-primary bg-surface px-4 py-2">
-      <span className="font-mono text-xs uppercase text-primary">{t('classroom.banner.label')}</span>
+      <span className="text-sm font-semibold text-primary">{t('classroom.banner.label')}</span>
       <span className="font-semibold">{assignment.title}</span>
       {assignment.teacher && <span className="text-sm text-muted">{t('classroom.banner.by', { teacher: assignment.teacher })}</span>}
       <Link to={`/studio/${projectId}/bai-tap`} className="ml-auto inline-flex items-center gap-1 text-sm font-medium text-primary underline">
