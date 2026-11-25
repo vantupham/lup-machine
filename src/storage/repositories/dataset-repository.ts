@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { ClassRecord, ImageCredit, LupDatabase, SampleRecord, SampleSource, Split, StoredImage } from '../db';
+import { touchProjects } from './touch-project';
 import type { RepositoryDeps } from './project-repository';
 
 /** Giới hạn để máy phòng tin cấu hình thấp vẫn chạy mượt. */
@@ -66,29 +67,34 @@ export function createDexieDatasetRepository(
 
     async addClass(projectId, rawName) {
       const name = classNameSchema.parse(rawName);
-      return db.transaction('rw', db.classes, async () => {
+      const record = await db.transaction('rw', db.classes, async () => {
         await assertUniqueName(projectId, name);
         const existing = await listClasses(projectId);
         const order = existing.reduce((max, c) => Math.max(max, c.order + 1), 0);
-        const record: ClassRecord = { id: deps.newId(), projectId, name, order, createdAt: deps.now() };
-        await db.classes.add(record);
-        return record;
+        const created: ClassRecord = { id: deps.newId(), projectId, name, order, createdAt: deps.now() };
+        await db.classes.add(created);
+        return created;
       });
+      await touchProjects(db, [projectId], record.createdAt);
+      return record;
     },
 
     async renameClass(classId, rawName) {
       const name = classNameSchema.parse(rawName);
-      return db.transaction('rw', db.classes, async () => {
+      const updated = await db.transaction('rw', db.classes, async () => {
         const existing = await db.classes.get(classId);
         if (!existing) throw new Error(`Không tìm thấy lớp: ${classId}`);
         await assertUniqueName(existing.projectId, name, classId);
-        const updated: ClassRecord = { ...existing, name };
-        await db.classes.put(updated);
-        return updated;
+        const renamed: ClassRecord = { ...existing, name };
+        await db.classes.put(renamed);
+        return renamed;
       });
+      await touchProjects(db, [updated.projectId], deps.now());
+      return updated;
     },
 
     async deleteClass(classId) {
+      const projectId = (await db.classes.get(classId))?.projectId;
       await db.transaction('rw', [db.classes, db.samples, db.features, db.audioClips, db.poseSamples], async () => {
         await db.audioClips.where('classId').equals(classId).delete();
         await db.poseSamples.where('classId').equals(classId).delete();
@@ -97,6 +103,7 @@ export function createDexieDatasetRepository(
         await db.samples.bulkDelete(sampleIds);
         await db.classes.delete(classId);
       });
+      await touchProjects(db, [projectId], deps.now());
     },
 
     async listSamples(projectId) {
@@ -105,31 +112,37 @@ export function createDexieDatasetRepository(
     },
 
     async addSamples(inputs) {
-      return db.transaction('rw', db.classes, db.samples, async () => {
+      const records = await db.transaction('rw', db.classes, db.samples, async () => {
         await assertCapacity(db, inputs);
         const createdAt = deps.now();
         const nextSeq = await nextSeqByProject(db, inputs);
-        const records = inputs.map((input): SampleRecord => {
+        const created = inputs.map((input): SampleRecord => {
           const seq = nextSeq.get(input.projectId) ?? 0;
           nextSeq.set(input.projectId, seq + 1);
           return { ...input, id: deps.newId(), createdAt, seq };
         });
-        await db.samples.bulkAdd(records);
-        return records;
+        await db.samples.bulkAdd(created);
+        return created;
       });
+      await touchProjects(db, records.map((r) => r.projectId), records[0]?.createdAt ?? deps.now());
+      return records;
     },
 
     async setSplits(changes) {
       await db.transaction('rw', db.samples, async () => {
         for (const { id, split } of changes) await db.samples.update(id, { split });
       });
+      const first = changes[0] ? await db.samples.get(changes[0].id) : undefined;
+      await touchProjects(db, [first?.projectId], deps.now());
     },
 
     async deleteSample(sampleId) {
+      const projectId = (await db.samples.get(sampleId))?.projectId;
       await db.transaction('rw', db.samples, db.features, async () => {
         await db.features.where('sampleId').equals(sampleId).delete();
         await db.samples.delete(sampleId);
       });
+      await touchProjects(db, [projectId], deps.now());
     },
 
     async countSamples(projectId) {

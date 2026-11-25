@@ -31,7 +31,6 @@ test('làm mờ khuôn mặt: bật thì ảnh lưu đã bị pixel hóa, tắt 
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Quyền riêng tư');
   await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
-  await page.getByRole('list', { name: 'Dự án của em' }).getByRole('link', { name: 'Mở' }).click();
 
   const toggle = page.getByRole('checkbox', { name: 'Làm mờ khuôn mặt trước khi lưu ảnh' });
   await expect(toggle).toBeChecked();

@@ -41,7 +41,7 @@ export function TrainSection(props: TrainSectionProps) {
   const last = snapshots.at(-1);
 
   return (
-    <section aria-labelledby="train-title" className="space-y-4">
+    <section aria-labelledby="train-title" data-step-done={!isActive && snapshots.length > 0 ? 'true' : undefined} className="space-y-4">
       <div>
         <h2 id="train-title" className="text-2xl font-semibold">{t('project.train.title')}</h2>
         <p className="max-w-3xl text-sm text-muted">

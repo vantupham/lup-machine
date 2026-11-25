@@ -141,7 +141,7 @@ export function AudioModelLab({ projectName, data, dataKey, trainSamples }: Audi
 
   return (
     <>
-      <Step n={4} id="audio-step-train" title={t('audio.steps.train')}>
+      <Step n={4} id="audio-step-train" title={t('audio.steps.train')} done={current !== null}>
         <div className="grid gap-6 lg:grid-cols-2">
           <fieldset className="space-y-2">
             <legend className="text-sm font-medium">{t('tabular.model.choose')}</legend>

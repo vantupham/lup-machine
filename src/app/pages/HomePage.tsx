@@ -1,12 +1,21 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { version } from '../../../package.json';
+import { ProjectTypeCards } from '@/features/studio/quick-start/ProjectTypeCards';
+import { RecentProjects } from '@/features/studio/quick-start/RecentProjects';
 
 const PIPELINE_STEPS = ['data', 'check', 'represent', 'train', 'evaluate', 'use'] as const;
 const PROMISES = ['privacy', 'honest', 'open'] as const;
 
 export function HomePage() {
   const { t } = useTranslation();
+
+  /** Cuộn tới các thẻ loại dự án và đặt con trỏ vào thẻ đầu tiên (dùng được cả bằng bàn phím). */
+  const goToQuickStart = () => {
+    const section = document.getElementById('quick-start');
+    section?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+    section?.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true });
+  };
 
   return (
     <div className="space-y-20">
@@ -23,7 +32,10 @@ export function HomePage() {
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">{t('home.lead')}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/studio" className="btn btn-primary">
+            <button type="button" className="btn btn-primary" onClick={goToQuickStart}>
+              {t('home.ctaCreate')} <span aria-hidden="true">↓</span>
+            </button>
+            <Link to="/studio" className="btn btn-ghost">
               {t('home.ctaStudio')} <span aria-hidden="true">→</span>
             </Link>
             <Link to="/about" className="btn btn-ghost">
@@ -33,6 +45,19 @@ export function HomePage() {
         </div>
         <PixelSpecimen />
       </section>
+
+      <div className="-mt-6 space-y-10">
+        <RecentProjects />
+        <section id="quick-start" aria-labelledby="quick-start-title" className="scroll-mt-6 space-y-4">
+          <div>
+            <h2 id="quick-start-title" className="font-display text-3xl font-bold">
+              {t('quickStart.title')}
+            </h2>
+            <p className="mt-1 max-w-2xl text-muted">{t('quickStart.lead')}</p>
+          </div>
+          <ProjectTypeCards />
+        </section>
+      </div>
 
       <section aria-labelledby="pipeline-title">
         <h2 id="pipeline-title" className="mb-6 font-display text-2xl font-bold">
@@ -86,7 +111,7 @@ const SPECIMEN: readonly (readonly number[])[] = [
 
 function PixelSpecimen() {
   return (
-    <figure aria-hidden="true" className="lab-card rotate-1 p-4">
+    <figure aria-hidden="true" className="lab-card hidden rotate-1 p-4 lg:block">
       <div className="grid grid-cols-6 gap-px overflow-hidden rounded-sm bg-rule">
         {SPECIMEN.flat().map((v, i) => (
           <div

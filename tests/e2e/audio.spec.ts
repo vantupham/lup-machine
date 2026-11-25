@@ -31,7 +31,6 @@ test('Studio âm thanh: âm thanh mẫu, thu bằng micro (giả), tải tệp W
   await page.getByLabel('Tên dự án').fill('Âm thanh E2E');
   await page.getByRole('radio', { name: /Âm thanh/ }).check();
   await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
-  await page.getByRole('listitem').filter({ hasText: 'Âm thanh E2E' }).getByRole('link', { name: 'Mở' }).click();
 
   await page.getByRole('button', { name: /Dùng âm thanh mẫu/ }).click();
   await expect(page.getByTestId('clip-count-2')).toHaveText('16 đoạn');

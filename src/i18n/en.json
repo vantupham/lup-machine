@@ -27,6 +27,7 @@
     "title": "Don't just watch AI guess right.",
     "titleMark": "See how it does it.",
     "lead": "Teach the computer with your own data, then open the lid on every step: how a photo turns into numbers, how the machine learns, and why it gets things wrong.",
+    "ctaCreate": "Create a new model",
     "ctaStudio": "Open the Model Studio",
     "ctaAbout": "Where does my data go?",
     "pipelineTitle": "Six steps, each one can be opened up",
@@ -55,18 +56,17 @@
       "openTitle": "Open source, free",
       "openBody": "Teachers can read, review and contribute lessons on GitHub."
     },
-    "status": "Version {{version}} · foundation stage in progress"
+    "status": "Version {{version}} · open source, runs entirely in your browser"
   },
   "studio": {
     "title": "Model Studio",
     "lead": "Each project is an experiment. Projects are saved in this browser on this device.",
     "newProject": "New project",
     "nameLabel": "Project name",
-    "namePlaceholder": "e.g. Waste sorting",
+    "namePlaceholder": "Leave empty to name it automatically (e.g. Image project 1)",
     "typeLabel": "Data type",
     "create": "Create project",
     "creating": "Creating…",
-    "comingSoon": "coming soon",
     "types": {
       "image": "Image",
       "audio": "Audio",
@@ -81,8 +81,67 @@
     "confirmDelete": "Delete project \"{{name}}\"? This cannot be undone.",
     "loadError": "Could not read saved data. The browser may be in private mode or blocking storage.",
     "saveError": "Could not save the project: {{message}}",
-    "nameRequired": "Please name your project (1–100 characters).",
-    "open": "Open"
+    "open": "Open",
+    "namedTitle": "Create with your own name",
+    "namedLead": "Want to name it up front, e.g. to hand it in? Type a name and pick a data type.",
+    "searchLabel": "Search projects",
+    "searchPlaceholder": "Type a project name",
+    "noMatch": "No project name contains \"{{query}}\".",
+    "summary": {
+      "noData": "No data yet",
+      "table": "Data table added",
+      "classes": "Classes: {{count}}",
+      "items": {
+        "image": "Images: {{count}}",
+        "audio": "Sound clips: {{count}}",
+        "pose": "Pose samples: {{count}}"
+      },
+      "runs": "Training runs: {{count}}"
+    },
+    "deleteError": "Could not delete project \"{{name}}\": {{message}}"
+  },
+  "quickStart": {
+    "title": "What do you want to teach the computer?",
+    "lead": "Pick a kind of data and start right away, no name needed. Everything is saved on this device.",
+    "popular": "Most used",
+    "start": "Start",
+    "startAria": "Create new {{type}} project",
+    "creating": "Creating…",
+    "creatingFromLink": "Creating a new project…",
+    "error": "Could not create the project: {{message}}",
+    "badType": "There is no project type \"{{slug}}\". Pick one below.",
+    "backToStudio": "Back to the Model Studio",
+    "recentTitle": "Continue a recent project",
+    "recentAll": "See all projects →",
+    "nameBase": {
+      "image": "Image project",
+      "audio": "Sound project",
+      "pose": "Pose project",
+      "text": "Text project",
+      "tabular": "Table project"
+    },
+    "types": {
+      "image": {
+        "description": "Teach the computer to recognise objects, animals or gestures from uploaded photos or the webcam.",
+        "example": "e.g. waste sorting, diseased leaves"
+      },
+      "audio": {
+        "description": "Teach the computer to tell sounds apart, recorded from the microphone.",
+        "example": "e.g. clapping, whistling, drums"
+      },
+      "pose": {
+        "description": "Teach the computer to recognise body poses or hand gestures through the webcam.",
+        "example": "e.g. hand raised, sitting up straight"
+      },
+      "text": {
+        "description": "Teach the computer to sort Vietnamese sentences into groups by meaning.",
+        "example": "e.g. praise or complaint"
+      },
+      "tabular": {
+        "description": "Teach the computer to predict from a pasted table or a CSV file.",
+        "example": "e.g. guess the penguin species"
+      }
+    }
   },
   "projectFile": {
     "exportButton": "Export .lup",
@@ -753,6 +812,22 @@
       "rejected": "This file can't be used: {{reason}}.",
       "badImage": "Couldn't read this image. Try another JPEG or PNG image.",
       "frameError": "Couldn't analyze the image: {{message}}"
+    },
+    "rename": {
+      "button": "Rename",
+      "aria": "Rename project",
+      "inputLabel": "New project name",
+      "save": "Save",
+      "cancel": "Cancel",
+      "invalid": "A project name needs 1 to 100 characters.",
+      "error": "Could not rename: {{message}}"
+    },
+    "stepBar": {
+      "done": "done",
+      "locked": "not open yet",
+      "lockedHint": "Finish the earlier steps to open this one",
+      "next": "Next step: {{step}}",
+      "stepPrefix": "Step {{n}}"
     }
   },
   "samples": {

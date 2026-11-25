@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
+import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -13,6 +14,7 @@ import type { TextConfig } from '@/storage/schemas/text';
 import { getErrorMessage } from '@/ui/error-message';
 import { version as appVersion } from '../../../../package.json';
 import { StudioStep as Step } from '../StudioStep';
+import { StepBar, studioStepTargets } from '../StepBar';
 import { useTabularProject } from '../tabular/useTabularProject';
 import { examplesFrom, initialTextConfig, isTextConfigValid } from './text-config';
 import { TextDataSection } from './TextDataSection';
@@ -28,9 +30,12 @@ interface TrainedState {
   readonly count: number;
 }
 
+/** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
+const STEP_TARGETS = studioStepTargets('text');
+
 export function TextProjectPage({ projectId }: { readonly projectId: string }) {
   const { t } = useTranslation();
-  const { state, saveTable, saveConfig } = useTabularProject(projectId);
+  const { state, saveTable, saveConfig, renameProject } = useTabularProject(projectId);
   const [trained, setTrained] = useState<TrainedState | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -76,14 +81,16 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
       <header className="space-y-2">
         <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
         <p className="font-mono text-xs uppercase text-accent">{t('studio.types.text')}</p>
-        <h1 className="font-display text-4xl font-bold">{state.project.name}</h1>
+        <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={renameProject} />
         <AssignmentBanner projectId={projectId} />
         <ModelCardLink projectId={projectId} />
         <p className="max-w-3xl text-muted">{t('text.lead')}</p>
         {saveError && <p role="alert" className="text-sm text-danger">{saveError}</p>}
       </header>
 
-      <Step n={1} id="text-step-data" title={t('text.steps.data')}>
+      <StepBar targets={STEP_TARGETS} />
+
+      <Step n={1} id="text-step-data" title={t('text.steps.data')} done={state.table !== null}>
         <TextDataSection
           hasTable={parsed !== null}
           fileName={table?.fileName ?? null}
@@ -106,7 +113,7 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
           <Step n={3} id="text-step-represent" title={t('text.steps.represent')}>
             <TextRepresentSection data={data} maxN={config.maxN} onMaxNChange={(maxN) => updateConfig({ ...config, maxN })} />
           </Step>
-          <Step n={4} id="text-step-train" title={t('text.steps.train')}>
+          <Step n={4} id="text-step-train" title={t('text.steps.train')} done={current !== null}>
             <TextModelSection
               settings={config.model}
               onChange={(model) => updateConfig({ ...config, model })}

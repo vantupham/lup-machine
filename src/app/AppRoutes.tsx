@@ -5,6 +5,7 @@ import { StudioPage } from './pages/StudioPage';
 import { AboutPage } from './pages/AboutPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProjectRouter } from '@/features/studio/ProjectRouter';
+import { NewProjectRoute } from '@/features/studio/quick-start/NewProjectRoute';
 import { LessonsPage } from '@/features/lessons/LessonsPage';
 import { LessonPage } from '@/features/lessons/LessonPage';
 import { WorksheetPage } from '@/features/lessons/WorksheetPage';
@@ -21,6 +22,7 @@ export function AppRoutes() {
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="studio" element={<StudioPage />} />
+        <Route path="studio/moi/:typeSlug" element={<NewProjectRoute />} />
         <Route path="studio/:projectId" element={<ProjectRouter />} />
         <Route path="studio/:projectId/the-mo-hinh" element={<ModelCardPage />} />
         <Route path="studio/:projectId/bai-tap" element={<AssignmentPage />} />

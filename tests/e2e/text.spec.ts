@@ -6,7 +6,6 @@ test('Studio văn bản: bộ góp ý căng tin, huấn luyện, giải thích t
   await page.getByLabel('Tên dự án').fill('Căng tin E2E');
   await page.getByRole('radio', { name: /Văn bản/ }).check();
   await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
-  await page.getByRole('listitem').filter({ hasText: 'Căng tin E2E' }).getByRole('link', { name: 'Mở' }).click();
 
   await page.getByRole('button', { name: /Góp ý căng tin/ }).click();
   await expect(page.getByTestId('text-size')).toHaveText('80 câu · 2 nhóm');

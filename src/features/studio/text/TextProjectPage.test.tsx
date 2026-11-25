@@ -75,7 +75,6 @@ describe('Studio văn bản tiếng Việt', () => {
     await userEvent.type(await screen.findByLabelText('Tên dự án'), 'Góp ý căng tin');
     await userEvent.click(screen.getByRole('radio', { name: /Văn bản/ }));
     await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án' }));
-    await userEvent.click(await screen.findByRole('link', { name: /Mở/ }));
     expect(await screen.findByRole('button', { name: /Góp ý căng tin: khen/ })).toBeInTheDocument();
   });
 });

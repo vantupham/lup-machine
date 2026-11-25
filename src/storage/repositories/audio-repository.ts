@@ -1,4 +1,5 @@
 import type { AudioClipRecord, AudioSource, LupDatabase } from '../db';
+import { touchProjects } from './touch-project';
 import { AUDIO } from '@/core/audio/features';
 
 /** Mỗi lớp tối đa ngần này đoạn (mỗi đoạn 64 KB). */
@@ -33,7 +34,7 @@ export function createDexieAudioRepository(
     },
 
     async addClips(inputs) {
-      return db.transaction('rw', db.classes, db.audioClips, async () => {
+      const records = await db.transaction('rw', db.classes, db.audioClips, async () => {
         const incoming = new Map<string, number>();
         for (const input of inputs) {
           if (input.samples.length !== AUDIO.clipSamples) throw new RangeError(`Đoạn âm thanh phải dài đúng ${AUDIO.clipSamples} mẫu`);
@@ -47,7 +48,7 @@ export function createDexieAudioRepository(
         const existing = inputs[0] ? await db.audioClips.where('projectId').equals(inputs[0].projectId).toArray() : [];
         let seq = existing.reduce((m, c) => Math.max(m, c.seq + 1), 0);
         const createdAt = deps.now();
-        const records = inputs.map((input): AudioClipRecord => ({
+        const created = inputs.map((input): AudioClipRecord => ({
           id: deps.newId(),
           projectId: input.projectId,
           classId: input.classId,
@@ -56,13 +57,17 @@ export function createDexieAudioRepository(
           createdAt,
           seq: seq++,
         }));
-        await db.audioClips.bulkAdd(records);
-        return records;
+        await db.audioClips.bulkAdd(created);
+        return created;
       });
+      await touchProjects(db, records.map((r) => r.projectId), records[0]?.createdAt ?? deps.now());
+      return records;
     },
 
     async deleteClip(clipId) {
+      const projectId = (await db.audioClips.get(clipId))?.projectId;
       await db.audioClips.delete(clipId);
+      await touchProjects(db, [projectId], deps.now());
     },
   };
 }

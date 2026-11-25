@@ -44,9 +44,11 @@ describe('Xuất / mở tệp dự án .lup ở Xưởng mô hình', () => {
 
     await user.click(await screen.findByRole('button', { name: 'Xuất tệp dự án Phân loại rác' }));
     await waitFor(() => expect(clicked).toEqual(['phan-loai-rac.lup']));
-    expect(created[0]?.type).toBe('application/zip');
+    // Thẻ dự án cũng tạo Blob cho ảnh thu nhỏ: lấy đúng tệp .zip vừa xuất.
+    const zip = created.find((blob) => blob.type === 'application/zip');
+    expect(zip).toBeDefined();
 
-    const file = new File([await created[0]!.arrayBuffer()], 'phan-loai-rac.lup', { type: 'application/zip' });
+    const file = new File([await zip!.arrayBuffer()], 'phan-loai-rac.lup', { type: 'application/zip' });
     await user.upload(screen.getByLabelText('Chọn tệp .lup hoặc .lupa'), file);
 
     expect(await screen.findByRole('status')).toHaveTextContent('Đã mở dự án "Phân loại rác".');

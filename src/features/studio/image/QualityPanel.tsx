@@ -72,7 +72,7 @@ export function QualityPanel({ classes, counts, markers }: QualityPanelProps) {
   const max = Math.max(1, ...classes.map((c) => (counts[c.id]?.train ?? 0) + (counts[c.id]?.test ?? 0)));
 
   return (
-    <section aria-labelledby="quality-title" className="lab-card h-fit space-y-4 p-4 lg:sticky lg:top-4">
+    <section aria-labelledby="quality-title" className="lab-card h-fit space-y-4 p-4 lg:sticky lg:top-20">
       <div>
         <h2 id="quality-title" className="text-lg font-semibold">
           {t('project.quality.title')}

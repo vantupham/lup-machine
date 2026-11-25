@@ -9,7 +9,6 @@ async function createPoseProject(page: Page, name: string) {
   await page.getByLabel('Tên dự án').fill(name);
   await page.getByRole('radio', { name: /Tư thế/ }).check();
   await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
-  await page.getByRole('listitem').filter({ hasText: name }).getByRole('link', { name: 'Mở' }).click();
 }
 
 test('Studio tư thế (cơ thể): MoveNet thật nhận ảnh người đứng, camera chạy, nhận dạng ảnh mới', async ({ page }) => {

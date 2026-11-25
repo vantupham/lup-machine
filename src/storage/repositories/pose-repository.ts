@@ -1,4 +1,5 @@
 import type { LupDatabase, PoseSampleRecord, PoseSource } from '../db';
+import { touchProjects } from './touch-project';
 import { keypointCount, packKeypoints, type PoseKind } from '@/core/pose/features';
 import type { Keypoint } from '@/core/pose/detectors';
 
@@ -31,7 +32,7 @@ export function createDexiePoseRepository(
     },
 
     async addPoses(inputs) {
-      return db.transaction('rw', db.classes, db.poseSamples, async () => {
+      const records = await db.transaction('rw', db.classes, db.poseSamples, async () => {
         const incoming = new Map<string, number>();
         for (const input of inputs) {
           if (input.keypoints.length !== keypointCount(input.kind)) throw new RangeError(`Cần đúng ${keypointCount(input.kind)} khớp`);
@@ -46,7 +47,7 @@ export function createDexiePoseRepository(
         const existing = inputs[0] ? await db.poseSamples.where('projectId').equals(inputs[0].projectId).toArray() : [];
         let seq = existing.reduce((m, p) => Math.max(m, p.seq + 1), 0);
         const createdAt = deps.now();
-        const records = inputs.map((input): PoseSampleRecord => ({
+        const created = inputs.map((input): PoseSampleRecord => ({
           id: deps.newId(),
           projectId: input.projectId,
           classId: input.classId,
@@ -58,13 +59,17 @@ export function createDexiePoseRepository(
           createdAt,
           seq: seq++,
         }));
-        await db.poseSamples.bulkAdd(records);
-        return records;
+        await db.poseSamples.bulkAdd(created);
+        return created;
       });
+      await touchProjects(db, records.map((r) => r.projectId), records[0]?.createdAt ?? deps.now());
+      return records;
     },
 
     async deletePose(id) {
+      const projectId = (await db.poseSamples.get(id))?.projectId;
       await db.poseSamples.delete(id);
+      await touchProjects(db, [projectId], deps.now());
     },
   };
 }

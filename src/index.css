@@ -8,44 +8,114 @@
  * Nền giấy kẻ ô, mực xanh, tiêu đề chữ có chân, số liệu chữ đơn cách.
  * Font lấy từ hệ điều hành (không tải từ ngoài → đúng CSP, chạy ngoại tuyến).
  */
+/*
+ * Token màu dùng cho utility Tailwind (bg-paper, text-ink…). Giá trị thật nằm ở :root bên dưới,
+ * tự đổi sáng/tối theo color-scheme — utility không cần biến thể dark:.
+ */
 @theme {
-  --color-paper: #f7f5ef;
-  --color-surface: #fffdf8;
-  --color-ink: #1b2433;
-  --color-muted: #5b6474;
-  --color-rule: #d9d4c7;
-  --color-grid: rgb(29 78 216 / 0.06);
-  --color-primary: #1d4ed8;
-  --color-primary-ink: #ffffff;
-  --color-accent: #0f766e;
-  --color-highlight: #fde68a;
-  --color-warning: #b45309;
-  --color-danger: #b91c1c;
+  --color-paper: var(--paper-light);
+  --color-surface: var(--surface-light);
+  --color-ink: var(--ink-light);
+  --color-muted: var(--muted-light);
+  --color-rule: var(--rule-light);
+  --color-grid: var(--grid-light);
+  --color-primary: var(--primary-light);
+  --color-primary-ink: var(--primary-ink-light);
+  --color-accent: var(--accent-light);
+  --color-highlight: var(--highlight-light);
+  --color-warning: var(--warning-light);
+  --color-danger: var(--danger-light);
 
   --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
 
-  --shadow-card: 0 1px 0 var(--color-rule), 4px 4px 0 rgb(27 36 51 / 0.08);
-  --shadow-card-hover: 0 1px 0 var(--color-rule), 7px 7px 0 rgb(29 78 216 / 0.18);
+  --shadow-card: 0 1px 0 var(--color-rule), 4px 4px 0 var(--shadow-tint);
+  --shadow-card-hover: 0 1px 0 var(--color-rule), 7px 7px 0 var(--shadow-tint-hover);
 }
 
+/*
+ * Bảng màu thô cho từng chế độ. color-scheme: light dark để trình duyệt vẽ thanh cuộn, ô nhập,
+ * <select>, ô chọn ngày… theo chế độ tối thay vì để lại mảng trắng.
+ */
+:root {
+  color-scheme: light dark;
+  accent-color: var(--color-primary);
+
+  --paper-light: #f7f5ef;
+  --surface-light: #fffdf8;
+  --ink-light: #1b2433;
+  --muted-light: #5b6474;
+  --rule-light: #d9d4c7;
+  --grid-light: rgb(29 78 216 / 0.06);
+  --primary-light: #1d4ed8;
+  --primary-ink-light: #ffffff;
+  --accent-light: #0f766e;
+  --highlight-light: #fde68a;
+  --warning-light: #b45309;
+  --danger-light: #b91c1c;
+  --shadow-tint-light: rgb(27 36 51 / 0.08);
+  --shadow-tint-hover-light: rgb(29 78 216 / 0.18);
+
+  --paper-dark: #0e1420;
+  --surface-dark: #141c2b;
+  --ink-dark: #e6e2d6;
+  --muted-dark: #9aa3b2;
+  --rule-dark: #263248;
+  --grid-dark: rgb(96 165 250 / 0.07);
+  --primary-dark: #7aa7ff;
+  --primary-ink-dark: #0e1420;
+  --accent-dark: #4fd1c5;
+  --highlight-dark: #6b5a1e;
+  --warning-dark: #f6b94a;
+  --danger-dark: #f87171;
+  --shadow-tint-dark: rgb(0 0 0 / 0.35);
+  --shadow-tint-hover-dark: rgb(122 167 255 / 0.25);
+
+  --shadow-tint: var(--shadow-tint-light);
+  --shadow-tint-hover: var(--shadow-tint-hover-light);
+}
+
+/* Dự phòng cho trình duyệt chưa có light-dark() (Chrome < 123, Safari < 17.5). */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-paper: #0e1420;
-    --color-surface: #141c2b;
-    --color-ink: #e6e2d6;
-    --color-muted: #9aa3b2;
-    --color-rule: #263248;
-    --color-grid: rgb(96 165 250 / 0.07);
-    --color-primary: #7aa7ff;
-    --color-primary-ink: #0e1420;
-    --color-accent: #4fd1c5;
-    --color-highlight: #6b5a1e;
-    --color-warning: #f6b94a;
-    --color-danger: #f87171;
-    --shadow-card: 0 1px 0 var(--color-rule), 4px 4px 0 rgb(0 0 0 / 0.35);
-    --shadow-card-hover: 0 1px 0 var(--color-rule), 7px 7px 0 rgb(122 167 255 / 0.25);
+    --color-paper: var(--paper-dark);
+    --color-surface: var(--surface-dark);
+    --color-ink: var(--ink-dark);
+    --color-muted: var(--muted-dark);
+    --color-rule: var(--rule-dark);
+    --color-grid: var(--grid-dark);
+    --color-primary: var(--primary-dark);
+    --color-primary-ink: var(--primary-ink-dark);
+    --color-accent: var(--accent-dark);
+    --color-highlight: var(--highlight-dark);
+    --color-warning: var(--warning-dark);
+    --color-danger: var(--danger-dark);
+    --shadow-tint: var(--shadow-tint-dark);
+    --shadow-tint-hover: var(--shadow-tint-hover-dark);
+  }
+}
+
+/*
+ * Trình duyệt mới: light-dark() chọn màu theo color-scheme của chính phần tử dùng nó, nên một
+ * vùng đặt color-scheme riêng (vd. khi in: light) tự đổi màu mà không cần lặp lại media query.
+ */
+@supports (color: light-dark(white, black)) {
+  :root {
+    --color-paper: light-dark(var(--paper-light), var(--paper-dark));
+    --color-surface: light-dark(var(--surface-light), var(--surface-dark));
+    --color-ink: light-dark(var(--ink-light), var(--ink-dark));
+    --color-muted: light-dark(var(--muted-light), var(--muted-dark));
+    --color-rule: light-dark(var(--rule-light), var(--rule-dark));
+    --color-grid: light-dark(var(--grid-light), var(--grid-dark));
+    --color-primary: light-dark(var(--primary-light), var(--primary-dark));
+    --color-primary-ink: light-dark(var(--primary-ink-light), var(--primary-ink-dark));
+    --color-accent: light-dark(var(--accent-light), var(--accent-dark));
+    --color-highlight: light-dark(var(--highlight-light), var(--highlight-dark));
+    --color-warning: light-dark(var(--warning-light), var(--warning-dark));
+    --color-danger: light-dark(var(--danger-light), var(--danger-dark));
+    --shadow-tint: light-dark(var(--shadow-tint-light), var(--shadow-tint-dark));
+    --shadow-tint-hover: light-dark(var(--shadow-tint-hover-light), var(--shadow-tint-hover-dark));
   }
 }
 

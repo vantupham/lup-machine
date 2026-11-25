@@ -27,6 +27,7 @@
     "title": "Đừng chỉ xem AI đoán đúng.",
     "titleMark": "Hãy nhìn nó làm thế nào.",
     "lead": "Tự dạy cho máy tính bằng dữ liệu của em, rồi mở nắp từng bước: ảnh biến thành con số ra sao, máy học như thế nào, vì sao nó đoán sai.",
+    "ctaCreate": "Tạo mô hình mới",
     "ctaStudio": "Vào Xưởng mô hình",
     "ctaAbout": "Dữ liệu của em đi đâu?",
     "pipelineTitle": "Sáu bước, bước nào cũng mở nắp được",
@@ -55,18 +56,17 @@
       "openTitle": "Mã nguồn mở, miễn phí",
       "openBody": "Giáo viên có thể xem, góp ý và đóng góp bài học trên GitHub."
     },
-    "status": "Phiên bản {{version}} · đang phát triển giai đoạn nền móng"
+    "status": "Phiên bản {{version}} · mã nguồn mở, chạy hoàn toàn trên trình duyệt"
   },
   "studio": {
     "title": "Xưởng mô hình",
     "lead": "Mỗi dự án là một thí nghiệm. Dự án được lưu ngay trên trình duyệt của máy này.",
     "newProject": "Dự án mới",
     "nameLabel": "Tên dự án",
-    "namePlaceholder": "Ví dụ: Phân loại rác",
+    "namePlaceholder": "Để trống: tự đặt tên (ví dụ: Dự án ảnh 1)",
     "typeLabel": "Loại dữ liệu",
     "create": "Tạo dự án",
     "creating": "Đang tạo…",
-    "comingSoon": "sắp có",
     "types": {
       "image": "Ảnh",
       "audio": "Âm thanh",
@@ -81,8 +81,67 @@
     "confirmDelete": "Xóa dự án \"{{name}}\"? Không thể hoàn tác.",
     "loadError": "Không đọc được dữ liệu đã lưu trên trình duyệt. Có thể trình duyệt đang ở chế độ ẩn danh hoặc đã chặn lưu trữ.",
     "saveError": "Không lưu được dự án: {{message}}",
-    "nameRequired": "Hãy đặt tên cho dự án (1–100 ký tự).",
-    "open": "Mở"
+    "open": "Mở",
+    "namedTitle": "Tạo với tên riêng",
+    "namedLead": "Muốn đặt tên ngay từ đầu, ví dụ để nộp bài? Điền tên rồi chọn loại dữ liệu.",
+    "searchLabel": "Tìm dự án",
+    "searchPlaceholder": "Gõ tên dự án, không dấu cũng được",
+    "noMatch": "Không có dự án nào có tên chứa \"{{query}}\".",
+    "summary": {
+      "noData": "Chưa có dữ liệu",
+      "table": "Đã có bảng dữ liệu",
+      "classes": "{{count}} lớp",
+      "items": {
+        "image": "{{count}} ảnh",
+        "audio": "{{count}} đoạn âm thanh",
+        "pose": "{{count}} mẫu tư thế"
+      },
+      "runs": "Đã huấn luyện {{count}} lần"
+    },
+    "deleteError": "Không xóa được dự án \"{{name}}\": {{message}}"
+  },
+  "quickStart": {
+    "title": "Em muốn dạy máy nhận ra gì?",
+    "lead": "Chọn một loại dữ liệu là vào làm ngay, không cần đặt tên trước. Mọi thứ được lưu trên máy này.",
+    "popular": "Hay dùng nhất",
+    "start": "Bắt đầu",
+    "startAria": "Tạo dự án {{type}} mới",
+    "creating": "Đang tạo…",
+    "creatingFromLink": "Đang tạo dự án mới…",
+    "error": "Không tạo được dự án: {{message}}",
+    "badType": "Không có loại dự án \"{{slug}}\". Hãy chọn một loại bên dưới.",
+    "backToStudio": "Về Xưởng mô hình",
+    "recentTitle": "Tiếp tục dự án gần đây",
+    "recentAll": "Xem tất cả dự án →",
+    "nameBase": {
+      "image": "Dự án ảnh",
+      "audio": "Dự án âm thanh",
+      "pose": "Dự án tư thế",
+      "text": "Dự án văn bản",
+      "tabular": "Dự án bảng số"
+    },
+    "types": {
+      "image": {
+        "description": "Dạy máy nhận ra đồ vật, con vật, cử chỉ qua ảnh tải lên hoặc webcam.",
+        "example": "Ví dụ: phân loại rác, lá cây bị bệnh"
+      },
+      "audio": {
+        "description": "Dạy máy phân biệt các loại âm thanh thu từ micro.",
+        "example": "Ví dụ: vỗ tay, huýt sáo, tiếng trống"
+      },
+      "pose": {
+        "description": "Dạy máy nhận ra tư thế cơ thể hoặc cử chỉ bàn tay qua webcam.",
+        "example": "Ví dụ: giơ tay, ngồi thẳng lưng"
+      },
+      "text": {
+        "description": "Dạy máy xếp câu tiếng Việt vào đúng nhóm theo nội dung.",
+        "example": "Ví dụ: góp ý khen hay chê"
+      },
+      "tabular": {
+        "description": "Dạy máy dự đoán từ bảng số liệu dán vào hoặc tệp CSV.",
+        "example": "Ví dụ: đoán loài chim cánh cụt"
+      }
+    }
   },
   "projectFile": {
     "exportButton": "Xuất .lup",
@@ -753,6 +812,22 @@
       "rejected": "Không dùng được tệp này: {{reason}}.",
       "badImage": "Không đọc được ảnh này. Hãy thử một ảnh JPEG hoặc PNG khác.",
       "frameError": "Không phân tích được ảnh: {{message}}"
+    },
+    "rename": {
+      "button": "Đổi tên",
+      "aria": "Đổi tên dự án",
+      "inputLabel": "Tên dự án mới",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "invalid": "Tên dự án cần từ 1 đến 100 ký tự.",
+      "error": "Không đổi được tên: {{message}}"
+    },
+    "stepBar": {
+      "done": "đã xong",
+      "locked": "chưa mở",
+      "lockedHint": "Làm xong các bước trước để mở bước này",
+      "next": "Bước tiếp: {{step}}",
+      "stepPrefix": "Bước {{n}}"
     }
   },
   "samples": {

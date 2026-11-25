@@ -125,7 +125,7 @@ export function PoseModelLab({ kind, projectName, data, dataKey }: { readonly ki
 
   return (
     <>
-      <Step n={4} id="pose-step-train" title={t('pose.steps.train')}>
+      <Step n={4} id="pose-step-train" title={t('pose.steps.train')} done={current !== null}>
         <div className="grid gap-6 lg:grid-cols-2">
           <fieldset className="space-y-2">
             <legend className="text-sm font-medium">{t('tabular.model.choose')}</legend>
