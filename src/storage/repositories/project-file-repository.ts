@@ -104,6 +104,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
           metrics: run.metrics,
           matchesData: run.fingerprint === fingerprint,
           ...(run.guess ? { guess: run.guess } : {}),
+          ...(run.conclusion ? { conclusion: run.conclusion } : {}),
         })),
       modelCard: card ? pickModelCardFields(card) : null,
       notes: await notebook.list(project.id),

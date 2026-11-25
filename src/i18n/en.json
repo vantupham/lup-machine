@@ -604,7 +604,13 @@
       "stale": "The classes changed since the last run. Train again.",
       "guessLabel": "Your guess for the Test score (%)",
       "guessInvalid": "Your guess must be between 0 and 100.",
-      "guessResult": "You guessed {{guess}}%. Actual Test score: {{actual}}% (off by {{diff}} points)."
+      "guessResult": "You guessed {{guess}}%. Actual Test score: {{actual}}% (off by {{diff}} points).",
+      "epochLevel": "Training length",
+      "epochLevels": {
+        "few": "Short ({{n}})",
+        "medium": "Medium ({{n}})",
+        "many": "Long ({{n}})"
+      }
     },
     "evaluate": {
       "title": "Evaluate",
@@ -659,7 +665,11 @@
       "replaying": "Viewing run {{n}} again.",
       "saveError": "Could not save to the log: {{message}}",
       "na": "—",
-      "guess": "Guess"
+      "guess": "Guess",
+      "changes": "Changed",
+      "conclusion": "Conclusion",
+      "firstRun": "First run",
+      "noChange": "No change"
     },
     "explain": {
       "title": "Why did the model predict this?",
@@ -836,6 +846,33 @@
     "details": {
       "show": "Show every step inside",
       "hide": "Collapse the steps"
+    },
+    "compare": {
+      "planTitle": "Compared with run #{{n}}, you changed:",
+      "noChange": "Nothing changed since run #{{n}}. Same seed, so the result will be identical.",
+      "changes": {
+        "epochs": "epochs {{from}} → {{to}}",
+        "learningRate": "learning rate {{from}} → {{to}}",
+        "batchSize": "batch size {{from}} → {{to}}",
+        "trainCount": "Training images {{from}} → {{to}}",
+        "testCount": "Test images {{from}} → {{to}}",
+        "classes": "classes: {{from}} → {{to}}",
+        "images": "images replaced (same count)"
+      },
+      "tooMany": "You changed {{count}} things at once, so it is hard to tell which one moved the score.",
+      "unfairTest": "The Test split changed, so comparing Test scores with run #{{n}} is not fair yet.",
+      "resultTitle": "Result compared with run #{{n}}",
+      "firstRun": "This is the first run. Change one thing and train again to compare.",
+      "score": {
+        "test": "Test score",
+        "train": "Training score"
+      },
+      "delta": "{{label}}: {{from}}% → {{to}}% ({{change}}).",
+      "up": "up {{d}} points",
+      "down": "down {{d}} points",
+      "same": "unchanged",
+      "conclusionLabel": "Your conclusion",
+      "conclusionPlaceholder": "Did that change raise or lower the score? Why do you think so?"
     }
   },
   "samples": {
@@ -1689,9 +1726,6 @@
     "explain": "Explain",
     "label": "Your notes",
     "placeholder": "What do you see, and why do you think so?",
-    "saving": "Saving…",
-    "saved": "Saved",
-    "saveError": "Could not save your notes: {{message}}",
     "image": {
       "data": {
         "observe": "How many images does each class have? How do images in one class differ?",
@@ -1718,5 +1752,10 @@
         "explain": "How does the region the model looks at explain that mistake?"
       }
     }
+  },
+  "autosave": {
+    "saving": "Saving…",
+    "saved": "Saved",
+    "error": "Could not save: {{message}}"
   }
 }

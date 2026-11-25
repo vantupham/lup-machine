@@ -473,6 +473,46 @@ describe('Sổ tay: đoán trước, so sau', () => {
   });
 });
 
+describe('Thí nghiệm có kiểm soát', () => {
+  test('Khám phá: chọn số lượt học Ít / Vừa / Nhiều', async () => {
+    await seed();
+    open();
+    await extractAll();
+    expect(screen.getByRole('radio', { name: 'Vừa (50)' })).toBeChecked();
+    await userEvent.click(screen.getByRole('radio', { name: 'Ít (10)' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Bắt đầu huấn luyện' }));
+    expect(await screen.findByText('Xong 10 epoch.', {}, SLOW_WAIT)).toBeInTheDocument();
+  });
+
+  test('đổi một thứ, huấn luyện lại: thấy đã đổi gì, điểm đổi thế nào, ghi kết luận vào nhật ký', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    const first = await screen.findByTestId('run-comparison', {}, SLOW_WAIT);
+    expect(first).toHaveTextContent('Đây là lần chạy đầu tiên.');
+    expect(screen.getByTestId('experiment-plan')).toHaveTextContent('Chưa đổi gì so với lần #1.');
+
+    await userEvent.click(screen.getByRole('radio', { name: 'Ít (10)' }));
+    expect(screen.getByTestId('experiment-plan')).toHaveTextContent('số epoch 50 → 10');
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện lại' }));
+    await screen.findByText('Xong 10 epoch.', {}, SLOW_WAIT);
+
+    const comparison = await screen.findByText('Kết quả so với lần #1', {}, SLOW_WAIT);
+    expect(comparison).toBeInTheDocument();
+    expect(screen.getByTestId('run-delta')).toHaveTextContent(/^Điểm Kiểm tra: 100% → \d+% \(((tăng|giảm) \d+ điểm|giữ nguyên)\)\.$/);
+
+    await userEvent.type(screen.getByLabelText('Kết luận của em'), 'Ít epoch vẫn đủ');
+    await userEvent.tab();
+    await waitFor(async () => expect((await repos.experiments.listRuns(projectId))[0]?.conclusion).toBe('Ít epoch vẫn đủ'));
+
+    expect(screen.getByTestId('run-changes-2')).toHaveTextContent('số epoch 50 → 10');
+    expect(screen.getByTestId('run-changes-1')).toHaveTextContent('Lần đầu');
+    const log = screen.getByRole('table', { name: 'Nhật ký thí nghiệm' });
+    expect(await within(log).findByText('Ít epoch vẫn đủ')).toBeInTheDocument();
+  });
+});
+
 describe('Bước 6: Sử dụng', () => {
   test('sau khi huấn luyện: tải một ảnh mới, mô hình đoán lớp; ảnh thử không được lưu vào dự án', async () => {
     await seed();

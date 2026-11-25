@@ -105,10 +105,11 @@ describe('ProjectFileRepository', () => {
       counts: { train: 0, test: 0 },
       metrics: [{ epoch: 0, trainLoss: 0.7, trainAccuracy: 0.5, testLoss: 0.7, testAccuracy: 0.5 }],
       guess: { testAccuracy: 0.9 },
-    });
+    }).then((saved) => r.experiments.setConclusion(saved.id, 'Máy học nhanh'));
     const copy = await r.files.importProject((await r.files.exportProject(project.id)).bytes);
     expect(await r.notebook.list(copy.id)).toEqual([{ step: 'represent', text: 'Mèo nằm bên trái bản đồ' }]);
     expect((await r.experiments.listRuns(copy.id))[0]?.guess).toEqual({ testAccuracy: 0.9 });
+    expect((await r.experiments.listRuns(copy.id))[0]?.conclusion).toBe('Máy học nhanh');
   });
 
   test('dự án âm thanh và tư thế', async () => {
