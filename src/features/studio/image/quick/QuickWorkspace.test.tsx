@@ -96,7 +96,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     await seed();
     open();
     await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: 'Huấn luyện nhanh' }));
-    expect(await within(quick()).findByText(/Xong! Máy đoán đúng 100% ảnh dạy\./, {}, { timeout: TRAIN_WAIT_MS })).toBeInTheDocument();
+    expect(await within(quick()).findByText(/Xong\. Máy đoán đúng 100% ảnh dạy\./, {}, { timeout: TRAIN_WAIT_MS })).toBeInTheDocument();
     expect(screen.getByText('Xong 50 epoch.')).toBeInTheDocument();
     expect(screen.getByText(/tất cả ảnh đã có vector/i)).toBeInTheDocument();
     expect(await repos.experiments.listRuns(projectId)).toHaveLength(1);
@@ -114,7 +114,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     await seed();
     open();
     await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: 'Huấn luyện nhanh' }));
-    await within(quick()).findByText(/Xong!/, {}, { timeout: TRAIN_WAIT_MS });
+    await within(quick()).findByText(/^Xong\./, {}, { timeout: TRAIN_WAIT_MS });
     vi.mocked(codec.fileToStoredImage).mockResolvedValue(imageOf(235, 3));
     await userEvent.upload(within(quick()).getByLabelText('Thử với một tệp ảnh'), new File(['x'], 'moi.jpg', { type: 'image/jpeg' }));
     const result = await within(quick()).findByRole('list', { name: 'Máy đoán' });
@@ -143,7 +143,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     await seed();
     open();
     await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: 'Huấn luyện nhanh' }));
-    await within(quick()).findByText(/Xong!/, {}, { timeout: TRAIN_WAIT_MS });
+    await within(quick()).findByText(/^Xong\./, {}, { timeout: TRAIN_WAIT_MS });
     vi.mocked(codec.fileToStoredImage).mockResolvedValue(imageOf(20, 40));
     const files = [new File(['a'], 'a.jpg', { type: 'image/jpeg' }), new File(['b'], 'b.jpg', { type: 'image/jpeg' })];
     await userEvent.upload(within(quick()).getByLabelText('Tải ảnh cho lớp Nhựa'), files);
@@ -172,7 +172,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     expect(document.getElementById('train-title')).toHaveFocus();
 
     await userEvent.click(within(region).getByRole('button', { name: 'Huấn luyện nhanh' }));
-    await within(quick()).findByText(/Xong!/, {}, { timeout: TRAIN_WAIT_MS });
+    await within(quick()).findByText(/^Xong\./, {}, { timeout: TRAIN_WAIT_MS });
     await userEvent.upload(within(quick()).getByLabelText('Thử với một tệp ảnh'), new File(['x'], 'ghi-chu.txt', { type: 'text/plain' }), { applyAccept: false });
     expect(within(quick()).getByRole('alert')).toBeInTheDocument();
     expect(within(quick()).queryByRole('list', { name: 'Máy đoán' })).toBeNull();
@@ -207,7 +207,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     release();
     await waitFor(() => expect(quickTrain).toBeEnabled(), { timeout: TRAIN_WAIT_MS });
     await userEvent.click(quickTrain);
-    await within(quick()).findByText(/Xong!/, {}, { timeout: TRAIN_WAIT_MS });
+    await within(quick()).findByText(/^Xong\./, {}, { timeout: TRAIN_WAIT_MS });
     expect(loader.loadFeatureExtractor).toHaveBeenCalledTimes(1);
     expect(await repos.experiments.listRuns(projectId)).toHaveLength(1);
   });
@@ -250,7 +250,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     await seed();
     open();
     await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: 'Huấn luyện nhanh' }));
-    await within(quick()).findByText(/Xong!/, {}, { timeout: TRAIN_WAIT_MS });
+    await within(quick()).findByText(/^Xong\./, {}, { timeout: TRAIN_WAIT_MS });
     await userEvent.click(within(quick()).getByRole('button', { name: /Xem thử bằng webcam/ }));
     expect(quick().querySelector('video')).not.toBeNull();
     await userEvent.click(within(quick()).getByRole('button', { name: 'Chụp ảnh cho lớp Giấy' }));

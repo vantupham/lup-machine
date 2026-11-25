@@ -41,7 +41,7 @@ describe('Lớp học qua tệp: giáo viên tạo gói, học sinh làm và n�
     renderWithRepositories('/giao-vien', createTestRepository());
     expect(screen.getByTestId('rubric-total')).toHaveTextContent('Tổng: 10 điểm');
     await user.click(screen.getByRole('button', { name: 'Tải gói bài tập (.lupa)' }));
-    expect(await screen.findByText('Hãy đặt tên bài.')).toHaveAttribute('role', 'alert');
+    expect(await screen.findByText('Cần đặt tên bài.')).toHaveAttribute('role', 'alert');
     await user.click(screen.getByRole('button', { name: 'Xóa tiêu chí 3' }));
     expect(screen.getByTestId('rubric-total')).toHaveTextContent('Tổng: 7 điểm');
     await user.click(screen.getByRole('button', { name: '+ Thêm câu hỏi' }));

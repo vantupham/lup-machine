@@ -37,7 +37,7 @@ describe('Phòng đạo đức AI', () => {
     expect(percentOf('score-overall')).toBe(floorPercent(accuracy(biased.overall)));
     // chưa dự đoán thì chưa hiện theo vùng
     expect(screen.queryByTestId('score-mountain')).toBeNull();
-    expect(screen.getByText(/Hãy dự đoán và xem độ chính xác theo từng vùng/)).toBeInTheDocument();
+    expect(screen.getByText(/Dự đoán và xem độ chính xác theo vùng/)).toBeInTheDocument();
     // biểu đồ có mô tả bằng chữ vị trí ranh giới cho trình đọc màn hình
     expect(screen.getByRole('img', { name: /Biểu đồ 220 lá/ })).toHaveAccessibleDescription(/Ranh giới \(cả hai vùng\): với lá có 4 đốm, lá vàng hơn \d+% bị đoán là bệnh\./);
     const reveal = screen.getByRole('button', { name: 'Xem độ chính xác theo từng vùng' });

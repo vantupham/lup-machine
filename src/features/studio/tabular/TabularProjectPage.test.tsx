@@ -36,7 +36,7 @@ describe('Studio dữ liệu bảng', () => {
     fireEvent.change(screen.getByLabelText('Rộng cánh hoa (cm)'), { target: { value: '0.2' } });
     expect(screen.getByTestId('tabular-prediction')).toHaveTextContent('Máy đoán: setosa');
     fireEvent.change(screen.getByLabelText('Rộng cánh hoa (cm)'), { target: { value: 'abc' } });
-    expect(screen.getByText(/Hãy nhập đủ các ô/)).toBeInTheDocument();
+    expect(screen.getByText(/Cần nhập đủ các ô/)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /notebook Google Colab/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeEnabled();
   });

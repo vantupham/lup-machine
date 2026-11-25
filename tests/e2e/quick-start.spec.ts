@@ -119,7 +119,7 @@ test('khối "Dạy máy trong 3 bước": tải ảnh, Huấn luyện nhanh v�
   await expect(quick.getByRole('group', { name: 'Lớp 2' })).toContainText('8 ảnh');
 
   await quick.getByRole('button', { name: 'Huấn luyện nhanh' }).click();
-  await expect(quick.getByText(/Xong! Máy đoán đúng \d+% ảnh dạy\./)).toBeVisible({ timeout: 120_000 });
+  await expect(quick.getByText(/Xong\. Máy đoán đúng \d+% ảnh dạy\./)).toBeVisible({ timeout: 120_000 });
   const bar = page.getByRole('navigation', { name: 'Các bước của dự án' });
   await expect(bar.getByRole('button', { name: 'Bước 4: Huấn luyện (đã xong)' })).toBeVisible();
 

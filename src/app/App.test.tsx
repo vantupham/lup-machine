@@ -13,7 +13,7 @@ describe('Khung ứng dụng', () => {
 
   test('trang chủ hiển thị tiêu đề và 6 bước quy trình', () => {
     renderApp('/', createTestRepository().repository);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Hãy nhìn nó làm thế nào');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Xem nó làm thế nào');
     const pipeline = screen.getByRole('list', { name: /sáu bước/i });
     expect(within(pipeline).getAllByRole('listitem')).toHaveLength(6);
   });
