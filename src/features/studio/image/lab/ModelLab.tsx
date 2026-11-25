@@ -14,6 +14,7 @@ import { RepresentSection } from './RepresentSection';
 import { TrainSection } from './TrainSection';
 import { useExperiments } from './useExperiments';
 import { useFeatures } from './useFeatures';
+import { UseSection } from './UseSection';
 import { useTraining, type TrainingSpeed } from './useTraining';
 
 interface ModelLabProps {
@@ -40,7 +41,7 @@ function toMetrics(snapshots: readonly EpochSnapshot[]) {
   }));
 }
 
-/** Bước ③ Biểu diễn → ④ Huấn luyện → ⑤ Đánh giá → Nhật ký thí nghiệm. */
+/** Bước ③ Biểu diễn → ④ Huấn luyện → ⑤ Đánh giá → ⑥ Sử dụng (thử ảnh mới, xuất notebook) → Nhật ký thí nghiệm. */
 export function ModelLab({ projectId, projectName, classes, samples }: ModelLabProps) {
   const { t } = useTranslation();
   const { features, missingCount, status, extractMissing } = useFeatures(projectId, samples);
@@ -163,6 +164,7 @@ export function ModelLab({ projectId, projectName, classes, samples }: ModelLabP
         </p>
       )}
       <EvaluateSection classes={classes} snapshot={snapshot} samplesBySplit={samplesBySplit} predictions={predictions} />
+      <UseSection classes={classes} samples={samples} features={features} params={snapshot?.params ?? null} epoch={snapshot?.epoch ?? null} />
       {training.status === 'done' && !isStale && lastOptions && readiness.readiness === 'ready' && snapshots.length > 0 && (
         <ColabExportPanel
           projectName={projectName}

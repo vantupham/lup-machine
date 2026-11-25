@@ -1,14 +1,14 @@
+import type { ImageSubject } from './image-subject';
 import { useTranslation } from 'react-i18next';
 import { occlusionDrops } from '@/core/ml/occlusion';
 import type { SoftmaxParams } from '@/core/ml/softmax-regression';
-import type { SampleRecord } from '@/storage/db';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { useObjectUrl } from '../useObjectUrl';
 import { GridOverlay } from './GridOverlay';
 import { OCCLUSION_GRID, useOcclusion } from './useOcclusion';
 
 interface OcclusionMapProps {
-  readonly sample: SampleRecord;
+  readonly sample: ImageSubject;
   readonly params: SoftmaxParams;
   readonly classIndex: number;
   readonly className: string;

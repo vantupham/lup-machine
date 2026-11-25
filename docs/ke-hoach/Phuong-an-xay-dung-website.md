@@ -462,7 +462,7 @@ Hằng tuần ─► Dependabot + CodeQL + npm audit
 | Giai đoạn | Thời lượng gợi ý | Sản phẩm | Tiêu chí hoàn thành |
 |---|---|---|---|
 | **0. Nền móng** | 2–3 tuần | Repo, CI/CD, khung giao diện, i18n, lưu trữ, định dạng `.lup`, trang Giới thiệu và Quyền riêng tư | Deploy được lên GitHub Pages, CI xanh |
-| **1. MVP – Studio Ảnh minh bạch** | 6–8 tuần | Dự án ảnh 6 bước; tách Dạy / Kiểm tra; trợ lý chất lượng dữ liệu; Inspector: điểm ảnh, tiền xử lý, vector đặc trưng, bản đồ PCA, giải thích bằng ví dụ, occlusion; huấn luyện chậm có phát lại; ma trận nhầm lẫn bấm được; nhật ký và so sánh; 3 bộ dữ liệu mẫu; 3 bài học | Thí điểm được 1 lớp THCS và 1 lớp THPT |
+| **1. MVP – Studio Ảnh minh bạch** | 6–8 tuần | Dự án ảnh 6 bước; tách Dạy / Kiểm tra; trợ lý chất lượng dữ liệu; Inspector: điểm ảnh, tiền xử lý, vector đặc trưng, bản đồ PCA, giải thích bằng ví dụ, occlusion; huấn luyện chậm có phát lại; ma trận nhầm lẫn bấm được; nhật ký và so sánh; 3 bộ dữ liệu mẫu; 3 bài học. *Bước ⑥ Sử dụng (thử trực tiếp ảnh mới bằng webcam / tệp, chấm ✱ trên bản đồ 2D) bị sót khi đóng giai đoạn, đã bổ sung ngày 25/11/2026.* | Thí điểm được 1 lớp THCS và 1 lớp THPT |
 | **2. Mở nắp sâu hơn** | 4–6 tuần | Grad-CAM, bản đồ đặc trưng CNN, chế độ học 2D (ranh giới chính xác), UMAP, đường đi phép tính, ngưỡng tin cậy, PWA ngoại tuyến | Chạy ngoại tuyến được ở phòng máy |
 | **3. Sân chơi thuật toán & dữ liệu bảng** | 4–6 tuần | k-NN, cây quyết định, hồi quy, gradient descent, k-means, mạng nơ-ron mini; Studio dữ liệu bảng; xuất notebook Colab | Kiểm thử đối chiếu scikit-learn đạt |
 | **4. Âm thanh, tư thế, văn bản tiếng Việt** | 6–8 tuần | 3 Studio còn lại kèm Inspector riêng (ảnh phổ, khung xương, trọng số từ) | |

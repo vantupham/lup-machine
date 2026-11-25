@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import type { DecisionGrid } from '@/core/ml/explain';
@@ -10,13 +11,23 @@ export interface MapPoint {
   readonly y: number;
 }
 
+export interface ProbePoint {
+  readonly x: number;
+  readonly y: number;
+  readonly classIndex: number;
+  readonly label: string;
+}
+
 interface EmbeddingMapProps {
   readonly points: readonly MapPoint[];
   readonly classes: readonly ClassRecord[];
   readonly selectedId: string | null;
   readonly wrongIds: ReadonlySet<string>;
   readonly axisLabels: readonly [string, string];
-  readonly onSelect: (sample: SampleRecord) => void;
+  /** Không truyền thì bản đồ chỉ để xem: các chấm không bấm được. */
+  readonly onSelect?: (sample: SampleRecord) => void;
+  /** Ảnh đang thử ở bước ⑥: vẽ thành dấu ✱ trên cùng hệ tọa độ (không làm xê dịch bản đồ). */
+  readonly probe?: ProbePoint | null;
   /** Lưới ranh giới quyết định (tùy chọn), vẽ dưới các chấm theo đúng hệ tọa độ của bản đồ. */
   readonly grid?: DecisionGrid | null;
 }
@@ -25,7 +36,7 @@ const WIDTH = 480;
 const HEIGHT = 320;
 const PAD = 24;
 
-export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels, onSelect, grid = null }: EmbeddingMapProps) {
+export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels, onSelect, grid = null, probe = null }: EmbeddingMapProps) {
   const { t } = useTranslation();
   const b = pointBounds(points);
   const sx = (x: number) => PAD + ((x - b.minX) / (b.maxX - b.minX)) * (WIDTH - 2 * PAD);
@@ -52,13 +63,17 @@ export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels
         return (
           <g
             key={sample.id}
-            role="button"
-            tabIndex={0}
-            aria-label={t('project.represent.pointLabel', { name: className, split: t(`project.class.${sample.split}`) })}
-            aria-pressed={isSelected}
-            onClick={() => onSelect(sample)}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onSelect(sample))}
-            className="cursor-pointer focus:outline-none [&:focus-visible>circle.focus]:opacity-100"
+            {...(onSelect
+              ? {
+                  role: 'button',
+                  tabIndex: 0,
+                  'aria-label': t('project.represent.pointLabel', { name: className, split: t(`project.class.${sample.split}`) }),
+                  'aria-pressed': isSelected,
+                  onClick: () => onSelect(sample),
+                  onKeyDown: (e: KeyboardEvent<SVGGElement>) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onSelect(sample)),
+                  className: 'cursor-pointer focus:outline-none [&:focus-visible>circle.focus]:opacity-100',
+                }
+              : { 'aria-hidden': true })}
           >
             <circle className="focus opacity-0" cx={cx} cy={cy} r={11} fill="none" stroke="var(--color-primary)" strokeWidth={2} />
             {sample.split === 'test' && <circle cx={cx} cy={cy} r={8} fill="none" stroke={colorFor(i)} strokeWidth={1.5} />}
@@ -70,7 +85,26 @@ export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels
           </g>
         );
       })}
+      {probe && <ProbeMarker probe={probe} cx={sx(probe.x)} cy={sy(probe.y)} />}
     </svg>
+  );
+}
+
+/** Dấu ✱ của ảnh đang thử. Nằm ngoài khung thì ghim vào mép, kèm mũi tên chỉ hướng. */
+function ProbeMarker({ probe, cx, cy }: { probe: ProbePoint; cx: number; cy: number }) {
+  const x = Math.min(WIDTH - PAD / 2, Math.max(PAD / 2, cx));
+  const y = Math.min(HEIGHT - PAD / 2, Math.max(PAD / 2, cy));
+  const isClamped = x !== cx || y !== cy;
+  return (
+    <g role="img" aria-label={probe.label} data-testid="probe-marker" data-clamped={isClamped}>
+      <circle cx={x} cy={y} r={12} fill="var(--color-paper)" stroke="var(--color-ink)" strokeWidth={2} />
+      <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fill={colorFor(probe.classIndex)} fontSize={16} fontWeight="bold">
+        ✱
+      </text>
+      {isClamped && (
+        <line x1={x} y1={y} x2={x + Math.sign(cx - x) * 10} y2={y + Math.sign(cy - y) * 10} stroke="var(--color-ink)" strokeWidth={2} />
+      )}
+    </g>
   );
 }
 

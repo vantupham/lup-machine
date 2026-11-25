@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { SampleRecord } from '@/storage/db';
+import type { ImageSubject } from './image-subject';
 import { getErrorMessage } from '@/ui/error-message';
 import { decodeStoredImage } from '../image-codec.browser';
 import { loadFeatureExtractor } from '../feature-loader.browser';
@@ -10,7 +10,7 @@ export type SpatialState =
   | { readonly status: 'error'; readonly message: string };
 
 /** Kích hoạt 7×7×1280 của một ảnh, tính khi cần (không lưu đệm vì nặng ~250 KB mỗi ảnh). */
-export function useSpatial(sample: SampleRecord): SpatialState {
+export function useSpatial(sample: ImageSubject): SpatialState {
   const [state, setState] = useState<{ id: string; value: SpatialState } | null>(null);
 
   useEffect(() => {

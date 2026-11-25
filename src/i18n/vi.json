@@ -416,8 +416,7 @@
       "represent": "Biểu diễn",
       "train": "Huấn luyện",
       "evaluate": "Đánh giá",
-      "use": "Sử dụng",
-      "soon": "sắp có"
+      "use": "Sử dụng"
     },
     "data": {
       "title": "① Dữ liệu",
@@ -726,6 +725,34 @@
       "hint": "Bảo vệ quyền riêng tư của em và bạn bè: khuôn mặt được phát hiện trong ảnh tải lên hoặc chụp từ camera sẽ bị làm mờ ngay trên máy, ảnh chưa làm mờ không được lưu. Khuôn mặt nhỏ, ở xa hoặc quay nghiêng có thể không được phát hiện, hãy xem lại ảnh sau khi thêm. Tắt đi nếu dự án cần nhìn khuôn mặt (ví dụ nhận biểu cảm).",
       "blurred": "Đã làm mờ {{count}} khuôn mặt.",
       "none": "Không thấy khuôn mặt nào để làm mờ. Nếu ảnh có người (nhất là đứng xa, quay nghiêng), hãy xem lại ảnh và xóa nếu cần."
+    },
+    "use": {
+      "title": "⑥ Sử dụng: thử với ảnh mới",
+      "lead": "Đưa cho mô hình những ảnh nó CHƯA TỪNG THẤY, từ webcam hoặc tệp, để xem nó dùng được ngoài đời đến đâu. Điểm Kiểm tra ở bước ⑤ cho biết mô hình đúng bao nhiêu phần trăm; thử trực tiếp giúp em tìm ra những trường hợp nó còn sai.",
+      "needModel": "Hãy huấn luyện mô hình ở bước ④ trước, rồi quay lại đây để thử với ảnh mới.",
+      "atEpoch": "Đang dùng mô hình ở epoch {{epoch}} (giống bước ⑤).",
+      "startCamera": "📷 Bật camera",
+      "stopCamera": "Tắt camera",
+      "freeze": "⏸ Dừng hình để giải thích",
+      "resume": "▶ Chạy tiếp",
+      "upload": "🖼 Tải ảnh lên",
+      "uploadLabel": "Tải một ảnh lên để thử",
+      "empty": "Bật camera hoặc tải một ảnh lên để thử.",
+      "analyzing": "Đang phân tích ảnh…",
+      "liveHint": "Mô hình đang nhận dạng liên tục khoảng 4 lần mỗi giây. Bấm \"Dừng hình\" để xem vì sao nó đoán như vậy.",
+      "verdict": "Mô hình đoán: {{name}} · {{percent}}",
+      "uncertain": "Mô hình chưa chắc chắn: xác suất cao nhất chỉ {{percent}}, dưới mức {{threshold}}. Có thể ảnh này khác hẳn những ảnh mô hình đã học. Lưu ý: mô hình luôn phải chọn một trong các lớp đã có, kể cả khi ảnh không thuộc lớp nào.",
+      "probeLabel": "Ảnh đang thử, mô hình đoán {{name}}",
+      "mapTitle": "Ảnh mới nằm ở đâu trên bản đồ?",
+      "mapLead": "Cùng bản đồ PCA như bước ③. Dấu ✱ là ảnh đang thử: nó rơi gần nhóm chấm nào thì thường được đoán là lớp đó. Bản đồ chỉ giữ 2 trong 1280 chiều nên đôi khi ✱ trông gần nhóm này mà mô hình lại chọn nhóm khác.",
+      "mapOutside": "✱ nằm ngoài vùng của mọi ảnh đã có (được ghim vào mép bản đồ): ảnh này rất khác những ảnh mô hình đã học.",
+      "neighbors": "Ảnh Dạy giống nhất",
+      "neighborsLead": "Độ tương đồng cosine giữa vector của ảnh mới và vector của từng ảnh Dạy (1 là giống hệt).",
+      "stillAlt": "Ảnh đang thử (đã cắt vuông 224×224 như mô hình nhận)",
+      "privacy": "Ảnh thử chỉ được xử lý trên máy này và KHÔNG được lưu vào dự án. Vì không lưu nên không cần làm mờ khuôn mặt.",
+      "rejected": "Không dùng được tệp này: {{reason}}.",
+      "badImage": "Không đọc được ảnh này. Hãy thử một ảnh JPEG hoặc PNG khác.",
+      "frameError": "Không phân tích được ảnh: {{message}}"
     }
   },
   "samples": {

@@ -3,11 +3,10 @@ import { useTranslation } from 'react-i18next';
 import type { StoredImage } from '@/storage/db';
 import { Dialog } from '@/ui/Dialog';
 import { FaceBlurError } from './face-blur-error';
+import { useCamera } from './useCamera';
 
 /** Chụp liên tục khoảng 6–7 ảnh mỗi giây khi giữ nút. */
 const BURST_INTERVAL_MS = 150;
-
-type CameraState = 'starting' | 'ready' | 'denied' | 'unavailable';
 
 interface WebcamCaptureProps {
   readonly title: string;
@@ -18,40 +17,14 @@ interface WebcamCaptureProps {
 
 export function WebcamCapture({ title, remaining, captureFrame, onDone }: WebcamCaptureProps) {
   const { t } = useTranslation();
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const { videoRef, state } = useCamera();
   const capturedRef = useRef<StoredImage[]>([]);
   const timerRef = useRef<number | null>(null);
-  const [state, setState] = useState<CameraState>('starting');
   const [count, setCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   /** Một khung hình đang được xử lý (làm mờ, mã hóa): bỏ qua nhịp chụp tiếp theo thay vì chạy chồng. */
   const busyRef = useRef(false);
   const [isBusy, setIsBusy] = useState(false);
-
-  useEffect(() => {
-    let stream: MediaStream | null = null;
-    let isActive = true;
-    const start = async () => {
-      if (!navigator.mediaDevices?.getUserMedia) return setState('unavailable');
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: false });
-        if (!isActive) return;
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          // play() có thể trả về undefined (trình duyệt cũ) hoặc bị từ chối do chính sách tự phát.
-          await Promise.resolve(videoRef.current.play()).catch(() => undefined);
-        }
-        setState('ready');
-      } catch (error: unknown) {
-        if (isActive) setState(error instanceof DOMException && error.name === 'NotAllowedError' ? 'denied' : 'unavailable');
-      }
-    };
-    void start();
-    return () => {
-      isActive = false;
-      stream?.getTracks().forEach((track) => track.stop()); // tắt camera ngay khi đóng
-    };
-  }, []);
 
   const snap = useCallback(async () => {
     const video = videoRef.current;
@@ -69,7 +42,7 @@ export function WebcamCapture({ title, remaining, captureFrame, onDone }: Webcam
       busyRef.current = false;
       setIsBusy(false);
     }
-  }, [captureFrame, remaining, t]);
+  }, [captureFrame, remaining, t, videoRef]);
 
   const stopBurst = useCallback(() => {
     if (timerRef.current !== null) window.clearInterval(timerRef.current);

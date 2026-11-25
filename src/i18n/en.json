@@ -416,8 +416,7 @@
       "represent": "Represent",
       "train": "Train",
       "evaluate": "Evaluate",
-      "use": "Use",
-      "soon": "soon"
+      "use": "Use"
     },
     "data": {
       "title": "① Data",
@@ -726,6 +725,34 @@
       "hint": "Protects your and your friends’ privacy: faces detected in uploaded or camera images are blurred right on this computer, and the unblurred image is never saved. Small, distant or side-on faces may be missed, so check your images after adding them. Turn this off if the project needs to see faces (e.g. recognising expressions).",
       "blurred": "Blurred {{count}} face(s).",
       "none": "No faces found to blur. If the images show people (especially far away or turned sideways), check them and delete if needed."
+    },
+    "use": {
+      "title": "⑥ Use: try new images",
+      "lead": "Give the model images it has NEVER SEEN, from the webcam or a file, to see how well it works in real life. The Test score in step ⑤ tells you how often it is right; trying it live helps you find the cases where it still goes wrong.",
+      "needModel": "Train a model in step ④ first, then come back here to try new images.",
+      "atEpoch": "Using the model at epoch {{epoch}} (same as step ⑤).",
+      "startCamera": "📷 Turn on camera",
+      "stopCamera": "Turn off camera",
+      "freeze": "⏸ Freeze to explain",
+      "resume": "▶ Resume",
+      "upload": "🖼 Upload an image",
+      "uploadLabel": "Upload an image to try",
+      "empty": "Turn on the camera or upload an image to try.",
+      "analyzing": "Analyzing image…",
+      "liveHint": "The model is recognizing continuously, about 4 times per second. Press \"Freeze\" to see why it guessed that.",
+      "verdict": "Model's guess: {{name}} · {{percent}}",
+      "uncertain": "The model is not sure: the highest probability is only {{percent}}, below {{threshold}}. This image may be very different from what the model learned. Note: the model always has to pick one of the existing classes, even when the image belongs to none of them.",
+      "probeLabel": "Image being tried, the model guesses {{name}}",
+      "mapTitle": "Where does the new image land on the map?",
+      "mapLead": "The same PCA map as step ③. The ✱ is the image being tried: the group of dots it lands near is usually the class it gets. The map keeps only 2 of 1280 dimensions, so sometimes ✱ looks close to one group while the model picks another.",
+      "mapOutside": "✱ is outside the area of all existing images (pinned to the map edge): this image is very different from what the model learned.",
+      "neighbors": "Most similar Train images",
+      "neighborsLead": "Cosine similarity between the new image's vector and each Train image's vector (1 means identical).",
+      "stillAlt": "Image being tried (cropped to a 224×224 square, exactly what the model receives)",
+      "privacy": "Test images are processed only on this computer and are NOT saved to the project. Since nothing is saved, faces don't need to be blurred.",
+      "rejected": "This file can't be used: {{reason}}.",
+      "badImage": "Couldn't read this image. Try another JPEG or PNG image.",
+      "frameError": "Couldn't analyze the image: {{message}}"
     }
   },
   "samples": {

@@ -1,8 +1,8 @@
+import type { ImageSubject } from './image-subject';
 import { useTranslation } from 'react-i18next';
 import { classActivationMap, globalAveragePool } from '@/core/ml/explain';
 import { SPATIAL_SHAPE } from '@/core/ml/feature-model';
 import { computeLogits, type SoftmaxParams } from '@/core/ml/softmax-regression';
-import type { SampleRecord } from '@/storage/db';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { useModeStore } from '@/ui/mode-store';
 import { useObjectUrl } from '../useObjectUrl';
@@ -10,7 +10,7 @@ import { GridOverlay } from './GridOverlay';
 import { useSpatial } from './useSpatial';
 
 interface CamHeatmapProps {
-  readonly sample: SampleRecord;
+  readonly sample: ImageSubject;
   readonly params: SoftmaxParams;
   readonly classIndex: number;
 }
