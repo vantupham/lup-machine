@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ALGO_GLYPHS, PLAYGROUND_ALGOS } from './catalog';
+import { PLAYGROUND_ALGOS } from './catalog';
+import { AlgoIcon } from './AlgoIcon';
 
 export function PlaygroundPage() {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ export function PlaygroundPage() {
               className="lab-card lab-card-interactive flex h-full flex-col gap-2 p-5"
             >
               <span className="flex items-baseline justify-between">
-                <span aria-hidden="true" className="font-display text-3xl text-primary">{ALGO_GLYPHS[algo]}</span>
+                <AlgoIcon algo={algo} />
                 <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, '0')}</span>
               </span>
               <span className="text-lg font-semibold">{t(`playground.algos.${algo}.name`)}</span>

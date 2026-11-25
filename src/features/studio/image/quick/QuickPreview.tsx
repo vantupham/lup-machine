@@ -9,30 +9,30 @@ import { analyzeImage } from '../lab/analyze-image';
 import { LiveCamera } from '../lab/LiveCamera';
 import { predictProbe } from '../lab/probe';
 import type { ImageLab } from '../lab/useImageLab';
+import { Camera, ImageUp, Pause } from '@/ui/icons';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 interface QuickPreviewProps {
   readonly classes: readonly ClassRecord[];
-  readonly markers: readonly string[];
   readonly lab: ImageLab;
   /** Hộp chụp ảnh đang dùng webcam: tạm tắt xem thử (nhiều máy không mở được một camera hai lần). */
   readonly isCameraBusy: boolean;
 }
 
-/** Cột ③: thử mô hình ngay với webcam hoặc một tệp ảnh. Ảnh thử không được lưu. */
-export function QuickPreview({ classes, markers, lab, isCameraBusy }: QuickPreviewProps) {
+/** Cột 3: thử mô hình ngay với webcam hoặc một tệp ảnh. Ảnh thử không được lưu. */
+export function QuickPreview({ classes, lab, isCameraBusy }: QuickPreviewProps) {
   const { t } = useTranslation();
   const params = lab.snapshot?.params ?? null;
   if (!params) return <p className="text-sm text-muted">{t('project.quick.needModel')}</p>;
-  return <PreviewLab classes={classes} markers={markers} params={params} isCameraBusy={isCameraBusy} />;
+  return <PreviewLab classes={classes} params={params} isCameraBusy={isCameraBusy} />;
 }
 
 interface PredictionProps {
   readonly classes: readonly ClassRecord[];
-  readonly markers: readonly string[];
   readonly params: SoftmaxParams;
 }
 
-function PreviewLab({ classes, markers, params, isCameraBusy }: PredictionProps & { readonly isCameraBusy: boolean }) {
+function PreviewLab({ classes, params, isCameraBusy }: PredictionProps & { readonly isCameraBusy: boolean }) {
   const { t } = useTranslation();
   const [isLive, setIsLive] = useState(false);
   const [vector, setVector] = useState<Float32Array | null>(null);
@@ -72,10 +72,11 @@ function PreviewLab({ classes, markers, params, isCameraBusy }: PredictionProps 
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-ghost px-2.5 py-1 text-sm" onClick={toggleLive}>
+          {isLive ? <Pause /> : <Camera />}
           {isLive ? t('project.quick.liveStop') : t('project.quick.liveStart')}
         </button>
         <label className="btn btn-ghost cursor-pointer px-2.5 py-1 text-sm has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary">
-          🖼 {t('project.quick.tryFileShort')}
+          <ImageUp /> {t('project.quick.tryFileShort')}
           <input type="file" accept={ACCEPTED_IMAGE_TYPES.join(',')} aria-label={t('project.quick.tryFile')} className="sr-only" onChange={(e) => void onUpload(e)} />
         </label>
       </div>
@@ -92,25 +93,25 @@ function PreviewLab({ classes, markers, params, isCameraBusy }: PredictionProps 
           {error}
         </p>
       )}
-      {vector && <Prediction classes={classes} markers={markers} params={params} vector={vector} />}
+      {vector && <Prediction classes={classes} params={params} vector={vector} />}
     </div>
   );
 }
 
-function Prediction({ classes, markers, params, vector }: PredictionProps & { readonly vector: Float32Array }) {
+function Prediction({ classes, params, vector }: PredictionProps & { readonly vector: Float32Array }) {
   const { t } = useTranslation();
   const { probabilities } = predictProbe(params, vector);
   const rows = classes
-    .map((cls, i) => ({ cls, marker: markers[i % markers.length], percent: Math.round((probabilities[i] ?? 0) * 100) }))
+    .map((cls, i) => ({ cls, index: i, percent: Math.round((probabilities[i] ?? 0) * 100) }))
     .sort((a, b) => b.percent - a.percent);
 
   return (
     <ul aria-label={t('project.quick.resultLabel')} className="space-y-2">
-      {rows.map(({ cls, marker, percent }, rank) => (
+      {rows.map(({ cls, index, percent }, rank) => (
         <li key={cls.id} className="text-sm">
           <div className="flex justify-between gap-2">
             <span className={rank === 0 ? 'font-semibold' : ''}>
-              <span aria-hidden="true" className="mr-1 text-primary">{marker}</span>
+              <ClassMarker index={index} className="mr-1.5" />
               {cls.name}
             </span>
             <span className="font-mono">{percent}%</span>

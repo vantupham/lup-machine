@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProjectRepository } from '@/storage/repository-context';
 import { getErrorMessage } from '@/ui/error-message';
+import { Check, ExternalLink } from '@/ui/icons';
 
 const REPO_URL = 'https://github.com/vantupham/lup-machine';
 
@@ -44,9 +45,7 @@ export function AboutPage() {
         <ul className="space-y-3">
           {privacyItems.map((item) => (
             <li key={item} className="flex gap-3 leading-relaxed">
-              <span aria-hidden="true" className="text-accent">
-                ✓
-              </span>
+              <Check className="mt-1 text-accent" />
               {item}
             </li>
           ))}
@@ -78,8 +77,9 @@ export function AboutPage() {
           {t('about.licenseTitle')}
         </h2>
         <p className="mb-3 text-muted">{t('about.licenseBody')}</p>
-        <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className="text-primary underline">
-          {t('about.sourceCode')} ↗
+        <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary underline">
+          {t('about.sourceCode')}
+          <ExternalLink />
         </a>
       </section>
     </article>

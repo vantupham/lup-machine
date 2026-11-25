@@ -4,6 +4,7 @@ import type { StoredImage } from '@/storage/db';
 import { Dialog } from '@/ui/Dialog';
 import { FaceBlurError } from './face-blur-error';
 import { useCamera } from './useCamera';
+import { Lock } from '@/ui/icons';
 
 /** Chụp liên tục khoảng 6–7 ảnh mỗi giây khi giữ nút. */
 const BURST_INTERVAL_MS = 150;
@@ -93,14 +94,14 @@ export function WebcamCapture({ title, remaining, captureFrame, onDone }: Webcam
               onKeyDown={(e) => (e.key === ' ' || e.key === 'Enter') && !e.repeat && startBurst()}
               onKeyUp={stopBurst}
             >
-              ● {t('project.webcam.hold')}
+              <span aria-hidden="true" className="inline-block size-2.5 rounded-full bg-danger" /> {t('project.webcam.hold')}
             </button>
             {/* Khóa trong lúc đang xử lý khung trước (làm mờ, mã hóa) để cú bấm không bị bỏ qua âm thầm. */}
             <button type="button" className="btn btn-ghost" disabled={state !== 'ready' || isFull || isBusy} onClick={() => void snap()}>
               {t('project.webcam.snap')}
             </button>
           </div>
-          <p className="text-xs text-muted">🔒 {t('project.webcam.privacy')}</p>
+          <p className="text-xs text-muted"><Lock /> {t('project.webcam.privacy')}</p>
         </div>
       </div>
     </Dialog>

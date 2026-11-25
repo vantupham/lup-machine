@@ -5,9 +5,10 @@ import type { EpochSnapshot } from '@/core/ml/softmax-regression';
 import type { ClassRecord, SampleRecord, Split } from '@/storage/db';
 import { useModeStore } from '@/ui/mode-store';
 import { useObjectUrl } from '../useObjectUrl';
-import { markerFor } from './class-style';
 import type { SamplePrediction } from './lab-data';
 import { ThresholdPanel } from './ThresholdPanel';
+import { StepNumber } from '@/ui/StepNumber';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 /** Chênh lệch điểm Dạy − Kiểm tra vượt ngưỡng này thì cảnh báo quá khớp. */
 export const OVERFIT_GAP = 0.15;
@@ -25,7 +26,7 @@ export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions
 
   return (
     <section aria-labelledby="evaluate-title" className="space-y-4">
-      <h2 id="evaluate-title" className="text-2xl font-semibold">{t('project.evaluate.title')}</h2>
+      <h2 id="evaluate-title" className="flex items-center gap-3 text-2xl font-semibold"><StepNumber n={5} />{t('project.evaluate.title')}</h2>
       {!snapshot ? (
         <p className="text-sm text-muted">{t('project.evaluate.empty')}</p>
       ) : (
@@ -100,13 +101,13 @@ function ConfusionPanel({ classes, samplesBySplit, predictions, defaultSplit }: 
           <thead>
             <tr>
               <th className="p-1 text-left text-xs text-muted">{t('project.evaluate.actual')} ↓ / {t('project.evaluate.predicted')} →</th>
-              {classes.map((c, j) => <th key={c.id} scope="col" className="p-1 text-xs">{markerFor(j)} {c.name}</th>)}
+              {classes.map((c, j) => <th key={c.id} scope="col" className="p-1 text-xs"><ClassMarker index={j} className="mr-1" />{c.name}</th>)}
             </tr>
           </thead>
           <tbody>
             {matrix.map((row, i) => (
               <tr key={classes[i]!.id}>
-                <th scope="row" className="p-1 text-left text-xs">{markerFor(i)} {classes[i]!.name}</th>
+                <th scope="row" className="p-1 text-left text-xs"><ClassMarker index={i} className="mr-1" />{classes[i]!.name}</th>
                 {row.map((count, j) => {
                   const isDiag = i === j;
                   const alpha = count === 0 ? 0 : 0.15 + (0.75 * count) / max;

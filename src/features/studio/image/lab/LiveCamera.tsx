@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { StoredImage } from '@/storage/db';
 import { videoFrameToStoredImage } from '../image-codec.browser';
 import { useCamera } from '../useCamera';
+import { Pause } from '@/ui/icons';
 
 /** Khoảng 4 lần nhận dạng mỗi giây: đủ "trực tiếp" mà máy phòng tin học yếu vẫn theo kịp. */
 export const LIVE_INTERVAL_MS = 250;
@@ -66,8 +67,8 @@ export function LiveCamera({ isPaused, onFrame, onError }: LiveCameraProps) {
         </p>
       )}
       {state === 'ready' && (
-        <span className="absolute left-2 top-2 rounded bg-black/70 px-2 py-0.5 font-mono text-xs text-white" aria-hidden="true">
-          {isPaused ? '⏸' : '● LIVE'}
+        <span className="absolute left-2 top-2 inline-flex items-center gap-1.5 rounded bg-black/70 px-2 py-0.5 font-mono text-xs text-white" aria-hidden="true">
+          {isPaused ? <Pause /> : <><span className="size-2 animate-pulse rounded-full bg-danger" />LIVE</>}
         </span>
       )}
     </div>

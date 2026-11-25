@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { findLesson } from '@/content/lessons';
 import { useCreateSampleProject } from '@/features/samples/useCreateSampleProject';
 import { Quiz } from './Quiz';
+import { GraduationCap, Lightbulb, Printer } from '@/ui/icons';
+import { BackLink } from '@/ui/BackLink';
 
 export function LessonPage() {
   const { lessonId = '' } = useParams();
@@ -14,7 +16,7 @@ export function LessonPage() {
   if (!lesson) {
     return (
       <div className="space-y-4">
-        <Link to="/lessons" className="text-sm text-primary hover:underline">{t('lessons.back')}</Link>
+        <BackLink to="/lessons">{t('lessons.back')}</BackLink>
         <p role="alert">{t('lessons.notFound')}</p>
       </div>
     );
@@ -28,14 +30,14 @@ export function LessonPage() {
   return (
     <article className="mx-auto max-w-3xl space-y-10" lang="vi">
       <header className="space-y-3">
-        <Link to="/lessons" className="text-sm text-primary hover:underline">{t('lessons.back')}</Link>
+        <BackLink to="/lessons">{t('lessons.back')}</BackLink>
         <h1 className="font-display text-4xl font-bold">{lesson.title}</h1>
         <p className="font-mono text-xs">
           {t('lessons.grade', { grade: lesson.grade })} · {t('lessons.minutes', { minutes: lesson.minutes })}
         </p>
         <p className="text-lg text-muted">{lesson.summary}</p>
-        <Link to={`/lessons/${lesson.id}/phieu-bai-tap`} className="inline-block text-sm text-primary hover:underline">
-          🖨 {t('worksheet.link')}
+        <Link to={`/lessons/${lesson.id}/phieu-bai-tap`} className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
+          <Printer /> {t('worksheet.link')}
         </Link>
       </header>
 
@@ -63,7 +65,7 @@ export function LessonPage() {
               {step.predict && (
                 <details className="mt-3 rounded border border-warning/60 bg-highlight/20 p-3">
                   <summary className="cursor-pointer text-sm font-medium">
-                    🤔 {t('lessons.predict')}: {step.predict.question} <span className="text-primary">({t('lessons.reveal')})</span>
+                    <Lightbulb className="text-warning" /> {t('lessons.predict')}: {step.predict.question} <span className="text-primary">({t('lessons.reveal')})</span>
                   </summary>
                   <p className="mt-2 text-sm leading-relaxed">{step.predict.answer}</p>
                 </details>
@@ -84,7 +86,7 @@ export function LessonPage() {
       </section>
 
       <details className="rounded border border-rule p-4 text-sm">
-        <summary className="cursor-pointer font-medium">👩‍🏫 {t('lessons.teacherNotes')}</summary>
+        <summary className="cursor-pointer font-medium"><GraduationCap /> {t('lessons.teacherNotes')}</summary>
         <ul className="mt-2 list-disc space-y-1 pl-5">
           {lesson.teacherNotes.map((n) => <li key={n}>{n}</li>)}
         </ul>

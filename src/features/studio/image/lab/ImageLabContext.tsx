@@ -13,7 +13,7 @@ interface ImageLabProviderProps {
 
 /**
  * Giữ trạng thái học máy (vector, huấn luyện…) cho cả trang dự án ảnh. Mỗi lượt huấn luyện chỉ làm vẽ lại
- * các phần dùng `useImageLabContext` (khối làm nhanh, bước ③–⑥), KHÔNG vẽ lại phần Dữ liệu với hàng trăm ảnh:
+ * các phần dùng `useImageLabContext` (khối làm nhanh, bước 3–6), KHÔNG vẽ lại phần Dữ liệu với hàng trăm ảnh:
  * `children` do trang cha tạo sẵn nên React giữ nguyên chúng.
  */
 export function ImageLabProvider({ projectId, classes, samples, children }: ImageLabProviderProps) {

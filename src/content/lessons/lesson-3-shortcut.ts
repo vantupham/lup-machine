@@ -28,7 +28,7 @@ export const lessonShortcut: Lesson = {
     {
       title: 'Huấn luyện và chấm điểm',
       body: [
-        'Làm bước ③ Biểu diễn, rồi ④ Huấn luyện với tốc độ Bình thường.',
+        'Làm bước 3 (Biểu diễn), rồi bước 4 (Huấn luyện) với tốc độ Bình thường.',
         'So sánh điểm trên bài đã học và bài chưa học. Xem Ma trận nhầm lẫn trên tập Kiểm tra và bấm vào các ô bị nhầm.',
       ],
       predict: {
@@ -67,8 +67,8 @@ export const lessonShortcut: Lesson = {
     {
       title: 'Sửa dữ liệu và thí nghiệm lại',
       body: [
-        'Ở mỗi lớp, chuyển 3 trong 6 ảnh Kiểm tra sang ngăn Dạy (nút ⇄ trên ảnh). Như vậy dữ liệu Dạy có cả nền sáng lẫn nền tối cho mỗi hình.',
-        'Làm lại bước ③ nếu được nhắc, rồi huấn luyện lại. So sánh hai lần chạy trong Nhật ký thí nghiệm.',
+        'Ở mỗi lớp, chuyển 3 trong 6 ảnh Kiểm tra sang ngăn Dạy (nút mũi tên hai chiều trên ảnh). Như vậy dữ liệu Dạy có cả nền sáng lẫn nền tối cho mỗi hình.',
+        'Làm lại bước 3 nếu được nhắc, rồi huấn luyện lại. So sánh hai lần chạy trong Nhật ký thí nghiệm.',
       ],
       predict: {
         question: 'Điểm Kiểm tra sẽ thay đổi thế nào sau khi dữ liệu Dạy đa dạng hơn?',

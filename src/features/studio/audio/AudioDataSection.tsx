@@ -5,11 +5,11 @@ import { SOUND_KINDS, soundDataset } from '@/core/audio/synthetic-sounds';
 import type { AudioClipRecord, AudioSource, ClassRecord } from '@/storage/db';
 import { clipSamples, MAX_CLIPS_PER_CLASS, type AudioRepository } from '@/storage/repositories/audio-repository';
 import type { DatasetRepository } from '@/storage/repositories/dataset-repository';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { getErrorMessage } from '@/ui/error-message';
 import { decodeAudioFile, isAudioSupported, playClip, recordClip } from './audio-io.browser';
 import { Waveform } from './viz';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 /** Thu dư một chút để không hụt phần đầu / cuối âm thanh; sau đó cắt về đúng 1 giây quanh chỗ có tiếng. */
 const RECORD_SECONDS = 1.5;
@@ -69,7 +69,7 @@ function ClassCard({ cls, index, clips, onRecord, onUpload, onDelete, onRename, 
   return (
     <li className="lab-card space-y-3 p-4">
       <div className="flex items-center gap-2">
-        <span aria-hidden="true" style={{ color: colorFor(index) }}>{markerFor(index)}</span>
+        <ClassMarker index={index} />
         <input
           aria-label={t('audio.data.className', { n: index + 1 })}
           value={name}

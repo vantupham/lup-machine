@@ -6,6 +6,7 @@ import { ExactBadge } from '@/ui/ExactBadge';
 import { useModeStore } from '@/ui/mode-store';
 import { GroupScores } from './GroupScores';
 import { LeafScatter } from './LeafScatter';
+import { StepNumber } from '@/ui/StepNumber';
 
 /** Số lần lấy mẫu đã được kiểm chứng (src/core/ethics/rice-leaves.test.ts): nút "Lấy mẫu lại" xoay vòng trong đó. */
 const VERIFIED_SAMPLINGS = 10;
@@ -80,7 +81,7 @@ export function BiasLab() {
           <LeafScatter samples={result.train} model={result.model} />
           <div className="space-y-4">
             <div lang="vi">
-              <h3 className="font-semibold">{content.title}</h3>
+              <h3 className="flex items-center gap-2 font-semibold"><StepNumber n={(step ?? 0) + 1} size="sm" />{content.title}</h3>
               <p className="text-sm">{content.explain}</p>
             </div>
             <GroupScores scores={result.scores} showGroups={showGroups} />

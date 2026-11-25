@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatCsv } from '@/core/tabular/csv';
 import type { TextExample } from '@/core/text/text-model';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
 import { EDITOR_COLUMNS } from './text-samples';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 interface ClassDraft {
   readonly name: string;
@@ -61,7 +61,7 @@ export function SentenceEditor({ initial, onSave, onCancel }: SentenceEditorProp
         {drafts.map((d, i) => (
           <div key={i} className="lab-card space-y-2 p-3">
             <div className="flex items-center gap-2">
-              <span aria-hidden="true" style={{ color: colorFor(i) }}>{markerFor(i)}</span>
+              <ClassMarker index={i} />
               <input
                 aria-label={t('text.editor.className', { n: i + 1 })}
                 value={d.name}

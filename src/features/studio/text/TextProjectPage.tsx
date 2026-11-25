@@ -3,7 +3,6 @@ import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { textNotebook } from '@/core/export/text-notebook';
 import { parseCsv } from '@/core/tabular/csv';
 import { evaluateText, prepareText, trainText, type TrainedText } from '@/core/text/text-model';
@@ -23,6 +22,7 @@ import { TextModelSection } from './TextModelSection';
 import { TextRepresentSection } from './TextRepresentSection';
 import { TextSetupSection } from './TextSetupSection';
 import { TextUseSection } from './TextUseSection';
+import { BackLink } from '@/ui/BackLink';
 
 interface TrainedState {
   readonly key: string;
@@ -79,7 +79,7 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
+        <BackLink to="/studio">{t('project.back')}</BackLink>
         <p className="font-mono text-xs uppercase text-accent">{t('studio.types.text')}</p>
         <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={renameProject} />
         <AssignmentBanner projectId={projectId} />

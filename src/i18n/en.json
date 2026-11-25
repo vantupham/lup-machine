@@ -115,7 +115,7 @@
     "badType": "There is no project type \"{{slug}}\". Pick one below.",
     "backToStudio": "Back to the Model Studio",
     "recentTitle": "Continue a recent project",
-    "recentAll": "See all projects →",
+    "recentAll": "See all projects",
     "nameBase": {
       "image": "Image project",
       "audio": "Sound project",
@@ -164,7 +164,7 @@
   "modelCard": {
     "title": "Model card",
     "lead": "Answer 5 questions so others understand your model: what it is for, what data it learned from, how good it is and when not to trust it. The card travels with the .lup file and your submission.",
-    "backToProject": "← Back to project",
+    "backToProject": "Back to project",
     "authors": "Made by",
     "authorsPlaceholder": "Your name or group name (optional)",
     "fields": {
@@ -272,12 +272,12 @@
     "banner": {
       "label": "Assignment",
       "by": "Teacher: {{teacher}}",
-      "open": "Work and submit →"
+      "open": "Work and submit"
     },
     "assignment": {
       "loading": "Loading assignment…",
       "notLinked": "This project is not linked to an assignment.",
-      "back": "← Back to project",
+      "back": "Back to project",
       "eyebrow": "Assignment",
       "instructions": "Instructions",
       "noInstructions": "(No instructions given.)",
@@ -368,7 +368,7 @@
       "saveError": "Could not save: {{message}}",
       "openProject": "Open the student's project in the Studio",
       "openedProject": "Created project \"{{name}}\".",
-      "openProjectLink": "View project →",
+      "openProjectLink": "View project",
       "delete": "Delete this submission",
       "confirmDelete": "Delete the submission from {{students}} from this computer?",
       "close": "Close",
@@ -432,7 +432,7 @@
       "leaves": "When does it leave?"
     },
     "lockedStart": "Click \"Train\" to start.",
-    "lockedPredict": "Make a prediction and view the accuracy by region before step ②."
+    "lockedPredict": "Make a prediction and view the accuracy by region before step 2."
   },
   "about": {
     "title": "About & Privacy",
@@ -463,12 +463,12 @@
     "privacy": "No server · No tracking · Data stays on your device",
     "offline": {
       "installing": "Saving the app and model for offline use…",
-      "ready": "✓ Saved on this device — works even without internet",
+      "ready": "Saved on this device — works even without internet",
       "error": "Could not save for offline use (the app still works normally online)"
     }
   },
   "project": {
-    "back": "← Model Studio",
+    "back": "Model Studio",
     "notFound": "This project was not found on this device.",
     "loadError": "Could not read project data.",
     "steps": {
@@ -481,7 +481,7 @@
       "use": "Use"
     },
     "data": {
-      "title": "① Data",
+      "title": "Data",
       "lead": "Each class is a group you want the machine to tell apart. Train images are used for learning; Test images are held back for fair scoring.",
       "addClass": "Add class",
       "newClassPlaceholder": "New class name, e.g. Paper",
@@ -538,7 +538,7 @@
       "snapError": "Could not capture the frame. Please try again."
     },
     "quality": {
-      "title": "② Check data",
+      "title": "Check data",
       "lead": "The assistant reviews the Train data before training.",
       "ok": "Data looks good. Ready for training.",
       "chartLabel": "Images per class",
@@ -587,7 +587,7 @@
     },
     "defaultClass": "Class {{n}}",
     "represent": {
-      "title": "③ Represent",
+      "title": "Represent",
       "leadExplore": "Computers do not \"see\" photos like people. A pre-trained neural network (MobileNetV2) reads the 150,528 numbers of each image and summarises them into 1,280 numbers describing features such as edges, colours, textures and shapes. Similar images get similar numbers.",
       "leadExpert": "Transfer learning: MobileNetV2 (α = 0.35, pre-trained on ImageNet, frozen weights) → out_relu layer 7×7×1280 → global average pooling → 1280-dimensional feature vector.",
       "extract": "Turn images into vectors ({{count}} not processed)",
@@ -611,10 +611,10 @@
       "pointLabel": "Image of class {{name}}, {{split}} set"
     },
     "train": {
-      "title": "④ Train",
+      "title": "Train",
       "leadExplore": "The machine starts by guessing randomly. After each round (epoch) it compares with the answers and nudges its internal numbers so it guesses better next time.",
       "leadExpert": "Classifier layer: logit = W·x + b (W: {{classes}} × 1280), probability = softmax(logit), cross-entropy loss, Adam optimiser. Glorot initialisation and seeded shuffling make results reproducible.",
-      "needFeatures": "Do step ③ Represent first.",
+      "needFeatures": "Do step 3 (Represent) first.",
       "needClasses": "At least 2 classes need Train images.",
       "speed": "Speed",
       "speeds": {
@@ -642,8 +642,8 @@
       "stale": "Classes changed since the last training. Please train again."
     },
     "evaluate": {
-      "title": "⑤ Evaluate",
-      "empty": "Train in step ④ first.",
+      "title": "Evaluate",
+      "empty": "Train in step 4 first.",
       "atEpoch": "Results at epoch {{epoch}}",
       "trainScore": "Score on studied material",
       "testScore": "Score on unseen material",
@@ -697,7 +697,7 @@
     },
     "explain": {
       "title": "Why did the model predict this?",
-      "needModel": "Train in step ④ to see explanations.",
+      "needModel": "Train in step 4 to see explanations.",
       "probabilities": "Probability the model computes for each class",
       "heatmapTitle": "Where does the model look?",
       "heatmapFor": "Evidence for class",
@@ -789,15 +789,15 @@
       "none": "No faces found to blur. If the images show people (especially far away or turned sideways), check them and delete if needed."
     },
     "use": {
-      "title": "⑥ Use: try new images",
-      "lead": "Give the model images it has NEVER SEEN, from the webcam or a file, to see how well it works in real life. The Test score in step ⑤ tells you how often it is right; trying it live helps you find the cases where it still goes wrong.",
-      "needModel": "Train a model in step ④ first, then come back here to try new images.",
-      "atEpoch": "Using the model at epoch {{epoch}} (same as step ⑤).",
-      "startCamera": "📷 Turn on camera",
+      "title": "Use: try new images",
+      "lead": "Give the model images it has NEVER SEEN, from the webcam or a file, to see how well it works in real life. The Test score in step 5 tells you how often it is right; trying it live helps you find the cases where it still goes wrong.",
+      "needModel": "Train a model in step 4 first, then come back here to try new images.",
+      "atEpoch": "Using the model at epoch {{epoch}} (same as step 5).",
+      "startCamera": "Turn on camera",
       "stopCamera": "Turn off camera",
-      "freeze": "⏸ Freeze to explain",
-      "resume": "▶ Resume",
-      "upload": "🖼 Upload an image",
+      "freeze": "Freeze to explain",
+      "resume": "Resume",
+      "upload": "Upload an image",
       "uploadLabel": "Upload an image to try",
       "empty": "Turn on the camera or upload an image to try.",
       "analyzing": "Analyzing image…",
@@ -806,8 +806,8 @@
       "uncertain": "The model is not sure: the highest probability is only {{percent}}, below {{threshold}}. This image may be very different from what the model learned. Note: the model always has to pick one of the existing classes, even when the image belongs to none of them.",
       "probeLabel": "Image being tried, the model guesses {{name}}",
       "mapTitle": "Where does the new image land on the map?",
-      "mapLead": "The same PCA map as step ③. The ✱ is the image being tried: the group of dots it lands near is usually the class it gets. The map keeps only 2 of 1280 dimensions, so sometimes ✱ looks close to one group while the model picks another.",
-      "mapOutside": "✱ is outside the area of all existing images (pinned to the map edge): this image is very different from what the model learned.",
+      "mapLead": "The same PCA map as step 3. The asterisk is the image being tried: the group of dots it lands near is usually the class it gets. The map keeps only 2 of 1280 dimensions, so sometimes the asterisk looks close to one group while the model picks another.",
+      "mapOutside": "The asterisk is outside the area of all existing images (pinned to the map edge): this image is very different from what the model learned.",
       "neighbors": "Most similar Train images",
       "neighborsLead": "Cosine similarity between the new image's vector and each Train image's vector (1 means identical).",
       "stillAlt": "Image being tried (cropped to a 224×224 square, exactly what the model receives)",
@@ -848,7 +848,7 @@
       "addClass": "+ Add class",
       "train": "Quick train",
       "needClasses": "At least 2 classes need images.",
-      "defaults": "Uses the default settings ({{epochs}} epochs). To tune them, see step ④.",
+      "defaults": "Uses the default settings ({{epochs}} epochs). To tune them, see step 4.",
       "openLid": "Open the lid: see how the computer learns",
       "loadingModel": "Loading the image recognition model…",
       "extracting": "Turning images into vectors: {{done}}/{{total}}…",
@@ -857,7 +857,7 @@
       "stale": "The data changed: train again.",
       "error": "Something went wrong: {{message}}",
       "needModel": "Train first, then you can try it.",
-      "liveStart": "📷 Try with the webcam",
+      "liveStart": "Try with the webcam",
       "liveStop": "Stop trying",
       "tryFile": "Try with an image file",
       "tryFileShort": "Try a file",
@@ -925,7 +925,7 @@
     "grade": "Grade {{grade}}",
     "minutes": "{{minutes}} minutes",
     "open": "Open lesson",
-    "back": "← All lessons",
+    "back": "All lessons",
     "notFound": "Lesson not found.",
     "goals": "Goals",
     "openProject": "Create the sample project for this lesson",
@@ -960,7 +960,7 @@
     "step": "Step {{n}}.",
     "myPrediction": "My prediction (write BEFORE doing it):",
     "observed": "What I observed:",
-    "actualPredicted": "Actual ↓ / Predicted →",
+    "actualPredicted": "Rows: actual, columns: predicted",
     "reflect": "What did I learn from this lesson?",
     "footer": "LUP Machine – vantupham.github.io/lup-machine · Lesson content licensed CC BY 4.0.",
     "sampleNote": "Italic values in the tables are sample results from the verification run with MobileNetV2 (default settings). Students' machines may differ slightly, especially ±1 image in the confusion matrix."
@@ -1061,8 +1061,8 @@
       "diagramTitle": "Decision tree",
       "diagramLabel": "Decision tree diagram",
       "nodeStats": "{{samples}} samples · impurity {{impurity}} · [{{counts}}]",
-      "yes": "yes →",
-      "no": "no →",
+      "yes": "yes",
+      "no": "no",
       "depthChart": "Accuracy by maximum depth",
       "depthAxis": "depth {{n}}",
       "overfitHint": "Deeper trees memorise the training set (solid line rises), but the test set (dashed) can drop: that is overfitting."
@@ -1082,7 +1082,7 @@
     },
     "gradient": {
       "plotLabel": "Contour map of the loss surface {{formula}}; darker is lower",
-      "clickHint": "Click the plot to choose a starting point. ✕ marks the global minimum.",
+      "clickHint": "Click the plot to choose a starting point. The X marks the global minimum.",
       "surface": "Loss surface",
       "surfaces": {
         "bowl": "Bowl",
@@ -1273,7 +1273,7 @@
     },
     "evaluate": {
       "confusion": "Confusion matrix on the test set",
-      "trueVsPred": "true ↓ / predicted →",
+      "trueVsPred": "rows: true, columns: predicted",
       "overfit": "Training accuracy is much higher than test accuracy: the model may be memorising (overfitting).",
       "r2Train": "R² training set",
       "r2Test": "R² test set",
@@ -1485,18 +1485,18 @@
     "inspector": {
       "clip": "Sound clip",
       "exactHint": "Exactly the calculations the model uses: same frames, Hann window, FFT, mel filters and pooling.",
-      "waveTitle": "① Waveform",
+      "waveTitle": "Waveform",
       "waveLabel": "Waveform of the sound clip",
       "waveHint": "The microphone measures air pressure {{rate}} times per second: 1 second is {{n}} numbers. The yellow area is the frame being viewed.",
       "frame": "Time frame",
       "frameValue": "{{n}}/{{total}} (from {{ms}} ms)",
-      "fftTitle": "② Frequency spectrum of one frame (FFT)",
+      "fftTitle": "Frequency spectrum of one frame (FFT)",
       "fftLabel": "Power spectrum of frame {{n}}",
       "fftHint": "Take {{win}} samples (25 ms), multiply by a Hann window to soften both ends, then use the fast Fourier transform (FFT, {{nfft}} points) to find which frequencies the frame contains: {{bins}} values from 0 to 8 kHz.",
-      "melTitle": "③ Mel spectrogram",
+      "melTitle": "Mel spectrogram",
       "melLabel": "Mel spectrogram: horizontal axis is time, vertical axis is frequency band",
-      "melHint": "Repeat step ② for all {{frames}} frames (10 ms apart), group frequencies into {{bands}} mel bands (from about {{low}} Hz to {{high}} Hz; low bands are narrow and high bands wide, like human hearing) and convert to decibels. Brighter is louder. Dashed lines split 4 time segments.",
-      "poolTitle": "④ The 160 numbers the model receives",
+      "melHint": "Repeat step 2 for all {{frames}} frames (10 ms apart), group frequencies into {{bands}} mel bands (from about {{low}} Hz to {{high}} Hz; low bands are narrow and high bands wide, like human hearing) and convert to decibels. Brighter is louder. Dashed lines split 4 time segments.",
+      "poolTitle": "The 160 numbers the model receives",
       "poolLabel": "Average loudness of each band in each time segment",
       "poolHint": "Average each mel band within {{segments}} time segments: {{bands}} × {{segments}} = {{total}} numbers. Columns are time segments (left to right), rows are frequency bands (low at the bottom)."
     },
@@ -1518,7 +1518,7 @@
       "importanceHint": "The model's real weights arranged as a 40-band × 4-segment grid.",
       "importanceLabel": "Weights of group {{cls}}",
       "importanceLegend": "Orange: louder than average in that cell pushes towards this group. Blue: pulls away. Rows are frequency bands (low at the bottom), columns are time segments.",
-      "knnNoMap": "k-NN learns no weights, so there is no such map; see the neighbours in step ⑥."
+      "knnNoMap": "k-NN learns no weights, so there is no such map; see the neighbours in step 6."
     },
     "use": {
       "empty": "Record 1 second or upload an audio file to try.",
@@ -1527,7 +1527,8 @@
       "contributionLabel": "Contribution of each spectrogram cell",
       "contributionHint": "Score of \"{{cls}}\" relative to the average over groups = {{base}} (fixed part) + sum of cells = {{total}}. Orange pushes towards this group, blue pulls away.",
       "distance": "{{d}} dB away",
-      "knnHint": "Press ▶ to hear the most similar training clips the computer relied on."
+      "playNeighbour": "Play this clip",
+      "knnHint": "Press play to hear the most similar training clips the computer relied on."
     }
   },
   "pose": {
@@ -1649,13 +1650,13 @@
     "inspector": {
       "sample": "Sample",
       "exactHint": "Exactly the coordinates the detection model found and the normalisation the learning model uses.",
-      "rawTitle": "① Joint coordinates in the frame",
+      "rawTitle": "Joint coordinates in the frame",
       "rawLabel": "Skeleton in frame pixels",
       "rawHint": {
         "body": "Frame of {{w}} × {{h}} pixels. The orange circle is the new origin (between the hips); the orange segment is \"1 unit\" (hips → shoulders).",
         "hand": "Frame of {{w}} × {{h}} pixels. The orange circle is the new origin (wrist); the orange segment is \"1 unit\" (wrist → middle-finger knuckle)."
       },
-      "normTitle": "② After normalisation",
+      "normTitle": "After normalisation",
       "normLabel": "Skeleton after moving the origin and changing the unit",
       "normHint": {
         "body": "The origin moves to between the hips and lengths are measured in torso lengths, so standing near or far, left or right gives the same numbers.",
@@ -1689,7 +1690,7 @@
       "importanceHint": "Joint importance = |weight of x| + |weight of y|, from the model's real weights.",
       "importanceLabel": "Importance of the joints for group {{cls}}",
       "importanceLegend": "Drawn on the average pose of each group; the bigger the dot, the more that joint affects the group's score.",
-      "knnNoMap": "k-NN learns no weights, so there is no such picture; see the neighbours in step ⑥."
+      "knnNoMap": "k-NN learns no weights, so there is no such picture; see the neighbours in step 6."
     },
     "use": {
       "live": "Live recognition with the camera",

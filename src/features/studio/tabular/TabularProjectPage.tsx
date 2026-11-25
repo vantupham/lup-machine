@@ -3,7 +3,6 @@ import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { parseCsv } from '@/core/tabular/csv';
 import { summarizeColumns } from '@/core/tabular/columns';
 import { evaluateTabular, trainTabular, type TrainedModel } from '@/core/tabular/models';
@@ -26,6 +25,7 @@ import { initialConfig, isConfigValid } from './tabular-config';
 import { findTabularSample } from './tabular-samples';
 import { UseSection } from './UseSection';
 import { useTabularProject } from './useTabularProject';
+import { BackLink } from '@/ui/BackLink';
 
 interface TrainedState {
   readonly key: string;
@@ -82,7 +82,7 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
+        <BackLink to="/studio">{t('project.back')}</BackLink>
         <p className="font-mono text-xs uppercase text-accent">{t('studio.types.tabular')}</p>
         <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={renameProject} />
         <AssignmentBanner projectId={projectId} />

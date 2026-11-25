@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import type { DecisionTree, TreeNode } from '@/core/algorithms/decision-tree';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { colorFor } from '@/features/studio/image/lab/class-style';
+import { ChevronRight } from '@/ui/icons';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 interface TreeDiagramProps {
   readonly tree: DecisionTree;
@@ -31,14 +33,14 @@ function NodeView({ tree, id, opened, latest, featureNames, branch }: TreeDiagra
       <div
         className={`my-1 inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded border px-2 py-1 text-sm ${id === latest ? 'border-primary bg-highlight/40' : 'border-rule bg-surface'}`}
       >
-        {branch && <span className="font-mono text-xs text-muted">{branch}</span>}
+        {branch && <span className="inline-flex items-center font-mono text-xs text-muted">{branch}<ChevronRight /></span>}
         {isOpen && node.split ? (
           <span className="font-mono font-semibold">
             {featureNames[node.split.feature]} ≤ {node.split.threshold.toFixed(3)}?
           </span>
         ) : (
           <span className="font-semibold">
-            <span style={{ color: colorFor(majority) }} aria-hidden="true">{markerFor(majority)}</span>{' '}
+            <ClassMarker index={majority} className="mr-1" />
             {t('playground.common.className', { n: majority + 1 })}
           </span>
         )}

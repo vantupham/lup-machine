@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DATASET_2D_KINDS, type Dataset2dKind } from '@/core/algorithms/datasets-2d';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 interface RangeFieldProps {
   readonly label: string;
@@ -99,7 +99,7 @@ export function ClassPicker({ numClasses, value, onChange }: {
             onClick={() => onChange(k)}
             className={`btn px-3 py-1 text-sm ${value === k ? 'btn-primary' : 'btn-ghost'}`}
           >
-            <span aria-hidden="true" style={{ color: value === k ? undefined : colorFor(k) }}>{markerFor(k)}</span>
+            <ClassMarker index={k} color={value === k ? 'current' : 'class'} />
             {t('playground.common.className', { n: k + 1 })}
           </button>
         ))}

@@ -9,6 +9,7 @@ import { PROJECT_NAME_MAX_LENGTH } from '@/storage/schemas/manifest';
 import { getErrorMessage } from '@/ui/error-message';
 import { FactsPanel } from '@/features/model-card/FactsPanel';
 import { GradeForm } from './GradeForm';
+import { ArrowRight } from '@/ui/icons';
 
 interface SubmissionDetailProps {
   readonly submission: StoredSubmission;
@@ -107,7 +108,7 @@ function OpenProjectButton({ submission }: { readonly submission: StoredSubmissi
       {opened && (
         <p role="status" className="text-sm">
           {t('grading.detail.openedProject', { name: opened.name })}{' '}
-          <Link to={`/studio/${opened.id}`} className="text-primary underline">{t('grading.detail.openProjectLink')}</Link>
+          <Link to={`/studio/${opened.id}`} className="inline-flex items-center gap-1 text-primary underline">{t('grading.detail.openProjectLink')}<ArrowRight /></Link>
         </p>
       )}
       {error && <p role="alert" className="text-sm text-danger">{error}</p>}

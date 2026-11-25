@@ -3,7 +3,6 @@ import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { prepareVectors } from '@/core/ml/vector-classifier';
 import { poseFeatures, unpackKeypoints } from '@/core/pose/features';
 import { checkPoseQuality } from '@/core/pose/pose-quality';
@@ -14,6 +13,7 @@ import { PoseDataSection } from './PoseDataSection';
 import { PoseInspector } from './PoseInspector';
 import { PoseModelLab } from './PoseModelLab';
 import { usePoseProject } from './usePoseProject';
+import { BackLink } from '@/ui/BackLink';
 
 /** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
 const STEP_TARGETS = studioStepTargets('pose');
@@ -54,7 +54,7 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
+        <BackLink to="/studio">{t('project.back')}</BackLink>
         <p className="font-mono text-xs uppercase text-accent">{t('studio.types.pose')}</p>
         <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={() => void reload()} />
         <AssignmentBanner projectId={projectId} />

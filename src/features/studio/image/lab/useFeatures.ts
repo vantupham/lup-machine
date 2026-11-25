@@ -21,7 +21,7 @@ export function useFeatures(projectId: string, samples: readonly SampleRecord[])
   const [status, setStatus] = useState<FeatureStatus>({ phase: 'idle' });
   /** Bảng vector mới nhất (không chờ React vẽ lại), để các lần ghi luôn GỘP chứ không đè lên nhau. */
   const latest = useRef<FeatureMap>(features);
-  /** Lần trích đang chạy: bấm lần nữa (bước ③ hay "Huấn luyện nhanh") thì dùng chung, không trích hai lần. */
+  /** Lần trích đang chạy: bấm lần nữa (bước 3 hay "Huấn luyện nhanh") thì dùng chung, không trích hai lần. */
   const inFlight = useRef<Promise<FeatureMap | null> | null>(null);
   const samplesRef = useRef(samples);
   useEffect(() => {

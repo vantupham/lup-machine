@@ -11,6 +11,7 @@ import { RepresentSection } from './RepresentSection';
 import { TrainSection } from './TrainSection';
 import { useImageLabContext } from './ImageLabContext';
 import { UseSection } from './UseSection';
+import { RotateCcw } from '@/ui/icons';
 
 interface ModelLabProps {
   readonly projectName: string;
@@ -18,7 +19,7 @@ interface ModelLabProps {
   readonly samples: readonly SampleRecord[];
 }
 
-/** Bước ③ Biểu diễn → ④ Huấn luyện → ⑤ Đánh giá → ⑥ Sử dụng (thử ảnh mới, xuất notebook) → Nhật ký thí nghiệm. */
+/** Bước 3 Biểu diễn → 4 Huấn luyện → 5 Đánh giá → 6 Sử dụng (thử ảnh mới, xuất notebook) → Nhật ký thí nghiệm. */
 export function ModelLab({ projectName, classes, samples }: ModelLabProps) {
   const { t } = useTranslation();
   /** Trạng thái học máy dùng chung với khối "làm nhanh" ở đầu trang. */
@@ -59,7 +60,7 @@ export function ModelLab({ projectName, classes, samples }: ModelLabProps) {
         onStep={training.step}
         onFinish={training.finish}
       />
-      {isStale && <p role="status" className="text-sm text-warning">↻ {t('project.train.stale')}</p>}
+      {isStale && <p role="status" className="text-sm text-warning"><RotateCcw /> {t('project.train.stale')}</p>}
       {lab.notice && (
         <p role={lab.notice.kind === 'error' ? 'alert' : 'status'} className={`text-sm ${lab.notice.kind === 'error' ? 'text-danger' : 'text-accent'}`}>
           {lab.notice.text}

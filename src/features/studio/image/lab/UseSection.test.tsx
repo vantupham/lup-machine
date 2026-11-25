@@ -85,17 +85,17 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('⑥ Sử dụng (Studio ảnh)', () => {
-  test('chưa có mô hình thì hướng dẫn quay lại bước ④, không bật camera', () => {
+describe('Bước 6: Sử dụng (Studio ảnh)', () => {
+  test('chưa có mô hình thì hướng dẫn quay lại bước 4, không bật camera', () => {
     const { getUserMedia } = mockCamera();
     renderUse({ params: null, epoch: null });
-    expect(screen.getByRole('heading', { name: /⑥ Sử dụng/ })).toBeInTheDocument();
-    expect(screen.getByText(/huấn luyện mô hình ở bước ④/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /^Sử dụng/ })).toBeInTheDocument();
+    expect(screen.getByText(/huấn luyện mô hình ở bước 4/i)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /bật camera/i })).toBeNull();
     expect(getUserMedia).not.toHaveBeenCalled();
   });
 
-  test('tải một ảnh mới: đoán lớp, đặt ✱ lên bản đồ, chỉ ra ảnh Dạy giống nhất và giải thích', async () => {
+  test('tải một ảnh mới: đoán lớp, đặt dấu hoa thị lên bản đồ, chỉ ra ảnh Dạy giống nhất và giải thích', async () => {
     vi.mocked(codec.fileToStoredImage).mockResolvedValue(imageOf(240));
     renderUse();
     const input = screen.getByLabelText(/tải một ảnh lên để thử/i);

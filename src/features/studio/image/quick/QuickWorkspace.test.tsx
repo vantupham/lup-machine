@@ -161,7 +161,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     vi.mocked(console.error).mockRestore();
   });
 
-  test('"Mở nắp" đưa tới bước ④ Huấn luyện; xem thử: tệp không phải ảnh bị từ chối, nút webcam bật / tắt', async () => {
+  test('"Mở nắp" đưa tới bước 4 (Huấn luyện); xem thử: tệp không phải ảnh bị từ chối, nút webcam bật / tắt', async () => {
     await seed();
     open();
     const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
@@ -182,7 +182,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     expect(within(quick()).getByRole('button', { name: /Xem thử bằng webcam/ })).not.toHaveAttribute('aria-pressed');
   });
 
-  test('đang biến ảnh thành vector ở bước ③ thì "Huấn luyện nhanh" chờ; xong thì huấn luyện, không trích lại', async () => {
+  test('đang biến ảnh thành vector ở bước 3 thì "Huấn luyện nhanh" chờ; xong thì huấn luyện, không trích lại', async () => {
     await seed();
     open();
     await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });

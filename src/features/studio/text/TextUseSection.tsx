@@ -1,9 +1,10 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { explainText, highlightSpans, type TextData, type TrainedText } from '@/core/text/text-model';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { colorFor } from '@/features/studio/image/lab/class-style';
 import { SelectField } from '@/features/playground/controls';
 import { ExactBadge } from '@/ui/ExactBadge';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 const MAX_ROWS = 10;
 
@@ -25,7 +26,7 @@ export function TextUseSection({ trained, data }: { readonly trained: TrainedTex
         <label htmlFor={inputId} className="text-sm font-medium">{t('text.use.input')}</label>
         <textarea id={inputId} rows={3} value={text} onChange={(e) => setText(e.target.value)} className="w-full rounded border border-rule bg-paper p-2" />
         <p className="text-lg" data-testid="text-prediction">
-          <span aria-hidden="true" style={{ color: colorFor(predictedEx.predicted) }}>{markerFor(predictedEx.predicted)} </span>
+          <ClassMarker index={predictedEx.predicted} className="mr-1" />
           {t('tabular.use.predictedClass', { cls: data.classNames[predictedEx.predicted] })}
         </p>
         <ul className="space-y-1">

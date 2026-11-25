@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import type { ProjectRecord } from '@/storage/db';
 import { useProjectRepository } from '@/storage/repository-context';
 import { ProjectTypeIcon } from './ProjectTypeIcon';
+import { ArrowRight } from '@/ui/icons';
 
 const RECENT_LIMIT = 3;
 
@@ -33,8 +34,9 @@ export function RecentProjects() {
     <section aria-labelledby="recent-title" className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 id="recent-title" className="font-display text-xl font-bold">{t('quickStart.recentTitle')}</h2>
-        <Link to="/studio" className="text-sm font-medium text-primary hover:underline">
+        <Link to="/studio" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
           {t('quickStart.recentAll')}
+          <ArrowRight />
         </Link>
       </div>
       <ul className="grid gap-3 sm:grid-cols-3">

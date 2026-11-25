@@ -6,6 +6,7 @@ import { getErrorMessage } from '@/ui/error-message';
 import { ProjectTypeIcon } from './ProjectTypeIcon';
 import { QUICK_START_TYPES } from './quick-start';
 import { useCreateProject } from './useCreateProject';
+import { ArrowRight } from '@/ui/icons';
 
 /**
  * Tạo dự án kèm tên riêng (ví dụ để nộp bài). Để trống tên thì tự đặt, giống các thẻ một chạm.
@@ -101,7 +102,7 @@ export function NamedProjectForm() {
           <div className="flex flex-wrap items-center gap-3">
             <button type="submit" className="btn btn-primary min-h-12 px-6 text-base" disabled={isSaving}>
               {isSaving ? t('studio.creating') : t('studio.create')}
-              {!isSaving && <span aria-hidden="true">→</span>}
+              {!isSaving && <ArrowRight />}
             </button>
             <p className="text-xs text-muted">{t('studio.namedFooter')}</p>
           </div>

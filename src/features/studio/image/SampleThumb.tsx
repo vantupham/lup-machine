@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { SampleRecord } from '@/storage/db';
 import { useObjectUrl } from './useObjectUrl';
+import { ArrowLeftRight, X } from '@/ui/icons';
 
 interface SampleThumbProps {
   readonly sample: SampleRecord;
@@ -33,7 +34,7 @@ export function SampleThumb({ sample, index, onInspect, onMove, onDelete }: Samp
           title={t(sample.split === 'train' ? 'project.class.moveToTest' : 'project.class.moveToTrain')}
           className="rounded px-1 text-xs text-white hover:bg-white/20"
         >
-          ⇄
+          <ArrowLeftRight />
         </button>
         <button
           type="button"
@@ -42,7 +43,7 @@ export function SampleThumb({ sample, index, onInspect, onMove, onDelete }: Samp
           title={t('project.class.deleteSample')}
           className="rounded px-1 text-xs text-white hover:bg-white/20"
         >
-          ✕
+          <X />
         </button>
       </div>
     </li>

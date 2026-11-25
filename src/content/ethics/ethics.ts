@@ -20,21 +20,21 @@ export const BIAS_INTRO = {
 
 export const BIAS_STEPS: readonly BiasStepContent[] = [
   {
-    title: '① Huấn luyện với dữ liệu lệch',
+    title: 'Huấn luyện với dữ liệu lệch',
     action: 'Huấn luyện',
     explain: 'Mô hình hồi quy logistic chỉ nhìn hai số đo, không biết lá ở vùng nào.',
     takeaway:
       'Độ chính xác chung trông khá ổn, nhưng tách theo vùng mới thấy Miền núi kém hẳn. Mọi lỗi ở Miền núi đều là báo động nhầm: lá khỏe bị báo bệnh. Nguyên nhân là độ vàng: mô hình gần như chỉ học từ lá Đồng bằng, nên với nó "vàng" nghĩa là "bệnh". Nếu lá Miền núi khỏe không vàng hơn, phần lớn báo động nhầm sẽ biến mất. Một con số "chung" có thể che giấu việc AI làm kém với một nhóm.',
   },
   {
-    title: '② Thu thêm dữ liệu Miền núi',
+    title: 'Thu thêm dữ liệu Miền núi',
     action: 'Thu thêm 200 lá Miền núi rồi huấn luyện lại',
     explain: 'Dữ liệu Dạy giờ có số lá hai vùng gần bằng nhau. Mô hình vẫn không biết lá ở vùng nào.',
     takeaway:
       'Miền núi tốt lên, nhưng Đồng bằng lại giảm, và phần giảm đó đúng bằng số lá bệnh Đồng bằng bị bỏ sót thêm. Mô hình chỉ có một đường ranh giới cho cả hai vùng nên phải "chia" lỗi cho hai vùng. Thêm dữ liệu là cần thiết nhưng chưa đủ.',
   },
   {
-    title: '③ Cho mô hình biết lá ở vùng nào',
+    title: 'Cho mô hình biết lá ở vùng nào',
     action: 'Thêm cột "ở Miền núi" rồi huấn luyện lại',
     explain: 'Mô hình có thêm một cột 0/1 cho biết lá ở Miền núi. Mỗi vùng giờ có một đường ranh giới riêng.',
     takeaway:

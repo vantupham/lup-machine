@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { DEFAULT_TRAIN_OPTIONS } from '../lab/TrainSection';
 import type { ImageLab } from '../lab/useImageLab';
+import { ArrowDown } from '@/ui/icons';
 
 /** Cần ít nhất chừng này lớp có ảnh Dạy mới huấn luyện được (khớp với lab-data). */
 const MIN_CLASSES_WITH_IMAGES = 2;
@@ -12,7 +13,7 @@ interface QuickTrainProps {
   readonly lab: ImageLab;
 }
 
-/** Cột ②: một nút làm hết (biến ảnh thành vector → huấn luyện 50 lượt), kèm đường "mở nắp" xuống bước ④. */
+/** Cột 2: một nút làm hết (biến ảnh thành vector → huấn luyện 50 lượt), kèm đường "mở nắp" xuống bước 4. */
 export function QuickTrain({ classes, samples, lab }: QuickTrainProps) {
   const { t } = useTranslation();
   const ids = new Set(classes.map((c) => c.id));
@@ -44,7 +45,7 @@ export function QuickTrain({ classes, samples, lab }: QuickTrainProps) {
       </div>
       <p className="text-xs text-muted">{t('project.quick.defaults', { epochs: DEFAULT_TRAIN_OPTIONS.epochs })}</p>
       <button type="button" className="text-sm font-medium text-primary hover:underline" onClick={() => revealHeading('train-title')}>
-        {t('project.quick.openLid')} <span aria-hidden="true">↓</span>
+        {t('project.quick.openLid')} <ArrowDown />
       </button>
     </div>
   );

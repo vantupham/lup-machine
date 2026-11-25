@@ -5,6 +5,7 @@ import { getErrorMessage } from '@/ui/error-message';
 import { ProjectTypeCards } from './ProjectTypeCards';
 import { projectTypeFromSlug } from './quick-start';
 import { useCreateProject } from './useCreateProject';
+import { ArrowLeft } from '@/ui/icons';
 
 /**
  * #/studio/moi/:loai — giáo viên dán đường dẫn này (hoặc in mã QR), học sinh mở ra là có dự án mới.
@@ -53,7 +54,7 @@ function CreateFromSlug({ typeSlug }: { readonly typeSlug: string }) {
       <div className="space-y-4">
         <p role="alert" className="rounded border border-danger p-3 text-danger">{error}</p>
         <Link to="/studio" className="btn btn-ghost">
-          ← {t('quickStart.backToStudio')}
+          <ArrowLeft /> {t('quickStart.backToStudio')}
         </Link>
       </div>
     );

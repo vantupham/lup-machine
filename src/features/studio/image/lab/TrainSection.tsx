@@ -5,6 +5,8 @@ import { useModeStore } from '@/ui/mode-store';
 import { LineChart } from './LineChart';
 import type { TrainingReadiness } from './lab-data';
 import type { TrainingSpeed, TrainingStatus } from './useTraining';
+import { ArrowRight, Info } from '@/ui/icons';
+import { StepNumber } from '@/ui/StepNumber';
 
 export const DEFAULT_TRAIN_OPTIONS: TrainOptions = { epochs: 50, learningRate: 0.001, batchSize: 16, seed: 42 };
 const LIMITS = { epochs: [1, 500], learningRate: [0.00001, 1], batchSize: [1, 256] } as const;
@@ -43,7 +45,7 @@ export function TrainSection(props: TrainSectionProps) {
   return (
     <section aria-labelledby="train-title" data-step-done={!isActive && snapshots.length > 0 ? 'true' : undefined} className="space-y-4">
       <div>
-        <h2 id="train-title" className="text-2xl font-semibold">{t('project.train.title')}</h2>
+        <h2 id="train-title" className="flex items-center gap-3 text-2xl font-semibold"><StepNumber n={4} />{t('project.train.title')}</h2>
         <p className="max-w-3xl text-sm text-muted">
           {mode === 'expert' ? t('project.train.leadExpert', { classes: props.numClasses }) : t('project.train.leadExplore')}
         </p>
@@ -68,7 +70,7 @@ export function TrainSection(props: TrainSectionProps) {
           </button>
           {status === 'waiting-step' && (
             <>
-              <button type="button" className="btn btn-ghost" onClick={props.onStep}>{t('project.train.next')} →</button>
+              <button type="button" className="btn btn-ghost" onClick={props.onStep}>{t('project.train.next')} <ArrowRight /></button>
               <button type="button" className="btn btn-ghost" onClick={props.onFinish}>{t('project.train.finish')}</button>
             </>
           )}
@@ -132,7 +134,7 @@ function Charts({ snapshots, selectedEpoch, onSelectEpoch }: TrainSectionProps) 
         <input type="range" min={0} max={maxEpoch} value={selectedEpoch ?? maxEpoch} onChange={(e) => onSelectEpoch(Number(e.target.value))} className="mt-1 block w-full" />
         <span className="text-xs text-muted">{t('project.train.replayHint')}</span>
       </label>
-      <p className="text-xs text-muted">ⓘ {t('project.train.notSaved')}</p>
+      <p className="text-xs text-muted"><Info /> {t('project.train.notSaved')}</p>
     </div>
   );
 }

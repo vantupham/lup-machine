@@ -10,7 +10,6 @@ interface QuickWorkspaceProps {
   readonly classes: readonly ClassRecord[];
   readonly samples: readonly SampleRecord[];
   readonly samplesByClass: ReadonlyMap<string, readonly SampleRecord[]>;
-  readonly markers: readonly string[];
   readonly onWebcam: (cls: ClassRecord) => void;
   readonly onUpload: (cls: ClassRecord, files: readonly File[]) => void;
   readonly onAddClass: () => void;
@@ -22,7 +21,7 @@ interface QuickWorkspaceProps {
  * Chế độ Khám phá: cả quy trình trên một màn hình như Teachable Machine (thu ảnh → học → thử).
  * Dùng chung mô hình với các bước "mở nắp" bên dưới, nên làm nhanh xong vẫn mở nắp xem được.
  */
-export function QuickWorkspace({ classes, samples, samplesByClass, markers, onWebcam, onUpload, onAddClass, isCapturing }: QuickWorkspaceProps) {
+export function QuickWorkspace({ classes, samples, samplesByClass, onWebcam, onUpload, onAddClass, isCapturing }: QuickWorkspaceProps) {
   const { t } = useTranslation();
   const lab = useImageLabContext();
   return (
@@ -33,13 +32,13 @@ export function QuickWorkspace({ classes, samples, samplesByClass, markers, onWe
       </div>
       <div className="grid gap-4 lg:grid-cols-[1.15fr_1fr_1fr]">
         <Column title={t('project.quick.columns.data')}>
-          <QuickClasses classes={classes} markers={markers} samplesByClass={samplesByClass} onWebcam={onWebcam} onUpload={onUpload} onAddClass={onAddClass} />
+          <QuickClasses classes={classes} samplesByClass={samplesByClass} onWebcam={onWebcam} onUpload={onUpload} onAddClass={onAddClass} />
         </Column>
         <Column title={t('project.quick.columns.train')}>
           <QuickTrain classes={classes} samples={samples} lab={lab} />
         </Column>
         <Column title={t('project.quick.columns.preview')}>
-          <QuickPreview classes={classes} markers={markers} lab={lab} isCameraBusy={isCapturing} />
+          <QuickPreview classes={classes} lab={lab} isCameraBusy={isCapturing} />
         </Column>
       </div>
     </section>

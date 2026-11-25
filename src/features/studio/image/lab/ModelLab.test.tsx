@@ -57,7 +57,9 @@ vi.mock('../feature-loader.browser', () => ({
 }));
 
 // Huấn luyện 50 epoch kèm vẽ lại biểu đồ trong jsdom mất vài giây.
-vi.setConfig({ testTimeout: 20_000 });
+// Huấn luyện 50 epoch trong jsdom mất vài giây, và lâu hơn nhiều khi cả bộ kiểm thử chạy song song.
+vi.setConfig({ testTimeout: 40_000 });
+const SLOW_WAIT = { timeout: 25_000 };
 
 let repos: TestRepositories;
 let projectId: string;
@@ -90,7 +92,7 @@ async function extractAll() {
 
 async function trainToEnd() {
   await userEvent.click(screen.getByRole('button', { name: 'Bắt đầu huấn luyện' }));
-  await screen.findByText('Xong 50 epoch.', {}, { timeout: 10_000 });
+  await screen.findByText('Xong 50 epoch.', {}, SLOW_WAIT);
 }
 
 beforeEach(async () => {
@@ -98,11 +100,11 @@ beforeEach(async () => {
   useModeStore.setState({ mode: 'explore' });
 });
 
-describe('③ Biểu diễn', () => {
+describe('Bước 3: Biểu diễn', () => {
   test('trích đặc trưng, lưu cache và vẽ bản đồ PCA với mọi ảnh', async () => {
     await seed();
     open();
-    expect(await screen.findByText(/hãy làm bước ③ biểu diễn trước/i)).toBeInTheDocument();
+    expect(await screen.findByText(/hãy làm bước 3 \(biểu diễn\) trước/i)).toBeInTheDocument();
     await extractAll();
     const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
     expect(within(map).getAllByRole('button')).toHaveLength(16);
@@ -139,11 +141,11 @@ describe('③ Biểu diễn', () => {
   });
 });
 
-describe('④ Huấn luyện và ⑤ Đánh giá', () => {
+describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
   test('huấn luyện, xem điểm Dạy / Kiểm tra và ma trận nhầm lẫn bấm được', async () => {
     await seed();
     open();
-    expect(await screen.findByText('Hãy huấn luyện ở bước ④ trước.')).toBeInTheDocument();
+    expect(await screen.findByText('Hãy huấn luyện ở bước 4 trước.')).toBeInTheDocument();
     await extractAll();
     await trainToEnd();
     expect(screen.getByTestId('score-train')).toHaveTextContent('100%');
@@ -177,7 +179,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await userEvent.click(screen.getByRole('button', { name: /epoch tiếp theo/i }));
     expect(await screen.findByText('Đang huấn luyện… epoch 1/50')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Chạy hết' }));
-    expect(await screen.findByText('Xong 50 epoch.', {}, { timeout: 10_000 })).toBeInTheDocument();
+    expect(await screen.findByText('Xong 50 epoch.', {}, SLOW_WAIT)).toBeInTheDocument();
   });
 
   test('cảnh báo quá khớp và vòng đỏ trên bản đồ khi ảnh Kiểm tra bị đoán sai', async () => {
@@ -203,7 +205,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await userEvent.clear(epochs);
     await userEvent.type(epochs, '5');
     await userEvent.click(screen.getByRole('button', { name: 'Bắt đầu huấn luyện' }));
-    await screen.findByText('Xong 5 epoch.', {}, { timeout: 10_000 });
+    await screen.findByText('Xong 5 epoch.', {}, SLOW_WAIT);
     expect(screen.getByRole('table', { name: 'Theo từng lớp' })).toBeInTheDocument();
   });
 
@@ -214,7 +216,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await trainToEnd();
     await userEvent.type(screen.getByLabelText('Tên lớp mới'), 'Kim loại{Enter}');
     expect(await screen.findByText(/các lớp đã thay đổi/i)).toBeInTheDocument();
-    expect(screen.getByText('Hãy huấn luyện ở bước ④ trước.')).toBeInTheDocument();
+    expect(screen.getByText('Hãy huấn luyện ở bước 4 trước.')).toBeInTheDocument();
     // mô hình cũ không còn khớp dữ liệu: không cho xuất notebook
     expect(screen.queryByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeNull();
   });
@@ -253,7 +255,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     const firstScore = screen.getByTestId('score-test').textContent;
     await userEvent.click(await screen.findByRole('button', { name: 'Chạy lại lần 1' }));
     expect(await screen.findByText('Đang xem lại lần 1.')).toBeInTheDocument();
-    await screen.findByText('Xong 50 epoch.', {}, { timeout: 10_000 });
+    await screen.findByText('Xong 50 epoch.', {}, SLOW_WAIT);
     expect(screen.getByTestId('score-test').textContent).toBe(firstScore);
     expect(await repos.experiments.listRuns(projectId)).toHaveLength(1);
   });
@@ -268,7 +270,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
 
     open();
     expect(await screen.findByText('Đã khôi phục lần 1 bằng cách chạy lại với cùng seed 42.')).toBeInTheDocument();
-    await screen.findByText('Xong 50 epoch.', {}, { timeout: 10_000 });
+    await screen.findByText('Xong 50 epoch.', {}, SLOW_WAIT);
     expect(screen.getByTestId('score-test')).toHaveTextContent('100%');
   });
 
@@ -285,7 +287,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     open();
     expect(await screen.findByText('Dữ liệu đã thay đổi')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Chạy lại lần 1' })).toBeNull();
-    expect(screen.getByText('Hãy huấn luyện ở bước ④ trước.')).toBeInTheDocument();
+    expect(screen.getByText('Hãy huấn luyện ở bước 4 trước.')).toBeInTheDocument();
   });
 
   test('chưa huấn luyện: phần giải thích nhắc huấn luyện trước', async () => {
@@ -294,7 +296,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     await extractAll();
     const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
     await userEvent.click(within(map).getAllByRole('button')[0]!);
-    expect(await screen.findByText('Hãy huấn luyện ở bước ④ để xem giải thích.')).toBeInTheDocument();
+    expect(await screen.findByText('Hãy huấn luyện ở bước 4 để xem giải thích.')).toBeInTheDocument();
   });
 
   test('giải thích dự đoán: xác suất, bản đồ CAM 7×7 và (Chuyên sâu) đường đi phép tính khớp logit', async () => {
@@ -310,7 +312,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
 
     const heatmap = await within(explainer).findByTestId('cam-heatmap');
     expect(heatmap.querySelectorAll('rect')).toHaveLength(49);
-    expect(within(explainer).getByRole('button', { name: /● Nhựa/ })).toHaveAttribute('aria-pressed', 'true');
+    expect(within(explainer).getByRole('button', { name: 'Nhựa' })).toHaveAttribute('aria-pressed', 'true');
 
     // Đẳng thức hiển thị: trung bình 49 ô + b = logit (cùng một số ở hai vế)
     const check = within(explainer).getByTestId('cam-check').textContent!;
@@ -319,8 +321,8 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     expect(sum).toBe(logit);
     expect(num(within(explainer).getByTestId('path-logit').textContent!)).toBeCloseTo(num(logit!), 3);
 
-    await userEvent.click(within(explainer).getByRole('button', { name: /▲ Giấy/ }));
-    expect(within(explainer).getByRole('button', { name: /▲ Giấy/ })).toHaveAttribute('aria-pressed', 'true');
+    await userEvent.click(within(explainer).getByRole('button', { name: 'Giấy' }));
+    expect(within(explainer).getByRole('button', { name: 'Giấy' })).toHaveAttribute('aria-pressed', 'true');
   });
 
   test('che thử từng ô: đo 49 lần, chỉ ô chứa thông tin làm đổi xác suất', async () => {
@@ -338,7 +340,7 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     expect(values[0]).not.toBe(0);
     expect(values.slice(1).every((v) => v === 0)).toBe(true);
     // Đổi lớp: cùng 49 lần đo, không phải chạy lại mô hình
-    await userEvent.click(screen.getByRole('button', { name: /● Nhựa/ }));
+    await userEvent.click(screen.getByRole('button', { name: 'Nhựa' }));
     expect(within(occlusion).getByTestId('occlusion-summary')).toHaveTextContent(/Nhựa/);
   });
 
@@ -373,9 +375,9 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
     open();
     await extractAll();
     await userEvent.click(screen.getByRole('button', { name: 'UMAP' }));
-    expect(await screen.findByTestId('umap-note', {}, { timeout: 10_000 })).toHaveTextContent(/seed 42/);
+    expect(await screen.findByTestId('umap-note', {}, SLOW_WAIT)).toHaveTextContent(/seed 42/);
     // ghi chú hiện ngay, còn bản đồ chỉ hiện khi UMAP tính xong (bất đồng bộ): phải chờ bản đồ
-    const map = await screen.findByRole('group', { name: 'Bản đồ dữ liệu 2D' }, { timeout: 10_000 });
+    const map = await screen.findByRole('group', { name: 'Bản đồ dữ liệu 2D' }, SLOW_WAIT);
     expect(within(map).getAllByRole('button')).toHaveLength(16);
     expect(screen.getByText(/UMAP 1 \(không có đơn vị\)/)).toBeInTheDocument();
     expect(screen.queryByRole('checkbox', { name: /hiện ranh giới quyết định/i })).toBeNull();
@@ -419,12 +421,12 @@ describe('④ Huấn luyện và ⑤ Đánh giá', () => {
   });
 });
 
-describe('⑥ Sử dụng', () => {
+describe('Bước 6: Sử dụng', () => {
   test('sau khi huấn luyện: tải một ảnh mới, mô hình đoán lớp; ảnh thử không được lưu vào dự án', async () => {
     await seed();
     open();
-    const use = await screen.findByRole('region', { name: /⑥ Sử dụng/ });
-    expect(within(use).getByText(/huấn luyện mô hình ở bước ④/i)).toBeInTheDocument();
+    const use = await screen.findByRole('region', { name: /^Sử dụng/ });
+    expect(within(use).getByText(/huấn luyện mô hình ở bước 4/i)).toBeInTheDocument();
     expect(within(screen.getByRole('navigation', { name: 'Các bước của dự án' })).getAllByRole('listitem')).toHaveLength(6);
 
     await extractAll();

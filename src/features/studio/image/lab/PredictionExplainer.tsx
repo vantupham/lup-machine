@@ -8,8 +8,9 @@ import type { ClassRecord } from '@/storage/db';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { useModeStore } from '@/ui/mode-store';
 import { CamHeatmap } from './CamHeatmap';
-import { colorFor, markerFor } from './class-style';
+import { colorFor } from './class-style';
 import { OcclusionMap } from './OcclusionMap';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 const TOP_FEATURES = 5;
 
@@ -18,7 +19,7 @@ interface PredictionExplainerProps {
   readonly vector: Float32Array;
   readonly classes: readonly ClassRecord[];
   readonly params: SoftmaxParams;
-  /** Ẩn khi nơi gọi đã hiện xác suất (bước ⑥ hiện xác suất trực tiếp ở trên). */
+  /** Ẩn khi nơi gọi đã hiện xác suất (bước 6 hiện xác suất trực tiếp ở trên). */
   readonly showProbabilities?: boolean;
 }
 
@@ -44,7 +45,7 @@ export function PredictionExplainer({ sample, vector, classes, params, showProba
             {names.map((c, i) => (
               <li key={c.id} className="grid grid-cols-[7rem_1fr_3.5rem] items-center gap-2 text-sm">
                 <span className={`truncate ${i === predicted ? 'font-semibold' : ''}`}>
-                  {markerFor(i)} {c.name}
+                  <ClassMarker index={i} className="mr-1" />{c.name}
                 </span>
                 <span className="h-2 overflow-hidden rounded-sm bg-rule" aria-hidden="true">
                   <span className="block h-full" style={{ width: `${probs[i]! * 100}%`, backgroundColor: colorFor(i) }} />
@@ -65,7 +66,7 @@ export function PredictionExplainer({ sample, vector, classes, params, showProba
             onClick={() => setChosen(i)}
             className={`rounded px-2 py-0.5 ${i === classIndex ? 'bg-ink text-paper' : 'border border-rule'}`}
           >
-            {markerFor(i)} {c.name}
+            <ClassMarker index={i} className="mr-1" />{c.name}
           </button>
         ))}
       </div>
@@ -133,7 +134,7 @@ function CalculationPath({ vector, params, logits, probs, classIndex, names }: P
         <ul className="font-mono text-xs">
           {names.map((c, i) => (
             <li key={c.id}>
-              {markerFor(i)} {c.name}: {t('project.explain.softmaxRow', { logit: fmt(logits[i]!), prob: fmt(probs[i]!) })}
+              <ClassMarker index={i} className="mr-1" />{c.name}: {t('project.explain.softmaxRow', { logit: fmt(logits[i]!), prob: fmt(probs[i]!) })}
             </li>
           ))}
         </ul>

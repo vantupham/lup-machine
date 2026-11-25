@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord, Split } from '@/storage/db';
 import { ACCEPTED_IMAGE_TYPES } from './image-file';
 import { SampleThumb } from './SampleThumb';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 export interface ClassPanelActions {
   readonly onUpload: (cls: ClassRecord, files: File[], split: Split) => void;
@@ -17,12 +18,12 @@ export interface ClassPanelActions {
 interface ClassPanelProps extends ClassPanelActions {
   readonly cls: ClassRecord;
   readonly samples: readonly SampleRecord[];
-  readonly marker: string;
+  readonly markerIndex: number;
 }
 
 const SPLITS: readonly Split[] = ['train', 'test'];
 
-export function ClassPanel({ cls, samples, marker, ...actions }: ClassPanelProps) {
+export function ClassPanel({ cls, samples, markerIndex, ...actions }: ClassPanelProps) {
   const { t } = useTranslation();
   const [split, setSplit] = useState<Split>('train');
   const fileInput = useRef<HTMLInputElement>(null);
@@ -34,9 +35,7 @@ export function ClassPanel({ cls, samples, marker, ...actions }: ClassPanelProps
   return (
     <article aria-labelledby={headingId} className="lab-card p-4">
       <header className="mb-3 flex flex-wrap items-center gap-3">
-        <span aria-hidden="true" className="text-lg text-primary">
-          {marker}
-        </span>
+        <ClassMarker index={markerIndex} className="text-lg" />
         <ClassName cls={cls} headingId={headingId} onRename={actions.onRename} />
         <span className="font-mono text-xs text-muted">
           {t('project.class.count', counts)}

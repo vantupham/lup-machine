@@ -34,7 +34,7 @@ test('Thẻ mô hình: điền từ studio, còn sau khi tải lại, đi theo t
   await page.getByRole('button', { name: 'Xóa Ý kiến căng tin', exact: true }).click();
   const panel = page.getByRole('region', { name: 'Mở tệp dự án' });
   await panel.getByLabel('Chọn tệp .lup').setInputFiles((await download.path())!);
-  await panel.getByRole('link', { name: /Mở dự án →/ }).click();
+  await panel.getByRole('link', { name: 'Mở dự án', exact: true }).click();
   await page.getByRole('link', { name: /Thẻ mô hình · đã điền đủ/ }).click();
   await expect(page.getByLabel('Người làm')).toHaveValue('Nhóm 4');
   await expect(page.getByLabel(/Không nên dùng/)).toHaveValue('Đánh giá nhân viên căng tin');

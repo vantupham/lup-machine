@@ -8,6 +8,7 @@ import { useModeStore } from '@/ui/mode-store';
 import { useObjectUrl } from '../useObjectUrl';
 import { GridOverlay } from './GridOverlay';
 import { useSpatial } from './useSpatial';
+import { Info } from '@/ui/icons';
 
 interface CamHeatmapProps {
   readonly sample: ImageSubject;
@@ -32,7 +33,7 @@ export function CamHeatmap({ sample, params, classIndex }: CamHeatmapProps) {
       {state.status === 'ready' && <CamOverlay url={url} spatial={state.spatial} params={params} classIndex={classIndex} />}
       <p className="text-xs text-muted">{t('project.explain.heatmapLegend')}</p>
       <details className="text-xs">
-        <summary className="cursor-pointer">ⓘ {t('project.explain.heatmapHowTitle')}</summary>
+        <summary className="cursor-pointer"><Info /> {t('project.explain.heatmapHowTitle')}</summary>
         <p className="mt-1 leading-relaxed text-muted">{t('project.explain.heatmapHowBody')}</p>
       </details>
     </figure>

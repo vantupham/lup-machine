@@ -1,12 +1,13 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAssignmentRepository } from '@/storage/repository-context';
 import type { ProjectAssignment } from '@/storage/repositories/assignment-repository';
 import { ASSIGNMENT_LIMITS } from '@/storage/schemas/assignment';
 import { getErrorMessage } from '@/ui/error-message';
 import { RubricTable } from './RubricTable';
 import { SubmitPanel } from './SubmitPanel';
+import { BackLink } from '@/ui/BackLink';
 
 type Loaded = { readonly projectId: string; readonly linked: ProjectAssignment | null; readonly failed: boolean } | null;
 
@@ -44,7 +45,7 @@ export function AssignmentPage() {
   return (
     <div className="space-y-6">
       <header className="space-y-2">
-        <Link to={`/studio/${projectId}`} className="text-sm text-primary hover:underline">{t('classroom.assignment.back')}</Link>
+        <BackLink to={`/studio/${projectId}`}>{t('classroom.assignment.back')}</BackLink>
         <p className="font-mono text-xs uppercase text-accent">{t('classroom.assignment.eyebrow')}</p>
         <h1 className="font-display text-4xl font-bold">{assignment.title}</h1>
         {assignment.teacher && <p className="text-muted">{t('classroom.banner.by', { teacher: assignment.teacher })}</p>}

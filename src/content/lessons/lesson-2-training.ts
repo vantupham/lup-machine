@@ -15,10 +15,10 @@ export const lessonTraining: Lesson = {
   ],
   steps: [
     {
-      title: '① Dữ liệu và ② Kiểm tra dữ liệu',
+      title: 'Bước 1 và 2: Dữ liệu, Kiểm tra dữ liệu',
       body: [
         'Bấm "Tạo dự án mẫu cho bài này". Dự án có 3 lớp: Hình tròn, Hình vuông, Tam giác; mỗi lớp 18 ảnh Dạy và 6 ảnh Kiểm tra.',
-        'Xem bảng "② Kiểm tra dữ liệu": số ảnh các lớp có cân bằng không?',
+        'Xem bảng "Kiểm tra dữ liệu": số ảnh các lớp có cân bằng không?',
       ],
       predict: {
         question: 'Vì sao phải giấu riêng 6 ảnh mỗi lớp ở ngăn Kiểm tra, không cho máy học?',
@@ -27,7 +27,7 @@ export const lessonTraining: Lesson = {
       },
     },
     {
-      title: '③ Biểu diễn',
+      title: 'Bước 3: Biểu diễn',
       body: [
         'Bấm "Biến ảnh thành vector". Mỗi ảnh được MobileNetV2 tóm lại thành 1.280 con số đặc trưng.',
         'Quan sát Bản đồ dữ liệu 2D. Bấm vào vài chấm để xem ảnh và 3 ảnh Dạy giống nhất.',
@@ -40,7 +40,7 @@ export const lessonTraining: Lesson = {
       record: [{ kind: 'fields', title: 'Em ghi lại', fields: ['Bản đồ giữ được bao nhiêu % biến thiên:'], answers: ['60,4%'] }],
     },
     {
-      title: '④ Huấn luyện từng bước',
+      title: 'Bước 4: Huấn luyện từng bước',
       body: [
         'Chọn tốc độ "Từng bước", bấm "Bắt đầu huấn luyện", rồi bấm "Epoch tiếp theo" khoảng 5 lần. Quan sát biểu đồ độ chính xác.',
         'Sau đó bấm "Chạy hết".',
@@ -65,7 +65,7 @@ export const lessonTraining: Lesson = {
       ],
     },
     {
-      title: '⑤ Đánh giá',
+      title: 'Bước 5: Đánh giá',
       body: [
         'So sánh "Điểm trên bài đã học" và "Điểm trên bài chưa học".',
         'Ở epoch cuối, mô hình có thể đã đúng hết: mọi ô ngoài đường chéo của Ma trận nhầm lẫn đều bằng 0. Kéo thanh Phát lại về epoch 5, lúc mô hình còn nhầm: tìm ô ngoài đường chéo có số lớn nhất và bấm vào để xem các ảnh bị nhầm.',
@@ -149,7 +149,7 @@ export const lessonTraining: Lesson = {
   wrapUp:
     'Học máy gồm các bước: thu thập dữ liệu, biến dữ liệu thành con số đặc trưng, huấn luyện bằng cách đoán – so đáp án – sửa lỗi qua nhiều epoch, rồi đánh giá trên dữ liệu chưa thấy. Ma trận nhầm lẫn cho biết mô hình sai ở đâu.',
   teacherNotes: [
-    'Bài dài 2 tiết: tiết 1 đến hết bước ③, tiết 2 từ bước ④.',
+    'Bài dài 2 tiết: tiết 1 đến hết bước 3, tiết 2 từ bước 4.',
     'Kết quả huấn luyện tái lập được (seed cố định): cả lớp làm cùng bộ dữ liệu sẽ ra cùng con số hoặc chỉ lệch rất nhỏ giữa các máy, tiện cho việc so sánh.',
     'Học sinh THPT có thể dùng chế độ Chuyên sâu để xem công thức W·x + b và bảng precision / recall.',
     'Đã kiểm chứng với MobileNetV2: epoch 0 Dạy 44,4% / Kiểm tra 22,2%; epoch 5 98,1% / 77,8% (nhầm 3 vuông → tam giác, 1 tam giác → vuông); epoch 50 đạt 100% / 100%. Chạy 3 epoch: 94,4% / 72,2%.',

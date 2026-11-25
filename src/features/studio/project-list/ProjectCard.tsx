@@ -7,6 +7,7 @@ import { useObjectUrl } from '@/features/studio/image/useObjectUrl';
 import type { ProjectRecord, StoredImage } from '@/storage/db';
 import type { ProjectSummary } from '@/storage/repositories/project-summary';
 import { useProjectRepository } from '@/storage/repository-context';
+import { ArrowRight } from '@/ui/icons';
 
 interface ProjectCardProps {
   readonly project: ProjectRecord;
@@ -32,7 +33,7 @@ export function ProjectCard({ project, onDelete }: ProjectCardProps) {
       </div>
       <div className="mt-auto flex flex-wrap items-center gap-2">
         <Link to={`/studio/${project.id}`} aria-label={`${t('studio.open')} ${project.name}`} className="btn btn-primary px-3 py-1 text-sm">
-          {t('studio.open')} →
+          {t('studio.open')} <ArrowRight />
         </Link>
         <ExportProjectButton projectId={project.id} projectName={project.name} />
         <button

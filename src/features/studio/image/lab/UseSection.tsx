@@ -1,4 +1,4 @@
-/** Bước ⑥ Sử dụng của Studio ảnh: thử mô hình với ảnh MỚI từ webcam hoặc tệp, kèm giải thích. Ảnh thử không được lưu. */
+/** Bước 6 Sử dụng của Studio ảnh: thử mô hình với ảnh MỚI từ webcam hoặc tệp, kèm giải thích. Ảnh thử không được lưu. */
 import { useRef, useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { SoftmaxParams } from '@/core/ml/softmax-regression';
@@ -14,6 +14,8 @@ import { PredictionExplainer } from './PredictionExplainer';
 import { predictProbe } from './probe';
 import { ProbeMap, ProbeNeighbors } from './ProbeInsights';
 import { ProbeResult } from './ProbeResult';
+import { Camera, ImageUp, Lock, Pause, Play } from '@/ui/icons';
+import { StepNumber } from '@/ui/StepNumber';
 
 type Source = 'none' | 'webcam' | 'upload';
 
@@ -26,7 +28,7 @@ interface UseSectionProps {
   readonly classes: readonly ClassRecord[];
   readonly samples: readonly SampleRecord[];
   readonly features: ReadonlyMap<string, Float32Array>;
-  /** Mô hình đang hiển thị (cùng epoch với bước ⑤); null khi chưa huấn luyện. */
+  /** Mô hình đang hiển thị (cùng epoch với bước 5); null khi chưa huấn luyện. */
   readonly params: SoftmaxParams | null;
   readonly epoch: number | null;
 }
@@ -36,7 +38,7 @@ export function UseSection({ classes, samples, features, params, epoch }: UseSec
 
   return (
     <section aria-labelledby="use-title" className="space-y-4">
-      <h2 id="use-title" className="text-2xl font-semibold">{t('project.use.title')}</h2>
+      <h2 id="use-title" className="flex items-center gap-3 text-2xl font-semibold"><StepNumber n={6} />{t('project.use.title')}</h2>
       <p className="max-w-3xl text-sm text-muted">{t('project.use.lead')}</p>
       {params === null ? (
         <p className="text-sm text-muted">{t('project.use.needModel')}</p>
@@ -124,6 +126,7 @@ function ProbeLab({ classes, samples, features, params, epoch }: ProbeLabProps) 
         {source === 'webcam' ? (
           <>
             <button type="button" className="btn btn-primary" onClick={() => setIsPaused((p) => !p)} disabled={!probe && !isPaused}>
+              {isPaused ? <Play /> : <Pause />}
               {t(isPaused ? 'project.use.resume' : 'project.use.freeze')}
             </button>
             <button type="button" className="btn btn-ghost" onClick={() => switchTo('none')}>
@@ -132,10 +135,12 @@ function ProbeLab({ classes, samples, features, params, epoch }: ProbeLabProps) 
           </>
         ) : (
           <button type="button" className="btn btn-primary" onClick={() => switchTo('webcam')}>
+            <Camera />
             {t('project.use.startCamera')}
           </button>
         )}
         <label className="btn btn-ghost cursor-pointer focus-within:outline focus-within:outline-2 focus-within:outline-primary">
+          <ImageUp />
           {t('project.use.upload')}
           <input
             type="file"
@@ -160,7 +165,7 @@ function ProbeLab({ classes, samples, features, params, epoch }: ProbeLabProps) 
           )}
           {source === 'upload' && probe && <StillImage subject={probe.subject} />}
           {source === 'webcam' && !isPaused && <p className="text-xs text-muted">{t('project.use.liveHint')}</p>}
-          <p className="text-xs text-muted">🔒 {t('project.use.privacy')}</p>
+          <p className="text-xs text-muted"><Lock /> {t('project.use.privacy')}</p>
         </div>
         <div className="space-y-4">
           {isBusy && <p role="status" className="text-sm">{t('project.use.analyzing')}</p>}

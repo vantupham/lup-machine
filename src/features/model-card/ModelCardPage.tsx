@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import type { ProjectRecord } from '@/storage/db';
 import { useRepositories } from '@/storage/repository-context';
 import {
@@ -15,6 +15,8 @@ import {
 import { getErrorMessage } from '@/ui/error-message';
 import { FactsPanel } from './FactsPanel';
 import { loadModelCardFacts, type ModelCardFacts } from './facts';
+import { Check, Printer } from '@/ui/icons';
+import { BackLink } from '@/ui/BackLink';
 
 type LoadState =
   | { readonly status: 'not-found' }
@@ -106,9 +108,9 @@ function ModelCardEditor({ project, facts, saved, updatedAt, onSaved }: EditorPr
   return (
     <div className="space-y-6">
       <header className="space-y-2">
-        <Link to={`/studio/${project.id}`} className="text-sm text-primary hover:underline print:hidden">
+        <BackLink to={`/studio/${project.id}`} className="print:hidden">
           {t('modelCard.backToProject')}
-        </Link>
+        </BackLink>
         <p className="font-mono text-xs uppercase text-accent">{t('modelCard.title')}</p>
         <h1 className="font-display text-4xl font-bold">{project.name}</h1>
         <p className="max-w-3xl text-muted print:hidden">{t('modelCard.lead')}</p>
@@ -153,7 +155,7 @@ function ModelCardEditor({ project, facts, saved, updatedAt, onSaved }: EditorPr
               {isSaving ? t('modelCard.saving') : t('modelCard.save')}
             </button>
             <button type="button" className="btn btn-ghost" onClick={() => window.print()}>
-              🖨 {t('modelCard.print')}
+              <Printer /> {t('modelCard.print')}
             </button>
             {isDirty && <span className="text-sm text-warning">{t('modelCard.unsaved')}</span>}
           </div>
@@ -165,7 +167,7 @@ function ModelCardEditor({ project, facts, saved, updatedAt, onSaved }: EditorPr
         <aside className="space-y-4">
           <p data-testid="model-card-completeness" className={`rounded border p-3 text-sm print:hidden ${missing.length === 0 ? 'border-accent text-accent' : 'border-rule'}`}>
             {missing.length === 0
-              ? `✓ ${t('modelCard.complete')}`
+              ? <><Check /> {t('modelCard.complete')}</>
               : t('modelCard.missing', { fields: missing.map((f) => t(`modelCard.fields.${f}.short`)).join(', ') })}
           </p>
           <FactsPanel facts={facts} />

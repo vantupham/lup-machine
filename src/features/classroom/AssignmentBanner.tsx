@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useAssignmentRepository } from '@/storage/repository-context';
 import type { Assignment } from '@/storage/schemas/assignment';
+import { ArrowRight } from '@/ui/icons';
 
 interface AssignmentBannerProps {
   readonly projectId: string;
@@ -32,8 +33,9 @@ export function AssignmentBanner({ projectId }: AssignmentBannerProps) {
       <span className="font-mono text-xs uppercase text-primary">{t('classroom.banner.label')}</span>
       <span className="font-semibold">{assignment.title}</span>
       {assignment.teacher && <span className="text-sm text-muted">{t('classroom.banner.by', { teacher: assignment.teacher })}</span>}
-      <Link to={`/studio/${projectId}/bai-tap`} className="ml-auto text-sm font-medium text-primary underline">
+      <Link to={`/studio/${projectId}/bai-tap`} className="ml-auto inline-flex items-center gap-1 text-sm font-medium text-primary underline">
         {t('classroom.banner.open')}
+        <ArrowRight />
       </Link>
     </aside>
   );

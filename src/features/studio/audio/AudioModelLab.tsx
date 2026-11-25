@@ -1,4 +1,4 @@
-/** Bước ④ Huấn luyện, ⑤ Đánh giá, ⑥ Sử dụng của Studio âm thanh. */
+/** Bước 4 Huấn luyện, 5 Đánh giá, 6 Sử dụng của Studio âm thanh. */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { contributionMap, encodeVector, evaluateVectors, importanceMap, predictVector, trainVectorModel, type VectorData, type VectorModelSettings, type TrainedVectorModel } from '@/core/ml/vector-classifier';
@@ -6,7 +6,7 @@ import { audioFeatures, fitClip } from '@/core/audio/features';
 import { audioNotebook } from '@/core/export/audio-notebook';
 import { formatPercent, RangeField, SelectField, Stat } from '@/features/playground/controls';
 import { ColabExportPanel } from '@/features/export/ColabExportPanel';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { colorFor } from '@/features/studio/image/lab/class-style';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { getErrorMessage } from '@/ui/error-message';
 import { version as appVersion } from '../../../../package.json';
@@ -15,6 +15,8 @@ import { C_LEVELS } from '../tabular/ModelSection';
 import { ConfusionTable } from '../tabular/EvaluateSection';
 import { decodeAudioFile, playClip, recordClip } from './audio-io.browser';
 import { FeatureGrid, Waveform } from './viz';
+import { Play } from '@/ui/icons';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 const DEFAULT_SETTINGS: VectorModelSettings = { kind: 'logistic', c: 1, k: 3 };
 
@@ -73,7 +75,7 @@ function TryClip({ trained, data, trainSamples }: { readonly trained: TrainedVec
           <>
             <Waveform samples={signal} label={t('audio.inspector.waveLabel')} />
             <p className="text-lg" data-testid="audio-prediction">
-              <span aria-hidden="true" style={{ color: colorFor(prediction.label) }}>{markerFor(prediction.label)} </span>
+              <ClassMarker index={prediction.label} className="mr-1" />
               {t('tabular.use.predictedClass', { cls: data.classNames[prediction.label] })}
             </p>
             <ul className="space-y-1">
@@ -114,7 +116,7 @@ function TryClip({ trained, data, trainSamples }: { readonly trained: TrainedVec
                   const samples = trainSamples(id);
                   return (
                     <li key={n.index} className="flex items-center gap-2">
-                      <button type="button" className="btn btn-ghost px-2 py-0.5 text-xs" disabled={!samples} onClick={() => samples && playClip(samples)}>▶</button>
+                      <button type="button" className="btn btn-ghost px-2 py-0.5 text-xs" aria-label={t('audio.use.playNeighbour')} disabled={!samples} onClick={() => samples && playClip(samples)}><Play /></button>
                       <span>{data.classNames[data.train.ys[n.index] as number]}</span>
                       <span className="font-mono text-xs text-muted">{t('audio.use.distance', { d: n.distance.toFixed(1) })}</span>
                     </li>

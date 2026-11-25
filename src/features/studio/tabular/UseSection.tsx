@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import type { DecisionTree } from '@/core/algorithms/decision-tree';
 import { contributions, logisticRowScores, predictRow, type TrainedModel } from '@/core/tabular/models';
 import { encodeCells, type FeatureEncoder, type PreparedData } from '@/core/tabular/prepare';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { colorFor } from '@/features/studio/image/lab/class-style';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 /** Mỗi lời giải thích chỉ liệt kê các đóng góp lớn nhất để học sinh dễ đọc. */
 const TOP_CONTRIBUTIONS = 4;
@@ -136,7 +137,7 @@ export function UseSection({ trained, data }: { readonly trained: TrainedModel; 
             {data.task === 'classification' ? (
               <>
                 <p className="text-lg" data-testid="tabular-prediction">
-                  <span aria-hidden="true" style={{ color: colorFor(prediction.value) }}>{markerFor(prediction.value)} </span>
+                  <ClassMarker index={prediction.value} className="mr-1" />
                   {t('tabular.use.predictedClass', { cls: data.classNames[prediction.value] })}
                 </p>
                 <ul className="space-y-1">

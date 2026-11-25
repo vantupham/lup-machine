@@ -20,7 +20,7 @@ async function importProject(page: Page, file: string, name: string): Promise<vo
   const panel = page.getByRole('region', { name: 'Mở tệp dự án' });
   await panel.getByLabel('Chọn tệp .lup').setInputFiles(file);
   await expect(panel.getByRole('status')).toHaveText(new RegExp(`Đã mở dự án "${name}"`));
-  await panel.getByRole('link', { name: /Mở dự án →/ }).click();
+  await panel.getByRole('link', { name: 'Mở dự án', exact: true }).click();
 }
 
 test.beforeEach(async ({ page }) => {

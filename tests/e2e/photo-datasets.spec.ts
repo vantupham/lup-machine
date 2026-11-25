@@ -34,7 +34,7 @@ test('bộ hoa: ảnh thật, mô hình học tốt; ảnh mang ghi công tác g
 
   const shots = process.env.SCREENSHOT_DIR;
   if (shots) {
-    await page.getByRole('region', { name: '③ Biểu diễn' }).screenshot({ path: `${shots}/flowers-map.png` });
+    await page.getByRole('region', { name: 'Biểu diễn', exact: true }).screenshot({ path: `${shots}/flowers-map.png` });
     await page.goto('./#/studio');
     await page.getByRole('list', { name: 'Ảnh thật (giấy phép mở)' }).screenshot({ path: `${shots}/photo-cards.png` });
   }

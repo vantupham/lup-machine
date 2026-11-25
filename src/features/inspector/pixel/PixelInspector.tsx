@@ -7,6 +7,7 @@ import { useModeStore } from '@/ui/mode-store';
 import { Dialog } from '@/ui/Dialog';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { PixelGrid } from './PixelGrid';
+import { ChevronRight, Info } from '@/ui/icons';
 
 const DISPLAY_SIZE = 336;
 const TOTAL_VALUES = MODEL_INPUT_SIZE * MODEL_INPUT_SIZE * 3;
@@ -50,7 +51,7 @@ export function PixelInspector({ image, title, onClose, decode, credit }: PixelI
         {pipeline.map((step, i) => (
           <li key={step} className="flex items-center gap-1">
             <span className="rounded border border-rule px-2 py-0.5">{step}</span>
-            {i < pipeline.length - 1 && <span aria-hidden="true">→</span>}
+            {i < pipeline.length - 1 && <ChevronRight className="text-muted" />}
           </li>
         ))}
         <li className="ml-auto">
@@ -75,7 +76,7 @@ export function PixelInspector({ image, title, onClose, decode, credit }: PixelI
       )}
 
       <details className="mt-6 rounded border border-rule p-3 text-sm">
-        <summary className="cursor-pointer font-medium">ⓘ {t('project.inspector.howTitle')}</summary>
+        <summary className="cursor-pointer font-medium"><Info /> {t('project.inspector.howTitle')}</summary>
         <p className="mt-2 leading-relaxed text-muted">{t('project.inspector.howBody')}</p>
       </details>
     </Dialog>
