@@ -63,7 +63,7 @@
     "lead": "Each project is an experiment. Projects are saved in this browser on this device.",
     "newProject": "New project",
     "nameLabel": "Project name",
-    "namePlaceholder": "Leave empty to name it automatically (e.g. Image project 1)",
+    "namePlaceholder": "e.g. Waste sorting, class 7A",
     "typeLabel": "Data type",
     "create": "Create project",
     "creating": "Creating…",
@@ -98,7 +98,10 @@
       },
       "runs": "Training runs: {{count}}"
     },
-    "deleteError": "Could not delete project \"{{name}}\": {{message}}"
+    "deleteError": "Could not delete project \"{{name}}\": {{message}}",
+    "namedEyebrow": "Start a new experiment",
+    "nameHint": "Optional. Leave it empty to get a name like \"Image project 1\"; you can rename it any time.",
+    "namedFooter": "You go straight into the project."
   },
   "quickStart": {
     "title": "What do you want to teach the computer?",
