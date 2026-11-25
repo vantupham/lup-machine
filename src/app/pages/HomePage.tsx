@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { version } from '../../../package.json';
 import { ProjectTypeCards } from '@/features/studio/quick-start/ProjectTypeCards';
 import { RecentProjects } from '@/features/studio/quick-start/RecentProjects';
 
@@ -72,10 +71,6 @@ export function HomePage() {
           ))}
         </dl>
       </section>
-
-      <p className="font-mono text-xs text-muted">
-        {t('home.status', { version })}
-      </p>
     </div>
   );
 }

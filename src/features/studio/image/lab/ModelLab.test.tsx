@@ -106,7 +106,7 @@ describe('Bước 3: Biểu diễn', () => {
   test('trích đặc trưng, lưu cache và vẽ bản đồ PCA với mọi ảnh', async () => {
     await seed();
     open();
-    expect(await screen.findByText(/hãy làm bước 3 \(biểu diễn\) trước/i)).toBeInTheDocument();
+    expect(await screen.findByText(/cần làm bước 3 \(biểu diễn\) trước/i)).toBeInTheDocument();
     await extractAll();
     const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
     expect(within(map).getAllByRole('button')).toHaveLength(16);
@@ -147,7 +147,7 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
   test('huấn luyện, xem điểm Dạy / Kiểm tra và ma trận nhầm lẫn bấm được', async () => {
     await seed();
     open();
-    expect(await screen.findByText('Hãy huấn luyện ở bước 4 trước.')).toBeInTheDocument();
+    expect(await screen.findByText('Huấn luyện ở bước 4 để xem kết quả.')).toBeInTheDocument();
     await extractAll();
     await trainToEnd();
     expect(screen.getByTestId('score-train')).toHaveTextContent('100%');
@@ -217,8 +217,8 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     await extractAll();
     await trainToEnd();
     await userEvent.type(screen.getByLabelText('Tên lớp mới'), 'Kim loại{Enter}');
-    expect(await screen.findByText(/các lớp đã thay đổi/i)).toBeInTheDocument();
-    expect(screen.getByText('Hãy huấn luyện ở bước 4 trước.')).toBeInTheDocument();
+    expect(await screen.findByText(/các lớp đã đổi/i)).toBeInTheDocument();
+    expect(screen.getByText('Huấn luyện ở bước 4 để xem kết quả.')).toBeInTheDocument();
     // mô hình cũ không còn khớp dữ liệu: không cho xuất notebook
     expect(screen.queryByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeNull();
   });
@@ -289,7 +289,7 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     open();
     expect(await screen.findByText('Dữ liệu đã thay đổi')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Chạy lại lần 1' })).toBeNull();
-    expect(screen.getByText('Hãy huấn luyện ở bước 4 trước.')).toBeInTheDocument();
+    expect(screen.getByText('Huấn luyện ở bước 4 để xem kết quả.')).toBeInTheDocument();
   });
 
   test('chưa huấn luyện: phần giải thích nhắc huấn luyện trước', async () => {
@@ -298,7 +298,7 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     await extractAll();
     const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
     await userEvent.click(within(map).getAllByRole('button')[0]!);
-    expect(await screen.findByText('Hãy huấn luyện ở bước 4 để xem giải thích.')).toBeInTheDocument();
+    expect(await screen.findByText('Huấn luyện ở bước 4 để xem giải thích.')).toBeInTheDocument();
   });
 
   test('giải thích dự đoán: xác suất, bản đồ CAM 7×7 và (Chuyên sâu) đường đi phép tính khớp logit', async () => {
@@ -395,7 +395,7 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     await userEvent.click(screen.getByRole('checkbox', { name: /hiện ranh giới quyết định/i }));
     expect(await screen.findByTestId('decision-grid')).toBeInTheDocument();
     expect(screen.getByTestId('decision-grid').querySelectorAll('rect')).toHaveLength(48 * 48);
-    expect(screen.getByTestId('boundary-note')).toHaveTextContent(/2 trục đạt 100% .* mô hình chính .* đạt 100%/);
+    expect(screen.getByTestId('boundary-note')).toHaveTextContent(/2 trục đạt 100%.*mô hình chính đạt 100%/);
     await userEvent.click(screen.getByRole('checkbox', { name: /hiện ranh giới quyết định/i }));
     expect(screen.queryByTestId('decision-grid')).toBeNull();
   });

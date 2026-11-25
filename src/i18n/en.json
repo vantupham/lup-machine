@@ -25,7 +25,7 @@
     "eyebrow": "Teaching and learning AI for grades 6–12",
     "title": "Don't just watch AI guess right.",
     "titleMark": "See how it does it.",
-    "lead": "Teach the computer with your own data, then open the lid on every step: how a photo turns into numbers, how the machine learns, and why it gets things wrong.",
+    "lead": "Teach the computer with your own data, then see how it learns, step by step.",
     "pipelineTitle": "Six steps, each one can be opened up",
     "steps": {
       "data": "Data",
@@ -51,12 +51,11 @@
       "honestBody": "Every visualisation says whether it is exact or approximate, and how it was made.",
       "openTitle": "Open source, free",
       "openBody": "Teachers can read, review and contribute lessons on GitHub."
-    },
-    "status": "Version {{version}} · open source, runs entirely in your browser"
+    }
   },
   "studio": {
     "title": "Model Studio",
-    "lead": "Each project is an experiment. Projects are saved in this browser on this device.",
+    "lead": "Every project is an experiment.",
     "newProject": "New project",
     "nameLabel": "Project name",
     "namePlaceholder": "e.g. Waste sorting, class 7A",
@@ -96,14 +95,14 @@
   },
   "quickStart": {
     "title": "What do you want to teach the computer?",
-    "lead": "Pick a kind of data and start right away, no name needed. Everything is saved on this device.",
+    "lead": "Pick a data type to start right away.",
     "popular": "Most used",
     "start": "Start",
     "startAria": "Create new {{type}} project",
     "creating": "Creating…",
     "creatingFromLink": "Creating a new project…",
     "error": "Could not create the project: {{message}}",
-    "badType": "There is no project type \"{{slug}}\". Pick one below.",
+    "badType": "There is no \"{{slug}}\" project type. Pick one below.",
     "backToStudio": "Back to the Model Studio",
     "recentTitle": "Continue a recent project",
     "recentAll": "See all projects",
@@ -143,7 +142,7 @@
     "exporting": "Exporting…",
     "exportError": "Could not export: {{message}}",
     "importTitle": "Open a project or assignment file",
-    "importLead": "Projects are only stored in this browser. Click \"Export .lup\" to move a project to another computer, send it to your teacher or keep a copy, then open the file here. Your teacher's assignment packages (.lupa) open here too.",
+    "importLead": "Open a .lup file from another device, or a .lupa assignment from your teacher.",
     "importLabel": "Choose a .lup or .lupa file",
     "importing": "Opening file…",
     "imported": "Opened project \"{{name}}\".",
@@ -154,7 +153,7 @@
   },
   "modelCard": {
     "title": "Model card",
-    "lead": "Answer 5 questions so others understand your model: what it is for, what data it learned from, how good it is and when not to trust it. The card travels with the .lup file and your submission.",
+    "lead": "Answer 5 questions so others know what your model does and when not to trust it.",
     "backToProject": "Back to project",
     "authors": "Made by",
     "authorsPlaceholder": "Your name or group name (optional)",
@@ -213,12 +212,12 @@
     "factsExact": "Exact",
     "factsExactHint": "Counted directly from the project's stored data and training log.",
     "loading": "Loading model card…",
-    "factsRunOutdated": "The data changed after this training run (images added / removed or moved). Train again before writing down the accuracy."
+    "factsRunOutdated": "The data changed after this run. Train again before recording the accuracy."
   },
   "classroom": {
     "teacher": {
       "title": "Teacher corner",
-      "lead": "Create an assignment package and send it to students via chat, Drive, USB or your learning platform. No accounts, no server: students open the package in the Model Studio, do the work and send back a submission file."
+      "lead": "Create an assignment and send it via Zalo, Drive or USB. No accounts needed."
     },
     "create": {
       "title": "Create an assignment (.lupa)",
@@ -248,7 +247,7 @@
       "creating": "Creating…",
       "created": "Created {{file}}. Send this file to your students.",
       "error": "Could not create the package: {{message}}",
-      "titleRequired": "Please give the assignment a title.",
+      "titleRequired": "The assignment needs a title.",
       "criterionRequired": "Every criterion needs a name.",
       "questionRequired": "Questions cannot be empty."
     },
@@ -288,7 +287,7 @@
       "studentsPlaceholder": "Example: An Nguyen, Binh Tran",
       "classLabel": "Class",
       "includeData": "Include the original data (images, audio, data table…)",
-      "includeDataHint": "Not included by default to protect privacy. The submission still has sample counts, training log, model card and answers. Only tick this if your teacher asks.",
+      "includeDataHint": "Without it, the submission still has the log, model card and answers. Tick only if your teacher asks.",
       "checklist": "Before submitting",
       "blockers": {
         "students": "Write the student name(s).",
@@ -302,7 +301,7 @@
       "submitting": "Creating submission…",
       "submitted": "Created {{file}}. Send this file to your teacher.",
       "submitError": "Could not create the submission: {{message}}",
-      "checkError": "Could not check the submission requirements. Please reload the page."
+      "checkError": "Could not check the submission requirements. Reload the page to try again."
     }
   },
   "grading": {
@@ -312,7 +311,7 @@
       "grade": "Grade"
     },
     "importTitle": "Receive submissions (.lups)",
-    "importLead": "Choose one or more submission files from your students. Submissions are stored on this computer. A resubmission replaces the older one and keeps any grades already given.",
+    "importLead": "Choose submission files. A resubmission replaces the old one; grades are kept.",
     "importLabel": "Choose .lups files",
     "importing": "Reading files…",
     "outcome": {
@@ -385,14 +384,14 @@
   },
   "ethics": {
     "title": "AI Ethics Lab",
-    "lead": "AI learns from data, so missing data can make it fail for one group in ways the overall accuracy hides. Run the experiment yourself, see where your data goes, and discuss real situations.",
+    "lead": "Missing data can make AI fail one group. Run the experiment and see for yourself.",
     "exact": "Exact",
     "exactHint": "A real model is trained right on this page; the scores and the boundary are computed results.",
     "stepsLabel": "Experiment steps",
     "resample": "Resample ({{n}}/{{total}})",
     "predictTitle": "Predict first",
     "predictRight": "Correct: the model is much worse for mountain leaves.",
-    "predictWrong": "Not quite: the model is much worse for mountain leaves. Let's see why.",
+    "predictWrong": "Not quite: the model is much worse on Highland leaves. Read on to see why.",
     "openStudio": "Open the Model Studio",
     "regions": {
       "lowland": "Lowland",
@@ -454,7 +453,7 @@
     "privacy": "No server · No tracking · Data stays on your device",
     "offline": {
       "installing": "Saving the app and model for offline use…",
-      "ready": "Saved on this device — works even without internet",
+      "ready": "Saved on this device, works without internet.",
       "error": "Could not save for offline use (the app still works normally online)"
     }
   },
@@ -473,7 +472,7 @@
     },
     "data": {
       "title": "Data",
-      "lead": "Each class is a group you want the machine to tell apart. Train images are used for learning; Test images are held back for fair scoring.",
+      "lead": "Each class is a group to tell apart. Train images teach; Test images are kept aside for scoring.",
       "addClass": "Add class",
       "newClassPlaceholder": "New class name, e.g. Paper",
       "newClassLabel": "New class name",
@@ -521,12 +520,12 @@
       "done": "Done",
       "captured": "Captured {{count}} images",
       "starting": "Starting camera…",
-      "denied": "Camera permission was not granted. Click the lock icon in the address bar to allow it, then try again.",
+      "denied": "Camera access is blocked. Click the lock icon in the address bar to allow it, then try again.",
       "unavailable": "No camera found or not supported. You can use \"Upload images\" instead.",
       "privacy": "Images are processed only on this device.",
       "full": "This class already has {{max}} images.",
-      "blurError": "Could not blur faces, so this frame was not saved. Check your connection and try again, or turn blurring off.",
-      "snapError": "Could not capture the frame. Please try again."
+      "blurError": "Could not blur faces, so this image was not saved. Check your connection and try again, or turn blurring off.",
+      "snapError": "Could not capture the frame. Try again."
     },
     "quality": {
       "title": "Check data",
@@ -626,24 +625,24 @@
       "replay": "Replay: epoch {{epoch}}",
       "replayHint": "Drag to see the model at each moment. Epoch 0 is when it still guesses randomly.",
       "chartAccuracy": "Accuracy (%)",
-      "chartLoss": "Loss — lower is better",
+      "chartLoss": "Loss: lower is better",
       "seriesTrain": "Train set",
       "seriesTest": "Test set",
       "notSaved": "Each training run is recorded in the Experiment log below.",
-      "stale": "Classes changed since the last training. Please train again."
+      "stale": "The classes changed since the last run. Train again."
     },
     "evaluate": {
       "title": "Evaluate",
-      "empty": "Train in step 4 first.",
+      "empty": "Train in step 4 to see results.",
       "atEpoch": "Results at epoch {{epoch}}",
       "trainScore": "Score on studied material",
       "testScore": "Score on unseen material",
       "trainHint": "Train set",
-      "testHint": "Test set — the more trustworthy score",
+      "testHint": "Test set: the more trustworthy score",
       "noTest": "No Test images yet, so there is no objective score.",
       "overfit": "The studied score is much higher than the unseen score: the model is memorising rather than understanding (overfitting). Try more varied images.",
       "matrixTitle": "Confusion matrix",
-      "matrixLead": "Rows: true class. Columns: predicted class. Diagonal cells are correct. Click a cell to see which images they are.",
+      "matrixLead": "Rows: actual class. Columns: predicted. The diagonal is correct. Click a cell to see its images.",
       "matrixOn": "Show for",
       "actual": "True",
       "predicted": "Predicted",
@@ -661,7 +660,7 @@
     },
     "experiments": {
       "title": "Experiment log",
-      "lead": "Every training run is recorded. Select a few to compare, like a scientist keeping lab notes.",
+      "lead": "Every training run is recorded. Pick a few to compare.",
       "empty": "No training runs yet.",
       "number": "Run",
       "time": "Time",
@@ -694,9 +693,9 @@
       "heatmapFor": "Evidence for class",
       "heatmapLegend": "Red: regions supporting this class · Blue: regions against it",
       "heatmapBadge": "Approximate location",
-      "heatmapBadgeHint": "Each cell's value is exact, but each cell of the 7×7 grid actually \"sees\" a larger area than the 32×32-pixel square shaded.",
+      "heatmapBadgeHint": "Each cell's value is exact, but each 7×7 cell actually \"sees\" a wider area than the 32×32 square drawn.",
       "heatmapHowTitle": "How was this made?",
-      "heatmapHowBody": "MobileNetV2 divides the image into a 7 × 7 grid; each cell has 1,280 numbers. For the selected class, each cell's score = Σ (class weight × cell number). The mean of the 49 cell scores plus the bias b equals that class's logit exactly — so the map shows exactly how much each cell contributes (the CAM method, identical to Grad-CAM for this model).",
+      "heatmapHowBody": "MobileNetV2 divides the image into a 7 × 7 grid; each cell has 1,280 numbers. For the selected class, each cell's score = Σ (class weight × cell number). The mean of the 49 cell scores plus the bias b equals that class's logit exactly, so the map shows exactly how much each cell contributes (the CAM method, identical to Grad-CAM for this model).",
       "heatmapCheck": "Check: mean of 49 cells ({{mean}}) + b ({{bias}}) = {{sum}} ≈ logit {{logit}}",
       "loading": "Computing map…",
       "error": "Could not compute the map: {{message}}",
@@ -713,7 +712,7 @@
     },
     "threshold": {
       "title": "Confidence threshold",
-      "lead": "Accept an answer only when the model is confident enough; otherwise it answers \"Not sure\".",
+      "lead": "The model answers only when confident enough; otherwise it says \"Not sure\".",
       "label": "Threshold: {{percent}}%",
       "summary": "Answered {{answered}}/{{total}} images ({{coverage}}%) · {{accuracy}} correct among answered",
       "noneAnswered": "No image reaches the threshold.",
@@ -727,46 +726,46 @@
       "toggle": "Show decision boundary",
       "badge": "Exact for the 2D model",
       "badgeHint": "This is a helper model trained only on the map's 2 axes, so the boundary drawn is exactly its boundary.",
-      "note": "The helper model on 2 axes reaches {{acc2d}}% on Train, while the main model (1,280 dimensions) reaches {{accFull}}%. The gap shows how much information the 2D map loses.",
+      "note": "The 2-axis model scores {{acc2d}}%, the main model {{accFull}}% (Train set). The gap is what the 2D map leaves out.",
       "noteNoMain": "The helper model on 2 axes reaches {{acc2d}}% on Train.",
       "needClasses": "At least 2 classes need Train images to draw a boundary."
     },
     "occlusion": {
       "title": "Cover one cell at a time",
       "badge": "Real measurement",
-      "badgeHint": "Each cell is the result of re-running the real model on the image with that cell covered — not an estimate.",
-      "lead": "Cover each cell in grey and let the model guess again. If covering a cell makes the probability drop sharply, the model relies on that region.",
+      "badgeHint": "Each cell is a real model run on the image with that cell covered, not an estimate.",
+      "lead": "Cover one cell at a time and predict again. A big drop means the model relies on that cell.",
       "run": "Measure by covering each cell ({{count}} runs)",
       "running": "Running the model {{done}}/{{total}} times…",
       "error": "Could not measure: {{message}}",
       "legend": "Deep red = covering this cell lowers the probability a lot (important region). Blue = covering it raises the probability.",
       "summary": "Covering row {{row}}, column {{col}}: probability of \"{{name}}\" drops from {{from}} to {{to}}.",
-      "noDrop": "Covering any single cell does not lower the probability of \"{{name}}\" ({{prob}}) — the model does not rely on one region alone."
+      "noDrop": "Covering any cell does not lower the probability of \"{{name}}\" ({{prob}}): the model relies on no single region."
     },
     "featureMaps": {
       "title": "Inside the CNN",
       "badge": "Exact",
-      "badgeHint": "Each square shows exactly the numbers one channel of this layer computes for the image, mapped to brightness (min–max per channel).",
-      "lead": "MobileNet has over 150 layers. Each layer has many channels — each channel is a \"filter\" that lights up where it recognises a pattern.",
+      "badgeHint": "Each square shows the exact numbers one channel computes, as brightness (min–max per channel).",
+      "lead": "MobileNet has over 150 layers, each with many channels. A channel lights up where it spots a pattern.",
       "open": "Open the network's layers",
       "loading": "Running the network…",
       "error": "Could not open the layers: {{message}}",
       "layers": "Choose a layer",
       "layerButton": "Layer {{n}}",
-      "shape": "{{layer}}: {{h}} × {{w}} cells × {{c}} channels — showing the {{shown}} most active channels",
+      "shape": "{{layer}}: {{h}} × {{w}} cells × {{c}} channels, showing the {{shown}} strongest",
       "input": "Input",
       "channel": "Channel {{k}}",
       "depth": {
         "early": "Early layer (close to the image): small cells; channels usually respond to strokes, edges and colour patches.",
         "middle": "Middle layer: larger cells; channels respond to textures and parts (corners, stripes, curves).",
-        "late": "Last layer: a 7 × 7 grid with 1280 channels — abstract concepts. Averaging each channel gives exactly the 1280 numbers above."
+        "late": "Last layer: a 7 × 7 grid with 1280 channels of abstract concepts. Averaging each channel gives the 1280 numbers above."
       }
     },
     "umap": {
       "switch": "Map method",
       "badge": "Approximate",
       "badgeHint": "UMAP only tries to keep \"who is close to whom\". Distances between clusters, cluster sizes and the axes have no meaning.",
-      "lead": "UMAP arranges images so that images close together in 1280 dimensions stay close on the map. Clusters are often clearer than PCA, but this is a non-linear transformation.",
+      "lead": "UMAP places similar images close together. Clusters look clearer than PCA, but distances are not measurable.",
       "loading": "Computing the UMAP map…",
       "error": "Could not compute UMAP: {{message}}",
       "needMore": "UMAP needs at least {{count}} images with features.",
@@ -775,14 +774,14 @@
     },
     "faceBlur": {
       "label": "Blur faces before saving images",
-      "hint": "Protects your and your friends’ privacy: faces detected in uploaded or camera images are blurred right on this computer, and the unblurred image is never saved. Small, distant or side-on faces may be missed, so check your images after adding them. Turn this off if the project needs to see faces (e.g. recognising expressions).",
+      "hint": "Faces are blurred before saving; unblurred images are never stored. Small or turned faces may be missed.",
       "blurred": "Blurred {{count}} face(s).",
       "none": "No faces found to blur. If the images show people (especially far away or turned sideways), check them and delete if needed."
     },
     "use": {
       "title": "Use: try new images",
-      "lead": "Give the model images it has NEVER SEEN, from the webcam or a file, to see how well it works in real life. The Test score in step 5 tells you how often it is right; trying it live helps you find the cases where it still goes wrong.",
-      "needModel": "Train a model in step 4 first, then come back here to try new images.",
+      "lead": "Try the model on images it has never seen, from the webcam or a file, to find where it still fails.",
+      "needModel": "Train a model in step 4 to try new images.",
       "atEpoch": "Using the model at epoch {{epoch}} (same as step 5).",
       "startCamera": "Turn on camera",
       "stopCamera": "Turn off camera",
@@ -797,14 +796,14 @@
       "uncertain": "The model is not sure: the highest probability is only {{percent}}, below {{threshold}}. This image may be very different from what the model learned. Note: the model always has to pick one of the existing classes, even when the image belongs to none of them.",
       "probeLabel": "Image being tried, the model guesses {{name}}",
       "mapTitle": "Where does the new image land on the map?",
-      "mapLead": "The same PCA map as step 3. The asterisk is the image being tried: the group of dots it lands near is usually the class it gets. The map keeps only 2 of 1280 dimensions, so sometimes the asterisk looks close to one group while the model picks another.",
+      "mapLead": "The asterisk is the image being tried. The map is a 2D projection, so its position is only a guide.",
       "mapOutside": "The asterisk is outside the area of all existing images (pinned to the map edge): this image is very different from what the model learned.",
       "neighbors": "Most similar Train images",
       "neighborsLead": "Cosine similarity between the new image's vector and each Train image's vector (1 means identical).",
       "stillAlt": "Image being tried (cropped to a 224×224 square, exactly what the model receives)",
-      "privacy": "Test images are processed only on this computer and are NOT saved to the project. Since nothing is saved, faces don't need to be blurred.",
+      "privacy": "Test images are processed on this device only and are not saved.",
       "rejected": "This file can't be used: {{reason}}.",
-      "badImage": "Couldn't read this image. Try another JPEG or PNG image.",
+      "badImage": "Could not read this image. Try another JPEG or PNG.",
       "frameError": "Couldn't analyze the image: {{message}}"
     },
     "rename": {
@@ -825,7 +824,7 @@
     },
     "quick": {
       "title": "Teach the computer in 3 steps",
-      "lead": "The quick way, like Teachable Machine: collect images, press one button to train, then try it. To see how it works, open the lid of each step below — it is the same model.",
+      "lead": "Collect images, press one button to train, then try it. The steps below show what the computer does.",
       "columns": {
         "data": "1. Collect images",
         "train": "2. Train",
@@ -844,7 +843,7 @@
       "loadingModel": "Loading the image recognition model…",
       "extracting": "Turning images into vectors: {{done}}/{{total}}…",
       "training": "Training…",
-      "done": "Done! It gets {{percent}}% of the training images right.",
+      "done": "Done. The computer gets {{percent}}% of training images right.",
       "stale": "The data changed: train again.",
       "error": "Something went wrong: {{message}}",
       "needModel": "Train first, then you can try it.",
@@ -886,7 +885,7 @@
       },
       "beans-3": {
         "title": "Bean leaf doctor: healthy, angular leaf spot or rust?",
-        "description": "Bean leaves photographed in fields in Uganda so AI can detect crop disease. A real, harder problem: the classes look quite alike.",
+        "description": "Bean leaves photographed in fields in Uganda. A real, harder problem: the classes look alike.",
         "source": "© 2020 AIR Lab, Makerere University (Uganda), ibean dataset."
       }
     },
@@ -904,18 +903,18 @@
     "count": "{{images}} images · {{classes}} classes",
     "create": "Create sample project",
     "creating": "Drawing images {{done}}/{{total}}…",
-    "note": "Sample images are drawn by the computer from a fixed seed: no real people, no copyright issues, and the same images every time.",
+    "note": "Images drawn by the computer from a fixed seed: no real people, no copyright issues.",
     "error": "Could not create the sample project: {{message}}",
     "syntheticTitle": "Synthetic drawings",
     "photoTitle": "Real photos (open licence)",
-    "photoNote": "Real photos taken by other people and shared under open licences. Every image lists its author and licence (see the Pixel Microscope or click the image on the map). Images were cropped square and resized; photos with people, text or logos were removed during curation.",
+    "photoNote": "Real photos under open licences, each credited. Photos with people, text or logos were excluded.",
     "credits": "Per-image credits",
     "creditsLoading": "Loading the list…",
     "creditsError": "Could not load the credits list."
   },
   "lessons": {
     "title": "Lessons",
-    "lead": "Interactive lessons that use LUP Machine's tools directly. Each has goals, activity steps, prediction questions and a quick quiz.",
+    "lead": "Each lesson has goals, activity steps, prediction questions and a quick check.",
     "onlyVietnamese": "Lesson content is currently available in Vietnamese only.",
     "grade": "Grade {{grade}}",
     "minutes": "{{minutes}} minutes",
@@ -928,7 +927,7 @@
     "predict": "Predict first",
     "reveal": "Show answer",
     "quiz": "Quick quiz",
-    "correct": "Correct!",
+    "correct": "Correct.",
     "incorrect": "Not quite.",
     "score": "You got {{correct}}/{{total}} right.",
     "retry": "Try again",
@@ -958,12 +957,12 @@
     "actualPredicted": "Rows: actual, columns: predicted",
     "reflect": "What did I learn from this lesson?",
     "footer": "LUP Machine – vantupham.github.io/lup-machine · Lesson content licensed CC BY 4.0.",
-    "sampleNote": "Italic values in the tables are sample results from the verification run with MobileNetV2 (default settings). Students' machines may differ slightly, especially ±1 image in the confusion matrix."
+    "sampleNote": "Italic figures are sample values from a verified run. Student results may differ slightly, usually by ±1 image."
   },
   "playground": {
     "eyebrow": "Hand-written algorithms · step by step",
     "title": "Algorithm Playground",
-    "lead": "Six core machine-learning algorithms on 2-D data so every step is visible. Written from scratch in TypeScript and cross-checked against scikit-learn.",
+    "lead": "Six basic machine-learning algorithms on 2D data, run step by step.",
     "back": "Algorithm Playground",
     "exact": "Exact",
     "algos": {
@@ -971,42 +970,42 @@
         "name": "k-nearest neighbours (k-NN)",
         "summary": "A new point takes the majority label of its k closest points.",
         "concept": "neighbours · distance · small vs large k",
-        "intro": "k-NN learns no formula: it memorises all the data, then for each new point finds the k closest points (Euclidean distance) and lets them vote.",
+        "intro": "k-NN memorises all the data. For a new point it finds the k nearest points and lets them vote.",
         "exactHint": "Coloured regions are the real k-NN result at the centre of each cell of a 30×30 grid; votes are real counts."
       },
       "decision-tree": {
         "name": "Decision tree",
         "summary": "A chain of yes/no questions cuts the plane into rectangles.",
         "concept": "if–then rules · Gini / entropy · overfitting",
-        "intro": "At each node the computer tries every possible threshold on every feature and picks the question that makes the child groups purest (lowest Gini or entropy). Press \"Grow one node\" to watch the tree grow.",
+        "intro": "At each node the computer picks the question that splits the data into the purest groups (lowest Gini or entropy).",
         "exactHint": "Coloured regions are the tree's real predictions at the centre of each cell of a 40×40 grid; thresholds, sample counts and impurity are real numbers."
       },
       "linear-regression": {
         "name": "Linear regression",
         "summary": "Drag a line yourself, then compare it with the computer's line by squared error.",
         "concept": "loss function · least squares",
-        "intro": "The model is a line ŷ = w·x + b. \"Good\" means a small mean squared error (MSE). Each square's side is one error: the smaller the total area, the better the line.",
+        "intro": "The model is a line ŷ = w·x + b. The smaller the total area of the error squares, the better the line.",
         "exactHint": "MSE, the computer's line (least-squares solution) and the gradient-descent step are all real calculations."
       },
       "gradient-descent": {
         "name": "Gradient descent",
         "summary": "A ball rolls downhill on the loss surface; steps that are too long fly off.",
         "concept": "optimisation · learning rate · local minima",
-        "intro": "The gradient ∇f points in the steepest uphill direction. Each step moves against it by an amount proportional to the learning rate η. This is how neural networks are trained.",
+        "intro": "Each step moves against the gradient by an amount set by the learning rate η. Neural networks learn the same way.",
         "exactHint": "The surface has an exact formula and derivative; every dot on the path is a real computed step."
       },
       "k-means": {
         "name": "k-means clustering",
         "summary": "No labels: cluster centres move until they stop.",
         "concept": "unsupervised learning · centroids",
-        "intro": "k-means repeats two things: assign each point to its nearest centre, then move each centre to the mean of its points. The computer does not know the true labels, so the colours are clusters it found, not answers.",
+        "intro": "k-means repeats: assign points to the nearest centre, then move each centre to its group's middle. Colours are clusters it found.",
         "exactHint": "Each frame is a real step of Lloyd's algorithm; starting centres come from seeded k-means++."
       },
       "neural-network": {
         "name": "Mini neural network",
         "summary": "Add hidden layers to separate data that no straight line can.",
         "concept": "hidden layers · activation functions · backpropagation",
-        "intro": "Each hidden neuron computes a weighted sum and passes it through an activation function. Combined, neurons can draw curved boundaries. Trained with gradient descent and backpropagation.",
+        "intro": "Each neuron takes a weighted sum and passes it through an activation. Many neurons can draw curved boundaries.",
         "exactHint": "Coloured regions and per-neuron maps are the network's real outputs at each grid-cell centre; loss is the real mean cross-entropy."
       }
     },
@@ -1036,7 +1035,7 @@
     "knn": {
       "plotLabel": "Data plane; coloured regions are the class k-NN predicts with k = {{k}}",
       "k": "Number of neighbours k",
-      "kHint": "Small k: jagged boundary, easily fooled by one stray point. Large k: smooth boundary, but small classes get outvoted.",
+      "kHint": "Small k: jagged boundary, easily fooled by one stray point. Large k: smoother, but small classes get outvoted.",
       "modeProbe": "Place the point to classify",
       "probeHint": "Click the plot to place the point to classify; dashed lines connect it to its k nearest neighbours.",
       "voteTitle": "Votes of the k neighbours",
@@ -1125,11 +1124,11 @@
       "epoch": "Steps",
       "lossChart": "Loss during training",
       "lossAxis": "step {{n}}",
-      "fullBatchNote": "Each step uses all the data to compute the gradient (full-batch gradient descent). Try 1 neuron on \"Two nested circles\": the network can only draw a straight line."
+      "fullBatchNote": "Each step uses all the data to compute the gradient. Try 1 neuron on \"Two circles\": it can only draw a straight line."
     }
   },
   "tabular": {
-    "lead": "Teach the computer to predict one column of a table from the others. At every step you can see what it does with the numbers.",
+    "lead": "Teach the computer to predict one column from the others.",
     "loading": "Loading project…",
     "saveError": "Could not save: {{message}}",
     "steps": {
@@ -1157,7 +1156,7 @@
       }
     },
     "data": {
-      "empty": "Pick a sample dataset, upload a CSV file or paste a table from Excel / Google Sheets. Data stays on this device only.",
+      "empty": "Pick a sample dataset, upload a CSV file or paste a table from Excel / Google Sheets.",
       "samplesTitle": "Sample datasets",
       "rowCount": "{{n}} rows",
       "uploadTitle": "Upload a CSV file",
@@ -1203,7 +1202,7 @@
       "target-not-numeric": "Regression needs a numeric label column.",
       "too-many-classes": "The label column has {{count}} different values, too many to classify (at most 10). If it is a number, choose Regression.",
       "single-class": "The label column has only one value: there is nothing to tell apart.",
-      "too-many-categories": "Column \"{{column}}\" has {{count}} different text values (at most 20). Untick this column.",
+      "too-many-categories": "Column \"{{column}}\" has {{count}} different text values (maximum 20). Deselect this column.",
       "too-few-rows": "Only {{count}} usable rows remain; at least 10 are needed."
     },
     "quality": {
@@ -1274,7 +1273,7 @@
       "r2Test": "R² test set",
       "rmseTrain": "RMSE training set",
       "rmseTest": "RMSE test set",
-      "regressionHint": "R² = 1 means every prediction is right; 0 means no better than always guessing the mean. RMSE is a typical error, in the same unit as \"{{target}}\".",
+      "regressionHint": "R² = 1: all correct; 0: no better than guessing the mean. RMSE is the typical error, in the units of \"{{target}}\".",
       "predVsTrue": "True value (horizontal) and predicted value (vertical) on the test set; the diagonal is a perfect prediction",
       "explainTitle": "What did the model learn?",
       "explainHint": "Weights, thresholds and importances are the real numbers of the model just trained.",
@@ -1282,7 +1281,7 @@
       "logisticBinary": "Weights apply to standardised columns. A positive weight pushes the prediction towards \"{{cls}}\", a negative one away from it.",
       "logisticMulti": "Each class has its own weights (on standardised columns). The class with the highest total score wins.",
       "weightsFor": "Score of class \"{{cls}}\" (intercept {{b}})",
-      "linearHint": "Each coefficient says how much the prediction changes when that column grows by 1 unit and the others stay the same. A coefficient is not a cause-and-effect relationship.",
+      "linearHint": "Coefficient: how much the prediction changes when that column rises by 1, others fixed. It is not cause and effect.",
       "knnHint": "k-NN learns no weights: it remembers the {{n}} training rows and, for each prediction, finds the {{k}} closest ones."
     },
     "use": {
@@ -1303,8 +1302,8 @@
   "export": {
     "colab": {
       "title": "Keep learning with Python: a Google Colab notebook",
-      "tabularDescription": "Download a notebook that rebuilds exactly this model with pandas and scikit-learn, on the same data and the same training / test split, then compares the results with LUP Machine.",
-      "imageDescription": "Download a notebook holding the 1,280 feature numbers of each image (not the images themselves); it retrains the classifier layer with Keras and converts the complete model to TensorFlow Lite.",
+      "tabularDescription": "A notebook that rebuilds this model with pandas and scikit-learn on the same data and compares the results with LUP Machine.",
+      "imageDescription": "A notebook with 1,280 feature numbers per image (no original images) that retrains with Keras and exports TensorFlow Lite.",
       "step1": "Press the button below to download the .ipynb file.",
       "step2": "Open colab.research.google.com, choose File → Upload notebook and pick the downloaded file.",
       "step3": "Choose Runtime → Run all.",
@@ -1312,14 +1311,14 @@
       "done": "Notebook created ({{size}} MB). Check your Downloads folder.",
       "large": "The notebook is fairly large, so Colab may open it slowly.",
       "error": "Could not create the notebook: {{message}}",
-      "privacy": "The notebook is created on this device. LUP Machine sends no data anywhere; only if you upload the notebook to Colab yourself does its data live in your Google Drive.",
-      "textDescription": "Download a notebook that rebuilds exactly this vocabulary and model with scikit-learn, on the same sentences and the same training / test split, then compares the results with LUP Machine.",
-      "audioDescription": "Download a notebook holding the 160 feature numbers of each clip (not the audio itself) that rebuilds the same model with scikit-learn on the same training / test split, then compares the results with LUP Machine.",
-      "poseDescription": "Download a notebook holding the normalised joint coordinates of each sample (no images) that rebuilds the same model with scikit-learn on the same training / test split, then compares the results with LUP Machine."
+      "privacy": "The notebook is built on this device. Data reaches Google Drive only if you upload the notebook to Colab yourself.",
+      "textDescription": "A notebook that rebuilds the vocabulary and model with scikit-learn on the same sentences and compares the results.",
+      "audioDescription": "A notebook with 160 feature numbers per clip (no original audio) that rebuilds the model with scikit-learn and compares results.",
+      "poseDescription": "A notebook with normalised joint coordinates (no images) that rebuilds the model with scikit-learn and compares results."
     }
   },
   "text": {
-    "lead": "Teach the computer to classify Vietnamese sentences. At every step you can see how a sentence becomes numbers and which words led to the prediction.",
+    "lead": "Teach the computer to sort Vietnamese sentences, and see which words drive its guess.",
     "steps": {
       "data": "Sentences and labels",
       "check": "Split and check the data",
@@ -1333,7 +1332,7 @@
       "can-tin": "Canteen feedback: praise / complaint"
     },
     "data": {
-      "empty": "Pick a sample set, type sentences for each group yourself, or upload a CSV file. Data stays on this device only.",
+      "empty": "Pick a sample set, type sentences for each group, or upload a CSV file.",
       "sentenceCount": "{{n}} sentences",
       "writeTitle": "Type sentences",
       "writeHint": "Name each group and type one sentence per line.",
@@ -1362,7 +1361,7 @@
     "prepareErrors": {
       "too-few-sentences": "Only {{count}} usable sentences; at least 6 are needed.",
       "single-class": "At least two different groups are needed.",
-      "too-many-classes": "There are {{count}} groups, too many (at most 10). Check the label column."
+      "too-many-classes": "There are {{count}} groups, too many (maximum 10). Check the label column."
     },
     "quality": {
       "dropped": "{{count}} sentences were dropped because they are empty or have no label.",
@@ -1385,7 +1384,7 @@
       "tableCaption": "Non-zero cells of the vector",
       "term": "Word",
       "count": "Count",
-      "tfidfHint": "idf = ln((1 + {{n}}) / (1 + training sentences containing the word)) + 1: words found in many sentences (like \"và\", \"là\") get a small idf. TF-IDF = count × idf, then divided by the vector length.",
+      "tfidfHint": "idf = ln((1 + {{n}}) / (1 + training sentences with the word)) + 1. TF-IDF = count × idf, divided by the vector length.",
       "frequentTitle": "Most frequent syllables in each group (training set)",
       "frequentHint": "Frequent does not mean useful: a word common to every group does not tell groups apart."
     },
@@ -1429,7 +1428,7 @@
     }
   },
   "audio": {
-    "lead": "Teach the computer to recognise sounds. At every step you can see how sound becomes numbers: waveform → frequency spectrum → mel spectrogram → 160 numbers.",
+    "lead": "Teach the computer to recognise sounds: waveform → spectrum → mel spectrogram → 160 numbers.",
     "steps": {
       "data": "Record and collect sounds",
       "check": "Split and check the data",
@@ -1460,12 +1459,12 @@
       "newClass": "New group name",
       "addClass": "Add group",
       "error": "Could not process the audio: {{message}}",
-      "unsupported": "This browser does not support Web Audio, so sound cannot be recorded or read. Please use a recent Chrome or Edge.",
-      "privacy": "Sounds are stored only on this device as 1-second, 16 kHz clips; original files are not kept and nothing is sent anywhere."
+      "unsupported": "This browser does not support Web Audio, so it cannot record or read sound. Use a recent Chrome or Edge.",
+      "privacy": "Sound is stored on this device as 1-second, 16 kHz clips; original files are not kept."
     },
     "live": {
       "badge": "Approximate",
-      "hint": "Live spectrum computed by the browser (different window and resolution), only to show the microphone is listening; the model does not use it."
+      "hint": "The live spectrum is computed by the browser, just to show the mic is listening; the model does not use it."
     },
     "quality": {
       "silent": "{{count}} clips are almost silent: the microphone may be off or too far away.",
@@ -1487,13 +1486,13 @@
       "frameValue": "{{n}}/{{total}} (from {{ms}} ms)",
       "fftTitle": "Frequency spectrum of one frame (FFT)",
       "fftLabel": "Power spectrum of frame {{n}}",
-      "fftHint": "Take {{win}} samples (25 ms), multiply by a Hann window to soften both ends, then use the fast Fourier transform (FFT, {{nfft}} points) to find which frequencies the frame contains: {{bins}} values from 0 to 8 kHz.",
+      "fftHint": "Take {{win}} samples (25 ms), apply a Hann window, then an FFT ({{nfft}} points): {{bins}} frequency values from 0 to 8 kHz.",
       "melTitle": "Mel spectrogram",
       "melLabel": "Mel spectrogram: horizontal axis is time, vertical axis is frequency band",
-      "melHint": "Repeat step 2 for all {{frames}} frames (10 ms apart), group frequencies into {{bands}} mel bands (from about {{low}} Hz to {{high}} Hz; low bands are narrow and high bands wide, like human hearing) and convert to decibels. Brighter is louder. Dashed lines split 4 time segments.",
+      "melHint": "Repeat step 2 for {{frames}} frames, group frequencies into {{bands}} mel bands (like human hearing) and convert to dB. Brighter is louder.",
       "poolTitle": "The 160 numbers the model receives",
       "poolLabel": "Average loudness of each band in each time segment",
-      "poolHint": "Average each mel band within {{segments}} time segments: {{bands}} × {{segments}} = {{total}} numbers. Columns are time segments (left to right), rows are frequency bands (low at the bottom)."
+      "poolHint": "Average each mel band over {{segments}} segments: {{bands}} × {{segments}} = {{total}} numbers. Columns are time, rows are bands (low at the bottom)."
     },
     "models": {
       "logistic": {
@@ -1520,14 +1519,14 @@
       "play": "Play",
       "whyHint": "Contribution = the cell's standardised value × weight; together with the fixed part they add up exactly to the group's score.",
       "contributionLabel": "Contribution of each spectrogram cell",
-      "contributionHint": "Score of \"{{cls}}\" relative to the average over groups = {{base}} (fixed part) + sum of cells = {{total}}. Orange pushes towards this group, blue pulls away.",
+      "contributionHint": "Score of \"{{cls}}\" vs. the average = {{base}} (fixed part) + sum of cells = {{total}}. Orange pushes towards this group, blue pulls away.",
       "distance": "{{d}} dB away",
       "playNeighbour": "Play this clip",
       "knnHint": "Press play to hear the most similar training clips the computer relied on."
     }
   },
   "pose": {
-    "lead": "Teach the computer to recognise body poses or hand gestures. A detection model finds the joint coordinates; only those numbers are stored and used for learning — no images are kept.",
+    "lead": "Teach the computer body poses or hand gestures. Only joint coordinates are stored, never images.",
     "steps": {
       "data": "Record poses",
       "check": "Split and check the data",
@@ -1598,9 +1597,9 @@
         "starting": "Starting the camera…",
         "loading-model": "Loading the detection model (needs internet the first time)…",
         "ready": "Detecting…",
-        "denied": "Camera access is not allowed. Click the lock icon in the address bar to allow it.",
+        "denied": "Camera access is blocked. Click the lock icon in the address bar to allow it.",
         "unavailable": "No camera found on this device.",
-        "model-error": "Could not load the detection model. Check the internet connection and try again."
+        "model-error": "Could not load the recognition model. Check your connection and try again."
       }
     },
     "data": {
@@ -1619,7 +1618,7 @@
       "cameraOn": "Turn on camera",
       "cameraOff": "Turn off camera",
       "handGuide": "Put your hand inside the dashed square; the model only looks there.",
-      "go": "Hold still!",
+      "go": "Hold still",
       "poseCount": "{{n}} samples",
       "recordOne": "Record 1 sample",
       "recordBurst": "Record {{n}} samples in a row",
@@ -1630,7 +1629,7 @@
       "deletePose": "Delete this sample",
       "confirmDeleteClass": "Delete group \"{{name}}\" and all its pose samples?",
       "error": "Could not process: {{message}}",
-      "privacy": "Only joint coordinates are stored on this device; photos and camera frames are not saved and nothing is sent anywhere."
+      "privacy": "Only joint coordinates are stored; camera images and frames are not."
     },
     "quality": {
       "unusable": "{{count}} samples cannot be used because the shoulders and hips (or wrist and middle-finger knuckle) are not clearly visible.",
@@ -1691,8 +1690,8 @@
       "live": "Live recognition with the camera",
       "empty": "Turn on the camera or upload a photo to try.",
       "badImage": "Could not read the image.",
-      "whyHint": "A joint's contribution = (normalised value × weight) for x plus for y; all joints plus the fixed part add up exactly to the group's score.",
-      "contributionHint": "On the skeleton: orange joints push towards \"{{cls}}\", blue ones pull away; bigger dots matter more. Score relative to the average over groups = {{base}} (fixed part) + sum over joints = {{total}}.",
+      "whyHint": "Contribution = (normalised value × weight) for x and y; added to the fixed part, they give the group score exactly.",
+      "contributionHint": "Orange joints push towards \"{{cls}}\", blue pull away; bigger dots matter more. Score = {{base}} + sum of joints = {{total}}.",
       "neighbors": "The {{k}} closest training samples belong to: {{labels}}."
     }
   },

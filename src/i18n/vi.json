@@ -24,8 +24,8 @@
   "home": {
     "eyebrow": "Dạy và học AI cho THCS · THPT",
     "title": "Đừng chỉ xem AI đoán đúng.",
-    "titleMark": "Hãy nhìn nó làm thế nào.",
-    "lead": "Tự dạy cho máy tính bằng dữ liệu của em, rồi mở nắp từng bước: ảnh biến thành con số ra sao, máy học như thế nào, vì sao nó đoán sai.",
+    "titleMark": "Xem nó làm thế nào.",
+    "lead": "Tự dạy máy bằng dữ liệu của em, rồi xem từng bước máy học thế nào.",
     "pipelineTitle": "Sáu bước, bước nào cũng mở nắp được",
     "steps": {
       "data": "Dữ liệu",
@@ -51,12 +51,11 @@
       "honestBody": "Mỗi hình minh họa đều ghi rõ là chính xác hay xấp xỉ, kèm cách nó được tạo ra.",
       "openTitle": "Mã nguồn mở, miễn phí",
       "openBody": "Giáo viên có thể xem, góp ý và đóng góp bài học trên GitHub."
-    },
-    "status": "Phiên bản {{version}} · mã nguồn mở, chạy hoàn toàn trên trình duyệt"
+    }
   },
   "studio": {
     "title": "Xưởng mô hình",
-    "lead": "Mỗi dự án là một thí nghiệm. Dự án được lưu ngay trên trình duyệt của máy này.",
+    "lead": "Mỗi dự án là một thí nghiệm.",
     "newProject": "Dự án mới",
     "nameLabel": "Tên dự án",
     "namePlaceholder": "Ví dụ: Phân loại rác lớp 7A",
@@ -96,14 +95,14 @@
   },
   "quickStart": {
     "title": "Em muốn dạy máy nhận ra gì?",
-    "lead": "Chọn một loại dữ liệu là vào làm ngay, không cần đặt tên trước. Mọi thứ được lưu trên máy này.",
+    "lead": "Bấm một loại dữ liệu là vào làm ngay.",
     "popular": "Hay dùng nhất",
     "start": "Bắt đầu",
     "startAria": "Tạo dự án {{type}} mới",
     "creating": "Đang tạo…",
     "creatingFromLink": "Đang tạo dự án mới…",
     "error": "Không tạo được dự án: {{message}}",
-    "badType": "Không có loại dự án \"{{slug}}\". Hãy chọn một loại bên dưới.",
+    "badType": "Không có loại dự án \"{{slug}}\". Chọn một loại bên dưới.",
     "backToStudio": "Về Xưởng mô hình",
     "recentTitle": "Tiếp tục dự án gần đây",
     "recentAll": "Xem tất cả dự án",
@@ -143,7 +142,7 @@
     "exporting": "Đang xuất…",
     "exportError": "Không xuất được: {{message}}",
     "importTitle": "Mở tệp dự án hoặc bài tập",
-    "importLead": "Dự án chỉ lưu trên trình duyệt của máy này. Bấm \"Xuất .lup\" để mang dự án sang máy khác, gửi cho thầy cô hoặc cất giữ, rồi mở lại tệp ở đây. Gói bài tập (.lupa) của thầy cô cũng mở ở đây.",
+    "importLead": "Mở tệp .lup từ máy khác, hoặc gói bài tập .lupa thầy cô gửi.",
     "importLabel": "Chọn tệp .lup hoặc .lupa",
     "importing": "Đang mở tệp…",
     "imported": "Đã mở dự án \"{{name}}\".",
@@ -154,7 +153,7 @@
   },
   "modelCard": {
     "title": "Thẻ mô hình",
-    "lead": "Trả lời 5 câu hỏi để người khác hiểu mô hình của em: dùng vào việc gì, học từ dữ liệu nào, tốt đến đâu và khi nào không nên tin nó. Thẻ đi kèm tệp .lup và bài nộp.",
+    "lead": "Trả lời 5 câu hỏi để người khác biết mô hình làm gì, khi nào không nên tin.",
     "backToProject": "Quay lại dự án",
     "authors": "Người làm",
     "authorsPlaceholder": "Tên em hoặc tên nhóm (không bắt buộc)",
@@ -213,12 +212,12 @@
     "factsExact": "Chính xác",
     "factsExactHint": "Đếm thẳng từ dữ liệu và nhật ký huấn luyện đã lưu của dự án.",
     "loading": "Đang tải thẻ mô hình…",
-    "factsRunOutdated": "Dữ liệu đã thay đổi sau lần huấn luyện này (thêm / xóa ảnh hoặc đổi ngăn). Hãy huấn luyện lại trước khi ghi độ chính xác."
+    "factsRunOutdated": "Dữ liệu đã đổi sau lần huấn luyện này. Huấn luyện lại trước khi ghi độ chính xác."
   },
   "classroom": {
     "teacher": {
       "title": "Góc giáo viên",
-      "lead": "Tạo gói bài tập rồi gửi cho học sinh qua Zalo, Drive, USB hay hệ thống học tập. Không cần tài khoản, không có máy chủ: học sinh mở gói ở Xưởng mô hình, làm bài rồi gửi lại tệp bài nộp."
+      "lead": "Tạo gói bài tập, gửi học sinh qua Zalo, Drive hay USB. Không cần tài khoản."
     },
     "create": {
       "title": "Tạo gói bài tập (.lupa)",
@@ -248,7 +247,7 @@
       "creating": "Đang tạo…",
       "created": "Đã tạo {{file}}. Gửi tệp này cho học sinh.",
       "error": "Không tạo được gói: {{message}}",
-      "titleRequired": "Hãy đặt tên bài.",
+      "titleRequired": "Cần đặt tên bài.",
       "criterionRequired": "Mỗi tiêu chí cần có tên.",
       "questionRequired": "Câu hỏi không được để trống."
     },
@@ -288,7 +287,7 @@
       "studentsPlaceholder": "Ví dụ: Nguyễn An, Trần Bình",
       "classLabel": "Lớp",
       "includeData": "Kèm dữ liệu gốc (ảnh, âm thanh, bảng dữ liệu…)",
-      "includeDataHint": "Mặc định KHÔNG kèm để bảo vệ quyền riêng tư. Bài nộp vẫn có số mẫu, nhật ký huấn luyện, thẻ mô hình và câu trả lời. Chỉ tick khi thầy cô yêu cầu.",
+      "includeDataHint": "Không kèm thì bài nộp vẫn có nhật ký, thẻ mô hình và câu trả lời. Chỉ chọn khi thầy cô yêu cầu.",
       "checklist": "Trước khi nộp",
       "blockers": {
         "students": "Ghi họ tên học sinh.",
@@ -302,7 +301,7 @@
       "submitting": "Đang tạo bài nộp…",
       "submitted": "Đã tạo {{file}}. Gửi tệp này cho thầy cô.",
       "submitError": "Không tạo được bài nộp: {{message}}",
-      "checkError": "Không kiểm tra được điều kiện nộp bài. Hãy tải lại trang."
+      "checkError": "Không kiểm tra được điều kiện nộp bài. Tải lại trang để thử lại."
     }
   },
   "grading": {
@@ -312,7 +311,7 @@
       "grade": "Chấm bài"
     },
     "importTitle": "Nhận bài nộp (.lups)",
-    "importLead": "Chọn một hoặc nhiều tệp bài nộp học sinh gửi. Bài nộp được lưu trên máy này. Học sinh nộp lại thì bài mới thay bài cũ, điểm đã chấm vẫn giữ.",
+    "importLead": "Chọn các tệp bài nộp. Bài nộp lại sẽ thay bài cũ, điểm đã chấm được giữ.",
     "importLabel": "Chọn tệp .lups",
     "importing": "Đang đọc tệp…",
     "outcome": {
@@ -385,14 +384,14 @@
   },
   "ethics": {
     "title": "Phòng đạo đức AI",
-    "lead": "AI học từ dữ liệu, nên dữ liệu thiếu thì AI có thể làm kém với một nhóm mà con số \"chính xác chung\" không cho thấy. Ở đây em tự làm thí nghiệm, xem dữ liệu của em đi đâu, và thảo luận những tình huống thật.",
+    "lead": "Dữ liệu thiếu có thể khiến AI làm kém với một nhóm. Tự làm thí nghiệm để thấy điều đó.",
     "exact": "Chính xác",
     "exactHint": "Mô hình thật được huấn luyện ngay trên trang; điểm và đường ranh giới là kết quả tính thật.",
     "stepsLabel": "Các bước thí nghiệm",
     "resample": "Lấy mẫu lại ({{n}}/{{total}})",
     "predictTitle": "Dự đoán trước",
     "predictRight": "Em đoán đúng: mô hình kém hơn hẳn với lá Miền núi.",
-    "predictWrong": "Chưa đúng: mô hình kém hơn hẳn với lá Miền núi. Hãy xem vì sao.",
+    "predictWrong": "Chưa đúng: mô hình kém hơn hẳn với lá Miền núi. Xem tiếp để biết vì sao.",
     "openStudio": "Mở Xưởng mô hình",
     "regions": {
       "lowland": "Đồng bằng",
@@ -423,7 +422,7 @@
       "leaves": "Rời máy em khi nào?"
     },
     "lockedStart": "Bấm \"Huấn luyện\" để bắt đầu.",
-    "lockedPredict": "Hãy dự đoán và xem độ chính xác theo từng vùng trước khi sang bước 2."
+    "lockedPredict": "Dự đoán và xem độ chính xác theo vùng trước khi sang bước 2."
   },
   "about": {
     "title": "Giới thiệu & Quyền riêng tư",
@@ -437,7 +436,7 @@
       "Camera và micro chỉ bật khi em cho phép, và tắt khi em rời trang."
     ],
     "sharedTitle": "Dùng máy chung ở phòng tin?",
-    "sharedBody": "Hãy xóa dữ liệu trước khi rời máy để bạn khác không xem được dự án của em.",
+    "sharedBody": "Xóa dữ liệu trước khi rời máy để bạn khác không xem được dự án của em.",
     "deleteAll": "Xóa toàn bộ dữ liệu trên máy này",
     "confirmDeleteAll": "Xóa TOÀN BỘ dự án LUP Machine trên trình duyệt này? Không thể hoàn tác.",
     "deletedAll": "Đã xóa toàn bộ dữ liệu.",
@@ -454,7 +453,7 @@
     "privacy": "Không máy chủ · Không theo dõi · Dữ liệu ở lại trên máy",
     "offline": {
       "installing": "Đang lưu sẵn ứng dụng và mô hình để dùng khi mất mạng…",
-      "ready": "Đã lưu sẵn trên máy này — dùng được cả khi mất mạng",
+      "ready": "Đã lưu sẵn trên máy này, dùng được cả khi mất mạng.",
       "error": "Chưa lưu sẵn được để dùng khi mất mạng (ứng dụng vẫn chạy bình thường khi có mạng)"
     }
   },
@@ -473,7 +472,7 @@
     },
     "data": {
       "title": "Dữ liệu",
-      "lead": "Mỗi lớp là một nhóm em muốn máy phân biệt. Ảnh ở ngăn Dạy dùng để học, ảnh ở ngăn Kiểm tra được giấu đi để chấm điểm công bằng.",
+      "lead": "Mỗi lớp là một nhóm cần phân biệt. Ngăn Dạy để học, ngăn Kiểm tra để chấm điểm.",
       "addClass": "Thêm lớp",
       "newClassPlaceholder": "Tên lớp mới, ví dụ: Giấy",
       "newClassLabel": "Tên lớp mới",
@@ -521,12 +520,12 @@
       "done": "Xong",
       "captured": "Đã chụp {{count}} ảnh",
       "starting": "Đang bật camera…",
-      "denied": "Em chưa cho phép dùng camera. Hãy bấm biểu tượng ổ khóa trên thanh địa chỉ để cho phép, rồi thử lại.",
+      "denied": "Em chưa cho phép dùng camera. Bấm biểu tượng ổ khóa trên thanh địa chỉ để cho phép, rồi thử lại.",
       "unavailable": "Không tìm thấy camera, hoặc trình duyệt không hỗ trợ. Em có thể dùng \"Tải ảnh lên\".",
       "privacy": "Hình ảnh chỉ được xử lý trên máy này.",
       "full": "Lớp này đã đủ {{max}} ảnh.",
-      "blurError": "Không làm mờ được khuôn mặt nên chưa lưu ảnh này. Hãy kiểm tra kết nối rồi thử lại, hoặc tắt làm mờ.",
-      "snapError": "Không chụp được khung hình. Hãy thử lại."
+      "blurError": "Không làm mờ được khuôn mặt nên chưa lưu ảnh này. Kiểm tra kết nối rồi thử lại, hoặc tắt làm mờ.",
+      "snapError": "Không chụp được khung hình. Thử chụp lại."
     },
     "quality": {
       "title": "Kiểm tra dữ liệu",
@@ -588,7 +587,7 @@
       "error": "Không trích được đặc trưng: {{message}}",
       "needTwo": "Cần ít nhất 2 ảnh có vector để vẽ bản đồ.",
       "mapTitle": "Bản đồ dữ liệu 2D",
-      "mapLead": "Mỗi chấm là một ảnh. Chấm đặc: ảnh Dạy. Chấm có vòng: ảnh Kiểm tra. Bấm vào chấm để xem ảnh.",
+      "mapLead": "Mỗi chấm là một ảnh. Chấm đặc: ảnh Dạy. Chấm có vòng: ảnh Kiểm tra. Bấm chấm để xem ảnh.",
       "mapExact": "Chính xác (phép chiếu PCA)",
       "mapExactHint": "Vị trí mỗi chấm được tính đúng bằng phép chiếu tuyến tính PCA.",
       "mapKept": "Bản đồ giữ được {{percent}}% độ biến thiên của 1.280 chiều. Phần còn lại bị ẩn, nên hai chấm gần nhau trên bản đồ chưa chắc thật sự gần nhau.",
@@ -605,7 +604,7 @@
       "title": "Huấn luyện",
       "leadExplore": "Máy bắt đầu bằng cách đoán bừa. Sau mỗi lượt (epoch), nó so với đáp án, rồi chỉnh các con số bên trong một chút để lần sau đoán đúng hơn.",
       "leadExpert": "Tầng phân loại: logit = W·x + b (W: {{classes}} × 1280), xác suất = softmax(logit), hàm mất mát cross-entropy, tối ưu bằng Adam. Khởi tạo Glorot và trộn dữ liệu theo seed nên kết quả tái lập được.",
-      "needFeatures": "Hãy làm bước 3 (Biểu diễn) trước.",
+      "needFeatures": "Cần làm bước 3 (Biểu diễn) trước.",
       "needClasses": "Cần ít nhất 2 lớp có ảnh Dạy.",
       "speed": "Tốc độ",
       "speeds": {
@@ -626,24 +625,24 @@
       "replay": "Phát lại: epoch {{epoch}}",
       "replayHint": "Kéo để xem mô hình ở từng thời điểm. Epoch 0 là lúc máy còn đoán bừa.",
       "chartAccuracy": "Độ chính xác (%)",
-      "chartLoss": "Mất mát (loss) — càng thấp càng tốt",
+      "chartLoss": "Mất mát (loss): càng thấp càng tốt",
       "seriesTrain": "Tập Dạy",
       "seriesTest": "Tập Kiểm tra",
       "notSaved": "Mỗi lần huấn luyện được ghi vào Nhật ký thí nghiệm bên dưới.",
-      "stale": "Các lớp đã thay đổi sau lần huấn luyện trước. Hãy huấn luyện lại."
+      "stale": "Các lớp đã đổi sau lần huấn luyện trước. Cần huấn luyện lại."
     },
     "evaluate": {
       "title": "Đánh giá",
-      "empty": "Hãy huấn luyện ở bước 4 trước.",
+      "empty": "Huấn luyện ở bước 4 để xem kết quả.",
       "atEpoch": "Kết quả tại epoch {{epoch}}",
       "trainScore": "Điểm trên bài đã học",
       "testScore": "Điểm trên bài chưa học",
       "trainHint": "Tập Dạy",
-      "testHint": "Tập Kiểm tra — điểm đáng tin hơn",
+      "testHint": "Tập Kiểm tra: điểm đáng tin hơn",
       "noTest": "Chưa có ảnh Kiểm tra nên chưa có điểm khách quan.",
       "overfit": "Điểm bài đã học cao hơn hẳn điểm bài chưa học: mô hình đang \"học thuộc\" mà chưa \"hiểu bài\" (quá khớp). Thử thêm ảnh đa dạng hơn.",
       "matrixTitle": "Ma trận nhầm lẫn",
-      "matrixLead": "Hàng: lớp thật. Cột: lớp máy đoán. Ô trên đường chéo là đoán đúng. Bấm vào ô để xem đó là những ảnh nào.",
+      "matrixLead": "Hàng: lớp thật. Cột: lớp máy đoán. Đường chéo là đoán đúng. Bấm ô để xem ảnh.",
       "matrixOn": "Xem trên",
       "actual": "Thật",
       "predicted": "Máy đoán",
@@ -661,7 +660,7 @@
     },
     "experiments": {
       "title": "Nhật ký thí nghiệm",
-      "lead": "Mỗi lần huấn luyện được ghi lại. Chọn vài lần để so sánh, giống như nhà khoa học ghi chép thí nghiệm.",
+      "lead": "Mỗi lần huấn luyện được ghi lại. Chọn vài lần để so sánh.",
       "empty": "Chưa có lần huấn luyện nào.",
       "number": "Lần",
       "time": "Thời gian",
@@ -688,15 +687,15 @@
     },
     "explain": {
       "title": "Vì sao mô hình đoán như vậy?",
-      "needModel": "Hãy huấn luyện ở bước 4 để xem giải thích.",
+      "needModel": "Huấn luyện ở bước 4 để xem giải thích.",
       "probabilities": "Xác suất mô hình tính cho từng lớp",
       "heatmapTitle": "Mô hình nhìn vào đâu?",
       "heatmapFor": "Bằng chứng cho lớp",
       "heatmapLegend": "Đỏ: vùng ủng hộ lớp này · Xanh: vùng chống lại",
       "heatmapBadge": "Xấp xỉ về vị trí",
-      "heatmapBadgeHint": "Giá trị mỗi ô được tính chính xác, nhưng mỗi ô của lưới 7×7 thực ra \"nhìn\" một vùng rộng hơn ô vuông 32×32 điểm ảnh được tô.",
+      "heatmapBadgeHint": "Giá trị mỗi ô là chính xác, nhưng mỗi ô 7×7 thực ra \"nhìn\" một vùng rộng hơn ô 32×32 được tô.",
       "heatmapHowTitle": "Hình này được tạo thế nào?",
-      "heatmapHowBody": "MobileNetV2 chia ảnh thành lưới 7 × 7 ô, mỗi ô có 1.280 con số. Với lớp đang chọn, mỗi ô được tính điểm = Σ (trọng số của lớp × con số của ô). Trung bình điểm của 49 ô cộng với độ lệch b đúng bằng logit của lớp đó — nên bản đồ cho biết chính xác mỗi ô góp bao nhiêu vào quyết định (phương pháp CAM, trùng với Grad-CAM cho mô hình này).",
+      "heatmapHowBody": "MobileNetV2 chia ảnh thành lưới 7 × 7 ô, mỗi ô có 1.280 con số. Với lớp đang chọn, mỗi ô được tính điểm = Σ (trọng số của lớp × con số của ô). Trung bình điểm của 49 ô cộng với độ lệch b đúng bằng logit của lớp đó, nên bản đồ cho biết chính xác mỗi ô góp bao nhiêu vào quyết định (phương pháp CAM, trùng với Grad-CAM cho mô hình này).",
       "heatmapCheck": "Kiểm tra: trung bình 49 ô ({{mean}}) + b ({{bias}}) = {{sum}} ≈ logit {{logit}}",
       "loading": "Đang tính bản đồ…",
       "error": "Không tính được bản đồ: {{message}}",
@@ -713,7 +712,7 @@
     },
     "threshold": {
       "title": "Ngưỡng tin cậy",
-      "lead": "Chỉ chấp nhận câu trả lời khi mô hình đủ chắc chắn; còn lại mô hình trả lời \"Không chắc chắn\".",
+      "lead": "Mô hình chỉ trả lời khi đủ chắc chắn; còn lại nó nói \"Không chắc chắn\".",
       "label": "Ngưỡng: {{percent}}%",
       "summary": "Trả lời {{answered}}/{{total}} ảnh ({{coverage}}%) · đúng {{accuracy}} trong số đã trả lời",
       "noneAnswered": "Không có ảnh nào đạt ngưỡng.",
@@ -727,46 +726,46 @@
       "toggle": "Hiện ranh giới quyết định",
       "badge": "Chính xác cho mô hình 2D",
       "badgeHint": "Đây là một mô hình phụ chỉ học trên 2 trục của bản đồ, nên ranh giới vẽ ra đúng là ranh giới của nó.",
-      "note": "Mô hình phụ học trên 2 trục đạt {{acc2d}}% trên tập Dạy, còn mô hình chính (1.280 chiều) đạt {{accFull}}%. Chênh lệch cho thấy bản đồ 2D đã bỏ mất bao nhiêu thông tin.",
+      "note": "Mô hình phụ trên 2 trục đạt {{acc2d}}%, mô hình chính đạt {{accFull}}% (tập Dạy). Chênh lệch là phần bản đồ 2D bỏ mất.",
       "noteNoMain": "Mô hình phụ học trên 2 trục đạt {{acc2d}}% trên tập Dạy.",
       "needClasses": "Cần ít nhất 2 lớp có ảnh Dạy để vẽ ranh giới."
     },
     "occlusion": {
       "title": "Che thử từng ô",
       "badge": "Phép đo thật",
-      "badgeHint": "Mỗi ô là kết quả chạy lại mô hình thật trên ảnh đã bị che ô đó — không phải ước lượng.",
-      "lead": "Lần lượt che từng ô bằng màu xám rồi cho mô hình đoán lại. Ô nào che vào mà xác suất tụt mạnh thì mô hình đang dựa vào vùng đó.",
+      "badgeHint": "Mỗi ô là kết quả chạy lại mô hình thật trên ảnh bị che ô đó, không phải ước lượng.",
+      "lead": "Che từng ô rồi cho mô hình đoán lại. Xác suất tụt mạnh: mô hình dựa vào ô đó.",
       "run": "Đo bằng cách che từng ô ({{count}} lần)",
       "running": "Đang chạy mô hình {{done}}/{{total}} lần…",
       "error": "Không đo được: {{message}}",
       "legend": "Đỏ đậm = che ô này làm xác suất giảm nhiều (vùng quan trọng). Xanh = che vào xác suất lại tăng.",
       "summary": "Che ô hàng {{row}}, cột {{col}}: xác suất \"{{name}}\" giảm từ {{from}} xuống {{to}}.",
-      "noDrop": "Che ô nào cũng không làm xác suất \"{{name}}\" ({{prob}}) giảm — mô hình không dựa vào riêng vùng nào."
+      "noDrop": "Che ô nào xác suất \"{{name}}\" ({{prob}}) cũng không giảm: mô hình không dựa vào riêng vùng nào."
     },
     "featureMaps": {
       "title": "Bên trong mạng CNN",
       "badge": "Chính xác",
-      "badgeHint": "Mỗi ô vuông là đúng các con số mà một kênh của tầng này tính ra cho ảnh, chỉ đổi thành độ sáng (min–max theo từng kênh).",
-      "lead": "MobileNet có hơn 150 tầng. Mỗi tầng có nhiều kênh — mỗi kênh là một \"bộ lọc\" sáng lên ở nơi nó nhận ra một mẫu hình.",
+      "badgeHint": "Mỗi ô vuông là đúng các con số một kênh tính ra, đổi thành độ sáng (min–max theo kênh).",
+      "lead": "MobileNet có hơn 150 tầng, mỗi tầng nhiều kênh. Mỗi kênh sáng ở nơi nó nhận ra một mẫu hình.",
       "open": "Mở các tầng của mạng",
       "loading": "Đang chạy mạng…",
       "error": "Không mở được các tầng: {{message}}",
       "layers": "Chọn tầng",
       "layerButton": "Tầng {{n}}",
-      "shape": "{{layer}}: {{h}} × {{w}} ô × {{c}} kênh — hiển thị {{shown}} kênh hoạt động mạnh nhất",
+      "shape": "{{layer}}: {{h}} × {{w}} ô × {{c}} kênh, hiện {{shown}} kênh mạnh nhất",
       "input": "Ảnh vào",
       "channel": "Kênh {{k}}",
       "depth": {
         "early": "Tầng đầu (gần ảnh): ô còn nhỏ, các kênh thường phản ứng với nét, cạnh, vùng màu.",
         "middle": "Tầng giữa: ô to hơn, các kênh phản ứng với kết cấu và bộ phận (góc, vân, đường cong).",
-        "late": "Tầng cuối: lưới 7 × 7 ô với 1280 kênh — các khái niệm trừu tượng. Lấy trung bình mỗi kênh ra chính là 1280 con số ở trên."
+        "late": "Tầng cuối: lưới 7 × 7 ô với 1280 kênh, là các khái niệm trừu tượng. Trung bình mỗi kênh chính là 1280 con số ở trên."
       }
     },
     "umap": {
       "switch": "Cách vẽ bản đồ",
       "badge": "Xấp xỉ",
       "badgeHint": "UMAP chỉ cố giữ quan hệ \"ai gần ai\". Khoảng cách giữa các cụm, kích thước cụm và các trục không có ý nghĩa.",
-      "lead": "UMAP sắp các ảnh sao cho ảnh nào gần nhau trong 1280 chiều thì cũng gần nhau trên bản đồ. Cụm thường rõ hơn PCA, nhưng đây là phép biến đổi phi tuyến.",
+      "lead": "UMAP đặt các ảnh giống nhau gần nhau. Cụm rõ hơn PCA, nhưng khoảng cách không đo được.",
       "loading": "Đang tính bản đồ UMAP…",
       "error": "Không tính được UMAP: {{message}}",
       "needMore": "Cần ít nhất {{count}} ảnh có đặc trưng để dùng UMAP.",
@@ -775,14 +774,14 @@
     },
     "faceBlur": {
       "label": "Làm mờ khuôn mặt trước khi lưu ảnh",
-      "hint": "Bảo vệ quyền riêng tư của em và bạn bè: khuôn mặt được phát hiện trong ảnh tải lên hoặc chụp từ camera sẽ bị làm mờ ngay trên máy, ảnh chưa làm mờ không được lưu. Khuôn mặt nhỏ, ở xa hoặc quay nghiêng có thể không được phát hiện, hãy xem lại ảnh sau khi thêm. Tắt đi nếu dự án cần nhìn khuôn mặt (ví dụ nhận biểu cảm).",
+      "hint": "Khuôn mặt được làm mờ trước khi lưu; ảnh chưa làm mờ không được lưu. Mặt nhỏ hoặc quay nghiêng có thể bị sót.",
       "blurred": "Đã làm mờ {{count}} khuôn mặt.",
       "none": "Không thấy khuôn mặt nào để làm mờ. Nếu ảnh có người (nhất là đứng xa, quay nghiêng), hãy xem lại ảnh và xóa nếu cần."
     },
     "use": {
       "title": "Sử dụng: thử với ảnh mới",
-      "lead": "Đưa cho mô hình những ảnh nó CHƯA TỪNG THẤY, từ webcam hoặc tệp, để xem nó dùng được ngoài đời đến đâu. Điểm Kiểm tra ở bước 5 cho biết mô hình đúng bao nhiêu phần trăm; thử trực tiếp giúp em tìm ra những trường hợp nó còn sai.",
-      "needModel": "Hãy huấn luyện mô hình ở bước 4 trước, rồi quay lại đây để thử với ảnh mới.",
+      "lead": "Thử mô hình với ảnh nó chưa từng thấy, từ webcam hoặc tệp, để tìm chỗ nó còn sai.",
+      "needModel": "Huấn luyện mô hình ở bước 4 để thử với ảnh mới.",
       "atEpoch": "Đang dùng mô hình ở epoch {{epoch}} (giống bước 5).",
       "startCamera": "Bật camera",
       "stopCamera": "Tắt camera",
@@ -797,14 +796,14 @@
       "uncertain": "Mô hình chưa chắc chắn: xác suất cao nhất chỉ {{percent}}, dưới mức {{threshold}}. Có thể ảnh này khác hẳn những ảnh mô hình đã học. Lưu ý: mô hình luôn phải chọn một trong các lớp đã có, kể cả khi ảnh không thuộc lớp nào.",
       "probeLabel": "Ảnh đang thử, mô hình đoán {{name}}",
       "mapTitle": "Ảnh mới nằm ở đâu trên bản đồ?",
-      "mapLead": "Cùng bản đồ PCA như bước 3. Dấu hoa thị là ảnh đang thử: nó rơi gần nhóm chấm nào thì thường được đoán là lớp đó. Bản đồ chỉ giữ 2 trong 1280 chiều nên đôi khi dấu hoa thị trông gần nhóm này mà mô hình lại chọn nhóm khác.",
+      "mapLead": "Dấu hoa thị là ảnh đang thử. Bản đồ là hình chiếu 2D nên vị trí chỉ để tham khảo.",
       "mapOutside": "Dấu hoa thị nằm ngoài vùng của mọi ảnh đã có (được ghim vào mép bản đồ): ảnh này rất khác những ảnh mô hình đã học.",
       "neighbors": "Ảnh Dạy giống nhất",
       "neighborsLead": "Độ tương đồng cosine giữa vector của ảnh mới và vector của từng ảnh Dạy (1 là giống hệt).",
       "stillAlt": "Ảnh đang thử (đã cắt vuông 224×224 như mô hình nhận)",
-      "privacy": "Ảnh thử chỉ được xử lý trên máy này và KHÔNG được lưu vào dự án. Vì không lưu nên không cần làm mờ khuôn mặt.",
+      "privacy": "Ảnh thử chỉ xử lý trên máy này, không lưu vào dự án.",
       "rejected": "Không dùng được tệp này: {{reason}}.",
-      "badImage": "Không đọc được ảnh này. Hãy thử một ảnh JPEG hoặc PNG khác.",
+      "badImage": "Không đọc được ảnh này. Thử một ảnh JPEG hoặc PNG khác.",
       "frameError": "Không phân tích được ảnh: {{message}}"
     },
     "rename": {
@@ -825,7 +824,7 @@
     },
     "quick": {
       "title": "Dạy máy trong 3 bước",
-      "lead": "Làm nhanh như Teachable Machine: thu ảnh, bấm một nút để máy học, rồi thử ngay. Muốn biết máy làm thế nào, mở nắp từng bước ở phía dưới — cùng một mô hình.",
+      "lead": "Thu ảnh, bấm một nút để máy học, rồi thử ngay. Các bước bên dưới cho thấy máy làm gì.",
       "columns": {
         "data": "1. Thu ảnh",
         "train": "2. Cho máy học",
@@ -844,7 +843,7 @@
       "loadingModel": "Đang tải mô hình nhận dạng ảnh…",
       "extracting": "Đang biến ảnh thành vector: {{done}}/{{total}}…",
       "training": "Máy đang học…",
-      "done": "Xong! Máy đoán đúng {{percent}}% ảnh dạy.",
+      "done": "Xong. Máy đoán đúng {{percent}}% ảnh dạy.",
       "stale": "Dữ liệu vừa đổi: hãy huấn luyện lại.",
       "error": "Có lỗi: {{message}}",
       "needModel": "Huấn luyện xong mới xem thử được.",
@@ -886,7 +885,7 @@
       },
       "beans-3": {
         "title": "Bác sĩ lá đậu: khỏe, đốm góc hay gỉ sắt?",
-        "description": "Ảnh lá đậu chụp ngoài đồng ở Uganda để AI phát hiện bệnh cây trồng. Bài toán thật, khó hơn: các lớp trông khá giống nhau.",
+        "description": "Ảnh lá đậu chụp ngoài đồng ở Uganda. Bài toán thật, khó hơn: các lớp trông khá giống nhau.",
         "source": "© 2020 AIR Lab, Đại học Makerere (Uganda), bộ dữ liệu ibean."
       }
     },
@@ -904,18 +903,18 @@
     "count": "{{images}} ảnh · {{classes}} lớp",
     "create": "Tạo dự án mẫu",
     "creating": "Đang vẽ ảnh {{done}}/{{total}}…",
-    "note": "Ảnh mẫu do máy vẽ ngẫu nhiên theo seed cố định: không có ảnh người thật, không vướng bản quyền, mở lại vẫn ra đúng các ảnh đó.",
+    "note": "Ảnh do máy vẽ theo seed cố định: không có người thật, không vướng bản quyền.",
     "error": "Không tạo được dự án mẫu: {{message}}",
     "syntheticTitle": "Hình vẽ tổng hợp",
     "photoTitle": "Ảnh thật (giấy phép mở)",
-    "photoNote": "Ảnh thật do người khác chụp và cho phép dùng lại theo giấy phép mở. Mỗi ảnh đều ghi tác giả và giấy phép (xem trong Kính hiển vi hoặc khi bấm vào ảnh trên bản đồ). Ảnh đã được cắt vuông và thu nhỏ; ảnh có người, chữ hoặc logo đã được loại bỏ khi tuyển chọn.",
+    "photoNote": "Ảnh thật dùng theo giấy phép mở, mỗi ảnh ghi tác giả. Ảnh có người, chữ hoặc logo đã được loại.",
     "credits": "Ghi công từng ảnh",
     "creditsLoading": "Đang tải danh sách…",
     "creditsError": "Không tải được danh sách ghi công."
   },
   "lessons": {
     "title": "Bài học",
-    "lead": "Các bài học tương tác dùng ngay các công cụ của LUP Machine. Mỗi bài có mục tiêu, các bước hoạt động, câu hỏi dự đoán và câu hỏi kiểm tra nhanh.",
+    "lead": "Mỗi bài có mục tiêu, các bước làm, câu hỏi dự đoán và câu hỏi kiểm tra nhanh.",
     "onlyVietnamese": "",
     "grade": "Lớp {{grade}}",
     "minutes": "{{minutes}} phút",
@@ -928,7 +927,7 @@
     "predict": "Dự đoán trước",
     "reveal": "Xem đáp án",
     "quiz": "Kiểm tra nhanh",
-    "correct": "Đúng rồi!",
+    "correct": "Đúng.",
     "incorrect": "Chưa đúng.",
     "score": "Em trả lời đúng {{correct}}/{{total}} câu.",
     "retry": "Làm lại",
@@ -958,12 +957,12 @@
     "actualPredicted": "Hàng: thật, cột: đoán",
     "reflect": "Em rút ra được điều gì sau bài học này?",
     "footer": "LUP Machine – vantupham.github.io/lup-machine · Nội dung bài học theo giấy phép CC BY 4.0.",
-    "sampleNote": "Chữ nghiêng trong các bảng là số liệu mẫu từ lần chạy kiểm chứng với MobileNetV2 (cài đặt mặc định). Kết quả trên máy học sinh có thể lệch nhẹ, nhất là ±1 ảnh trong ma trận nhầm lẫn."
+    "sampleNote": "Chữ nghiêng là số liệu mẫu từ lần chạy kiểm chứng. Máy học sinh có thể lệch nhẹ, nhất là ±1 ảnh."
   },
   "playground": {
     "eyebrow": "Thuật toán tự cài đặt · chạy từng bước",
     "title": "Sân chơi thuật toán",
-    "lead": "Sáu thuật toán học máy cơ bản trên dữ liệu 2 chiều để nhìn rõ từng bước. Mã nguồn tự viết bằng TypeScript và được kiểm thử đối chiếu với scikit-learn.",
+    "lead": "Sáu thuật toán học máy cơ bản trên dữ liệu 2 chiều, chạy từng bước.",
     "back": "Sân chơi thuật toán",
     "exact": "Chính xác",
     "algos": {
@@ -971,42 +970,42 @@
         "name": "k láng giềng gần nhất (k-NN)",
         "summary": "Điểm mới nhận nhãn theo số đông trong k điểm gần nó nhất.",
         "concept": "láng giềng · khoảng cách · k lớn và k nhỏ",
-        "intro": "k-NN không \"học\" công thức nào: nó ghi nhớ toàn bộ dữ liệu, rồi với mỗi điểm mới thì tìm k điểm gần nhất (khoảng cách Euclid) và cho chúng bỏ phiếu.",
+        "intro": "k-NN nhớ toàn bộ dữ liệu. Với điểm mới, nó tìm k điểm gần nhất và cho chúng bỏ phiếu.",
         "exactHint": "Vùng màu là kết quả k-NN tính thật tại tâm mỗi ô của lưới 30×30; phiếu bầu là số đếm thật."
       },
       "decision-tree": {
         "name": "Cây quyết định",
         "summary": "Chuỗi câu hỏi \"có / không\" chia mặt phẳng thành các ô chữ nhật.",
         "concept": "luật nếu – thì · Gini / entropy · quá khớp",
-        "intro": "Ở mỗi nút, máy thử mọi ngưỡng có thể trên từng đặc trưng và chọn câu hỏi làm các nhóm con \"thuần\" nhất (Gini hoặc entropy nhỏ nhất). Bấm \"Mọc thêm một nút\" để xem cây lớn dần.",
+        "intro": "Ở mỗi nút, máy chọn câu hỏi chia dữ liệu thành các nhóm \"thuần\" nhất (Gini hoặc entropy nhỏ nhất).",
         "exactHint": "Vùng màu là dự đoán thật của cây tại tâm mỗi ô lưới 40×40; ngưỡng, số mẫu và độ tạp chất là số thật."
       },
       "linear-regression": {
         "name": "Hồi quy tuyến tính",
         "summary": "Tự kéo đường thẳng, rồi so với đường của máy theo sai số bình phương.",
         "concept": "hàm mất mát · bình phương tối thiểu",
-        "intro": "Mô hình là một đường thẳng ŷ = w·x + b. \"Tốt\" nghĩa là trung bình bình phương sai số (MSE) nhỏ. Mỗi hình vuông có cạnh bằng một sai số: tổng diện tích càng nhỏ, đường càng tốt.",
+        "intro": "Mô hình là đường thẳng ŷ = w·x + b. Tổng diện tích sai số càng nhỏ, đường càng tốt.",
         "exactHint": "MSE, đường của máy (nghiệm bình phương tối thiểu) và bước gradient descent đều là phép tính thật."
       },
       "gradient-descent": {
         "name": "Gradient descent",
         "summary": "Viên bi đi xuống dốc trên mặt lỗi; bước quá dài thì văng ra ngoài.",
         "concept": "tối ưu hóa · learning rate · cực tiểu địa phương",
-        "intro": "Gradient ∇f chỉ hướng đi lên dốc nhất. Mỗi bước, ta đi ngược hướng đó một đoạn tỉ lệ với learning rate η. Đây chính là cách các mạng nơ-ron được huấn luyện.",
+        "intro": "Mỗi bước đi ngược hướng gradient một đoạn tỉ lệ với learning rate η. Mạng nơ-ron cũng học như vậy.",
         "exactHint": "Mặt lỗi có công thức và đạo hàm chính xác; mỗi chấm trên đường đi là một bước tính thật."
       },
       "k-means": {
         "name": "Phân cụm k-means",
         "summary": "Không có nhãn: tâm cụm tự dịch chuyển cho tới khi đứng yên.",
         "concept": "học không giám sát · tâm cụm",
-        "intro": "k-means lặp lại hai việc: gán mỗi điểm vào tâm gần nhất, rồi dời mỗi tâm về trung bình các điểm của nó. Máy không biết nhãn đúng, nên màu ở đây là cụm do máy tìm ra, không phải đáp án.",
+        "intro": "k-means lặp lại: gán điểm vào tâm gần nhất, rồi dời tâm về giữa nhóm. Màu là cụm máy tìm.",
         "exactHint": "Mỗi khung là một bước thật của thuật toán Lloyd; tâm khởi đầu chọn bằng k-means++ có seed."
       },
       "neural-network": {
         "name": "Mạng nơ-ron mini",
         "summary": "Thêm tầng ẩn để tách được dữ liệu mà một đường thẳng không tách nổi.",
         "concept": "tầng ẩn · hàm kích hoạt · lan truyền ngược",
-        "intro": "Mỗi nơ-ron ẩn tính một tổng có trọng số rồi đưa qua hàm kích hoạt. Ghép nhiều nơ-ron lại, mạng vẽ được ranh giới cong. Huấn luyện bằng gradient descent và lan truyền ngược.",
+        "intro": "Mỗi nơ-ron tính tổng có trọng số rồi qua hàm kích hoạt. Nhiều nơ-ron vẽ được ranh giới cong.",
         "exactHint": "Vùng màu và bản đồ từng nơ-ron là đầu ra thật của mạng tại tâm mỗi ô lưới; loss là cross-entropy trung bình thật."
       }
     },
@@ -1036,7 +1035,7 @@
     "knn": {
       "plotLabel": "Mặt phẳng dữ liệu, vùng màu là lớp k-NN dự đoán với k = {{k}}",
       "k": "Số láng giềng k",
-      "kHint": "k nhỏ: ranh giới lởm chởm, dễ bị một điểm lạc làm sai. k lớn: ranh giới mượt, nhưng lớp ít điểm dễ bị lấn át.",
+      "kHint": "k nhỏ: ranh giới lởm chởm, dễ sai vì một điểm lạc. k lớn: mượt hơn, nhưng lớp ít điểm dễ bị lấn át.",
       "modeProbe": "Đặt điểm cần đoán",
       "probeHint": "Bấm vào hình để đặt điểm cần đoán; các đường nét đứt nối tới k láng giềng gần nhất.",
       "voteTitle": "Phiếu bầu của k láng giềng",
@@ -1125,11 +1124,11 @@
       "epoch": "Số bước",
       "lossChart": "Loss qua quá trình huấn luyện",
       "lossAxis": "bước {{n}}",
-      "fullBatchNote": "Mỗi bước dùng toàn bộ dữ liệu để tính gradient (gradient descent toàn khối). Thử 1 nơ-ron với \"Hai vòng tròn\": mạng chỉ vẽ được một đường thẳng."
+      "fullBatchNote": "Mỗi bước dùng toàn bộ dữ liệu để tính gradient. Thử 1 nơ-ron với \"Hai vòng tròn\": chỉ vẽ được đường thẳng."
     }
   },
   "tabular": {
-    "lead": "Dạy máy dự đoán một cột của bảng từ các cột còn lại. Mỗi bước đều xem được máy đang làm gì với các con số.",
+    "lead": "Dạy máy đoán một cột của bảng từ các cột còn lại.",
     "loading": "Đang tải dự án…",
     "saveError": "Không lưu được: {{message}}",
     "steps": {
@@ -1157,7 +1156,7 @@
       }
     },
     "data": {
-      "empty": "Chọn một bộ dữ liệu mẫu, tải tệp CSV lên hoặc dán bảng từ Excel / Google Trang tính. Dữ liệu chỉ lưu trên máy này.",
+      "empty": "Chọn bộ dữ liệu mẫu, tải tệp CSV hoặc dán bảng từ Excel / Google Trang tính.",
       "samplesTitle": "Bộ dữ liệu mẫu",
       "rowCount": "{{n}} dòng",
       "uploadTitle": "Tải tệp CSV",
@@ -1199,11 +1198,11 @@
       "features": "Các cột máy được dùng (đặc trưng)"
     },
     "prepareErrors": {
-      "no-features": "Hãy chọn ít nhất một cột đặc trưng khác cột nhãn.",
+      "no-features": "Cần chọn ít nhất một cột đặc trưng khác cột nhãn.",
       "target-not-numeric": "Hồi quy cần cột nhãn là số.",
       "too-many-classes": "Cột nhãn có {{count}} giá trị khác nhau, quá nhiều để phân loại (tối đa 10). Nếu đây là con số, hãy chọn Hồi quy.",
       "single-class": "Cột nhãn chỉ có một giá trị: máy không có gì để phân biệt.",
-      "too-many-categories": "Cột \"{{column}}\" có {{count}} giá trị chữ khác nhau (tối đa 20). Hãy bỏ chọn cột này.",
+      "too-many-categories": "Cột \"{{column}}\" có {{count}} giá trị chữ khác nhau (tối đa 20). Bỏ chọn cột này.",
       "too-few-rows": "Chỉ còn {{count}} dòng dùng được, cần ít nhất 10."
     },
     "quality": {
@@ -1274,7 +1273,7 @@
       "r2Test": "R² tập Kiểm tra",
       "rmseTrain": "Sai số RMSE tập Dạy",
       "rmseTest": "Sai số RMSE tập Kiểm tra",
-      "regressionHint": "R² = 1 là đoán đúng hết, 0 là chỉ ngang đoán bằng giá trị trung bình. RMSE là sai số điển hình, cùng đơn vị với \"{{target}}\".",
+      "regressionHint": "R² = 1: đúng hết; 0: ngang đoán bằng trung bình. RMSE là sai số điển hình, cùng đơn vị với \"{{target}}\".",
       "predVsTrue": "Giá trị thật (trục ngang) và giá trị dự đoán (trục dọc) trên tập Kiểm tra; đường chéo là đoán đúng hoàn toàn",
       "explainTitle": "Mô hình đã học được gì?",
       "explainHint": "Các trọng số, ngưỡng và độ quan trọng là số thật của mô hình vừa huấn luyện.",
@@ -1282,13 +1281,13 @@
       "logisticBinary": "Trọng số tính trên các cột đã chuẩn hóa. Cột có trọng số dương đẩy dự đoán về lớp \"{{cls}}\", âm thì ngược lại.",
       "logisticMulti": "Mỗi lớp có một bộ trọng số (tính trên các cột đã chuẩn hóa). Lớp nào có tổng điểm cao nhất thì được chọn.",
       "weightsFor": "Điểm của lớp \"{{cls}}\" (độ lệch {{b}})",
-      "linearHint": "Mỗi hệ số cho biết dự đoán thay đổi bao nhiêu khi cột đó tăng 1 đơn vị và các cột khác giữ nguyên. Hệ số không phải là quan hệ nhân quả.",
+      "linearHint": "Hệ số: dự đoán đổi bao nhiêu khi cột đó tăng 1 đơn vị, các cột khác giữ nguyên. Không phải quan hệ nhân quả.",
       "knnHint": "k-NN không học trọng số nào: nó ghi nhớ {{n}} dòng của tập Dạy và mỗi lần dự đoán thì tìm {{k}} dòng gần nhất."
     },
     "use": {
       "formLabel": "Giá trị của dòng mới",
       "resultTitle": "Dự đoán",
-      "invalid": "Hãy nhập đủ các ô; ô số phải là số (có thể dùng dấu phẩy thập phân).",
+      "invalid": "Cần nhập đủ các ô; ô số phải là số (dùng được dấu phẩy thập phân).",
       "predictedClass": "Máy đoán: {{cls}}",
       "predictedValue": "Máy đoán {{target}} ≈ {{value}}",
       "why": "Vì sao?",
@@ -1303,8 +1302,8 @@
   "export": {
     "colab": {
       "title": "Học tiếp bằng Python: notebook Google Colab",
-      "tabularDescription": "Tải về một notebook dựng lại đúng mô hình này bằng pandas và scikit-learn, trên cùng dữ liệu và cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine.",
-      "imageDescription": "Tải về một notebook chứa 1.280 con số đặc trưng của mỗi ảnh (không chứa ảnh gốc), huấn luyện lại tầng phân loại bằng Keras rồi chuyển mô hình hoàn chỉnh sang TensorFlow Lite.",
+      "tabularDescription": "Notebook dựng lại mô hình này bằng pandas và scikit-learn trên cùng dữ liệu, rồi so kết quả với LUP Machine.",
+      "imageDescription": "Notebook chứa 1.280 con số đặc trưng mỗi ảnh (không có ảnh gốc), huấn luyện lại bằng Keras rồi xuất TensorFlow Lite.",
       "step1": "Bấm nút dưới đây để tải tệp .ipynb về máy.",
       "step2": "Mở colab.research.google.com, chọn Tệp → Tải sổ tay lên (File → Upload notebook) và chọn tệp vừa tải.",
       "step3": "Chọn Thời gian chạy → Chạy tất cả (Runtime → Run all).",
@@ -1312,14 +1311,14 @@
       "done": "Đã tạo notebook ({{size}} MB). Kiểm tra thư mục Tải xuống.",
       "large": "Notebook khá lớn nên Colab có thể mở chậm.",
       "error": "Không tạo được notebook: {{message}}",
-      "privacy": "Notebook được tạo ngay trên máy này. LUP Machine không gửi dữ liệu đi đâu; chỉ khi em tự tải notebook lên Colab thì dữ liệu trong đó mới nằm trên Google Drive của em.",
-      "textDescription": "Tải về một notebook dựng lại đúng bộ từ vựng và mô hình này bằng scikit-learn, trên cùng các câu và cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine.",
-      "audioDescription": "Tải về một notebook chứa 160 con số đặc trưng của mỗi đoạn (không chứa âm thanh gốc), dựng lại cùng mô hình bằng scikit-learn trên cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine.",
-      "poseDescription": "Tải về một notebook chứa tọa độ khớp đã chuẩn hóa của mỗi mẫu (không chứa ảnh), dựng lại cùng mô hình bằng scikit-learn trên cùng cách chia Dạy / Kiểm tra, rồi so kết quả với LUP Machine."
+      "privacy": "Notebook tạo ngay trên máy này. Dữ liệu chỉ lên Google Drive khi em tự tải notebook lên Colab.",
+      "textDescription": "Notebook dựng lại bộ từ vựng và mô hình bằng scikit-learn trên cùng các câu, rồi so kết quả.",
+      "audioDescription": "Notebook chứa 160 con số đặc trưng mỗi đoạn (không có âm thanh gốc), dựng lại mô hình bằng scikit-learn rồi so kết quả.",
+      "poseDescription": "Notebook chứa tọa độ khớp đã chuẩn hóa (không có ảnh), dựng lại mô hình bằng scikit-learn rồi so kết quả."
     }
   },
   "text": {
-    "lead": "Dạy máy phân loại câu tiếng Việt. Mỗi bước đều thấy máy biến câu thành con số ra sao và từ nào khiến máy đoán như vậy.",
+    "lead": "Dạy máy phân loại câu tiếng Việt, và xem từ nào khiến máy đoán như vậy.",
     "steps": {
       "data": "Các câu và nhãn",
       "check": "Chia dữ liệu và kiểm tra",
@@ -1333,7 +1332,7 @@
       "can-tin": "Góp ý căng tin: khen / chê"
     },
     "data": {
-      "empty": "Chọn bộ câu mẫu, tự gõ câu cho từng nhóm, hoặc tải tệp CSV. Dữ liệu chỉ lưu trên máy này.",
+      "empty": "Chọn bộ câu mẫu, tự gõ câu cho từng nhóm, hoặc tải tệp CSV.",
       "sentenceCount": "{{n}} câu",
       "writeTitle": "Tự gõ câu",
       "writeHint": "Đặt tên cho từng nhóm, mỗi dòng gõ một câu.",
@@ -1362,7 +1361,7 @@
     "prepareErrors": {
       "too-few-sentences": "Chỉ có {{count}} câu dùng được, cần ít nhất 6.",
       "single-class": "Cần ít nhất hai nhóm khác nhau.",
-      "too-many-classes": "Có {{count}} nhóm, quá nhiều (tối đa 10). Hãy kiểm tra cột nhãn."
+      "too-many-classes": "Có {{count}} nhóm, quá nhiều (tối đa 10). Kiểm tra lại cột nhãn."
     },
     "quality": {
       "dropped": "{{count}} câu bị bỏ vì trống hoặc chưa có nhãn.",
@@ -1385,7 +1384,7 @@
       "tableCaption": "Các ô khác 0 của vector",
       "term": "Từ",
       "count": "Số lần",
-      "tfidfHint": "idf = ln((1 + {{n}}) / (1 + số câu Dạy chứa từ)) + 1: từ có trong nhiều câu (như \"và\", \"là\") có idf nhỏ. TF-IDF = số lần × idf, rồi chia cho độ dài vector.",
+      "tfidfHint": "idf = ln((1 + {{n}}) / (1 + số câu Dạy chứa từ)) + 1. TF-IDF = số lần × idf, chia độ dài vector.",
       "frequentTitle": "Âm tiết hay gặp nhất trong mỗi nhóm (tập Dạy)",
       "frequentHint": "Hay gặp chưa chắc đã giúp phân biệt: một từ xuất hiện nhiều ở mọi nhóm thì không cho biết câu thuộc nhóm nào."
     },
@@ -1429,7 +1428,7 @@
     }
   },
   "audio": {
-    "lead": "Dạy máy nhận ra âm thanh. Mỗi bước đều thấy âm thanh biến thành con số ra sao: dạng sóng → phổ tần số → ảnh phổ mel → 160 con số.",
+    "lead": "Dạy máy nhận ra âm thanh: dạng sóng → phổ tần số → ảnh phổ mel → 160 con số.",
     "steps": {
       "data": "Thu và gom âm thanh",
       "check": "Chia dữ liệu và kiểm tra",
@@ -1460,12 +1459,12 @@
       "newClass": "Tên nhóm mới",
       "addClass": "Thêm nhóm",
       "error": "Không xử lý được âm thanh: {{message}}",
-      "unsupported": "Trình duyệt này không hỗ trợ Web Audio, nên chưa thu / đọc được âm thanh. Hãy dùng Chrome hoặc Edge bản mới.",
-      "privacy": "Âm thanh chỉ lưu trên máy này dưới dạng đoạn 1 giây, 16 kHz; tệp gốc không được giữ lại và không gửi đi đâu."
+      "unsupported": "Trình duyệt này không hỗ trợ Web Audio nên chưa thu hay đọc được âm thanh. Dùng Chrome hoặc Edge bản mới.",
+      "privacy": "Âm thanh lưu trên máy này thành đoạn 1 giây, 16 kHz; tệp gốc không được giữ."
     },
     "live": {
       "badge": "Xấp xỉ",
-      "hint": "Phổ trực tiếp do trình duyệt tính (cửa sổ và độ phân giải khác), chỉ để em thấy micro đang nghe; mô hình không dùng hình này."
+      "hint": "Phổ trực tiếp do trình duyệt tính, chỉ để thấy micro đang nghe; mô hình không dùng hình này."
     },
     "quality": {
       "silent": "{{count}} đoạn gần như im lặng: có thể micro chưa bật hoặc em đứng quá xa.",
@@ -1487,13 +1486,13 @@
       "frameValue": "{{n}}/{{total}} (từ {{ms}} ms)",
       "fftTitle": "Phổ tần số của một khung (FFT)",
       "fftLabel": "Phổ công suất của khung {{n}}",
-      "fftHint": "Lấy {{win}} mẫu (25 ms), nhân với cửa sổ Hann cho hai đầu mềm đi, rồi dùng biến đổi Fourier nhanh (FFT, {{nfft}} điểm) để biết khung đó gồm những tần số nào: {{bins}} giá trị từ 0 đến 8 kHz.",
+      "fftHint": "Lấy {{win}} mẫu (25 ms), nhân cửa sổ Hann, rồi dùng FFT ({{nfft}} điểm): {{bins}} giá trị tần số từ 0 đến 8 kHz.",
       "melTitle": "Ảnh phổ mel",
       "melLabel": "Ảnh phổ mel: trục ngang là thời gian, trục dọc là dải tần",
-      "melHint": "Làm lại bước 2 cho cả {{frames}} khung (mỗi khung cách nhau 10 ms), gom các tần số thành {{bands}} dải mel (từ khoảng {{low}} Hz tới {{high}} Hz; dải thấp hẹp, dải cao rộng giống cách tai người nghe) và đổi sang decibel. Càng sáng càng to. Đường nét đứt chia 4 đoạn thời gian.",
+      "melHint": "Làm lại bước 2 cho {{frames}} khung, gom tần số thành {{bands}} dải mel (giống tai người) và đổi sang dB. Càng sáng càng to.",
       "poolTitle": "160 con số mô hình nhận",
       "poolLabel": "Độ to trung bình của mỗi dải trong mỗi đoạn thời gian",
-      "poolHint": "Lấy trung bình mỗi dải mel trong {{segments}} đoạn thời gian: {{bands}} × {{segments}} = {{total}} con số. Cột là đoạn thời gian (trái sang phải), hàng là dải tần (trầm ở dưới)."
+      "poolHint": "Trung bình mỗi dải mel trong {{segments}} đoạn: {{bands}} × {{segments}} = {{total}} số. Cột là thời gian, hàng là dải tần (trầm ở dưới)."
     },
     "models": {
       "logistic": {
@@ -1520,14 +1519,14 @@
       "play": "Nghe lại",
       "whyHint": "Đóng góp = giá trị đã chuẩn hóa của ô × trọng số; cộng lại với phần cố định đúng bằng điểm của nhóm.",
       "contributionLabel": "Đóng góp của từng ô ảnh phổ",
-      "contributionHint": "Điểm của nhóm \"{{cls}}\" so với trung bình các nhóm = {{base}} (phần cố định) + tổng các ô = {{total}}. Cam: đẩy về nhóm này, xanh: kéo ra xa.",
+      "contributionHint": "Điểm \"{{cls}}\" so với trung bình = {{base}} (phần cố định) + tổng các ô = {{total}}. Cam đẩy về nhóm này, xanh kéo ra.",
       "distance": "cách {{d}} dB",
       "playNeighbour": "Nghe đoạn này",
       "knnHint": "Bấm nút phát để nghe các đoạn Dạy giống nhất mà máy dựa vào."
     }
   },
   "pose": {
-    "lead": "Dạy máy nhận ra tư thế cơ thể hoặc cử chỉ bàn tay. Mô hình nhận dạng tìm tọa độ các khớp; chỉ những con số đó được lưu và dùng để học — không lưu ảnh.",
+    "lead": "Dạy máy nhận ra tư thế hoặc cử chỉ tay. Chỉ tọa độ các khớp được lưu, không lưu ảnh.",
     "steps": {
       "data": "Ghi tư thế",
       "check": "Chia dữ liệu và kiểm tra",
@@ -1598,9 +1597,9 @@
         "starting": "Đang bật camera…",
         "loading-model": "Đang nạp mô hình nhận dạng (lần đầu cần mạng)…",
         "ready": "Đang nhận dạng…",
-        "denied": "Em chưa cho phép dùng camera. Hãy bấm biểu tượng ổ khóa trên thanh địa chỉ để cho phép.",
+        "denied": "Em chưa cho phép dùng camera. Bấm biểu tượng ổ khóa trên thanh địa chỉ để cho phép.",
         "unavailable": "Không tìm thấy camera trên máy này.",
-        "model-error": "Không nạp được mô hình nhận dạng. Hãy kiểm tra kết nối mạng rồi thử lại."
+        "model-error": "Không nạp được mô hình nhận dạng. Kiểm tra kết nối mạng rồi thử lại."
       }
     },
     "data": {
@@ -1619,7 +1618,7 @@
       "cameraOn": "Bật camera",
       "cameraOff": "Tắt camera",
       "handGuide": "Đặt bàn tay vào khung nét đứt; mô hình chỉ nhìn trong khung này.",
-      "go": "Giữ nguyên!",
+      "go": "Giữ nguyên",
       "poseCount": "{{n}} mẫu",
       "recordOne": "Ghi 1 mẫu",
       "recordBurst": "Ghi {{n}} mẫu liên tiếp",
@@ -1630,7 +1629,7 @@
       "deletePose": "Xóa mẫu này",
       "confirmDeleteClass": "Xóa nhóm \"{{name}}\" và mọi mẫu tư thế của nhóm?",
       "error": "Không xử lý được: {{message}}",
-      "privacy": "Chỉ tọa độ các khớp được lưu trên máy này; ảnh và khung hình camera không được lưu, không gửi đi đâu."
+      "privacy": "Chỉ lưu tọa độ các khớp; ảnh và khung hình camera không được lưu."
     },
     "quality": {
       "unusable": "{{count}} mẫu không dùng được vì không thấy rõ vai và hông (hoặc cổ tay và gốc ngón giữa).",
@@ -1691,8 +1690,8 @@
       "live": "Nhận dạng trực tiếp bằng camera",
       "empty": "Bật camera hoặc tải một ảnh lên để thử.",
       "badImage": "Không đọc được ảnh.",
-      "whyHint": "Đóng góp của khớp = (giá trị chuẩn hóa × trọng số) của x cộng của y; mọi khớp cộng lại với phần cố định đúng bằng điểm của nhóm.",
-      "contributionHint": "Trên khung xương: cam là khớp đẩy về nhóm \"{{cls}}\", xanh là kéo ra xa; chấm càng to ảnh hưởng càng lớn. Điểm so với trung bình các nhóm = {{base}} (phần cố định) + tổng các khớp = {{total}}.",
+      "whyHint": "Đóng góp = (giá trị chuẩn hóa × trọng số) của x và y; cộng với phần cố định ra đúng điểm của nhóm.",
+      "contributionHint": "Cam: khớp đẩy về \"{{cls}}\", xanh: kéo ra; chấm càng to ảnh hưởng càng lớn. Điểm = {{base}} + tổng các khớp = {{total}}.",
       "neighbors": "{{k}} mẫu Dạy gần nhất thuộc các nhóm: {{labels}}."
     }
   },

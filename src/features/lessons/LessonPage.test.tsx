@@ -50,7 +50,7 @@ describe('Bài học', () => {
     const quiz = screen.getByRole('region', { name: 'Kiểm tra nhanh' });
     const groups = within(quiz).getAllByRole('group');
     await userEvent.click(within(groups[0]!).getByLabelText(/một ô màu nhỏ nhất/i));
-    expect(within(groups[0]!).getByText('Đúng rồi!')).toBeInTheDocument();
+    expect(within(groups[0]!).getByText('Đúng.')).toBeInTheDocument();
     await userEvent.click(within(groups[1]!).getByLabelText('Đỏ'));
     expect(within(groups[1]!).getByText('Chưa đúng.')).toBeInTheDocument();
     expect(within(groups[1]!).getByLabelText('Xanh dương')).toBeDisabled();

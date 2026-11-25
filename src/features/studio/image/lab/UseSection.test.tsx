@@ -109,7 +109,7 @@ describe('Bước 6: Sử dụng (Studio ảnh)', () => {
     const neighbors = screen.getByRole('list', { name: /ảnh dạy giống nhất/i });
     expect(within(neighbors).getAllByRole('listitem')[0]).toHaveTextContent('Giấy');
     expect(await screen.findByTestId('cam-heatmap')).toBeInTheDocument();
-    expect(screen.getByText(/không được lưu vào dự án/i)).toBeInTheDocument();
+    expect(screen.getByText(/không lưu vào dự án/i)).toBeInTheDocument();
   });
 
   test('tệp không phải ảnh thì báo lỗi rõ ràng, không đoán', async () => {
