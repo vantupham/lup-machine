@@ -604,7 +604,13 @@
       "stale": "Các lớp đã đổi sau lần huấn luyện trước. Cần huấn luyện lại.",
       "guessLabel": "Em đoán điểm Kiểm tra (%)",
       "guessInvalid": "Điểm đoán phải từ 0 đến 100.",
-      "guessResult": "Em đoán {{guess}}%. Điểm Kiểm tra thực tế: {{actual}}% (lệch {{diff}} điểm)."
+      "guessResult": "Em đoán {{guess}}%. Điểm Kiểm tra thực tế: {{actual}}% (lệch {{diff}} điểm).",
+      "epochLevel": "Số lượt học",
+      "epochLevels": {
+        "few": "Ít ({{n}})",
+        "medium": "Vừa ({{n}})",
+        "many": "Nhiều ({{n}})"
+      }
     },
     "evaluate": {
       "title": "Đánh giá",
@@ -659,7 +665,11 @@
       "replaying": "Đang xem lại lần {{n}}.",
       "saveError": "Không lưu được vào nhật ký: {{message}}",
       "na": "—",
-      "guess": "Em đoán"
+      "guess": "Em đoán",
+      "changes": "Đổi gì",
+      "conclusion": "Kết luận",
+      "firstRun": "Lần đầu",
+      "noChange": "Không đổi"
     },
     "explain": {
       "title": "Vì sao mô hình đoán như vậy?",
@@ -836,6 +846,33 @@
     "details": {
       "show": "Xem từng bước bên trong",
       "hide": "Thu gọn các bước"
+    },
+    "compare": {
+      "planTitle": "So với lần #{{n}}, em đã đổi:",
+      "noChange": "Chưa đổi gì so với lần #{{n}}. Cùng seed nên kết quả sẽ giống hệt.",
+      "changes": {
+        "epochs": "số epoch {{from}} → {{to}}",
+        "learningRate": "tốc độ học {{from}} → {{to}}",
+        "batchSize": "batch size {{from}} → {{to}}",
+        "trainCount": "ảnh Huấn luyện {{from}} → {{to}}",
+        "testCount": "ảnh Kiểm tra {{from}} → {{to}}",
+        "classes": "các lớp: {{from}} → {{to}}",
+        "images": "đã thay ảnh (số lượng giữ nguyên)"
+      },
+      "tooMany": "Em đổi {{count}} thứ cùng lúc nên khó biết thứ nào làm điểm thay đổi.",
+      "unfairTest": "Tập Kiểm tra đã đổi nên so điểm Kiểm tra với lần #{{n}} chưa công bằng.",
+      "resultTitle": "Kết quả so với lần #{{n}}",
+      "firstRun": "Đây là lần chạy đầu tiên. Đổi một thứ rồi huấn luyện lại để so sánh.",
+      "score": {
+        "test": "Điểm Kiểm tra",
+        "train": "Điểm Huấn luyện"
+      },
+      "delta": "{{label}}: {{from}}% → {{to}}% ({{change}}).",
+      "up": "tăng {{d}} điểm",
+      "down": "giảm {{d}} điểm",
+      "same": "giữ nguyên",
+      "conclusionLabel": "Kết luận của em",
+      "conclusionPlaceholder": "Thay đổi đó làm điểm tăng hay giảm? Vì sao em nghĩ vậy?"
     }
   },
   "samples": {
@@ -1689,9 +1726,6 @@
     "explain": "Giải thích",
     "label": "Ghi chép của em",
     "placeholder": "Em thấy gì, và vì sao em nghĩ vậy?",
-    "saving": "Đang lưu…",
-    "saved": "Đã lưu",
-    "saveError": "Chưa lưu được ghi chép: {{message}}",
     "image": {
       "data": {
         "observe": "Mỗi lớp có bao nhiêu ảnh? Ảnh trong cùng một lớp khác nhau ở điểm nào?",
@@ -1718,5 +1752,10 @@
         "explain": "Vùng máy nhìn vào giải thích lỗi đó thế nào?"
       }
     }
+  },
+  "autosave": {
+    "saving": "Đang lưu…",
+    "saved": "Đã lưu",
+    "error": "Chưa lưu được: {{message}}"
   }
 }

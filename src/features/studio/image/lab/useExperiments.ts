@@ -46,5 +46,13 @@ export function useExperiments(projectId: string) {
     [repo, fetchRuns],
   );
 
-  return { runs, loaded, add, remove };
+  const setConclusion = useCallback(
+    async (id: string, text: string) => {
+      await repo.setConclusion(id, text);
+      setRuns(await fetchRuns());
+    },
+    [repo, fetchRuns],
+  );
+
+  return { runs, loaded, add, remove, setConclusion };
 }

@@ -4,6 +4,8 @@ import type { RunRecord } from '@/storage/db';
 import { CLASS_COLORS } from './class-style';
 import { LineChart } from './LineChart';
 import { RotateCcw } from '@/ui/icons';
+import { diffRunSetup } from '@/core/experiments/run-diff';
+import { describeChange, setupOf } from './run-setup';
 
 const MAX_COMPARE = 4;
 
@@ -43,23 +45,27 @@ export function ExperimentLog({ runs, fingerprint, canReplay, onReplay, onDelete
         <p className="text-sm text-muted">{t('project.experiments.empty')}</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] text-sm" aria-label={t('project.experiments.title')}>
+          <table className="w-full min-w-[960px] text-sm [&_td]:pr-3 [&_th]:whitespace-nowrap [&_th]:pr-3" aria-label={t('project.experiments.title')}>
             <thead>
               <tr className="border-b border-rule text-left text-xs text-muted">
                 <th className="py-1">{t('project.experiments.compare')}</th>
                 <th>{t('project.experiments.number')}</th>
                 <th>{t('project.experiments.time')}</th>
                 <th>{t('project.experiments.settings')}</th>
+                <th>{t('project.experiments.changes')}</th>
                 <th>{t('project.experiments.data')}</th>
                 <th>{t('project.experiments.trainScore')}</th>
                 <th>{t('project.experiments.testScore')}</th>
                 <th>{t('project.experiments.guess')}</th>
+                <th>{t('project.experiments.conclusion')}</th>
                 <th />
               </tr>
             </thead>
             <tbody>
-              {runs.map((run) => {
+              {runs.map((run, index) => {
                 const last = run.metrics.at(-1);
+                const older = runs[index + 1];
+                const changes = older ? diffRunSetup(setupOf(older), setupOf(run)) : null;
                 const isSameData = run.fingerprint === fingerprint;
                 return (
                   <tr key={run.id} className="border-b border-rule">
@@ -77,12 +83,20 @@ export function ExperimentLog({ runs, fingerprint, canReplay, onReplay, onDelete
                     <td className="font-mono text-xs">
                       {run.options.epochs} ep · lr {run.options.learningRate} · b {run.options.batchSize}
                     </td>
+                    <td className="text-xs" data-testid={`run-changes-${run.number}`}>
+                      {changes === null
+                        ? t('project.experiments.firstRun')
+                        : changes.length === 0
+                          ? t('project.experiments.noChange')
+                          : changes.map((c) => describeChange(t, c)).join('; ')}
+                    </td>
                     <td className="font-mono text-xs">
                       {run.counts.train} / {run.counts.test}
                     </td>
                     <td className="font-mono">{pct(last?.trainAccuracy)}</td>
                     <td className="font-mono font-semibold">{pct(last?.testAccuracy)}</td>
                     <td className="font-mono">{pct(run.guess?.testAccuracy)}</td>
+                    <td className="max-w-[16rem] truncate text-xs" title={run.conclusion ?? ''}>{run.conclusion ?? ''}</td>
                     <td className="space-x-2 whitespace-nowrap text-right">
                       {isSameData ? (
                         <button

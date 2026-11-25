@@ -1,5 +1,5 @@
 import { LupDatabase } from '../db';
-import { createDexieExperimentRepository, MAX_RUNS_PER_PROJECT, type NewRunInput } from './experiment-repository';
+import { createDexieExperimentRepository, MAX_RUNS_PER_PROJECT, RUN_CONCLUSION_MAX_LENGTH, type NewRunInput } from './experiment-repository';
 import { createDexieProjectRepository } from './project-repository';
 
 let db: LupDatabase;
@@ -56,6 +56,17 @@ describe('ExperimentRepository', () => {
   test('từ chối dữ liệu không hợp lệ', async () => {
     await expect(repo().addRun({ ...run(), metrics: [] })).rejects.toThrow();
     await expect(repo().addRun({ ...run(), options: { ...run().options, epochs: 0 } })).rejects.toThrow();
+  });
+
+  test('ghi kết luận cho một lần chạy; xóa hết chữ thì bỏ kết luận', async () => {
+    const r = repo();
+    const saved = await r.addRun(run());
+    await r.setConclusion(saved.id, '  Ít epoch hơn thì điểm Kiểm tra giảm  ');
+    expect((await r.listRuns('p1'))[0]!.conclusion).toBe('Ít epoch hơn thì điểm Kiểm tra giảm');
+    await r.setConclusion(saved.id, '   ');
+    expect((await r.listRuns('p1'))[0]!.conclusion).toBeUndefined();
+    await expect(r.setConclusion(saved.id, 'x'.repeat(RUN_CONCLUSION_MAX_LENGTH + 1))).rejects.toThrow();
+    await expect(r.setConclusion('khong-co', 'x')).rejects.toThrow();
   });
 
   test('giữ tối đa số lần chạy mỗi dự án (xóa lần cũ nhất)', async () => {

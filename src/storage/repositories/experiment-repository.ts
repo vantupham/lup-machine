@@ -5,6 +5,9 @@ import type { RepositoryDeps } from './project-repository';
 
 /** Giữ nhật ký gọn nhẹ: tối đa ngần này lần chạy mỗi dự án, lần cũ nhất bị xóa trước. */
 export const MAX_RUNS_PER_PROJECT = 30;
+export const RUN_CONCLUSION_MAX_LENGTH = 1000;
+
+const conclusionSchema = z.string().trim().max(RUN_CONCLUSION_MAX_LENGTH);
 
 const metricSchema = z.object({
   epoch: z.number().int().min(0),
@@ -28,6 +31,8 @@ export const newRunSchema = z.object({
   metrics: z.array(metricSchema).min(1),
   /** Điểm Kiểm tra học sinh đoán trước khi huấn luyện (0–1). */
   guess: z.object({ testAccuracy: z.number().min(0).max(1) }).strict().optional(),
+  /** Kết luận học sinh rút ra sau lần chạy (ghi sau khi chạy xong). */
+  conclusion: conclusionSchema.min(1).optional(),
 });
 
 export type NewRunInput = z.infer<typeof newRunSchema>;
@@ -36,6 +41,8 @@ export interface ExperimentRepository {
   listRuns(projectId: string): Promise<RunRecord[]>;
   addRun(input: NewRunInput): Promise<RunRecord>;
   deleteRun(id: string): Promise<void>;
+  /** Ghi kết luận của học sinh cho một lần chạy; chỉ còn khoảng trắng thì bỏ kết luận. */
+  setConclusion(id: string, text: string): Promise<void>;
 }
 
 const defaultDeps: RepositoryDeps = {
@@ -63,6 +70,14 @@ export function createDexieExperimentRepository(db: LupDatabase, deps: Repositor
       });
       await touchProjects(db, [record.projectId], record.createdAt);
       return record;
+    },
+
+    async setConclusion(id, text) {
+      const conclusion = conclusionSchema.parse(text);
+      const run = await db.runs.get(id);
+      if (!run) throw new Error(`Không tìm thấy lần chạy: ${id}`);
+      await db.runs.update(id, { conclusion: conclusion === '' ? undefined : conclusion });
+      await touchProjects(db, [run.projectId], deps.now());
     },
 
     async deleteRun(id) {

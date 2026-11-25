@@ -43,6 +43,8 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
   const [lastOptions, setLastOptions] = useState<TrainOptions | null>(null);
   /** Điểm Kiểm tra (0–1) học sinh đoán cho lần chạy đang hiện; null nếu không đoán. */
   const [guess, setGuess] = useState<number | null>(null);
+  /** Số thứ tự trong nhật ký của lần chạy đang hiện (lần mới: có sau khi lưu xong). */
+  const [currentRunNumber, setCurrentRunNumber] = useState<number | null>(null);
   const restoreAttempted = useRef(false);
   /** Mỗi lần bắt đầu huấn luyện (bất kỳ nút nào) tăng số này: "Huấn luyện nhanh" biết có lần khác chen vào. */
   const runCounter = useRef(0);
@@ -69,6 +71,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
     setOrigin(nextOrigin);
     setLastOptions(options);
     setGuess(runGuess);
+    setCurrentRunNumber(nextOrigin.kind === 'new' ? null : nextOrigin.number);
     // Chỉ lần huấn luyện MỚI được ghi vào nhật ký (chạy lại thì không lưu trùng).
     const onDone =
       nextOrigin.kind === 'new'
@@ -83,6 +86,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
                 metrics: toMetrics(done),
                 ...(runGuess === null ? {} : { guess: { testAccuracy: runGuess } }),
               })
+              .then((saved) => setCurrentRunNumber(saved.number))
               .catch((error: unknown) =>
                 setNotice({ kind: 'error', text: t('project.experiments.saveError', { message: getErrorMessage(error) }) }),
               )
@@ -169,6 +173,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
     notice,
     lastOptions,
     guess,
+    currentRunNumber,
     setReplayEpoch,
     startNew,
     trainQuick,

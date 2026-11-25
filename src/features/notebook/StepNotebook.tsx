@@ -1,15 +1,12 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NOTE_TEXT_MAX_LENGTH } from '@/storage/schemas/notebook';
-import { getErrorMessage } from '@/ui/error-message';
+import { AutosaveStatus } from '@/ui/AutosaveStatus';
 import { ChevronDown, ChevronUp, NotebookPen } from '@/ui/icons';
+import { useAutosave } from '@/ui/useAutosave';
 import { useNotebook, type NotebookContextValue } from './NotebookContext';
 
-/** Gõ xong ngần này mili-giây thì tự lưu (rời ô ghi chép thì lưu ngay). */
-export const NOTE_SAVE_DELAY_MS = 800;
 const QUESTION_KINDS = ['observe', 'explain'] as const;
-
-type SaveState = { readonly kind: 'idle' | 'saving' | 'saved' } | { readonly kind: 'error'; readonly message: string };
 
 interface StepNotebookProps {
   /** Tên bước (data, check, represent, train, evaluate, use). */
@@ -31,50 +28,21 @@ function NotebookBox({ notebook, step }: { readonly notebook: NotebookContextVal
   const id = useId();
   const [isOpen, setIsOpen] = useState(false);
   const [draft, setDraft] = useState<string | null>(null);
-  const [save, setSave] = useState<SaveState>({ kind: 'idle' });
-  const pending = useRef<string | null>(null);
-  const timer = useRef<number | undefined>(undefined);
-  const isMounted = useRef(true);
   const { projectId, projectType, repository, status } = notebook;
+  const save = useCallback((value: string) => repository.save(projectId, step, value), [repository, projectId, step]);
+  const autosave = useAutosave(save);
 
   const text = draft ?? notebook.textOf(step);
   const hasText = text.trim() !== '';
 
-  const flush = useCallback(async () => {
-    window.clearTimeout(timer.current);
-    const value = pending.current;
-    if (value === null) return;
-    pending.current = null;
-    if (isMounted.current) setSave({ kind: 'saving' });
-    try {
-      await repository.save(projectId, step, value);
-      if (isMounted.current && pending.current === null) setSave({ kind: 'saved' });
-    } catch (error: unknown) {
-      console.error('Không lưu được ghi chép', projectId, step, error);
-      if (isMounted.current) setSave({ kind: 'error', message: getErrorMessage(error) });
-    }
-  }, [repository, projectId, step]);
-
-  // Rời trang khi còn chữ chưa lưu: lưu nốt.
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-      void flush();
-    };
-  }, [flush]);
-
   const onChange = (value: string) => {
     setDraft(value);
     notebook.remember(step, value);
-    pending.current = value;
-    setSave({ kind: 'idle' });
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => void flush(), NOTE_SAVE_DELAY_MS);
+    autosave.schedule(value);
   };
 
   const toggle = () => {
-    if (isOpen) void flush();
+    if (isOpen) void autosave.flush();
     setIsOpen(!isOpen);
   };
 
@@ -101,7 +69,7 @@ function NotebookBox({ notebook, step }: { readonly notebook: NotebookContextVal
             <textarea
               value={text}
               onChange={(e) => onChange(e.target.value)}
-              onBlur={() => void flush()}
+              onBlur={() => void autosave.flush()}
               maxLength={NOTE_TEXT_MAX_LENGTH}
               rows={4}
               disabled={status !== 'ready'}
@@ -109,13 +77,7 @@ function NotebookBox({ notebook, step }: { readonly notebook: NotebookContextVal
               className="w-full rounded border border-rule bg-paper p-2 text-ink"
             />
           </label>
-          {save.kind === 'error' ? (
-            <p role="alert" className="text-xs text-danger">{t('notebook.saveError', { message: save.message })}</p>
-          ) : (
-            <p role="status" className="text-xs text-muted">
-              {save.kind === 'saving' ? t('notebook.saving') : save.kind === 'saved' ? t('notebook.saved') : ''}
-            </p>
-          )}
+          <AutosaveStatus state={autosave.state} />
         </div>
       )}
     </div>

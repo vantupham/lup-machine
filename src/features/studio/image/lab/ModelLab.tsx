@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { EpochSnapshot } from '@/core/ml/softmax-regression';
+import type { EpochSnapshot, TrainOptions } from '@/core/ml/softmax-regression';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { imageNotebook } from '@/core/export/image-notebook';
 import { ColabExportPanel } from '@/features/export/ColabExportPanel';
@@ -11,6 +11,9 @@ import { RepresentSection } from './RepresentSection';
 import { TrainSection } from './TrainSection';
 import { useImageLabContext } from './ImageLabContext';
 import { UseSection } from './UseSection';
+import { ExperimentPlan } from './ExperimentPlan';
+import { RunComparison } from './RunComparison';
+import { setupOf } from './run-setup';
 import { RotateCcw } from '@/ui/icons';
 
 interface ModelLabProps {
@@ -34,6 +37,25 @@ export function ModelLab({ projectName, classes, samples }: ModelLabProps) {
   );
   const selectedSample = selected && samples.find((s) => s.id === selected.id) ? selected : null;
   const finalTest = snapshots.at(-1)?.test?.accuracy;
+  const runs = lab.experiments.runs;
+  const latestRun = runs[0];
+  const shownRun = lab.currentRunNumber === null ? undefined : runs.find((r) => r.number === lab.currentRunNumber);
+  const runBefore = shownRun ? runs.find((r) => r.number < shownRun.number) : undefined;
+  const renderPlan =
+    latestRun && readiness.readiness === 'ready'
+      ? (options: TrainOptions) => (
+          <ExperimentPlan
+            previousNumber={latestRun.number}
+            previous={setupOf(latestRun)}
+            current={{
+              options,
+              counts: { train: readiness.trainSamples.length, test: readiness.testSamples.length },
+              classNames: classes.map((c) => c.name),
+              fingerprint: lab.fingerprint,
+            }}
+          />
+        )
+      : undefined;
   const guessResult =
     training.status === 'done' && !isStale && lab.guess !== null && finalTest !== undefined ? { guess: lab.guess, actual: finalTest } : null;
 
@@ -62,6 +84,12 @@ export function ModelLab({ projectName, classes, samples }: ModelLabProps) {
         onStart={lab.startNew}
         canGuess={readiness.readiness === 'ready' && readiness.testSamples.length > 0}
         guessResult={guessResult}
+        renderPlan={renderPlan}
+        afterResult={
+          training.status === 'done' && !isStale && shownRun ? (
+            <RunComparison key={shownRun.id} run={shownRun} previous={runBefore} onSaveConclusion={lab.experiments.setConclusion} />
+          ) : undefined
+        }
         onStep={training.step}
         onFinish={training.finish}
       />

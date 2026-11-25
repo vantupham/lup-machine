@@ -35,6 +35,7 @@ const imageBundle: ProjectBundle = {
       counts: { train: 1, test: 1 },
       metrics: [{ epoch: 1, trainLoss: 0.5, trainAccuracy: 1, testLoss: 0.6, testAccuracy: 1 }],
       guess: { testAccuracy: 0.8 },
+      conclusion: 'Đủ 5 epoch là máy phân biệt được',
     },
   ],
 };

@@ -83,6 +83,8 @@ export interface RunRecord {
   readonly metrics: readonly EpochMetrics[];
   /** Điểm Kiểm tra học sinh đoán trước khi huấn luyện (0–1), nếu có đoán. */
   readonly guess?: { readonly testAccuracy: number } | undefined;
+  /** Kết luận học sinh rút ra sau lần chạy. */
+  readonly conclusion?: string | undefined;
 }
 
 /** Ghi chép của học sinh ở một bước của dự án (sổ tay khám phá). */

@@ -43,6 +43,7 @@ export {
   Target,
   Triangle,
   Trash2,
+  TriangleAlert,
   TrendingDown,
   X,
 } from 'lucide-react';

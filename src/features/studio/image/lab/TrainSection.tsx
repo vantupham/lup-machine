@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { EpochSnapshot, TrainOptions } from '@/core/ml/softmax-regression';
 import { useModeStore } from '@/ui/mode-store';
@@ -12,6 +12,12 @@ import { StepNotebook } from '@/features/notebook/StepNotebook';
 export const DEFAULT_TRAIN_OPTIONS: TrainOptions = { epochs: 50, learningRate: 0.001, batchSize: 16, seed: 42 };
 const LIMITS = { epochs: [1, 500], learningRate: [0.00001, 1], batchSize: [1, 256] } as const;
 const SPEEDS: readonly TrainingSpeed[] = ['normal', 'slow', 'step'];
+/** Chế độ Khám phá chọn số epoch theo 3 mức thay vì gõ số. */
+export const EPOCH_LEVELS = [
+  { key: 'few', epochs: 10 },
+  { key: 'medium', epochs: 50 },
+  { key: 'many', epochs: 200 },
+] as const;
 
 interface TrainSectionProps {
   readonly readiness: TrainingReadiness;
@@ -28,6 +34,10 @@ interface TrainSectionProps {
   readonly guessResult: { readonly guess: number; readonly actual: number } | null;
   readonly onStep: () => void;
   readonly onFinish: () => void;
+  /** Khung "đã đổi gì so với lần trước", tính theo cài đặt đang chọn. */
+  readonly renderPlan?: ((options: TrainOptions) => ReactNode) | undefined;
+  /** Hiện dưới kết quả huấn luyện (so sánh với lần trước, kết luận). */
+  readonly afterResult?: ReactNode;
 }
 
 function isValid(o: TrainOptions): boolean {
@@ -63,6 +73,8 @@ export function TrainSection(props: TrainSectionProps) {
       {readiness.readiness !== 'ready' ? (
         <p className="text-sm text-warning">{t(readiness.readiness === 'need-features' ? 'project.train.needFeatures' : 'project.train.needClasses')}</p>
       ) : (
+        <div className="space-y-3">
+        {!isActive && props.renderPlan?.(options)}
         <div className="flex flex-wrap items-end gap-4">
           <fieldset className="flex gap-1 text-sm">
             <legend className="mb-1 text-xs text-muted">{t('project.train.speed')}</legend>
@@ -73,7 +85,11 @@ export function TrainSection(props: TrainSectionProps) {
               </label>
             ))}
           </fieldset>
-          {mode === 'expert' && <OptionInputs options={options} onChange={setOptions} disabled={isActive} />}
+          {mode === 'expert' ? (
+            <OptionInputs options={options} onChange={setOptions} disabled={isActive} />
+          ) : (
+            <EpochLevels epochs={options.epochs} onChange={(epochs) => setOptions({ ...options, epochs })} disabled={isActive} />
+          )}
           {props.canGuess && (
             <label className="flex flex-col text-xs text-muted">
               {t('project.train.guessLabel')}
@@ -109,6 +125,7 @@ export function TrainSection(props: TrainSectionProps) {
           {!valid && <p role="alert" className="text-sm text-danger">{t('project.train.invalid')}</p>}
           {!isGuessValid && <p role="alert" className="text-sm text-danger">{t('project.train.guessInvalid')}</p>}
         </div>
+        </div>
       )}
 
       {last && (
@@ -117,6 +134,7 @@ export function TrainSection(props: TrainSectionProps) {
         </p>
       )}
       {props.guessResult && <GuessResult {...props.guessResult} />}
+      {!isActive && props.afterResult}
       {snapshots.length > 0 && <Charts {...props} />}
       <StepNotebook step="train" />
     </section>
@@ -137,6 +155,21 @@ function GuessResult({ guess, actual }: { readonly guess: number; readonly actua
     <p className="border-l-4 border-primary pl-3 text-sm" data-testid="guess-result">
       {t('project.train.guessResult', { guess: percent(guess), actual: percent(actual), diff: Math.abs(percent(actual) - percent(guess)) })}
     </p>
+  );
+}
+
+function EpochLevels({ epochs, onChange, disabled }: { epochs: number; onChange: (epochs: number) => void; disabled: boolean }) {
+  const { t } = useTranslation();
+  return (
+    <fieldset className="flex gap-1 text-sm">
+      <legend className="mb-1 text-xs text-muted">{t('project.train.epochLevel')}</legend>
+      {EPOCH_LEVELS.map((level) => (
+        <label key={level.key} className={`cursor-pointer rounded border px-2 py-1 ${epochs === level.epochs ? 'border-primary' : 'border-rule'}`}>
+          <input type="radio" name="epoch-level" className="sr-only" checked={epochs === level.epochs} onChange={() => onChange(level.epochs)} disabled={disabled} />
+          {t(`project.train.epochLevels.${level.key}`, { n: level.epochs })}
+        </label>
+      ))}
+    </fieldset>
   );
 }
 
