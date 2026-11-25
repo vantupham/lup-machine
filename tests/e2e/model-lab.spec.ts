@@ -47,11 +47,15 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   const fallbacks: string[] = [];
   page.on('console', (m) => m.text().includes('Web Worker') && fallbacks.push(m.text()));
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
 
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Ấm và lạnh');
-  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo dự án Ảnh mới', exact: true }).click();
 
   await upload(page, 'Lớp 1', await makeImages(page, 'warm', IMAGES_PER_CLASS));
   await upload(page, 'Lớp 2', await makeImages(page, 'cool', IMAGES_PER_CLASS));

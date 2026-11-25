@@ -2,7 +2,11 @@ import { expect, test } from '@playwright/test';
 
 /** Phiếu bài tập in ra giấy thật: kể cả khi máy đang ở chế độ tối, bản in vẫn nền trắng chữ đen, không có thanh điều hướng. */
 test('in phiếu bài 4 (học sinh và giáo viên) ra PDF A4', async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('./#/lessons/bac-si-cay-trong');
   await page.getByRole('link', { name: /Phiếu bài tập in được/ }).click();

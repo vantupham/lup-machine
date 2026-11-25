@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Check } from '@/ui/icons';
+import { ensureStepVisible } from './step-details';
 
 export const STEP_KEYS = ['data', 'check', 'represent', 'train', 'evaluate', 'use'] as const;
 export type StepKey = (typeof STEP_KEYS)[number];
@@ -117,6 +118,7 @@ export function StepBar({ targets }: { readonly targets: StepTargets }) {
     (key: StepKey) => {
       const heading = document.getElementById(targets[key]);
       if (!heading) return;
+      ensureStepVisible(heading);
       const section = heading.closest('section') ?? heading;
       const barHeight = barRef.current?.offsetHeight ?? 0;
       const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;

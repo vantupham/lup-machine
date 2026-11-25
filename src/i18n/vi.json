@@ -5,7 +5,6 @@
   },
   "nav": {
     "label": "Điều hướng chính",
-    "home": "Trang chủ",
     "studio": "Xưởng mô hình",
     "playground": "Sân chơi thuật toán",
     "about": "Giới thiệu & Quyền riêng tư",
@@ -27,9 +26,6 @@
     "title": "Đừng chỉ xem AI đoán đúng.",
     "titleMark": "Hãy nhìn nó làm thế nào.",
     "lead": "Tự dạy cho máy tính bằng dữ liệu của em, rồi mở nắp từng bước: ảnh biến thành con số ra sao, máy học như thế nào, vì sao nó đoán sai.",
-    "ctaCreate": "Tạo mô hình mới",
-    "ctaStudio": "Vào Xưởng mô hình",
-    "ctaAbout": "Dữ liệu của em đi đâu?",
     "pipelineTitle": "Sáu bước, bước nào cũng mở nắp được",
     "steps": {
       "data": "Dữ liệu",
@@ -64,9 +60,6 @@
     "newProject": "Dự án mới",
     "nameLabel": "Tên dự án",
     "namePlaceholder": "Ví dụ: Phân loại rác lớp 7A",
-    "typeLabel": "Loại dữ liệu",
-    "create": "Tạo dự án",
-    "creating": "Đang tạo…",
     "types": {
       "image": "Ảnh",
       "audio": "Âm thanh",
@@ -75,15 +68,12 @@
       "tabular": "Bảng số"
     },
     "listTitle": "Dự án của em",
-    "empty": "Chưa có dự án nào. Hãy tạo dự án đầu tiên ở bên cạnh.",
+    "empty": "Chưa có dự án nào. Bấm một loại dữ liệu ở trên để tạo.",
     "updatedAt": "Cập nhật {{date}}",
     "delete": "Xóa",
-    "confirmDelete": "Xóa dự án \"{{name}}\"? Không thể hoàn tác.",
     "loadError": "Không đọc được dữ liệu đã lưu trên trình duyệt. Có thể trình duyệt đang ở chế độ ẩn danh hoặc đã chặn lưu trữ.",
     "saveError": "Không lưu được dự án: {{message}}",
     "open": "Mở",
-    "namedTitle": "Tạo với tên riêng",
-    "namedLead": "Muốn đặt tên ngay từ đầu, ví dụ để nộp bài? Điền tên rồi chọn loại dữ liệu.",
     "searchLabel": "Tìm dự án",
     "searchPlaceholder": "Gõ tên dự án, không dấu cũng được",
     "noMatch": "Không có dự án nào có tên chứa \"{{query}}\".",
@@ -99,9 +89,10 @@
       "runs": "Đã huấn luyện {{count}} lần"
     },
     "deleteError": "Không xóa được dự án \"{{name}}\": {{message}}",
-    "namedEyebrow": "Bắt đầu thí nghiệm mới",
-    "nameHint": "Không bắt buộc. Để trống thì máy tự đặt, ví dụ \"Dự án ảnh 1\"; đổi tên sau lúc nào cũng được.",
-    "namedFooter": "Tạo xong là vào thẳng dự án."
+    "nameHint": "Không bắt buộc. Bấm một loại dữ liệu bên dưới là tạo ngay.",
+    "deleted": "Đã xóa \"{{name}}\".",
+    "undo": "Hoàn tác",
+    "dismiss": "Đóng"
   },
   "quickStart": {
     "title": "Em muốn dạy máy nhận ra gì?",
@@ -866,6 +857,10 @@
       "epochCounter": "lượt {{epoch}}/{{total}}",
       "notReady": "Chưa huấn luyện được: cần ít nhất 2 lớp có ảnh ở ngăn Dạy.",
       "cameraBusy": "Đang dùng webcam để chụp ảnh; đóng hộp chụp để xem thử tiếp."
+    },
+    "details": {
+      "show": "Xem từng bước bên trong",
+      "hide": "Thu gọn các bước"
     }
   },
   "samples": {

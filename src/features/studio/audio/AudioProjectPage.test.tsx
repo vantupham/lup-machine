@@ -76,8 +76,7 @@ describe('Studio âm thanh', () => {
     const repos = createTestRepository();
     renderApp('/studio', repos.repository, repos.dataset, repos.experiments, repos.tables, repos.audio);
     await userEvent.type(await screen.findByLabelText('Tên dự án'), 'Âm thanh lớp 7');
-    await userEvent.click(screen.getByRole('radio', { name: /Âm thanh/ }));
-    await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án Âm thanh mới' }));
     expect(await screen.findByRole('button', { name: /Dùng âm thanh mẫu/ })).toBeInTheDocument();
   });
 });

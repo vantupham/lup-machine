@@ -3,6 +3,7 @@ import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { DEFAULT_TRAIN_OPTIONS } from '../lab/TrainSection';
 import type { ImageLab } from '../lab/useImageLab';
 import { ArrowDown } from '@/ui/icons';
+import { ensureStepVisible } from '@/features/studio/step-details';
 
 /** Cần ít nhất chừng này lớp có ảnh Dạy mới huấn luyện được (khớp với lab-data). */
 const MIN_CLASSES_WITH_IMAGES = 2;
@@ -68,6 +69,7 @@ function TrainProgress({ lab }: { readonly lab: ImageLab }) {
 export function revealHeading(id: string): void {
   const heading = document.getElementById(id);
   if (!heading) return;
+  ensureStepVisible(heading);
   const section = heading.closest('section') ?? heading;
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   const stickyBar = document.querySelector<HTMLElement>('nav[data-step-bar]')?.offsetHeight ?? 0;

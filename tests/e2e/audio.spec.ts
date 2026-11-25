@@ -26,11 +26,14 @@ function wav(hz: number, seconds: number, rate = 44_100): Buffer {
 }
 
 test('Studio âm thanh: âm thanh mẫu, thu bằng micro (giả), tải tệp WAV và nhận ra tiếng còi', async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Âm thanh E2E');
-  await page.getByRole('radio', { name: /Âm thanh/ }).check();
-  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo dự án Âm thanh mới', exact: true }).click();
 
   await page.getByRole('button', { name: /Dùng âm thanh mẫu/ }).click();
   await expect(page.getByTestId('clip-count-2')).toHaveText('16 đoạn');

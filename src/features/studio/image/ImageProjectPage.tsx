@@ -21,6 +21,8 @@ import { ModelLab } from './lab/ModelLab';
 import { ImageLabProvider } from './lab/ImageLabContext';
 import { QuickWorkspace } from './quick/QuickWorkspace';
 import { useModeStore } from '@/ui/mode-store';
+import { useStepDetailsStore } from '@/features/studio/step-details';
+import { ChevronDown, ChevronUp } from '@/ui/icons';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { BackLink } from '@/ui/BackLink';
@@ -86,6 +88,10 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
   };
 
   const mode = useModeStore((s) => s.mode);
+  const isDetailsOpen = useStepDetailsStore((s) => s.isOpen);
+  const setDetailsOpen = useStepDetailsStore((s) => s.setOpen);
+  /** Khám phá: các bước chi tiết thu gọn tới khi người xem mở (hoặc bấm một bước). Chuyên sâu: luôn mở. */
+  const showDetails = mode === 'expert' || isDetailsOpen;
   const [blurFaces, setBlurFaces] = useFaceBlurSetting(projectId);
   const { upload, progress } = useImageUpload(projectId, (text, kind) => setMessage({ kind, text }), reload, blurFaces);
 
@@ -185,6 +191,20 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         />
       )}
 
+      {mode === 'explore' && (
+        <button
+          type="button"
+          aria-expanded={showDetails}
+          aria-controls="step-details"
+          onClick={() => setDetailsOpen(!showDetails)}
+          className="btn btn-ghost"
+        >
+          {showDetails ? <ChevronUp /> : <ChevronDown />}
+          {t(showDetails ? 'project.details.hide' : 'project.details.show')}
+        </button>
+      )}
+
+      <div id="step-details" data-step-details hidden={!showDetails} className="space-y-8">
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <section aria-labelledby="data-title" data-step-done={dataReady ? 'true' : undefined} className="space-y-4">
           <div>
@@ -240,6 +260,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
       </div>
 
       <ModelLab projectName={projectName} classes={classes} samples={samples} />
+      </div>
 
       {inspecting && (
         <PixelInspector

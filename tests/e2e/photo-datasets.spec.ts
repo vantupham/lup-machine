@@ -16,7 +16,11 @@ async function createAndTrain(page: Page, cardTitle: string): Promise<{ train: n
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
 });
 
 test('bộ hoa: ảnh thật, mô hình học tốt; ảnh mang ghi công tác giả', async ({ page }) => {

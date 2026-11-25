@@ -3,7 +3,11 @@ import { expect, test } from '@playwright/test';
 const percent = async (locator: import('@playwright/test').Locator) => Number((await locator.textContent())?.match(/(\d+)%/)?.[1]);
 
 test('Phòng đạo đức AI: dữ liệu lệch làm AI kém với Miền núi; thêm dữ liệu và bối cảnh thì công bằng hơn', async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   await page.goto('./#/');
   await page.getByRole('link', { name: 'Đạo đức AI' }).click();
 

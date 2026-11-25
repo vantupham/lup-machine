@@ -6,6 +6,7 @@ import type { StoredImage } from '@/storage/db';
 import { createTestRepository, renderApp, type TestRepositories } from '../../../../../tests/setup/render';
 import * as codec from '../image-codec.browser';
 import * as loader from '../feature-loader.browser';
+import { useStepDetailsStore } from '@/features/studio/step-details';
 
 const imageOf = (tone: number, n: number): StoredImage => ({ bytes: new Uint8Array([tone, n]).buffer, mime: 'image/jpeg', width: 224, height: 224 });
 
@@ -66,6 +67,7 @@ const quick = () => screen.getByRole('region', { name: 'Dạy máy trong 3 bư�
 beforeEach(async () => {
   await i18n.changeLanguage('vi');
   useModeStore.setState({ mode: 'explore' });
+  useStepDetailsStore.setState({ isOpen: false });
   window.scrollTo = vi.fn();
 });
 
@@ -183,6 +185,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
   });
 
   test('đang biến ảnh thành vector ở bước 3 thì "Huấn luyện nhanh" chờ; xong thì huấn luyện, không trích lại', async () => {
+    useStepDetailsStore.setState({ isOpen: true });
     await seed();
     open();
     await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
@@ -207,6 +210,40 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     await within(quick()).findByText(/Xong!/, {}, { timeout: TRAIN_WAIT_MS });
     expect(loader.loadFeatureExtractor).toHaveBeenCalledTimes(1);
     expect(await repos.experiments.listRuns(projectId)).toHaveLength(1);
+  });
+
+  test('Khám phá: 6 bước chi tiết thu gọn sẵn; nút "Xem từng bước bên trong" mở và nhớ lựa chọn', async () => {
+    await seed();
+    const view = open();
+    const toggle = await screen.findByRole('button', { name: 'Xem từng bước bên trong' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('heading', { name: 'Dữ liệu' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /biến ảnh thành vector/i })).toBeNull();
+    await userEvent.click(toggle);
+    expect(screen.getByRole('button', { name: 'Thu gọn các bước' })).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('heading', { name: 'Dữ liệu' })).toBeVisible();
+    view.unmount();
+    open();
+    expect(await screen.findByRole('heading', { name: 'Dữ liệu' })).toBeVisible();
+  });
+
+  test('Khám phá: bấm một bước trên thanh các bước thì mở phần chi tiết và tới đúng bước đó', async () => {
+    await seed();
+    open();
+    const bar = await screen.findByRole('navigation', { name: 'Các bước của dự án' });
+    await userEvent.click(within(bar).getByRole('button', { name: /^Bước 3:/ }));
+    const heading = screen.getByRole('heading', { name: 'Biểu diễn' });
+    expect(heading).toBeVisible();
+    expect(heading).toHaveFocus();
+    expect(window.scrollTo).toHaveBeenCalled();
+  });
+
+  test('Chuyên sâu: các bước luôn mở, không có nút thu gọn', async () => {
+    useModeStore.setState({ mode: 'expert' });
+    await seed();
+    open();
+    expect(await screen.findByRole('heading', { name: 'Dữ liệu' })).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Xem từng bước bên trong' })).toBeNull();
   });
 
   test('đang xem thử bằng webcam mà mở hộp chụp ảnh thì tạm tắt xem thử (một camera không mở được hai lần)', async () => {

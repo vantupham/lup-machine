@@ -1,22 +1,13 @@
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { version } from '../../../package.json';
 import { ProjectTypeCards } from '@/features/studio/quick-start/ProjectTypeCards';
 import { RecentProjects } from '@/features/studio/quick-start/RecentProjects';
-import { ArrowDown, ArrowRight } from '@/ui/icons';
 
 const PIPELINE_STEPS = ['data', 'check', 'represent', 'train', 'evaluate', 'use'] as const;
 const PROMISES = ['privacy', 'honest', 'open'] as const;
 
 export function HomePage() {
   const { t } = useTranslation();
-
-  /** Cuộn tới các thẻ loại dự án và đặt con trỏ vào thẻ đầu tiên (dùng được cả bằng bàn phím). */
-  const goToQuickStart = () => {
-    const section = document.getElementById('quick-start');
-    section?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
-    section?.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true });
-  };
 
   return (
     <div className="space-y-20">
@@ -32,17 +23,6 @@ export function HomePage() {
             {t('home.title')} <span className="mark block sm:inline">{t('home.titleMark')}</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">{t('home.lead')}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <button type="button" className="btn btn-primary" onClick={goToQuickStart}>
-              {t('home.ctaCreate')} <ArrowDown />
-            </button>
-            <Link to="/studio" className="btn btn-ghost">
-              {t('home.ctaStudio')} <ArrowRight />
-            </Link>
-            <Link to="/about" className="btn btn-ghost">
-              {t('home.ctaAbout')}
-            </Link>
-          </div>
         </div>
         <PixelSpecimen />
       </section>

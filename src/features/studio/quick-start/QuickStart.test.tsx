@@ -18,12 +18,6 @@ describe('Tạo mô hình nhanh từ trang chủ', () => {
     }
   });
 
-  test('nút "Tạo mô hình mới" ở đầu trang đưa con trỏ tới thẻ Ảnh', async () => {
-    renderApp('/', createTestRepository().repository);
-    await userEvent.click(screen.getByRole('button', { name: /Tạo mô hình mới/ }));
-    expect(screen.getByRole('button', { name: 'Tạo dự án Ảnh mới' })).toHaveFocus();
-  });
-
   test('một cú bấm: tạo dự án ảnh tên tự đặt, có sẵn 2 lớp, rồi vào thẳng dự án', async () => {
     const repos = createTestRepository();
     renderApp('/', repos.repository, repos.dataset);
@@ -87,11 +81,21 @@ describe('Tạo mô hình nhanh từ trang chủ', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Mới nhất' })).toBeInTheDocument();
   });
 
-  test('thanh điều hướng làm nổi mục Xưởng mô hình', () => {
+  test('thanh điều hướng gọn 5 mục, làm nổi Xưởng mô hình; Giới thiệu và đổi ngôn ngữ ở chân trang', () => {
     renderApp('/', createTestRepository().repository);
     const nav = screen.getByRole('navigation', { name: 'Điều hướng chính' });
+    expect(within(nav).getAllByRole('link').map((l) => l.textContent)).toEqual(['Xưởng mô hình', 'Sân chơi thuật toán', 'Bài học', 'Đạo đức AI', 'Góc giáo viên']);
     expect(within(nav).getByRole('link', { name: 'Xưởng mô hình' })).toHaveAttribute('data-featured', 'true');
-    expect(within(nav).getByRole('link', { name: 'Trang chủ' })).not.toHaveAttribute('data-featured');
+    expect(within(nav).getByRole('link', { name: 'Bài học' })).not.toHaveAttribute('data-featured');
+    const footer = screen.getByRole('contentinfo');
+    expect(within(footer).getByRole('link', { name: 'Giới thiệu & Quyền riêng tư' })).toHaveAttribute('href', '/about');
+    expect(within(footer).getByRole('button', { name: 'English' })).toBeInTheDocument();
+  });
+
+  test('trang chủ không còn nút kêu gọi trùng lặp: thẻ loại dữ liệu là lối vào chính', () => {
+    renderApp('/', createTestRepository().repository);
+    expect(screen.queryByRole('button', { name: /Tạo mô hình mới/ })).toBeNull();
+    expect(screen.queryByRole('link', { name: /Vào Xưởng mô hình/ })).toBeNull();
   });
 });
 

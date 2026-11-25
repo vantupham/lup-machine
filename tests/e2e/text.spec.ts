@@ -1,11 +1,14 @@
 import { expect, test } from '@playwright/test';
 
 test('Studio văn bản: bộ góp ý căng tin, huấn luyện, giải thích từng từ, tải notebook', async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Căng tin E2E');
-  await page.getByRole('radio', { name: /Văn bản/ }).check();
-  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo dự án Văn bản mới', exact: true }).click();
 
   await page.getByRole('button', { name: /Góp ý căng tin/ }).click();
   await expect(page.getByTestId('text-size')).toHaveText('80 câu · 2 nhóm');

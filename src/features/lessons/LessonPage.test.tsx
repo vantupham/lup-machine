@@ -64,7 +64,7 @@ describe('Bài học', () => {
     open('/lessons/day-may-phan-biet-hinh');
     await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án mẫu cho bài này' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'Tròn, vuông, tam giác' })).toBeInTheDocument();
-    expect(screen.getByRole('article', { name: 'Tam giác' })).toBeInTheDocument();
+    expect(within(screen.getByRole('region', { name: 'Dạy máy trong 3 bước' })).getByRole('group', { name: 'Tam giác' })).toBeInTheDocument();
     const [project] = await repos.repository.findAll();
     const counts = await repos.dataset.countSamples(project!.id);
     expect(Object.values(counts)).toEqual([

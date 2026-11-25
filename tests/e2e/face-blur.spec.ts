@@ -27,10 +27,14 @@ async function centerDetail(page: Page, index: number): Promise<number> {
 
 test('làm mờ khuôn mặt: bật thì ảnh lưu đã bị pixel hóa, tắt thì giữ nguyên chi tiết', async ({ page }) => {
   test.setTimeout(120_000);
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Quyền riêng tư');
-  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo dự án Ảnh mới', exact: true }).click();
 
   const toggle = page.getByRole('checkbox', { name: 'Làm mờ khuôn mặt trước khi lưu ảnh' });
   await expect(toggle).toBeChecked();

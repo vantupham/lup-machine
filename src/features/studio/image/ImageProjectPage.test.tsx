@@ -6,6 +6,7 @@ import type { StoredImage } from '@/storage/db';
 import { createTestRepository, renderApp, type TestRepositories } from '../../../../tests/setup/render';
 import * as codec from './image-codec.browser';
 import { FaceBlurError } from './face-blur-error';
+import { useStepDetailsStore } from '@/features/studio/step-details';
 
 const FAKE_IMAGE: StoredImage = { bytes: new Uint8Array([9]).buffer, mime: 'image/jpeg', width: 224, height: 224 };
 
@@ -48,6 +49,7 @@ function panel(name: string) {
 beforeEach(async () => {
   await i18n.changeLanguage('vi');
   useModeStore.setState({ mode: 'explore' });
+  useStepDetailsStore.setState({ isOpen: true });
 });
 
 afterEach(() => {

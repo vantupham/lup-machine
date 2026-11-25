@@ -8,8 +8,13 @@ import { QUICK_START_TYPES } from './quick-start';
 import { useCreateProject } from './useCreateProject';
 import { ArrowRight } from '@/ui/icons';
 
-/** Năm thẻ lớn: bấm một lần là có dự án (tên tự đặt) và vào thẳng không gian làm việc. */
-export function ProjectTypeCards() {
+interface ProjectTypeCardsProps {
+  /** Tên người dùng gõ sẵn; để trống thì máy tự đặt. */
+  readonly name?: string;
+}
+
+/** Năm thẻ lớn: bấm một lần là có dự án và vào thẳng không gian làm việc. */
+export function ProjectTypeCards({ name = '' }: ProjectTypeCardsProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const createProject = useCreateProject();
@@ -20,7 +25,7 @@ export function ProjectTypeCards() {
     setCreating(type);
     setError(null);
     try {
-      const project = await createProject(type);
+      const project = await createProject(type, name);
       navigate(`/studio/${project.id}`);
     } catch (err: unknown) {
       console.error('Không tạo được dự án', err);
