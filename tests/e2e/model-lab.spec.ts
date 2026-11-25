@@ -52,7 +52,6 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Ấm và lạnh');
   await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
-  await page.getByRole('link', { name: 'Mở Ấm và lạnh' }).click();
 
   await upload(page, 'Lớp 1', await makeImages(page, 'warm', IMAGES_PER_CLASS));
   await upload(page, 'Lớp 2', await makeImages(page, 'cool', IMAGES_PER_CLASS));

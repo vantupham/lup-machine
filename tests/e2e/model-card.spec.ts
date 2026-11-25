@@ -6,7 +6,6 @@ test('Thẻ mô hình: điền từ studio, còn sau khi tải lại, đi theo t
   await page.getByLabel('Tên dự án').fill('Ý kiến căng tin');
   await page.getByRole('radio', { name: /Văn bản/ }).check();
   await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
-  await page.getByRole('list', { name: 'Dự án của em' }).getByRole('link', { name: 'Mở' }).click();
 
   await page.getByRole('link', { name: /Thẻ mô hình · chưa điền đủ/ }).click();
   await expect(page.getByTestId('model-card-facts')).toContainText('Loại dự án: Văn bản');

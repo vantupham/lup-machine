@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
+import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -8,10 +9,14 @@ import { poseFeatures, unpackKeypoints } from '@/core/pose/features';
 import { checkPoseQuality } from '@/core/pose/pose-quality';
 import { RangeField } from '@/features/playground/controls';
 import { StudioStep as Step } from '../StudioStep';
+import { StepBar, studioStepTargets } from '../StepBar';
 import { PoseDataSection } from './PoseDataSection';
 import { PoseInspector } from './PoseInspector';
 import { PoseModelLab } from './PoseModelLab';
 import { usePoseProject } from './usePoseProject';
+
+/** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
+const STEP_TARGETS = studioStepTargets('pose');
 
 export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
   const { t } = useTranslation();
@@ -51,13 +56,15 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
       <header className="space-y-2">
         <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
         <p className="font-mono text-xs uppercase text-accent">{t('studio.types.pose')}</p>
-        <h1 className="font-display text-4xl font-bold">{state.project.name}</h1>
+        <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={() => void reload()} />
         <AssignmentBanner projectId={projectId} />
         <ModelCardLink projectId={projectId} />
         <p className="max-w-3xl text-muted">{t('pose.lead')}</p>
       </header>
 
-      <Step n={1} id="pose-step-data" title={t('pose.steps.data')}>
+      <StepBar targets={STEP_TARGETS} />
+
+      <Step n={1} id="pose-step-data" title={t('pose.steps.data')} done={new Set(samples.map((p) => p.classId)).size >= 2}>
         <PoseDataSection projectId={projectId} kind={kind} kindLocked={kindLocked} onKindChange={setKind} classes={state.classes} poses={samples} dataset={dataset} repo={poses} onChanged={reload} />
       </Step>
 

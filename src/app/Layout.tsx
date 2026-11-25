@@ -7,7 +7,7 @@ import { rememberLanguage, type Language } from '@/i18n';
 
 const NAV_ITEMS = [
   { to: '/', key: 'nav.home', end: true },
-  { to: '/studio', key: 'nav.studio', end: false },
+  { to: '/studio', key: 'nav.studio', end: false, featured: true },
   { to: '/playground', key: 'nav.playground', end: false },
   { to: '/lessons', key: 'nav.lessons', end: false },
   { to: '/dao-duc', key: 'nav.ethics', end: false },
@@ -45,11 +45,14 @@ export function Layout() {
                   <NavLink
                     to={item.to}
                     end={item.end}
+                    data-featured={'featured' in item ? 'true' : undefined}
                     className={({ isActive }) =>
                       `block whitespace-nowrap rounded px-3 py-1.5 text-sm font-medium transition-colors ${
                         isActive
                           ? 'bg-ink text-paper'
-                          : 'hover:bg-rule/60'
+                          : 'featured' in item
+                            ? 'bg-primary/10 font-semibold text-primary ring-1 ring-primary/40 hover:bg-primary/20'
+                            : 'hover:bg-rule/60'
                       }`
                     }
                   >

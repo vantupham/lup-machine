@@ -78,7 +78,6 @@ describe('Studio âm thanh', () => {
     await userEvent.type(await screen.findByLabelText('Tên dự án'), 'Âm thanh lớp 7');
     await userEvent.click(screen.getByRole('radio', { name: /Âm thanh/ }));
     await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án' }));
-    await userEvent.click(await screen.findByRole('link', { name: /Mở/ }));
     expect(await screen.findByRole('button', { name: /Dùng âm thanh mẫu/ })).toBeInTheDocument();
   });
 });

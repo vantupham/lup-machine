@@ -5,6 +5,7 @@ import {
   type CreateProjectInput,
   type UpdateProjectInput,
 } from '../schemas/project';
+import { summarizeProject, type ProjectSummary, type SummaryTarget } from './project-summary';
 
 /** Giao diện lưu trữ dự án. Logic nghiệp vụ chỉ phụ thuộc vào giao diện này. */
 export interface ProjectRepository {
@@ -14,6 +15,8 @@ export interface ProjectRepository {
   update(id: string, patch: UpdateProjectInput): Promise<ProjectRecord>;
   delete(id: string): Promise<void>;
   deleteAll(): Promise<void>;
+  /** Số lớp, số mẫu, ảnh thu nhỏ… để hiện trên thẻ dự án. */
+  summarize(project: SummaryTarget): Promise<ProjectSummary>;
 }
 
 export interface RepositoryDeps {
@@ -80,6 +83,10 @@ export function createDexieProjectRepository(
         await db.classes.where('projectId').equals(id).delete();
         await db.projects.delete(id);
       });
+    },
+
+    summarize(project) {
+      return summarizeProject(db, project);
     },
 
     async deleteAll() {

@@ -52,7 +52,6 @@ test('dự án bảng: bảng dữ liệu và cấu hình mô hình đi theo t�
   await page.getByLabel('Tên dự án').fill('Cánh cụt mang đi');
   await page.getByRole('radio', { name: /Bảng số/ }).check();
   await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
-  await page.getByRole('listitem').filter({ hasText: 'Cánh cụt mang đi' }).getByRole('link', { name: 'Mở' }).click();
   await page.getByRole('button', { name: /Chim cánh cụt Palmer/ }).click();
   await expect(page.getByTestId('table-size')).toHaveText('344 dòng × 7 cột');
   await page.getByRole('radio', { name: /Hồi quy logistic/ }).check();

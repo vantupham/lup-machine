@@ -61,7 +61,6 @@ describe('Studio tư thế & bàn tay', () => {
     await userEvent.type(await screen.findByLabelText('Tên dự án'), 'Cử chỉ');
     await userEvent.click(screen.getByRole('radio', { name: /Tư thế/ }));
     await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án' }));
-    await userEvent.click(await screen.findByRole('link', { name: /Mở/ }));
     await userEvent.click(await screen.findByRole('button', { name: /Dùng tư thế mẫu/ }));
     await screen.findByTestId('pose-count-3');
     await userEvent.type(screen.getByLabelText('Tên nhóm mới'), 'Ngồi xổm');

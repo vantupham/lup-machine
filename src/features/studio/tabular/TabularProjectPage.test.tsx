@@ -95,7 +95,6 @@ describe('Xưởng mô hình tạo được dự án dữ liệu bảng', () => 
     await userEvent.type(await screen.findByLabelText('Tên dự án'), 'Chim cánh cụt');
     await userEvent.click(screen.getByRole('radio', { name: /Bảng số/ }));
     await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án' }));
-    await userEvent.click(await screen.findByRole('link', { name: /Mở/ }));
     expect(await screen.findByRole('heading', { level: 1, name: 'Chim cánh cụt' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Hoa diên vĩ/ })).toBeInTheDocument();
     expect(await repos.dataset.listClasses((await repos.repository.findAll())[0]!.id)).toEqual([]);

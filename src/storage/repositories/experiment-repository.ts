@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { LupDatabase, RunRecord } from '../db';
+import { touchProjects } from './touch-project';
 import type { RepositoryDeps } from './project-repository';
 
 /** Giữ nhật ký gọn nhẹ: tối đa ngần này lần chạy mỗi dự án, lần cũ nhất bị xóa trước. */
@@ -49,19 +50,23 @@ export function createDexieExperimentRepository(db: LupDatabase, deps: Repositor
 
     async addRun(input) {
       const valid = newRunSchema.parse(input);
-      return db.transaction('rw', db.runs, async () => {
+      const record = await db.transaction('rw', db.runs, async () => {
         const existing = await listRuns(valid.projectId);
         const number = (existing[0]?.number ?? 0) + 1;
-        const record: RunRecord = { ...valid, id: deps.newId(), number, createdAt: deps.now() };
-        await db.runs.add(record);
+        const created: RunRecord = { ...valid, id: deps.newId(), number, createdAt: deps.now() };
+        await db.runs.add(created);
         const overflow = existing.slice(MAX_RUNS_PER_PROJECT - 1);
         if (overflow.length > 0) await db.runs.bulkDelete(overflow.map((r) => r.id));
-        return record;
+        return created;
       });
+      await touchProjects(db, [record.projectId], record.createdAt);
+      return record;
     },
 
     async deleteRun(id) {
+      const projectId = (await db.runs.get(id))?.projectId;
       await db.runs.delete(id);
+      await touchProjects(db, [projectId], deps.now());
     },
   };
 }

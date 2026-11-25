@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
+import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -15,6 +16,7 @@ import { isTabularConfig } from '@/storage/repositories/table-repository';
 import { ColabExportPanel } from '@/features/export/ColabExportPanel';
 import { version as appVersion } from '../../../../package.json';
 import { StudioStep as Step } from '../StudioStep';
+import { StepBar, studioStepTargets } from '../StepBar';
 import { DataSection } from './DataSection';
 import { EvaluateSection } from './EvaluateSection';
 import { ModelSection } from './ModelSection';
@@ -31,9 +33,12 @@ interface TrainedState {
   readonly count: number;
 }
 
+/** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
+const STEP_TARGETS = studioStepTargets('tab');
+
 export function TabularProjectPage({ projectId }: { readonly projectId: string }) {
   const { t } = useTranslation();
-  const { state, saveTable, saveConfig } = useTabularProject(projectId);
+  const { state, saveTable, saveConfig, renameProject } = useTabularProject(projectId);
   const [trained, setTrained] = useState<TrainedState | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -79,14 +84,16 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
       <header className="space-y-2">
         <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
         <p className="font-mono text-xs uppercase text-accent">{t('studio.types.tabular')}</p>
-        <h1 className="font-display text-4xl font-bold">{state.project.name}</h1>
+        <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={renameProject} />
         <AssignmentBanner projectId={projectId} />
         <ModelCardLink projectId={projectId} />
         <p className="max-w-3xl text-muted">{t('tabular.lead')}</p>
         {saveError && <p role="alert" className="text-sm text-danger">{saveError}</p>}
       </header>
 
-      <Step n={1} id="tab-step-data" title={t('tabular.steps.data')}>
+      <StepBar targets={STEP_TARGETS} />
+
+      <Step n={1} id="tab-step-data" title={t('tabular.steps.data')} done={state.table !== null}>
         <DataSection table={table} parsed={parsed} columns={columns} onSave={async (input) => { await saveTable(input); setTrained(null); }} />
       </Step>
 
@@ -101,7 +108,7 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
           <Step n={3} id="tab-step-represent" title={t('tabular.steps.represent')}>
             <RepresentSection data={data} />
           </Step>
-          <Step n={4} id="tab-step-train" title={t('tabular.steps.train')}>
+          <Step n={4} id="tab-step-train" title={t('tabular.steps.train')} done={current !== null}>
             <ModelSection
               task={config.task}
               settings={config.model}

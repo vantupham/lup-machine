@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
+import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -8,10 +9,14 @@ import { checkAudioQuality, peakAmplitude } from '@/core/audio/audio-quality';
 import { RangeField } from '@/features/playground/controls';
 import { clipSamples } from '@/storage/repositories/audio-repository';
 import { StudioStep as Step } from '../StudioStep';
+import { StepBar, studioStepTargets } from '../StepBar';
 import { AudioDataSection } from './AudioDataSection';
 import { AudioInspector } from './AudioInspector';
 import { AudioModelLab } from './AudioModelLab';
 import { useAudioProject } from './useAudioProject';
+
+/** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
+const STEP_TARGETS = studioStepTargets('audio');
 
 export function AudioProjectPage({ projectId }: { readonly projectId: string }) {
   const { t } = useTranslation();
@@ -45,13 +50,15 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
       <header className="space-y-2">
         <Link to="/studio" className="text-sm text-primary hover:underline">{t('project.back')}</Link>
         <p className="font-mono text-xs uppercase text-accent">{t('studio.types.audio')}</p>
-        <h1 className="font-display text-4xl font-bold">{state.project.name}</h1>
+        <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={() => void reload()} />
         <AssignmentBanner projectId={projectId} />
         <ModelCardLink projectId={projectId} />
         <p className="max-w-3xl text-muted">{t('audio.lead')}</p>
       </header>
 
-      <Step n={1} id="audio-step-data" title={t('audio.steps.data')}>
+      <StepBar targets={STEP_TARGETS} />
+
+      <Step n={1} id="audio-step-data" title={t('audio.steps.data')} done={new Set(state.clips.map((c) => c.classId)).size >= 2}>
         <AudioDataSection projectId={projectId} classes={state.classes} clips={state.clips} dataset={dataset} audio={audio} onChanged={reload} />
       </Step>
 

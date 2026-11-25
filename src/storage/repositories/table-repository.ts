@@ -1,4 +1,5 @@
 import type { LupDatabase, TableRecord } from '../db';
+import { touchProjects } from './touch-project';
 import { CSV_LIMITS } from '@/core/tabular/csv';
 import { parseTabularConfig, type TabularConfig } from '../schemas/tabular';
 import { parseTextConfig, type TextConfig } from '../schemas/text';
@@ -68,18 +69,22 @@ export function createDexieTableRepository(db: LupDatabase, now: () => string = 
         updatedAt: now(),
       };
       await db.dataTables.put(record);
+      await touchProjects(db, [projectId], record.updatedAt);
       return toStored(record);
     },
 
     async saveConfig(projectId, config) {
       const parsed = parseTableProjectConfig(config);
       if (!parsed) throw new RangeError('Cấu hình không hợp lệ');
-      const updated = await db.dataTables.update(projectId, { config: parsed, updatedAt: now() });
+      const at = now();
+      const updated = await db.dataTables.update(projectId, { config: parsed, updatedAt: at });
       if (updated === 0) throw new RangeError('Dự án chưa có bảng dữ liệu');
+      await touchProjects(db, [projectId], at);
     },
 
     async delete(projectId) {
       await db.dataTables.delete(projectId);
+      await touchProjects(db, [projectId], now());
     },
   };
 }

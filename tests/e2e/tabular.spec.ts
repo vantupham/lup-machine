@@ -6,7 +6,6 @@ test('Studio dữ liệu bảng: tạo dự án, nạp chim cánh cụt, huấn 
   await page.getByLabel('Tên dự án').fill('Chim cánh cụt E2E');
   await page.getByRole('radio', { name: /Bảng số/ }).check();
   await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
-  await page.getByRole('listitem').filter({ hasText: 'Chim cánh cụt E2E' }).getByRole('link', { name: 'Mở' }).click();
 
   await page.getByRole('button', { name: /Chim cánh cụt Palmer/ }).click();
   await expect(page.getByTestId('table-size')).toHaveText('344 dòng × 7 cột');

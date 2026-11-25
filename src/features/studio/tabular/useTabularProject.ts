@@ -51,5 +51,10 @@ export function useTabularProject(projectId: string) {
     [tables, projectId],
   );
 
-  return { state, saveTable, saveConfig };
+  /** Tên đã lưu ở kho dự án (ProjectTitle); chỉ cần cập nhật trạng thái để tên tệp xuất dùng tên mới. */
+  const renameProject = useCallback((name: string) => {
+    setState((s) => (s.status === 'ready' ? { ...s, project: { ...s.project, name } } : s));
+  }, []);
+
+  return { state, saveTable, saveConfig, renameProject };
 }

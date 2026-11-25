@@ -9,7 +9,8 @@ import { getErrorMessage } from '@/ui/error-message';
 import { PixelInspector } from '@/features/inspector/pixel/PixelInspector';
 import { ClassPanel } from './ClassPanel';
 import { QualityPanel } from './QualityPanel';
-import { StepNav } from './StepNav';
+import { StepBar, type StepTargets } from '@/features/studio/StepBar';
+import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { WebcamCapture } from './WebcamCapture';
 import { useProjectData } from './useProjectData';
 import { useImageUpload } from './useImageUpload';
@@ -23,6 +24,16 @@ import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 
 /** Lớp phân biệt bằng cả ký hiệu, không chỉ màu (thân thiện người mù màu). */
 export const SPLIT_SEED = 42;
+
+/** Id tiêu đề các phần của Studio ảnh, theo thứ tự 6 bước. */
+const IMAGE_STEP_TARGETS: StepTargets = {
+  data: 'data-title',
+  check: 'quality-title',
+  represent: 'represent-title',
+  train: 'train-title',
+  evaluate: 'evaluate-title',
+  use: 'use-title',
+};
 const TEST_RATIO = 0.2;
 
 type Message = { readonly kind: 'info' | 'error'; readonly text: string } | null;
@@ -89,6 +100,9 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
     return result;
   }, [byClass]);
 
+  /** Bước Dữ liệu xong khi ít nhất 2 lớp có ảnh để dạy. */
+  const dataReady = Object.values(counts).filter((c) => c.train > 0).length >= 2;
+
   const autoSplit = () =>
     run(async () => {
       const { train, test } = stratifiedSplit(
@@ -125,11 +139,12 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         <Link to="/studio" className="text-sm text-primary hover:underline">
           {t('project.back')}
         </Link>
-        <h1 className="font-display text-4xl font-bold">{projectName}</h1>
+        <ProjectTitle projectId={projectId} name={projectName} onRenamed={() => void reload()} />
         <AssignmentBanner projectId={projectId} />
         <ModelCardLink projectId={projectId} />
-        <StepNav />
       </header>
+
+      <StepBar targets={IMAGE_STEP_TARGETS} />
 
       {(message || progress) && (
         <p
@@ -141,7 +156,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
       )}
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        <section aria-labelledby="data-title" className="space-y-4">
+        <section aria-labelledby="data-title" data-step-done={dataReady ? 'true' : undefined} className="space-y-4">
           <div>
             <h2 id="data-title" className="text-2xl font-semibold">{t('project.data.title')}</h2>
             <p className="max-w-2xl text-sm text-muted">{t('project.data.lead')}</p>

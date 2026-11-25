@@ -20,7 +20,6 @@ test('chụp màn hình trang dự án và Kính hiển vi', async ({ page }) =>
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Phân loại rác');
   await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
-  await page.getByRole('link', { name: 'Mở Phân loại rác' }).click();
   const panel = page.getByRole('article', { name: 'Lớp 1' });
   await panel.getByRole('button', { name: 'Webcam' }).click();
   const snap = page.getByRole('button', { name: 'Chụp 1 ảnh' });
