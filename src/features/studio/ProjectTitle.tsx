@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useLayoutEffect, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProjectRepository } from '@/storage/repository-context';
 import { projectNameSchema } from '@/storage/schemas/project';
@@ -28,7 +28,8 @@ export function ProjectTitle({ projectId, name, onRenamed }: ProjectTitleProps) 
 
   const isEditing = draft !== null;
 
-  useEffect(() => {
+  // Layout effect: chuyển con trỏ ngay khi ô nhập biến mất, trước khi vẽ, để con trỏ không rơi về <body>.
+  useLayoutEffect(() => {
     if (isEditing) {
       inputRef.current?.focus();
       inputRef.current?.select();
