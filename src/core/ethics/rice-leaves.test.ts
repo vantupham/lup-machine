@@ -78,17 +78,17 @@ describe('ranh giới quyết định vẽ trên biểu đồ', () => {
 describe.each(SEED_OFFSETS)('khẳng định của bài, lần lấy mẫu +%i', (offset) => {
   const { biased, balanced, withRegion } = runAll(offset);
 
-  test('① dữ liệu lệch: độ chính xác chung trông ổn (≥ 80%) nhưng Miền núi kém Đồng bằng ít nhất 15 điểm', () => {
+  test('Bước 1, dữ liệu lệch: độ chính xác chung trông ổn (≥ 80%) nhưng Miền núi kém Đồng bằng ít nhất 15 điểm', () => {
     expect(pct(biased)).toBeGreaterThanOrEqual(0.8);
     expect(pct(biased, 'lowland') - pct(biased, 'mountain')).toBeGreaterThanOrEqual(0.15);
   });
 
-  test('① lỗi ở Miền núi đều là báo động nhầm: lá khỏe bị báo bệnh, không bỏ sót lá bệnh nào', () => {
+  test('Bước 1, lỗi ở Miền núi đều là báo động nhầm: lá khỏe bị báo bệnh, không bỏ sót lá bệnh nào', () => {
     expect(biased.byRegion.mountain.falseAlarm).toBeGreaterThan(0);
     expect(biased.byRegion.mountain.missed).toBe(0);
   });
 
-  test('① nguyên nhân là độ vàng: nếu lá Miền núi khỏe không vàng hơn lá Đồng bằng, phần lớn báo động nhầm biến mất', () => {
+  test('Bước 1, nguyên nhân là độ vàng: nếu lá Miền núi khỏe không vàng hơn lá Đồng bằng, phần lớn báo động nhầm biến mất', () => {
     const d = biasExperimentData(offset);
     const model = trainLeafModel(d.trainBiased);
     const shift = LEAF_PROFILES.mountain[0].yellow[0] - LEAF_PROFILES.lowland[0].yellow[0];
@@ -99,7 +99,7 @@ describe.each(SEED_OFFSETS)('khẳng định của bài, lần lấy mẫu +%i',
     expect(ifNotYellower).toBeLessThanOrEqual(falseAlarms / 3);
   });
 
-  test('② thu thêm dữ liệu Miền núi: Miền núi tốt lên, nhưng Đồng bằng giảm, và phần giảm đó chính là do bỏ sót lá bệnh (báo động nhầm không tăng)', () => {
+  test('Bước 2, thu thêm dữ liệu Miền núi: Miền núi tốt lên, nhưng Đồng bằng giảm, và phần giảm đó chính là do bỏ sót lá bệnh (báo động nhầm không tăng)', () => {
     expect(pct(balanced, 'mountain')).toBeGreaterThan(pct(biased, 'mountain'));
     expect(pct(balanced, 'lowland')).toBeLessThan(pct(biased, 'lowland'));
     const lost = biased.byRegion.lowland.correct - balanced.byRegion.lowland.correct;
@@ -108,7 +108,7 @@ describe.each(SEED_OFFSETS)('khẳng định của bài, lần lấy mẫu +%i',
     expect(moreMissed).toBeGreaterThanOrEqual(lost);
   });
 
-  test('③ cho mô hình biết vùng: cả hai vùng đều từ 90% trở lên', () => {
+  test('Bước 3, cho mô hình biết vùng: cả hai vùng đều từ 90% trở lên', () => {
     expect(pct(withRegion, 'lowland')).toBeGreaterThanOrEqual(0.9);
     expect(pct(withRegion, 'mountain')).toBeGreaterThanOrEqual(0.9);
   });

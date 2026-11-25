@@ -2,8 +2,10 @@ import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import type { DecisionGrid } from '@/core/ml/explain';
-import { colorFor, markerFor } from './class-style';
+import { colorFor } from './class-style';
 import { pointBounds } from './boundary';
+import { Asterisk } from '@/ui/icons';
+import { ChartMarker } from '@/ui/ClassMarker';
 
 export interface MapPoint {
   readonly sample: SampleRecord;
@@ -26,7 +28,7 @@ interface EmbeddingMapProps {
   readonly axisLabels: readonly [string, string];
   /** Không truyền thì bản đồ chỉ để xem: các chấm không bấm được. */
   readonly onSelect?: (sample: SampleRecord) => void;
-  /** Ảnh đang thử ở bước ⑥: vẽ thành dấu ✱ trên cùng hệ tọa độ (không làm xê dịch bản đồ). */
+  /** Ảnh đang thử ở bước 6: vẽ thành dấu hoa thị trên cùng hệ tọa độ (không làm xê dịch bản đồ). */
   readonly probe?: ProbePoint | null;
   /** Lưới ranh giới quyết định (tùy chọn), vẽ dưới các chấm theo đúng hệ tọa độ của bản đồ. */
   readonly grid?: DecisionGrid | null;
@@ -79,9 +81,7 @@ export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels
             {sample.split === 'test' && <circle cx={cx} cy={cy} r={8} fill="none" stroke={colorFor(i)} strokeWidth={1.5} />}
             {wrongIds.has(sample.id) && <circle cx={cx} cy={cy} r={10} fill="none" stroke="#C62828" strokeWidth={2.5} data-testid="wrong-ring" />}
             {isSelected && <circle cx={cx} cy={cy} r={13} fill="none" stroke="var(--color-ink)" strokeWidth={1.5} strokeDasharray="3 2" />}
-            <text x={cx} y={cy} textAnchor="middle" dominantBaseline="central" fill={colorFor(i)} fontSize={sample.split === 'test' ? 8 : 11}>
-              {markerFor(i)}
-            </text>
+            <ChartMarker index={i} cx={cx} cy={cy} size={sample.split === 'test' ? 7 : 10} />
           </g>
         );
       })}
@@ -90,7 +90,7 @@ export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels
   );
 }
 
-/** Dấu ✱ của ảnh đang thử. Nằm ngoài khung thì ghim vào mép, kèm mũi tên chỉ hướng. */
+/** Dấu hoa thị của ảnh đang thử. Nằm ngoài khung thì ghim vào mép, kèm mũi tên chỉ hướng. */
 function ProbeMarker({ probe, cx, cy }: { probe: ProbePoint; cx: number; cy: number }) {
   const x = Math.min(WIDTH - PAD / 2, Math.max(PAD / 2, cx));
   const y = Math.min(HEIGHT - PAD / 2, Math.max(PAD / 2, cy));
@@ -98,9 +98,7 @@ function ProbeMarker({ probe, cx, cy }: { probe: ProbePoint; cx: number; cy: num
   return (
     <g role="img" aria-label={probe.label} data-testid="probe-marker" data-clamped={isClamped}>
       <circle cx={x} cy={y} r={12} fill="var(--color-paper)" stroke="var(--color-ink)" strokeWidth={2} />
-      <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fill={colorFor(probe.classIndex)} fontSize={16} fontWeight="bold">
-        ✱
-      </text>
+      <Asterisk x={x - 9} y={y - 9} width={18} height={18} strokeWidth={3} color={colorFor(probe.classIndex)} className="chart-marker" />
       {isClamped && (
         <line x1={x} y1={y} x2={x + Math.sign(cx - x) * 10} y2={y + Math.sign(cy - y) * 10} stroke="var(--color-ink)" strokeWidth={2} />
       )}

@@ -2,7 +2,7 @@ import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { normalizationFrame, unpackKeypoints, type PoseKind } from '@/core/pose/features';
 import { BODY_POSES, HAND_POSES, poseDataset } from '@/core/pose/synthetic-poses';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { colorFor } from '@/features/studio/image/lab/class-style';
 import type { ClassRecord, PoseSampleRecord } from '@/storage/db';
 import type { DatasetRepository } from '@/storage/repositories/dataset-repository';
 import { MAX_POSES_PER_CLASS, type PoseRepository } from '@/storage/repositories/pose-repository';
@@ -10,6 +10,7 @@ import { getErrorMessage } from '@/ui/error-message';
 import { PoseCamera } from './PoseCamera';
 import { grabFrame, imageFromFile, loadDetector, type PoseDetection } from './pose-io.browser';
 import { Skeleton } from './Skeleton';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 const THUMBS_SHOWN = 12;
 /** "Ghi liên tiếp": số mẫu và khoảng cách giữa hai mẫu; có 3 giây đếm ngược để kịp tạo dáng. */
@@ -161,7 +162,7 @@ export function PoseDataSection({ projectId, kind, kindLocked, onKindChange, cla
           return (
             <li key={cls.id} className="lab-card space-y-3 p-4">
               <div className="flex items-center gap-2">
-                <span aria-hidden="true" style={{ color: colorFor(i) }}>{markerFor(i)}</span>
+                <ClassMarker index={i} />
                 <span className="flex-1 font-semibold">{cls.name}</span>
                 <span className="font-mono text-xs text-muted" data-testid={`pose-count-${i}`}>{t('pose.data.poseCount', { n: mine.length })}</span>
               </div>

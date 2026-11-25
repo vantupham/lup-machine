@@ -8,6 +8,7 @@ import { ClassroomFileError } from '@/storage/classroom/errors';
 import { ASSIGNMENT_FILE_EXTENSION } from '@/storage/classroom/extensions';
 import { useRepositories } from '@/storage/repository-context';
 import { getErrorMessage } from '@/ui/error-message';
+import { ArrowRight } from '@/ui/icons';
 
 interface ImportProjectPanelProps {
   readonly onImported: () => Promise<void>;
@@ -78,8 +79,8 @@ export function ImportProjectPanel({ onImported }: ImportProjectPanelProps) {
       {state.status === 'done' && (
         <p role="status" className="text-sm">
           {t(state.isAssignment ? 'projectFile.importedAssignment' : 'projectFile.imported', { name: state.project.name })}{' '}
-          <Link to={`/studio/${state.project.id}`} className="font-medium text-primary underline">
-            {t('projectFile.openImported')} →
+          <Link to={`/studio/${state.project.id}`} className="inline-flex items-center gap-1 font-medium text-primary underline">
+            {t('projectFile.openImported')} <ArrowRight />
           </Link>
         </p>
       )}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LESSONS } from '@/content/lessons';
+import { ArrowRight } from '@/ui/icons';
 
 export function LessonsPage() {
   const { t, i18n } = useTranslation();
@@ -21,7 +22,7 @@ export function LessonsPage() {
               {t('lessons.grade', { grade: lesson.grade })} · {t('lessons.minutes', { minutes: lesson.minutes })}
             </p>
             <Link to={`/lessons/${lesson.id}`} className="btn btn-primary mt-auto self-start text-sm" aria-label={`${t('lessons.open')}: ${lesson.title}`}>
-              {t('lessons.open')} →
+              {t('lessons.open')} <ArrowRight />
             </Link>
           </li>
         ))}

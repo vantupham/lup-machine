@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ArrowRight, Check } from '@/ui/icons';
 
 export const STEP_KEYS = ['data', 'check', 'represent', 'train', 'evaluate', 'use'] as const;
 export type StepKey = (typeof STEP_KEYS)[number];
@@ -164,7 +165,7 @@ export function StepBar({ targets }: { readonly targets: StepTargets }) {
                     aria-hidden="true"
                     className={`flex size-5 items-center justify-center rounded-full font-mono text-[11px] ${step.done ? 'bg-accent text-white' : isActive ? 'bg-paper text-ink' : 'bg-rule/70'}`}
                   >
-                    {step.done ? '✓' : i + 1}
+                    {step.done ? <Check strokeWidth={3} className="size-3" /> : i + 1}
                   </span>
                   <span className="sr-only">{t('project.stepBar.stepPrefix', { n: i + 1 })}:</span>{' '}
                   {t(`project.steps.${step.key}`)}
@@ -181,7 +182,7 @@ export function StepBar({ targets }: { readonly targets: StepTargets }) {
         </ol>
         {next && (
           <button type="button" onClick={() => goTo(next.key)} className="btn btn-primary shrink-0 px-3 py-1 text-sm">
-            {t('project.stepBar.next', { step: t(`project.steps.${next.key}`) })} <span aria-hidden="true">→</span>
+            {t('project.stepBar.next', { step: t(`project.steps.${next.key}`) })} <ArrowRight />
           </button>
         )}
       </div>

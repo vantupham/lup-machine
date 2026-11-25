@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { thresholdCurve } from '@/core/ml/explain';
 import { LineChart } from './LineChart';
 import type { SamplePrediction } from './lab-data';
+import { Info } from '@/ui/icons';
 
 const CURVE_STEPS = Array.from({ length: 20 }, (_, i) => i / 20); // 0, 0.05, …, 0.95
 
@@ -53,7 +54,7 @@ export function ThresholdPanel({ predictions }: ThresholdPanelProps) {
           ]}
         />
       </div>
-      <p className="max-w-2xl text-xs text-muted">ⓘ {t('project.threshold.tradeoff')}</p>
+      <p className="max-w-2xl text-xs text-muted"><Info /> {t('project.threshold.tradeoff')}</p>
     </section>
   );
 }

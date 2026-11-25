@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ASSIGNMENT_LIMITS } from '@/storage/schemas/assignment';
+import { X } from '@/ui/icons';
 
 interface QuestionsEditorProps {
   readonly questions: readonly string[];
@@ -31,7 +32,7 @@ export function QuestionsEditor({ questions, onChange }: QuestionsEditorProps) {
               onClick={() => onChange(questions.filter((_, j) => j !== i))}
               className="btn btn-ghost px-2 py-1 text-sm"
             >
-              ✕
+              <X />
             </button>
           </li>
         ))}

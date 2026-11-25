@@ -56,7 +56,7 @@ describe('Xuất / mở tệp dự án .lup ở Xưởng mô hình', () => {
     expect(await within(list).findAllByText('Phân loại rác')).toHaveLength(2);
     const all = await r.repository.findAll();
     const copy = all.find((p) => p.id !== project.id);
-    expect(screen.getByRole('link', { name: /Mở dự án →/ })).toHaveAttribute('href', `/studio/${copy?.id}`);
+    expect(screen.getByRole('link', { name: 'Mở dự án' })).toHaveAttribute('href', `/studio/${copy?.id}`);
     expect(await r.dataset.listSamples(copy!.id)).toHaveLength(1);
   });
 

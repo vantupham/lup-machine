@@ -4,6 +4,7 @@ import { runGradientDescent, SURFACE_IDS, SURFACES, type SurfaceId } from '@/cor
 import { LineChart } from '@/features/studio/image/lab/LineChart';
 import { ControlPanel, RangeField, SelectField, useInterval } from '../controls';
 import { PLOT_SIZE, Plot2d } from '../Plot2d';
+import { X } from '@/ui/icons';
 
 const HEAT_RESOLUTION = 40;
 const MAX_STEPS = 60;
@@ -95,7 +96,7 @@ export function GradientPlayground() {
               {visible.map((p, i) => (
                 <circle key={i} cx={s.sx(p.x)} cy={s.sy(p.y)} r={i === index ? 6 : 2.5} fill={i === index ? 'var(--color-warning)' : 'var(--color-ink)'} />
               ))}
-              <text x={s.sx(surface.minimum[0])} y={s.sy(surface.minimum[1])} textAnchor="middle" dominantBaseline="central" className="fill-accent text-[14px]">✕</text>
+              <X x={s.sx(surface.minimum[0]) - 8} y={s.sy(surface.minimum[1]) - 8} width={16} height={16} strokeWidth={3} className="chart-marker text-accent" />
             </g>
           )}
         />

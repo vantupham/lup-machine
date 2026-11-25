@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { version } from '../../../package.json';
 import { ProjectTypeCards } from '@/features/studio/quick-start/ProjectTypeCards';
 import { RecentProjects } from '@/features/studio/quick-start/RecentProjects';
+import { ArrowDown, ArrowRight } from '@/ui/icons';
 
 const PIPELINE_STEPS = ['data', 'check', 'represent', 'train', 'evaluate', 'use'] as const;
 const PROMISES = ['privacy', 'honest', 'open'] as const;
@@ -33,10 +34,10 @@ export function HomePage() {
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">{t('home.lead')}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <button type="button" className="btn btn-primary" onClick={goToQuickStart}>
-              {t('home.ctaCreate')} <span aria-hidden="true">↓</span>
+              {t('home.ctaCreate')} <ArrowDown />
             </button>
             <Link to="/studio" className="btn btn-ghost">
-              {t('home.ctaStudio')} <span aria-hidden="true">→</span>
+              {t('home.ctaStudio')} <ArrowRight />
             </Link>
             <Link to="/about" className="btn btn-ghost">
               {t('home.ctaAbout')}

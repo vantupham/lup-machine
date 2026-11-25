@@ -7,6 +7,7 @@ import type { AudioClipRecord, ClassRecord } from '@/storage/db';
 import { clipSamples } from '@/storage/repositories/audio-repository';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { FeatureGrid, SpectrogramHeat, SpectrumLine, Waveform } from './viz';
+import { StepNumber } from '@/ui/StepNumber';
 
 const WINDOW = hannWindow(AUDIO.winLength, AUDIO.nFft);
 
@@ -36,7 +37,7 @@ export function AudioInspector({ classes, clips }: { readonly classes: readonly 
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="space-y-2" aria-labelledby="audio-step-wave">
-          <h3 id="audio-step-wave" className="font-semibold">{t('audio.inspector.waveTitle')}</h3>
+          <h3 id="audio-step-wave" className="flex items-center gap-2 font-semibold"><StepNumber n={1} size="sm" />{t('audio.inspector.waveTitle')}</h3>
           <Waveform samples={samples} label={t('audio.inspector.waveLabel')} marker={{ start: frame * AUDIO.hopLength, length: AUDIO.nFft }} />
           <p className="text-xs text-muted">{t('audio.inspector.waveHint', { rate: AUDIO.sampleRate.toLocaleString('vi'), n: AUDIO.clipSamples.toLocaleString('vi') })}</p>
           <RangeField
@@ -49,19 +50,19 @@ export function AudioInspector({ classes, clips }: { readonly classes: readonly 
           />
         </section>
         <section className="space-y-2" aria-labelledby="audio-step-fft">
-          <h3 id="audio-step-fft" className="font-semibold">{t('audio.inspector.fftTitle')}</h3>
+          <h3 id="audio-step-fft" className="flex items-center gap-2 font-semibold"><StepNumber n={2} size="sm" />{t('audio.inspector.fftTitle')}</h3>
           <SpectrumLine power={power} label={t('audio.inspector.fftLabel', { n: frame + 1 })} />
           <p className="text-xs text-muted">{t('audio.inspector.fftHint', { win: AUDIO.winLength, nfft: AUDIO.nFft, bins: AUDIO.nFft / 2 + 1 })}</p>
         </section>
         <section className="space-y-2" aria-labelledby="audio-step-mel">
-          <h3 id="audio-step-mel" className="font-semibold">{t('audio.inspector.melTitle')}</h3>
+          <h3 id="audio-step-mel" className="flex items-center gap-2 font-semibold"><StepNumber n={3} size="sm" />{t('audio.inspector.melTitle')}</h3>
           <SpectrogramHeat db={db} bounds={bounds} frame={frame} label={t('audio.inspector.melLabel')} />
           <p className="text-xs text-muted">
             {t('audio.inspector.melHint', { bands: AUDIO.nMels, frames: FRAME_COUNT, low: Math.round(centers[0] ?? 0), high: Math.round(centers.at(-1) ?? 0) })}
           </p>
         </section>
         <section className="space-y-2" aria-labelledby="audio-step-pool">
-          <h3 id="audio-step-pool" className="font-semibold">{t('audio.inspector.poolTitle')}</h3>
+          <h3 id="audio-step-pool" className="flex items-center gap-2 font-semibold"><StepNumber n={4} size="sm" />{t('audio.inspector.poolTitle')}</h3>
           <FeatureGrid values={pooled} label={t('audio.inspector.poolLabel')} testId="pooled-grid" />
           <p className="text-xs text-muted">{t('audio.inspector.poolHint', { segments: AUDIO.timeSegments, bands: AUDIO.nMels, total: pooled.length })}</p>
         </section>

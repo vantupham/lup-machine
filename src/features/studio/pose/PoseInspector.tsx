@@ -5,6 +5,7 @@ import { SelectField } from '@/features/playground/controls';
 import type { ClassRecord, PoseSampleRecord } from '@/storage/db';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { Skeleton } from './Skeleton';
+import { StepNumber } from '@/ui/StepNumber';
 
 /** Khung vẽ cho tọa độ đã chuẩn hóa (đơn vị: chiều dài thân / bàn tay). */
 const NORMALIZED_VIEW: Record<PoseKind, { x: number; y: number; w: number; h: number }> = {
@@ -42,7 +43,7 @@ export function PoseInspector({ kind, classes, poses }: { readonly kind: PoseKin
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="space-y-2" aria-labelledby="pose-raw-title">
-          <h3 id="pose-raw-title" className="font-semibold">{t('pose.inspector.rawTitle')}</h3>
+          <h3 id="pose-raw-title" className="flex items-center gap-2 font-semibold"><StepNumber n={1} size="sm" />{t('pose.inspector.rawTitle')}</h3>
           <Skeleton kind={kind} keypoints={keypoints} width={sample.width} height={sample.height} label={t('pose.inspector.rawLabel')} testId="pose-raw">
             {frame && (
               <g>
@@ -54,7 +55,7 @@ export function PoseInspector({ kind, classes, poses }: { readonly kind: PoseKin
           <p className="text-xs text-muted">{t(`pose.inspector.rawHint.${kind}`, { w: sample.width, h: sample.height })}</p>
         </section>
         <section className="space-y-2" aria-labelledby="pose-norm-title">
-          <h3 id="pose-norm-title" className="font-semibold">{t('pose.inspector.normTitle')}</h3>
+          <h3 id="pose-norm-title" className="flex items-center gap-2 font-semibold"><StepNumber n={2} size="sm" />{t('pose.inspector.normTitle')}</h3>
           {normalized ? (
             <Skeleton kind={kind} keypoints={normalized} width={VIEW_PX} height={toView(view.y + view.h, view.y, view.w)} label={t('pose.inspector.normLabel')} testId="pose-normalized">
               <line x1={toView(0, view.x, view.w)} x2={toView(0, view.x, view.w)} y1={0} y2={VIEW_PX * 2} className="stroke-rule" />

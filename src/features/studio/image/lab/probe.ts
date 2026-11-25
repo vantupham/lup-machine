@@ -1,4 +1,4 @@
-/** Bước ⑥ Sử dụng: dự đoán, giải thích bằng ví dụ và vị trí trên bản đồ cho một ảnh MỚI (không có trong dữ liệu). */
+/** Bước 6 Sử dụng: dự đoán, giải thích bằng ví dụ và vị trí trên bản đồ cho một ảnh MỚI (không có trong dữ liệu). */
 import { argmax, cosineSimilarity } from '@/core/ml/metrics';
 import { fitPca2, projectPca } from '@/core/ml/pca';
 import { predictProba, type SoftmaxParams } from '@/core/ml/softmax-regression';
@@ -52,7 +52,7 @@ export interface ProbeMap {
 }
 
 /**
- * PCA khớp trên các ảnh ĐÃ CÓ (giống hệt bản đồ ở bước ③); ảnh mới chỉ được chiếu lên cùng mặt phẳng.
+ * PCA khớp trên các ảnh ĐÃ CÓ (giống hệt bản đồ ở bước 3); ảnh mới chỉ được chiếu lên cùng mặt phẳng.
  * Ảnh mới không làm xê dịch bản đồ, nên chấm của nó di chuyển trên một nền đứng yên.
  * Khớp một lần, chiếu mỗi khung hình (chỉ là một phép nhân ma trận nhỏ).
  */

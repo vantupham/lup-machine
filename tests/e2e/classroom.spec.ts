@@ -41,7 +41,7 @@ test('lớp học qua tệp: giáo viên tạo .lupa (kèm dự án mẫu), họ
   const panel = student.getByRole('region', { name: 'Mở tệp dự án' });
   await panel.getByLabel('Chọn tệp .lup').setInputFiles(lupa.path);
   await expect(panel.getByRole('status')).toHaveText(/Đã mở bài tập "Nhận dạng hình"/);
-  await panel.getByRole('link', { name: /Mở dự án →/ }).click();
+  await panel.getByRole('link', { name: 'Mở dự án', exact: true }).click();
 
   // dự án mẫu đi kèm đủ ảnh
   await expect(student.getByRole('article', { name: 'Hình tròn' }).getByRole('tab', { name: 'Dạy (18)' })).toBeVisible();
@@ -60,7 +60,7 @@ test('lớp học qua tệp: giáo viên tạo .lupa (kèm dự án mẫu), họ
   await student.getByRole('link', { name: 'Quay lại dự án', exact: false }).click();
 
   // làm bài và nộp
-  await student.getByRole('link', { name: 'Làm bài và nộp bài →' }).click();
+  await student.getByRole('link', { name: 'Làm bài và nộp bài', exact: true }).click();
   await expect(student.getByText('Huấn luyện mô hình, thêm ảnh tự vẽ, ghi độ chính xác.')).toBeVisible();
   await student.getByLabel('1. Hình nào hay bị nhầm nhất?').fill('Vuông và tam giác');
   await student.getByRole('button', { name: 'Lưu câu trả lời' }).click();

@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { findLesson, type Lesson } from '@/content/lessons';
 import { datasetClassKeys } from '@/core/datasets/catalog';
 import { RecordBlock, WriteLines } from './WorksheetRecords';
+import { CornerDownRight, Info, Lightbulb, Printer, Square, SquareCheck } from '@/ui/icons';
+import { BackLink } from '@/ui/BackLink';
 
 const PREDICT_LINES = 2;
 const OBSERVE_LINES = 2;
@@ -19,7 +21,7 @@ export function WorksheetPage() {
   if (!lesson) {
     return (
       <div className="space-y-4">
-        <Link to="/lessons" className="text-sm text-primary hover:underline">{t('lessons.back')}</Link>
+        <BackLink to="/lessons">{t('lessons.back')}</BackLink>
         <p role="alert">{t('lessons.notFound')}</p>
       </div>
     );
@@ -28,7 +30,7 @@ export function WorksheetPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div className="flex flex-wrap items-center gap-3 print:hidden">
-        <Link to={`/lessons/${lesson.id}`} className="text-sm text-primary hover:underline">← {lesson.title}</Link>
+        <BackLink to={`/lessons/${lesson.id}`}>{lesson.title}</BackLink>
         <span className="flex-1" />
         <span className="inline-flex overflow-hidden rounded border border-rule text-sm" role="group" aria-label={t('worksheet.version')}>
           <button type="button" aria-pressed={!isTeacher} onClick={() => setIsTeacher(false)} className={`px-3 py-1 ${!isTeacher ? 'bg-ink text-paper' : ''}`}>
@@ -39,10 +41,10 @@ export function WorksheetPage() {
           </button>
         </span>
         <button type="button" className="btn btn-primary" onClick={() => window.print()}>
-          🖨 {t('worksheet.print')}
+          <Printer /> {t('worksheet.print')}
         </button>
       </div>
-      <p className="text-xs text-muted print:hidden">ⓘ {t('worksheet.hint')}</p>
+      <p className="text-xs text-muted print:hidden"><Info /> {t('worksheet.hint')}</p>
       <Sheet lesson={lesson} isTeacher={isTeacher} />
     </div>
   );
@@ -96,7 +98,7 @@ function Sheet({ lesson, isTeacher }: { readonly lesson: Lesson; readonly isTeac
             {step.predict && (
               <div className="rounded border border-ink/40 p-3 text-sm">
                 <p className="font-medium">
-                  <span aria-hidden="true">🤔 </span>
+                  <Lightbulb className="mr-1" />
                   <span>{step.predict.question}</span>
                 </p>
                 {isTeacher ? (
@@ -125,14 +127,14 @@ function Sheet({ lesson, isTeacher }: { readonly lesson: Lesson; readonly isTeac
               <ul className="mt-1 space-y-0.5">
                 {q.options.map((o, j) => (
                   <li key={o} data-correct={isTeacher && j === q.correct ? 'true' : undefined} className={isTeacher && j === q.correct ? 'font-semibold' : ''}>
-                    <span aria-hidden="true">{isTeacher && j === q.correct ? '☑ ' : '☐ '}</span>
+                    {isTeacher && j === q.correct ? <SquareCheck className="mr-1" /> : <Square className="mr-1" />}
                     <span>{o}</span>
                   </li>
                 ))}
               </ul>
               {isTeacher && (
                 <p className="mt-1 text-muted">
-                  <span aria-hidden="true">→ </span>
+                  <CornerDownRight className="mr-1" />
                   <span>{q.explanation}</span>
                 </p>
               )}

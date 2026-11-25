@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { boundaryLine, boundaryYellowAt, type LeafModel, type LeafSample, type Region } from '@/core/ethics/rice-leaves';
+import { Circle, Triangle } from '@/ui/icons';
 
 const W = 520;
 const H = 340;
@@ -98,10 +99,10 @@ export function LeafScatter({ samples, model }: LeafScatterProps) {
         </g>
       </svg>
       <figcaption className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
-        <span><span style={{ color: HEALTH_COLOR[0] }}>○</span> {t('ethics.chart.healthy')}</span>
-        <span><span style={{ color: HEALTH_COLOR[1] }}>●</span> {t('ethics.chart.sick')}</span>
-        <span>○ {t('ethics.regions.lowland')}</span>
-        <span>△ {t('ethics.regions.mountain')}</span>
+        <span><Circle color={HEALTH_COLOR[0]} /> {t('ethics.chart.healthy')}</span>
+        <span><Circle color={HEALTH_COLOR[1]} fill={HEALTH_COLOR[1]} fillOpacity={0.6} /> {t('ethics.chart.sick')}</span>
+        <span><Circle /> {t('ethics.regions.lowland')}</span>
+        <span><Triangle /> {t('ethics.regions.mountain')}</span>
         <span>{model.useRegion ? t('ethics.chart.boundaryTwo') : t('ethics.chart.boundaryOne')}</span>
       </figcaption>
     </figure>

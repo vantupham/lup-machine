@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, type FormEvent } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { stratifiedSplit } from '@/core/data/split';
 import type { ClassRecord, SampleRecord, Split, StoredImage } from '@/storage/db';
@@ -17,13 +17,14 @@ import { useImageUpload } from './useImageUpload';
 import { useFaceBlurSetting } from './face-blur-setting';
 import { faceBlurSummary } from './face-blur-message';
 import { decodeStoredImage, videoFrameToStoredImage } from './image-codec.browser';
-import { CLASS_MARKERS } from './lab/class-style';
 import { ModelLab } from './lab/ModelLab';
 import { ImageLabProvider } from './lab/ImageLabContext';
 import { QuickWorkspace } from './quick/QuickWorkspace';
 import { useModeStore } from '@/ui/mode-store';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
+import { BackLink } from '@/ui/BackLink';
+import { StepNumber } from '@/ui/StepNumber';
 
 /** Lớp phân biệt bằng cả ký hiệu, không chỉ màu (thân thiện người mù màu). */
 export const SPLIT_SEED = 42;
@@ -50,9 +51,7 @@ export function ImageProjectPage() {
   if (data.status === 'not-found' || data.status === 'error') {
     return (
       <div className="space-y-4">
-        <Link to="/studio" className="text-sm text-primary hover:underline">
-          {t('project.back')}
-        </Link>
+        <BackLink to="/studio">{t('project.back')}</BackLink>
         <p role="alert">{t(data.status === 'error' ? 'project.loadError' : 'project.notFound')}</p>
       </div>
     );
@@ -154,9 +153,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
     <ImageLabProvider projectId={projectId} classes={classes} samples={samples}>
     <div className="space-y-8">
       <header className="space-y-4">
-        <Link to="/studio" className="text-sm text-primary hover:underline">
-          {t('project.back')}
-        </Link>
+        <BackLink to="/studio">{t('project.back')}</BackLink>
         <ProjectTitle projectId={projectId} name={projectName} onRenamed={() => void reload()} />
         <AssignmentBanner projectId={projectId} />
         <ModelCardLink projectId={projectId} />
@@ -178,7 +175,6 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
           classes={classes}
           samples={samples}
           samplesByClass={byClass}
-          markers={CLASS_MARKERS}
           onWebcam={(c) => {
             webcamFaces.current = 0;
             setWebcam({ cls: c, split: 'train' });
@@ -192,7 +188,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <section aria-labelledby="data-title" data-step-done={dataReady ? 'true' : undefined} className="space-y-4">
           <div>
-            <h2 id="data-title" className="text-2xl font-semibold">{t('project.data.title')}</h2>
+            <h2 id="data-title" className="flex items-center gap-3 text-2xl font-semibold"><StepNumber n={1} />{t('project.data.title')}</h2>
             <p className="max-w-2xl text-sm text-muted">{t('project.data.lead')}</p>
           </div>
           <div className="rounded border border-rule bg-surface p-3">
@@ -212,7 +208,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
             <ClassPanel
               key={cls.id}
               cls={cls}
-              marker={CLASS_MARKERS[i % CLASS_MARKERS.length] as string}
+              markerIndex={i}
               samples={byClass.get(cls.id) ?? []}
               onUpload={(c, files, split) => void upload(c, files, split, byClass.get(c.id)?.length ?? 0)}
               onWebcam={(c, split) => {
@@ -240,7 +236,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
             />
           ))}
         </section>
-        <QualityPanel classes={classes} counts={counts} markers={CLASS_MARKERS} />
+        <QualityPanel classes={classes} counts={counts} />
       </div>
 
       <ModelLab projectName={projectName} classes={classes} samples={samples} />

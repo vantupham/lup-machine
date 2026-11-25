@@ -1,4 +1,4 @@
-/** Bước ④ Huấn luyện, ⑤ Đánh giá, ⑥ Sử dụng của Studio tư thế. */
+/** Bước 4 Huấn luyện, 5 Đánh giá, 6 Sử dụng của Studio tư thế. */
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { poseNotebook } from '@/core/export/pose-notebook';
@@ -6,7 +6,7 @@ import { contributionMap, encodeVector, evaluateVectors, importanceMap, predictV
 import { keypointCount, perJoint, poseFeatures, type PoseKind } from '@/core/pose/features';
 import { ColabExportPanel } from '@/features/export/ColabExportPanel';
 import { formatPercent, RangeField, Stat } from '@/features/playground/controls';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { colorFor } from '@/features/studio/image/lab/class-style';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { getErrorMessage } from '@/ui/error-message';
 import { version as appVersion } from '../../../../package.json';
@@ -16,6 +16,7 @@ import { ConfusionTable } from '../tabular/EvaluateSection';
 import { PoseCamera } from './PoseCamera';
 import { grabFrame, imageFromFile, loadDetector, type PoseDetection } from './pose-io.browser';
 import { Skeleton } from './Skeleton';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 const DEFAULT_SETTINGS: VectorModelSettings = { kind: 'logistic', c: 1, k: 3 };
 
@@ -32,7 +33,7 @@ function Prediction({ prediction, data }: { readonly prediction: VectorPredictio
   return (
     <>
       <p className="text-lg" data-testid="pose-prediction">
-        <span aria-hidden="true" style={{ color: colorFor(prediction.label) }}>{markerFor(prediction.label)} </span>
+        <ClassMarker index={prediction.label} className="mr-1" />
         {t('tabular.use.predictedClass', { cls: data.classNames[prediction.label] })}
       </p>
       <ul className="space-y-1">

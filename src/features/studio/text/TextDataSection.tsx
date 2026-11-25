@@ -2,12 +2,12 @@ import { useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CSV_LIMITS, parseCsv } from '@/core/tabular/csv';
 import type { TextExample } from '@/core/text/text-model';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
 import type { SaveTableInput } from '@/storage/repositories/table-repository';
 import { getErrorMessage } from '@/ui/error-message';
 import { csvErrorKey } from '../tabular/DataSection';
 import { SentenceEditor } from './SentenceEditor';
 import { TEXT_SAMPLES } from './text-samples';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 const PREVIEW_PER_CLASS = 3;
 
@@ -125,7 +125,7 @@ export function TextDataSection({ hasTable, fileName, examples, onSave }: TextDa
         {[...groups.entries()].map(([label, sentences], i) => (
           <li key={label} className="lab-card p-3">
             <p className="font-semibold">
-              <span aria-hidden="true" style={{ color: colorFor(i) }}>{markerFor(i)} </span>
+              <ClassMarker index={i} className="mr-1" />
               {label} <span className="font-mono text-xs text-muted">· {t('text.data.sentenceCount', { n: sentences.length })}</span>
             </p>
             <ul className="mt-1 space-y-0.5 text-sm text-muted">

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useProjectRepository } from '@/storage/repository-context';
 import { projectNameSchema } from '@/storage/schemas/project';
 import { getErrorMessage } from '@/ui/error-message';
+import { Pencil } from '@/ui/icons';
 
 interface ProjectTitleProps {
   readonly projectId: string;
@@ -82,7 +83,7 @@ export function ProjectTitle({ projectId, name, onRenamed }: ProjectTitleProps) 
           aria-label={t('project.rename.aria')}
           className="rounded px-2 py-1 text-sm text-muted transition-colors hover:text-primary print:hidden presentation:hidden"
         >
-          ✎ {t('project.rename.button')}
+          <Pencil /> {t('project.rename.button')}
         </button>
       </div>
     );

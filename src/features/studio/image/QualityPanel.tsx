@@ -3,11 +3,13 @@ import { checkDatasetQuality, checkTestCoverage } from '@/core/data/quality-chec
 import type { ClassRecord } from '@/storage/db';
 import type { SplitCounts } from '@/storage/repositories/dataset-repository';
 import { useModeStore } from '@/ui/mode-store';
+import { Check, CornerDownRight } from '@/ui/icons';
+import { ClassMarker } from '@/ui/ClassMarker';
+import { StepNumber } from '@/ui/StepNumber';
 
 interface QualityPanelProps {
   readonly classes: readonly ClassRecord[];
   readonly counts: SplitCounts;
-  readonly markers: readonly string[];
 }
 
 interface DisplayIssue {
@@ -65,7 +67,7 @@ function collectIssues(classes: readonly ClassRecord[], counts: SplitCounts): Di
   return [...quality, ...coverage];
 }
 
-export function QualityPanel({ classes, counts, markers }: QualityPanelProps) {
+export function QualityPanel({ classes, counts }: QualityPanelProps) {
   const { t } = useTranslation();
   const mode = useModeStore((s) => s.mode);
   const issues = collectIssues(classes, counts);
@@ -74,7 +76,8 @@ export function QualityPanel({ classes, counts, markers }: QualityPanelProps) {
   return (
     <section aria-labelledby="quality-title" className="lab-card h-fit space-y-4 p-4 lg:sticky lg:top-20">
       <div>
-        <h2 id="quality-title" className="text-lg font-semibold">
+        <h2 id="quality-title" className="flex items-center gap-2 text-lg font-semibold">
+          <StepNumber n={2} size="sm" />
           {t('project.quality.title')}
         </h2>
         <p className="text-sm text-muted">{t('project.quality.lead')}</p>
@@ -91,7 +94,7 @@ export function QualityPanel({ classes, counts, markers }: QualityPanelProps) {
               <li key={c.id} className="text-sm">
                 <div className="flex justify-between gap-2">
                   <span className="truncate">
-                    <span aria-hidden="true">{markers[i % markers.length]} </span>
+                    <ClassMarker index={i} className="mr-1" />
                     {c.name}
                   </span>
                   <span className="font-mono text-xs">
@@ -120,7 +123,7 @@ export function QualityPanel({ classes, counts, markers }: QualityPanelProps) {
 
       {issues.length === 0 ? (
         <p role="status" className="rounded bg-accent/10 p-3 text-sm text-accent">
-          ✓ {t('project.quality.ok')}
+          <Check /> {t('project.quality.ok')}
         </p>
       ) : (
         <ul aria-label={t('project.quality.title')} className="space-y-2">
@@ -133,7 +136,7 @@ export function QualityPanel({ classes, counts, markers }: QualityPanelProps) {
             >
               <p>{t(`project.quality.issues.${issue.code}`, issue.params)}</p>
               {mode === 'explore' && (
-                <p className="mt-0.5 text-xs text-muted">→ {t(`project.quality.tips.${issue.code}`)}</p>
+                <p className="mt-0.5 text-xs text-muted"><CornerDownRight className="mr-1" />{t(`project.quality.tips.${issue.code}`)}</p>
               )}
             </li>
           ))}

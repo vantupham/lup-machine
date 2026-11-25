@@ -1,5 +1,6 @@
 import type { MouseEvent, ReactNode } from 'react';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { colorFor } from '@/features/studio/image/lab/class-style';
+import { ChartMarker } from '@/ui/ClassMarker';
 
 export const PLOT_SIZE = 300;
 
@@ -75,19 +76,7 @@ export function ClassMarker({ x, y, label, highlight = false, size = 13 }: {
 }) {
   if (label === null) return <circle cx={x} cy={y} r={3.5} fill="var(--color-muted)" fillOpacity={0.7} />;
   return (
-    <text
-      x={x}
-      y={y}
-      textAnchor="middle"
-      dominantBaseline="central"
-      fontSize={highlight ? size * 1.5 : size}
-      fill={colorFor(label)}
-      stroke="var(--color-surface)"
-      strokeWidth={highlight ? 1.5 : 0.8}
-      paintOrder="stroke"
-    >
-      {markerFor(label)}
-    </text>
+    <ChartMarker index={label} cx={x} cy={y} size={(highlight ? size * 1.5 : size) * 0.8} halo />
   );
 }
 

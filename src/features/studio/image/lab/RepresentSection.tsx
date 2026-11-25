@@ -16,6 +16,8 @@ import { PredictionExplainer } from './PredictionExplainer';
 import { FeatureMapViewer } from './FeatureMapViewer';
 import { UMAP_SEED, useUmap } from './useUmap';
 import { UMAP_MIN_POINTS } from '@/core/ml/umap-limits';
+import { Check, Circle } from '@/ui/icons';
+import { StepNumber } from '@/ui/StepNumber';
 
 const NEIGHBOR_COUNT = 3;
 
@@ -43,7 +45,7 @@ export function RepresentSection(props: RepresentSectionProps) {
   return (
     <section aria-labelledby="represent-title" className="space-y-4">
       <div>
-        <h2 id="represent-title" className="text-2xl font-semibold">{t('project.represent.title')}</h2>
+        <h2 id="represent-title" className="flex items-center gap-3 text-2xl font-semibold"><StepNumber n={3} />{t('project.represent.title')}</h2>
         <p className="max-w-3xl text-sm text-muted">{t(mode === 'expert' ? 'project.represent.leadExpert' : 'project.represent.leadExplore')}</p>
       </div>
       <div className="flex flex-wrap items-center gap-3">
@@ -52,7 +54,7 @@ export function RepresentSection(props: RepresentSectionProps) {
             {t('project.represent.extract', { count: missingCount })}
           </button>
         ) : (
-          <p className="text-sm text-accent">✓ {t('project.represent.upToDate')}</p>
+          <p className="text-sm text-accent"><Check /> {t('project.represent.upToDate')}</p>
         )}
         {status.phase === 'loading-model' && <p role="status" className="text-sm">{t('project.represent.loadingModel')}</p>}
         {status.phase === 'extracting' && <p role="status" className="text-sm">{t('project.represent.extracting', status)}</p>}
@@ -139,7 +141,7 @@ function MapAndDetail({ classes, samples, features, selected, onSelect, wrongIds
         ) : (
           <p className="text-xs text-muted" data-testid="map-kept">{t('project.represent.mapKept', { percent: pct(kept) })}</p>
         )}
-        {wrongIds.size > 0 && <p className="text-xs text-danger">◯ {t('project.represent.wrongLegend')}</p>}
+        {wrongIds.size > 0 && <p className="text-xs text-danger"><Circle strokeWidth={3} /> {t('project.represent.wrongLegend')}</p>}
         {!isUmap && (
           <BoundaryControls
             checked={showBoundary}

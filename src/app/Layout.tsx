@@ -4,6 +4,7 @@ import { ModeSwitch } from '@/ui/ModeSwitch';
 import { PresentationController, PresentationToggle } from '@/ui/PresentationMode';
 import { useOfflineStore } from '@/ui/offline';
 import { rememberLanguage, type Language } from '@/i18n';
+import { Check } from '@/ui/icons';
 
 const NAV_ITEMS = [
   { to: '/', key: 'nav.home', end: true },
@@ -86,6 +87,7 @@ export function Layout() {
         <p>{t('footer.privacy')}</p>
         {offline !== 'off' && (
           <p role="status" className={`mt-1 ${offline === 'error' ? 'text-warning' : offline === 'ready' ? 'text-accent' : ''}`} data-testid="offline-status">
+            {offline === 'ready' && <Check className="mr-1" />}
             {t(`footer.offline.${offline}`)}
           </p>
         )}

@@ -103,7 +103,7 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   await expect(page.getByTestId('decision-grid').locator('rect')).toHaveCount(48 * 48);
   await expect(page.getByTestId('threshold-summary')).toContainText('Trả lời');
 
-  // Giai đoạn 2b ①: che thử từng ô — 50 lượt chạy MobileNet thật.
+  // Giai đoạn 2b, phần 1: che thử từng ô — 50 lượt chạy MobileNet thật.
   const occlusion = page.getByTestId('occlusion');
   await occlusion.getByRole('button', { name: /che từng ô \(49 lần\)/i }).click();
   const occlusionMap = page.getByTestId('occlusion-map');
@@ -112,14 +112,14 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   expect(new Set(drops.map((v) => v.toFixed(5))).size).toBeGreaterThan(1);
   await expect(page.getByTestId('occlusion-summary')).toBeVisible();
 
-  // ②: UMAP (xấp xỉ) rồi quay lại PCA.
+  // Phần 2: UMAP (xấp xỉ) rồi quay lại PCA.
   await page.getByRole('button', { name: 'UMAP', exact: true }).click();
   await expect(page.getByTestId('umap-note')).toContainText('seed 42', { timeout: 30_000 });
   await expect(map.getByRole('button')).toHaveCount(20);
   await page.getByRole('button', { name: 'PCA', exact: true }).click();
   await expect(page.getByTestId('map-kept')).toBeVisible();
 
-  // ③: Chuyên sâu — bên trong mạng CNN, canvas được vẽ thật bằng kích hoạt của tầng.
+  // Phần 3: Chuyên sâu — bên trong mạng CNN, canvas được vẽ thật bằng kích hoạt của tầng.
   // Ô radio được ẩn (sr-only) sau nhãn → bấm vào nhãn như người dùng thật.
   await page.locator('label', { has: page.getByRole('radio', { name: /Chuyên sâu/ }) }).click();
   await expect(page.getByRole('radio', { name: /Chuyên sâu/ })).toBeChecked();
@@ -135,8 +135,8 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   await viewer.getByRole('button', { name: 'Tầng 5' }).click();
   await expect(page.getByTestId('fmap-shape')).toContainText('out_relu: 7 × 7 ô × 1280 kênh');
 
-  // ⑥ Sử dụng: thử ảnh MỚI (không có trong dữ liệu) bằng MobileNet thật; ảnh thử không được lưu.
-  const use = page.getByRole('region', { name: /⑥ Sử dụng/ });
+  // Bước 6, Sử dụng: thử ảnh MỚI (không có trong dữ liệu) bằng MobileNet thật; ảnh thử không được lưu.
+  const use = page.getByRole('region', { name: /^Sử dụng/ });
   const [freshWarm] = await makeImages(page, 'warm', IMAGES_PER_CLASS + 1).then((list) => list.slice(-1));
   await use.getByLabel('Tải một ảnh lên để thử').setInputFiles({ name: 'moi.png', mimeType: 'image/png', buffer: freshWarm! });
   await expect(use.getByTestId('probe-verdict')).toContainText('Lớp 1', { timeout: 30_000 });
@@ -156,13 +156,13 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
 
   if (shots) {
     await page.setViewportSize({ width: 1280, height: 900 });
-    await page.getByRole('region', { name: '③ Biểu diễn' }).screenshot({ path: `${shots}/represent.png` });
+    await page.getByRole('region', { name: 'Biểu diễn', exact: true }).screenshot({ path: `${shots}/represent.png` });
     await page.getByTestId('selected-detail').screenshot({ path: `${shots}/explainer.png` });
     await page.getByTestId('feature-maps').screenshot({ path: `${shots}/feature-maps.png` });
     await page.getByTestId('explainer').screenshot({ path: `${shots}/occlusion.png` });
     await page.getByRole('region', { name: 'Ngưỡng tin cậy' }).screenshot({ path: `${shots}/threshold.png` });
-    await page.getByRole('region', { name: '④ Huấn luyện' }).screenshot({ path: `${shots}/train.png` });
-    await page.getByRole('region', { name: '⑤ Đánh giá' }).screenshot({ path: `${shots}/evaluate.png` });
+    await page.getByRole('region', { name: 'Huấn luyện', exact: true }).screenshot({ path: `${shots}/train.png` });
+    await page.getByRole('region', { name: 'Đánh giá', exact: true }).screenshot({ path: `${shots}/evaluate.png` });
   }
 
   expect(errors).toEqual([]);

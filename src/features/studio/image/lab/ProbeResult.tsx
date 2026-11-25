@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import type { ClassRecord } from '@/storage/db';
-import { colorFor, markerFor } from './class-style';
+import { colorFor } from './class-style';
 import { UNCERTAIN_BELOW, type ProbePrediction } from './probe';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 interface ProbeResultProps {
   readonly prediction: ProbePrediction;
@@ -22,7 +23,8 @@ export function ProbeResult({ prediction, classes }: ProbeResultProps) {
         style={{ borderLeftColor: colorFor(prediction.predicted) }}
         data-testid="probe-verdict"
       >
-        {t('project.use.verdict', { name: `${markerFor(prediction.predicted)} ${winner?.name ?? ''}`, percent: pct(prediction.confidence) })}
+        <ClassMarker index={prediction.predicted} className="mr-1.5" />
+        {t('project.use.verdict', { name: winner?.name ?? '', percent: pct(prediction.confidence) })}
       </p>
       {prediction.isUncertain && (
         <p className="border-l-4 border-warning pl-3 text-sm" data-testid="probe-uncertain">
@@ -33,7 +35,7 @@ export function ProbeResult({ prediction, classes }: ProbeResultProps) {
         {names.map((c, i) => (
           <li key={c.id} className="grid grid-cols-[7rem_1fr_3.5rem] items-center gap-2 text-sm">
             <span className={`truncate ${i === prediction.predicted ? 'font-semibold' : ''}`}>
-              {markerFor(i)} {c.name}
+              <ClassMarker index={i} className="mr-1" />{c.name}
             </span>
             <span className="h-3 overflow-hidden rounded-sm bg-rule" aria-hidden="true">
               <span

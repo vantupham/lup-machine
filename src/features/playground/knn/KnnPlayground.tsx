@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { makeDataset2d, type Dataset2dKind, type Point2 } from '@/core/algorithms/datasets-2d';
 import { knnClassify, knnGrid } from '@/core/algorithms/knn';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { colorFor } from '@/features/studio/image/lab/class-style';
 import { ClassPicker, ControlPanel, DatasetSelect, RangeField, SelectField } from '../controls';
 import { Plot2d, RegionCells } from '../Plot2d';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 const GRID_RESOLUTION = 30;
 const DOMAIN = 1.2;
@@ -111,7 +112,7 @@ export function KnnPlayground() {
               <ul className="mt-2 space-y-1" data-testid="knn-votes">
                 {result.votes.map((v, c) => (
                   <li key={c} className="flex items-center gap-2 text-sm">
-                    <span aria-hidden="true" style={{ color: colorFor(c) }}>{markerFor(c)}</span>
+                    <ClassMarker index={c} />
                     <span className="w-16">{t('playground.common.className', { n: c + 1 })}</span>
                     <span className="h-2 rounded" style={{ width: `${(v / k) * 100}%`, backgroundColor: colorFor(c) }} />
                     <span className="font-mono" data-testid="vote-count">{v}</span>

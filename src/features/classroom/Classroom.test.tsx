@@ -79,7 +79,7 @@ describe('Lớp học qua tệp: giáo viên tạo gói, học sinh làm và n�
     const projectView = renderWithRepositories(`/studio/${project!.id}`, student);
     const banner = await screen.findByRole('complementary', { name: 'Bài tập' });
     expect(within(banner).getByText('Phân loại ý kiến')).toBeInTheDocument();
-    expect(within(banner).getByRole('link', { name: 'Làm bài và nộp bài →' })).toHaveAttribute('href', `/studio/${project!.id}/bai-tap`);
+    expect(within(banner).getByRole('link', { name: 'Làm bài và nộp bài' })).toHaveAttribute('href', `/studio/${project!.id}/bai-tap`);
     projectView.unmount();
 
     // trang làm bài

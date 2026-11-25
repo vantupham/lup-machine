@@ -30,7 +30,7 @@ export const lessonPlantDisease: Lesson = {
     {
       title: 'Nhìn dữ liệu bằng con mắt của máy',
       body: [
-        'Làm bước ③ Biểu diễn rồi xem Bản đồ dữ liệu 2D. Thử chuyển sang UMAP.',
+        'Làm bước 3 (Biểu diễn) rồi xem Bản đồ dữ liệu 2D. Thử chuyển sang UMAP.',
         'So sánh với bản đồ của bộ "Tròn hay vuông?" hoặc bộ hoa nếu lớp em đã làm: các nhóm ở đây có tách bạch không?',
       ],
       predict: {
@@ -68,7 +68,7 @@ export const lessonPlantDisease: Lesson = {
     {
       title: 'Lỗi nào nguy hiểm nhất?',
       body: [
-        'Ở bước ⑤ Đánh giá, xem Ma trận nhầm lẫn trên tập Kiểm tra. Bấm vào các ô ngoài đường chéo để xem những ảnh bị đoán sai.',
+        'Ở bước 5 (Đánh giá), xem Ma trận nhầm lẫn trên tập Kiểm tra. Bấm vào các ô ngoài đường chéo để xem những ảnh bị đoán sai.',
         'Thảo luận theo nhóm: với người nông dân, đoán nhầm "bệnh này thành bệnh kia" và đoán nhầm "lá bệnh thành lá khỏe", lỗi nào gây hại hơn?',
         'Chế độ Chuyên sâu: xem bảng precision / recall. Recall của một lớp bệnh cho biết trong số lá thật sự mắc bệnh đó, mô hình phát hiện được bao nhiêu phần.',
       ],

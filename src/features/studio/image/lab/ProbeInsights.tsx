@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { useObjectUrl } from '../useObjectUrl';
-import { markerFor } from './class-style';
 import { pointBounds } from './boundary';
 import { EmbeddingMap, type MapPoint } from './EmbeddingMap';
 import { fitProbeMap, nearestTrainToVector, type Neighbor } from './probe';
@@ -18,7 +17,7 @@ interface ProbeMapProps {
   readonly predicted: number;
 }
 
-/** Bản đồ PCA của bước ③ (đứng yên) với dấu ✱ của ảnh đang thử di chuyển trên đó. */
+/** Bản đồ PCA của bước 3 (đứng yên) với dấu hoa thị của ảnh đang thử di chuyển trên đó. */
 export function ProbeMap({ classes, samples, features, vector, predicted }: ProbeMapProps) {
   const { t, i18n } = useTranslation();
   const withFeatures = useMemo(() => samples.filter((s) => features.has(s.id)), [samples, features]);
@@ -51,7 +50,7 @@ export function ProbeMap({ classes, samples, features, vector, predicted }: Prob
           t('project.represent.axis', { n: 1, percent: pct(map.explainedVarianceRatio[0]) }),
           t('project.represent.axis', { n: 2, percent: pct(map.explainedVarianceRatio[1]) }),
         ]}
-        probe={{ x, y, classIndex: predicted, label: t('project.use.probeLabel', { name: `${markerFor(predicted)} ${name}` }) }}
+        probe={{ x, y, classIndex: predicted, label: t('project.use.probeLabel', { name }) }}
       />
       {isOutside && <p className="text-xs text-warning" data-testid="probe-outside">{t('project.use.mapOutside')}</p>}
     </figure>
@@ -78,7 +77,7 @@ export function ProbeNeighbors({ classes, samples, features, vector }: ProbeNeig
       <p className="max-w-md text-xs text-muted">{t('project.use.neighborsLead')}</p>
       <ul className="flex gap-2" aria-labelledby="probe-neighbors-title">
         {neighbors.map((n) => (
-          <NeighborThumb key={n.sample.id} neighbor={n} label={`${markerFor(indexOf.get(n.sample.classId) ?? 0)} ${classes[indexOf.get(n.sample.classId) ?? 0]?.name ?? ''}`} />
+          <NeighborThumb key={n.sample.id} neighbor={n} label={classes[indexOf.get(n.sample.classId) ?? 0]?.name ?? ''} />
         ))}
       </ul>
     </div>

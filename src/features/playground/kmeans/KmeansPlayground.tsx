@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { makeDataset2d, type Dataset2dKind } from '@/core/algorithms/datasets-2d';
 import { kmeansPlusPlus, runKmeans } from '@/core/algorithms/kmeans';
 import { createRng } from '@/core/random/seeded-rng';
-import { colorFor, markerFor } from '@/features/studio/image/lab/class-style';
+import { colorFor } from '@/features/studio/image/lab/class-style';
 import { ControlPanel, DatasetSelect, RangeField, useInterval } from '../controls';
 import { Plot2d } from '../Plot2d';
 import { buildFrames } from './kmeans-view';
+import { ChartMarker } from '@/ui/ClassMarker';
 
 const DOMAIN = 1.2;
 const POINTS = 120;
@@ -57,7 +58,7 @@ export function KmeansPlayground() {
               {frame.centers.map((c, j) => (
                 <g key={j}>
                   <circle cx={s.sx(c[0]!)} cy={s.sy(c[1]!)} r={11} fill="var(--color-surface)" stroke={colorFor(j)} strokeWidth={3} />
-                  <text x={s.sx(c[0]!)} y={s.sy(c[1]!)} textAnchor="middle" dominantBaseline="central" fontSize={11} fill={colorFor(j)}>{markerFor(j)}</text>
+                  <ChartMarker index={j} cx={s.sx(c[0]!)} cy={s.sy(c[1]!)} size={11} />
                 </g>
               ))}
             </g>

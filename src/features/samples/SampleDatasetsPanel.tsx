@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { parsePhotoManifest, PHOTO_DATASETS, type PhotoDatasetId, type PhotoManifest } from '@/core/datasets/photo';
 import { SAMPLE_DATASETS } from '@/core/datasets/synthetic';
-import { markerFor } from '@/features/studio/image/lab/class-style';
 import { photoDatasetUrl, useCreateSampleProject, type AnyDatasetId, type CreateState } from './useCreateSampleProject';
+import { Info } from '@/ui/icons';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 /** Thẻ các bộ dữ liệu mẫu: bấm một nút là có ngay dự án đủ ảnh để thử cả quy trình. */
 export function SampleDatasetsPanel() {
@@ -29,7 +30,7 @@ export function SampleDatasetsPanel() {
           <DatasetCard key={d.id} id={d.id} classCount={d.classKeys.length} images={d.perClass * d.classKeys.length} state={state} onCreate={handleCreate} />
         ))}
       </ul>
-      <p className="text-xs text-muted">ⓘ {t('samples.note')}</p>
+      <p className="text-xs text-muted"><Info /> {t('samples.note')}</p>
       <h3 className="pt-2 text-sm font-semibold">{t('samples.photoTitle')}</h3>
       <ul className="grid gap-3 md:grid-cols-2" aria-label={t('samples.photoTitle')}>
         {PHOTO_DATASETS.map((d) => (
@@ -48,7 +49,7 @@ export function SampleDatasetsPanel() {
           </DatasetCard>
         ))}
       </ul>
-      <p className="text-xs text-muted">ⓘ {t('samples.photoNote')}</p>
+      <p className="text-xs text-muted"><Info /> {t('samples.photoNote')}</p>
       {state.phase === 'error' && <p role="alert" className="text-sm text-danger">{t('samples.error', { message: state.message })}</p>}
     </section>
   );
@@ -67,8 +68,8 @@ function DatasetCard({ id, classCount, images, state, onCreate, children }: Data
   const { t } = useTranslation();
   return (
     <li className="lab-card flex flex-col gap-2 p-4">
-      <p aria-hidden="true" className="text-xl tracking-widest text-primary">
-        {Array.from({ length: classCount }, (_, i) => markerFor(i)).join(' ')}
+      <p aria-hidden="true" className="flex gap-2 text-xl">
+        {Array.from({ length: classCount }, (_, i) => <ClassMarker key={i} index={i} />)}
       </p>
       <h4 className="font-semibold">{t(`samples.items.${id}.title`)}</h4>
       <p className="text-sm text-muted">{t(`samples.items.${id}.description`)}</p>

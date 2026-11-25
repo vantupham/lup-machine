@@ -29,7 +29,7 @@ function toMetrics(snapshots: readonly EpochSnapshot[]) {
 
 /**
  * Toàn bộ trạng thái học máy của một dự án ảnh: vector đặc trưng, huấn luyện, nhật ký thí nghiệm.
- * Dùng chung cho khối "làm nhanh" ở đầu trang và các bước ③–⑥ "mở nắp" bên dưới: cùng một mô hình.
+ * Dùng chung cho khối "làm nhanh" ở đầu trang và các bước 3–6 "mở nắp" bên dưới: cùng một mô hình.
  */
 export function useImageLab(projectId: string, classes: readonly ClassRecord[], samples: readonly SampleRecord[]) {
   const { t } = useTranslation();

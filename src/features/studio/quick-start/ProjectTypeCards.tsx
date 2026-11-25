@@ -6,6 +6,7 @@ import { getErrorMessage } from '@/ui/error-message';
 import { ProjectTypeIcon } from './ProjectTypeIcon';
 import { QUICK_START_TYPES } from './quick-start';
 import { useCreateProject } from './useCreateProject';
+import { ArrowRight } from '@/ui/icons';
 
 /** Năm thẻ lớn: bấm một lần là có dự án (tên tự đặt) và vào thẳng không gian làm việc. */
 export function ProjectTypeCards() {
@@ -58,7 +59,7 @@ export function ProjectTypeCards() {
               </span>
               <span className="mt-auto pt-2 text-sm font-semibold text-primary">
                 {creating === type ? t('quickStart.creating') : t('quickStart.start')}{' '}
-                <span aria-hidden="true" className="inline-block transition-transform group-hover:translate-x-1">→</span>
+                <ArrowRight className="transition-transform group-hover:translate-x-1" />
               </span>
             </button>
           </li>

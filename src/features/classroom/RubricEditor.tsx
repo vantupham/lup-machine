@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ASSIGNMENT_LIMITS, rubricTotal, type RubricCriterion } from '@/storage/schemas/assignment';
+import { X } from '@/ui/icons';
 
 interface RubricEditorProps {
   readonly rubric: readonly RubricCriterion[];
@@ -43,7 +44,7 @@ export function RubricEditor({ rubric, onChange }: RubricEditorProps) {
                 onClick={() => onChange(rubric.filter((_, j) => j !== i))}
                 className="btn btn-ghost px-2 py-1 text-sm"
               >
-                ✕
+                <X />
               </button>
               <textarea
                 aria-label={t('classroom.create.descriptionLabel', { n })}

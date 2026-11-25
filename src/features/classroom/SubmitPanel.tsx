@@ -6,6 +6,7 @@ import { ASSIGNMENT_LIMITS } from '@/storage/schemas/assignment';
 import { downloadBytes } from '@/ui/download';
 import { getErrorMessage } from '@/ui/error-message';
 import { createSubmissionFile, storedBlockers, submitterBlockers, SubmissionBlockedError, type SubmissionBlocker } from './classroom-files';
+import { Check } from '@/ui/icons';
 
 interface SubmitPanelProps {
   readonly projectId: string;
@@ -84,7 +85,7 @@ export function SubmitPanel({ projectId, answersVersion, hasUnsavedAnswers }: Su
       </div>
       <div aria-live="polite" data-testid="submit-checklist" className="rounded border border-rule p-3 text-sm">
         <p className="font-semibold">{t('classroom.assignment.checklist')}</p>
-        {isReady && <p className="text-accent">✓ {t('classroom.assignment.ready')}</p>}
+        {isReady && <p className="text-accent"><Check /> {t('classroom.assignment.ready')}</p>}
         {stored !== null && 'error' in stored && <p className="text-danger">{t('classroom.assignment.checkError')}</p>}
         {blockers && blockers.length > 0 && (
           <ul className="mt-1 list-disc space-y-1 pl-5">

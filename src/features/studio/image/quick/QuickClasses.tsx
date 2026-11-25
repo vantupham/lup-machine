@@ -2,21 +2,22 @@ import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { ACCEPTED_IMAGE_TYPES } from '../image-file';
 import { useObjectUrl } from '../useObjectUrl';
+import { Camera, ImageUp } from '@/ui/icons';
+import { ClassMarker } from '@/ui/ClassMarker';
 
 /** Số ảnh thu nhỏ hiện cho mỗi lớp (ảnh mới nhất), đủ để thấy vừa chụp được gì. */
 const THUMBS_PER_CLASS = 4;
 
 interface QuickClassesProps {
   readonly classes: readonly ClassRecord[];
-  readonly markers: readonly string[];
   readonly samplesByClass: ReadonlyMap<string, readonly SampleRecord[]>;
   readonly onWebcam: (cls: ClassRecord) => void;
   readonly onUpload: (cls: ClassRecord, files: readonly File[]) => void;
   readonly onAddClass: () => void;
 }
 
-/** Cột ①: mỗi lớp một dòng gọn, chụp hoặc tải ảnh thẳng vào ngăn Dạy. */
-export function QuickClasses({ classes, markers, samplesByClass, onWebcam, onUpload, onAddClass }: QuickClassesProps) {
+/** Cột 1: mỗi lớp một dòng gọn, chụp hoặc tải ảnh thẳng vào ngăn Dạy. */
+export function QuickClasses({ classes, samplesByClass, onWebcam, onUpload, onAddClass }: QuickClassesProps) {
   const { t } = useTranslation();
   return (
     <div className="space-y-3">
@@ -26,7 +27,7 @@ export function QuickClasses({ classes, markers, samplesByClass, onWebcam, onUpl
           <div key={cls.id} role="group" aria-label={cls.name} className="rounded border border-rule bg-paper p-3">
             <div className="flex items-baseline justify-between gap-2">
               <p className="truncate font-semibold">
-                <span aria-hidden="true" className="mr-1 text-primary">{markers[i % markers.length]}</span>
+                <ClassMarker index={i} className="mr-1.5" />
                 {cls.name}
               </p>
               <span className="shrink-0 font-mono text-xs text-muted">{t('project.quick.count', { count: list.length })}</span>
@@ -40,10 +41,10 @@ export function QuickClasses({ classes, markers, samplesByClass, onWebcam, onUpl
             )}
             <div className="mt-2 flex flex-wrap gap-2">
               <button type="button" className="btn btn-ghost px-2.5 py-1 text-sm" onClick={() => onWebcam(cls)} aria-label={t('project.quick.capture', { name: cls.name })}>
-                📷 {t('project.quick.captureShort')}
+                <Camera /> {t('project.quick.captureShort')}
               </button>
               <label className="btn btn-ghost cursor-pointer px-2.5 py-1 text-sm has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary">
-                🖼 {t('project.quick.uploadShort')}
+                <ImageUp /> {t('project.quick.uploadShort')}
                 <input
                   type="file"
                   multiple

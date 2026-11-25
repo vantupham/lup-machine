@@ -5,8 +5,8 @@ interface ExactBadgeProps {
 }
 
 /**
- * Nhãn độ tin cậy của một hình minh họa: 🟩 chính xác (đúng phép tính của mô hình)
- * hoặc 🟨 xấp xỉ (minh họa gần đúng). Bắt buộc có trên mọi công cụ của Kính hiển vi.
+ * Nhãn độ tin cậy của một hình minh họa: màu xanh: chính xác (đúng phép tính của mô hình)
+ * hoặc màu vàng: xấp xỉ (minh họa gần đúng). Bắt buộc có trên mọi công cụ của Kính hiển vi.
  */
 export function ExactBadge({ label, hint, kind = 'exact' }: ExactBadgeProps) {
   const color = kind === 'exact' ? 'var(--color-accent)' : 'var(--color-warning)';

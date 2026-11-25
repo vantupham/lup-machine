@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { RunRecord } from '@/storage/db';
 import { CLASS_COLORS } from './class-style';
 import { LineChart } from './LineChart';
+import { RotateCcw } from '@/ui/icons';
 
 const MAX_COMPARE = 4;
 
@@ -90,7 +91,7 @@ export function ExperimentLog({ runs, fingerprint, canReplay, onReplay, onDelete
                           aria-label={t('project.experiments.replayLabel', { n: run.number })}
                           onClick={() => onReplay(run)}
                         >
-                          ↻ {t('project.experiments.replay')}
+                          <RotateCcw /> {t('project.experiments.replay')}
                         </button>
                       ) : (
                         <span className="text-xs text-muted" title={t('project.experiments.changedHint')}>
