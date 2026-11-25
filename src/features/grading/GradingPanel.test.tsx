@@ -25,6 +25,7 @@ function project(): ProjectBundle {
     table: null,
     runs: [],
     modelCard: card,
+    notes: [],
   };
 }
 

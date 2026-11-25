@@ -33,6 +33,9 @@ export function ModelLab({ projectName, classes, samples }: ModelLabProps) {
     [samples],
   );
   const selectedSample = selected && samples.find((s) => s.id === selected.id) ? selected : null;
+  const finalTest = snapshots.at(-1)?.test?.accuracy;
+  const guessResult =
+    training.status === 'done' && !isStale && lab.guess !== null && finalTest !== undefined ? { guess: lab.guess, actual: finalTest } : null;
 
   return (
     <div className="space-y-12 border-t border-rule pt-8">
@@ -57,6 +60,8 @@ export function ModelLab({ projectName, classes, samples }: ModelLabProps) {
         selectedEpoch={lab.shownEpoch}
         onSelectEpoch={lab.setReplayEpoch}
         onStart={lab.startNew}
+        canGuess={readiness.readiness === 'ready' && readiness.testSamples.length > 0}
+        guessResult={guessResult}
         onStep={training.step}
         onFinish={training.finish}
       />

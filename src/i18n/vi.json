@@ -601,7 +601,10 @@
       "seriesTrain": "Tập Huấn luyện",
       "seriesTest": "Tập Kiểm tra",
       "notSaved": "Mỗi lần huấn luyện được ghi vào Nhật ký thí nghiệm bên dưới.",
-      "stale": "Các lớp đã đổi sau lần huấn luyện trước. Cần huấn luyện lại."
+      "stale": "Các lớp đã đổi sau lần huấn luyện trước. Cần huấn luyện lại.",
+      "guessLabel": "Em đoán điểm Kiểm tra (%)",
+      "guessInvalid": "Điểm đoán phải từ 0 đến 100.",
+      "guessResult": "Em đoán {{guess}}%. Điểm Kiểm tra thực tế: {{actual}}% (lệch {{diff}} điểm)."
     },
     "evaluate": {
       "title": "Đánh giá",
@@ -655,7 +658,8 @@
       "restored": "Đã khôi phục lần {{n}} bằng cách chạy lại với cùng seed {{seed}}.",
       "replaying": "Đang xem lại lần {{n}}.",
       "saveError": "Không lưu được vào nhật ký: {{message}}",
-      "na": "—"
+      "na": "—",
+      "guess": "Em đoán"
     },
     "explain": {
       "title": "Vì sao mô hình đoán như vậy?",
@@ -1676,5 +1680,43 @@
     "laser": "Laser (L)",
     "fullscreen": "Toàn màn hình (F)",
     "exit": "Thoát (Esc)"
+  },
+  "notebook": {
+    "title": "Sổ tay",
+    "questions": "{{count}} câu hỏi",
+    "written": "đã ghi",
+    "observe": "Quan sát",
+    "explain": "Giải thích",
+    "label": "Ghi chép của em",
+    "placeholder": "Em thấy gì, và vì sao em nghĩ vậy?",
+    "saving": "Đang lưu…",
+    "saved": "Đã lưu",
+    "saveError": "Chưa lưu được ghi chép: {{message}}",
+    "image": {
+      "data": {
+        "observe": "Mỗi lớp có bao nhiêu ảnh? Ảnh trong cùng một lớp khác nhau ở điểm nào?",
+        "explain": "Vì sao cần để riêng vài ảnh ở ngăn Kiểm tra?"
+      },
+      "check": {
+        "observe": "Trợ lý nhắc gì về dữ liệu của em?",
+        "explain": "Một lớp ít ảnh hơn hẳn thì máy dễ đoán sai thế nào?"
+      },
+      "represent": {
+        "observe": "Trên bản đồ, lớp nào tách riêng, lớp nào nằm lẫn vào nhau?",
+        "explain": "Vì sao hai ảnh trông giống nhau lại nằm gần nhau?"
+      },
+      "train": {
+        "observe": "Độ chính xác và mất mát thay đổi thế nào qua các epoch?",
+        "explain": "Vì sao ở epoch 0 máy đoán gần như bừa?"
+      },
+      "evaluate": {
+        "observe": "Ô nào ngoài đường chéo có số lớn nhất? Bấm vào để xem ảnh.",
+        "explain": "Vì sao máy hay nhầm hai lớp đó với nhau?"
+      },
+      "use": {
+        "observe": "Ảnh mới nào làm máy đoán sai hoặc không chắc chắn?",
+        "explain": "Vùng máy nhìn vào giải thích lỗi đó thế nào?"
+      }
+    }
   }
 }

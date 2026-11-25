@@ -16,6 +16,7 @@ import { ProbeMap, ProbeNeighbors } from './ProbeInsights';
 import { ProbeResult } from './ProbeResult';
 import { Camera, ImageUp, Lock, Pause, Play } from '@/ui/icons';
 import { StepNumber } from '@/ui/StepNumber';
+import { StepNotebook } from '@/features/notebook/StepNotebook';
 
 type Source = 'none' | 'webcam' | 'upload';
 
@@ -45,6 +46,7 @@ export function UseSection({ classes, samples, features, params, epoch }: UseSec
       ) : (
         <ProbeLab classes={classes} samples={samples} features={features} params={params} epoch={epoch} />
       )}
+      <StepNotebook step="use" />
     </section>
   );
 }

@@ -7,6 +7,7 @@ import type { TrainingReadiness } from './lab-data';
 import type { TrainingSpeed, TrainingStatus } from './useTraining';
 import { ArrowRight, Info } from '@/ui/icons';
 import { StepNumber } from '@/ui/StepNumber';
+import { StepNotebook } from '@/features/notebook/StepNotebook';
 
 export const DEFAULT_TRAIN_OPTIONS: TrainOptions = { epochs: 50, learningRate: 0.001, batchSize: 16, seed: 42 };
 const LIMITS = { epochs: [1, 500], learningRate: [0.00001, 1], batchSize: [1, 256] } as const;
@@ -19,7 +20,12 @@ interface TrainSectionProps {
   readonly status: TrainingStatus;
   readonly selectedEpoch: number | null;
   readonly onSelectEpoch: (epoch: number) => void;
-  readonly onStart: (options: TrainOptions, speed: TrainingSpeed) => void;
+  /** `guess`: điểm Kiểm tra (0–1) học sinh đoán trước, null nếu không đoán. */
+  readonly onStart: (options: TrainOptions, speed: TrainingSpeed, guess: number | null) => void;
+  /** Có ảnh Kiểm tra thì mới hỏi đoán điểm Kiểm tra. */
+  readonly canGuess: boolean;
+  /** Lần chạy vừa xong có đoán trước: điểm đoán và điểm thật (0–1). */
+  readonly guessResult: { readonly guess: number; readonly actual: number } | null;
   readonly onStep: () => void;
   readonly onFinish: () => void;
 }
@@ -37,8 +43,11 @@ export function TrainSection(props: TrainSectionProps) {
   const mode = useModeStore((s) => s.mode);
   const [options, setOptions] = useState<TrainOptions>(DEFAULT_TRAIN_OPTIONS);
   const [speed, setSpeed] = useState<TrainingSpeed>('normal');
+  const [guessText, setGuessText] = useState('');
   const { readiness, snapshots, status } = props;
   const isActive = status === 'running' || status === 'waiting-step';
+  const guess = parseGuess(guessText);
+  const isGuessValid = !props.canGuess || guess !== undefined;
   const valid = isValid(options);
   const last = snapshots.at(-1);
 
@@ -65,7 +74,30 @@ export function TrainSection(props: TrainSectionProps) {
             ))}
           </fieldset>
           {mode === 'expert' && <OptionInputs options={options} onChange={setOptions} disabled={isActive} />}
-          <button type="button" className="btn btn-primary" disabled={isActive || !valid} onClick={() => props.onStart(options, speed)}>
+          {props.canGuess && (
+            <label className="flex flex-col text-xs text-muted">
+              {t('project.train.guessLabel')}
+              <input
+                type="number"
+                min={0}
+                max={100}
+                step={1}
+                value={guessText}
+                disabled={isActive}
+                onChange={(e) => setGuessText(e.target.value)}
+                className="w-24 rounded border border-rule bg-paper px-2 py-1 font-mono text-sm text-ink"
+              />
+            </label>
+          )}
+          <button
+            type="button"
+            className="btn btn-primary"
+            disabled={isActive || !valid || !isGuessValid}
+            onClick={() => {
+              props.onStart(options, speed, props.canGuess ? (guess ?? null) : null);
+              setGuessText('');
+            }}
+          >
             {snapshots.length > 0 ? t('project.train.restart') : t('project.train.start')}
           </button>
           {status === 'waiting-step' && (
@@ -75,6 +107,7 @@ export function TrainSection(props: TrainSectionProps) {
             </>
           )}
           {!valid && <p role="alert" className="text-sm text-danger">{t('project.train.invalid')}</p>}
+          {!isGuessValid && <p role="alert" className="text-sm text-danger">{t('project.train.guessInvalid')}</p>}
         </div>
       )}
 
@@ -83,8 +116,27 @@ export function TrainSection(props: TrainSectionProps) {
           {isActive ? t('project.train.running', { epoch: last.epoch, total: options.epochs }) : t('project.train.done', { total: last.epoch })}
         </p>
       )}
+      {props.guessResult && <GuessResult {...props.guessResult} />}
       {snapshots.length > 0 && <Charts {...props} />}
+      <StepNotebook step="train" />
     </section>
+  );
+}
+
+/** '' → null (không đoán); số từ 0 đến 100 → 0–1; còn lại → undefined (không hợp lệ). */
+function parseGuess(text: string): number | null | undefined {
+  if (text.trim() === '') return null;
+  const value = Number(text);
+  return Number.isFinite(value) && value >= 0 && value <= 100 ? value / 100 : undefined;
+}
+
+function GuessResult({ guess, actual }: { readonly guess: number; readonly actual: number }) {
+  const { t } = useTranslation();
+  const percent = (v: number) => Math.round(v * 100);
+  return (
+    <p className="border-l-4 border-primary pl-3 text-sm" data-testid="guess-result">
+      {t('project.train.guessResult', { guess: percent(guess), actual: percent(actual), diff: Math.abs(percent(actual) - percent(guess)) })}
+    </p>
   );
 }
 

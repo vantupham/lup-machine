@@ -423,6 +423,56 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
   });
 });
 
+describe('Sổ tay: đoán trước, so sau', () => {
+  test('mỗi bước có một ô Sổ tay', async () => {
+    await seed();
+    open();
+    await screen.findByText(/cần làm bước 3 \(biểu diễn\) trước/i);
+    for (const step of ['data', 'check', 'represent', 'train', 'evaluate', 'use']) {
+      expect(screen.getByTestId(`notebook-${step}`)).toBeInTheDocument();
+    }
+  });
+
+  test('đoán điểm Kiểm tra trước khi huấn luyện: xong thì so với điểm thật và lưu vào nhật ký', async () => {
+    useModeStore.setState({ mode: 'expert' });
+    await seed();
+    open();
+    await extractAll();
+    const guess = screen.getByLabelText('Em đoán điểm Kiểm tra (%)');
+    await userEvent.type(guess, '80');
+    await trainToEnd();
+
+    expect(screen.getByTestId('guess-result')).toHaveTextContent('Em đoán 80%. Điểm Kiểm tra thực tế: 100% (lệch 20 điểm).');
+    expect(guess).toHaveValue(null);
+    await waitFor(async () => expect((await repos.experiments.listRuns(projectId))[0]?.guess).toEqual({ testAccuracy: 0.8 }));
+    const log = await screen.findByRole('table', { name: 'Nhật ký thí nghiệm' }, SLOW_WAIT);
+    expect(await within(log).findByText('80%')).toBeInTheDocument();
+  });
+
+  test('không đoán thì không so; đoán ngoài 0 đến 100 thì chưa cho huấn luyện', async () => {
+    await seed();
+    open();
+    await extractAll();
+    const guess = screen.getByLabelText('Em đoán điểm Kiểm tra (%)');
+    fireEvent.change(guess, { target: { value: '150' } });
+    expect(screen.getByRole('button', { name: 'Bắt đầu huấn luyện' })).toBeDisabled();
+    expect(screen.getByText('Điểm đoán phải từ 0 đến 100.')).toBeInTheDocument();
+
+    fireEvent.change(guess, { target: { value: '' } });
+    await trainToEnd();
+    expect(screen.queryByTestId('guess-result')).toBeNull();
+    await waitFor(async () => expect((await repos.experiments.listRuns(projectId))[0]?.guess).toBeUndefined());
+  });
+
+  test('chưa có ảnh Kiểm tra thì không hỏi đoán điểm', async () => {
+    await seed({ testPerClass: 0 });
+    open();
+    await userEvent.click(await screen.findByRole('button', { name: /biến ảnh thành vector \(12 ảnh/i }));
+    await screen.findByText(/tất cả ảnh đã có vector/i);
+    expect(screen.queryByLabelText('Em đoán điểm Kiểm tra (%)')).toBeNull();
+  });
+});
+
 describe('Bước 6: Sử dụng', () => {
   test('sau khi huấn luyện: tải một ảnh mới, mô hình đoán lớp; ảnh thử không được lưu vào dự án', async () => {
     await seed();

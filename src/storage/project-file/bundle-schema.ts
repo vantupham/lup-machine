@@ -14,6 +14,7 @@ export const BUNDLE_FILES = {
   table: 'table.json',
   runs: 'runs.json',
   modelCard: 'model-card.json',
+  notebook: 'notebook.json',
 } as const;
 
 export const MAX_BUNDLE_CLASSES = 50;

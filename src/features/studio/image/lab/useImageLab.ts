@@ -41,6 +41,8 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
   const [origin, setOrigin] = useState<RunOrigin | null>(null);
   const [notice, setNotice] = useState<LabNotice>(null);
   const [lastOptions, setLastOptions] = useState<TrainOptions | null>(null);
+  /** Điểm Kiểm tra (0–1) học sinh đoán cho lần chạy đang hiện; null nếu không đoán. */
+  const [guess, setGuess] = useState<number | null>(null);
   const restoreAttempted = useRef(false);
   /** Mỗi lần bắt đầu huấn luyện (bất kỳ nút nào) tăng số này: "Huấn luyện nhanh" biết có lần khác chen vào. */
   const runCounter = useRef(0);
@@ -60,12 +62,13 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
     [snapshot, classes, samples, features],
   );
 
-  const runWith = (ready: TrainingReadiness, options: TrainOptions, speed: TrainingSpeed, nextOrigin: RunOrigin) => {
+  const runWith = (ready: TrainingReadiness, options: TrainOptions, speed: TrainingSpeed, nextOrigin: RunOrigin, runGuess: number | null = null) => {
     if (ready.readiness !== 'ready') return;
     runCounter.current++;
     setReplayEpoch(null);
     setOrigin(nextOrigin);
     setLastOptions(options);
+    setGuess(runGuess);
     // Chỉ lần huấn luyện MỚI được ghi vào nhật ký (chạy lại thì không lưu trùng).
     const onDone =
       nextOrigin.kind === 'new'
@@ -78,6 +81,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
                 classNames: classes.map((c) => c.name),
                 counts: { train: ready.trainSamples.length, test: ready.testSamples.length },
                 metrics: toMetrics(done),
+                ...(runGuess === null ? {} : { guess: { testAccuracy: runGuess } }),
               })
               .catch((error: unknown) =>
                 setNotice({ kind: 'error', text: t('project.experiments.saveError', { message: getErrorMessage(error) }) }),
@@ -86,11 +90,13 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
     training.start(ready.data, options, speed, onDone);
   };
 
-  const run = (options: TrainOptions, speed: TrainingSpeed, nextOrigin: RunOrigin) => runWith(readiness, options, speed, nextOrigin);
+  const run = (options: TrainOptions, speed: TrainingSpeed, nextOrigin: RunOrigin, runGuess: number | null = null) =>
+    runWith(readiness, options, speed, nextOrigin, runGuess);
 
-  const startNew = (options: TrainOptions, speed: TrainingSpeed) => {
+  /** `runGuess`: điểm Kiểm tra (0–1) học sinh đoán trước, lưu kèm lần chạy để so sau khi xong. */
+  const startNew = (options: TrainOptions, speed: TrainingSpeed, runGuess: number | null = null) => {
     setNotice(null);
-    run(options, speed, { kind: 'new', fingerprint });
+    run(options, speed, { kind: 'new', fingerprint }, runGuess);
   };
 
   /**
@@ -120,7 +126,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
   };
 
   const replay = (record: RunRecord, kind: 'replay' | 'restore') => {
-    run(record.options, 'normal', { kind, number: record.number, seed: record.options.seed });
+    run(record.options, 'normal', { kind, number: record.number, seed: record.options.seed }, record.guess?.testAccuracy ?? null);
     setNotice({
       kind: 'info',
       text: t(kind === 'restore' ? 'project.experiments.restored' : 'project.experiments.replaying', {
@@ -162,6 +168,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
     predictions,
     notice,
     lastOptions,
+    guess,
     setReplayEpoch,
     startNew,
     trainQuick,

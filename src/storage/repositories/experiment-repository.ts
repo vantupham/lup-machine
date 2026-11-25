@@ -26,6 +26,8 @@ export const newRunSchema = z.object({
   classNames: z.array(z.string()).min(2),
   counts: z.object({ train: z.number().int().min(0), test: z.number().int().min(0) }),
   metrics: z.array(metricSchema).min(1),
+  /** Điểm Kiểm tra học sinh đoán trước khi huấn luyện (0–1). */
+  guess: z.object({ testAccuracy: z.number().min(0).max(1) }).strict().optional(),
 });
 
 export type NewRunInput = z.infer<typeof newRunSchema>;

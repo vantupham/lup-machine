@@ -12,7 +12,7 @@ function manifest(projectType: ProjectBundle['manifest']['projectType']): Projec
 }
 
 function empty(projectType: ProjectBundle['manifest']['projectType']): ProjectBundle {
-  return { manifest: manifest(projectType), classes: [], images: [], clips: [], poses: [], table: null, runs: [], modelCard: null };
+  return { manifest: manifest(projectType), classes: [], images: [], clips: [], poses: [], table: null, runs: [], modelCard: null, notes: [] };
 }
 
 const credit = { author: 'A. Tác giả', source: 'https://example.org/a', license: 'CC BY 2.0', licenseUrl: 'https://creativecommons.org/licenses/by/2.0/' };
@@ -34,6 +34,7 @@ const imageBundle: ProjectBundle = {
       classNames: ['Mèo', 'Chó'],
       counts: { train: 1, test: 1 },
       metrics: [{ epoch: 1, trainLoss: 0.5, trainAccuracy: 1, testLoss: 0.6, testAccuracy: 1 }],
+      guess: { testAccuracy: 0.8 },
     },
   ],
 };
@@ -79,6 +80,24 @@ describe('tệp dự án .lup', () => {
       files['model-card.json'] = strToU8(JSON.stringify({ ...modelCard, purpose: 'x'.repeat(1001) }));
     });
     expect(() => decodeBundle(broken)).toThrow(/model-card\.json/);
+  });
+
+  test('sổ tay ghi chép đi kèm mọi loại dự án', () => {
+    const notes = [{ step: 'data', text: 'Có 20 ảnh mèo' }, { step: 'evaluate', text: 'Hay nhầm mèo đen' }];
+    for (const type of ['image', 'audio', 'text'] as const) {
+      const bytes = encodeBundle({ ...empty(type), notes });
+      expect(Object.keys(unzipSync(bytes))).toContain('notebook.json');
+      expect(decodeBundle(bytes).notes).toEqual(notes);
+    }
+    expect(Object.keys(unzipSync(encodeBundle(empty('pose'))))).not.toContain('notebook.json');
+    const duplicated = rezip(encodeBundle({ ...empty('pose'), notes }), (files) => {
+      files['notebook.json'] = strToU8(JSON.stringify({ notes: [notes[0], notes[0]] }));
+    });
+    expect(() => decodeBundle(duplicated)).toThrow(/notebook\.json/);
+    const tooLong = rezip(encodeBundle({ ...empty('pose'), notes }), (files) => {
+      files['notebook.json'] = strToU8(JSON.stringify({ notes: [{ step: 'data', text: 'x'.repeat(2001) }] }));
+    });
+    expect(() => decodeBundle(tooLong)).toThrow(/notebook\.json/);
   });
 
   test('dự án âm thanh: giữ đúng từng mẫu âm thanh qua tệp WAV', () => {

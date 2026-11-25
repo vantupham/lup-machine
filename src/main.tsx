@@ -13,6 +13,7 @@ import { createDexieProjectFileRepository } from './storage/repositories/project
 import { createDexieModelCardRepository } from './storage/repositories/model-card-repository';
 import { createDexieAssignmentRepository } from './storage/repositories/assignment-repository';
 import { createDexieSubmissionRepository } from './storage/repositories/submission-repository';
+import { createDexieNotebookRepository } from './storage/repositories/notebook-repository';
 import { LupDatabase } from './storage/db';
 import { initialLanguage } from './i18n';
 import { registerServiceWorker, useOfflineStore } from './ui/offline';
@@ -34,6 +35,7 @@ const repositories: Repositories = {
   modelCards: createDexieModelCardRepository(db),
   assignments: createDexieAssignmentRepository(db),
   submissions: createDexieSubmissionRepository(db),
+  notebook: createDexieNotebookRepository(db),
 };
 
 // Chạy ngoại tuyến chỉ bật ở bản build (bản dev của Vite thay đổi mã liên tục).
