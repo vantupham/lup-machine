@@ -828,6 +828,41 @@
       "lockedHint": "Finish the earlier steps to open this one",
       "next": "Next step: {{step}}",
       "stepPrefix": "Step {{n}}"
+    },
+    "quick": {
+      "title": "Teach the computer in 3 steps",
+      "lead": "The quick way, like Teachable Machine: collect images, press one button to train, then try it. To see how it works, open the lid of each step below — it is the same model.",
+      "columns": {
+        "data": "1. Collect images",
+        "train": "2. Train",
+        "preview": "3. Try it"
+      },
+      "count": "Images: {{count}}",
+      "capture": "Capture images for class {{name}}",
+      "captureShort": "Capture",
+      "upload": "Upload images for class {{name}}",
+      "uploadShort": "Upload",
+      "addClass": "+ Add class",
+      "train": "Quick train",
+      "needClasses": "At least 2 classes need images.",
+      "defaults": "Uses the default settings ({{epochs}} epochs). To tune them, see step ④.",
+      "openLid": "Open the lid: see how the computer learns",
+      "loadingModel": "Loading the image recognition model…",
+      "extracting": "Turning images into vectors: {{done}}/{{total}}…",
+      "training": "Training…",
+      "done": "Done! It gets {{percent}}% of the training images right.",
+      "stale": "The data changed: train again.",
+      "error": "Something went wrong: {{message}}",
+      "needModel": "Train first, then you can try it.",
+      "liveStart": "📷 Try with the webcam",
+      "liveStop": "Stop trying",
+      "tryFile": "Try with an image file",
+      "tryFileShort": "Try a file",
+      "resultLabel": "Prediction",
+      "previewError": "Could not try the image: {{message}}",
+      "epochCounter": "epoch {{epoch}}/{{total}}",
+      "notReady": "Cannot train yet: at least 2 classes need training images.",
+      "cameraBusy": "The webcam is busy capturing images; close the capture box to keep trying."
     }
   },
   "samples": {

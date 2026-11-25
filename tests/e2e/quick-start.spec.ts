@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
@@ -65,5 +65,60 @@ test('trang dự án: đổi tên tại chỗ, thanh 6 bước dính khi cuộn 
   await page.goto('./#/studio');
   const card = page.getByRole('listitem', { name: 'Góp ý căng tin lớp 7A' });
   await expect(card).toContainText('Đã có bảng dữ liệu');
+});
+
+/** Ảnh "ấm" (nền cam) và "lạnh" (nền xanh, sọc), vẽ bằng canvas để không phụ thuộc tệp ngoài. */
+async function toneImages(page: Page, kind: 'warm' | 'cool', count: number, offset = 0) {
+  const list = await page.evaluate(
+    ({ kind, count, offset }) =>
+      Array.from({ length: count }, (_, k) => {
+        const i = k + offset;
+        const c = document.createElement('canvas');
+        c.width = 320;
+        c.height = 240;
+        const ctx = c.getContext('2d')!;
+        if (kind === 'warm') {
+          ctx.fillStyle = `rgb(${200 + (i % 10) * 5}, ${60 + (i % 10) * 8}, 30)`;
+          ctx.fillRect(0, 0, 320, 240);
+          ctx.fillStyle = '#fff3';
+          ctx.beginPath();
+          ctx.arc(80 + (i % 10) * 15, 120, 40, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillStyle = `rgb(20, ${80 + (i % 10) * 6}, ${200 + (i % 10) * 5})`;
+          ctx.fillRect(0, 0, 320, 240);
+          ctx.fillStyle = '#0004';
+          for (let x = (i % 10) * 3; x < 320; x += 24) ctx.fillRect(x, 0, 10, 240);
+        }
+        return c.toDataURL('image/png').split(',')[1]!;
+      }),
+    { kind, count, offset },
+  );
+  return list.map((b64, i) => ({ name: `${kind}-${offset + i}.png`, mimeType: 'image/png', buffer: Buffer.from(b64, 'base64') }));
+}
+
+test('khối "Dạy máy trong 3 bước": tải ảnh, Huấn luyện nhanh với MobileNet thật, thử ảnh mới', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.goto('./#/studio/moi/anh');
+  const quick = page.getByRole('region', { name: 'Dạy máy trong 3 bước' });
+  await expect(quick).toBeVisible();
+  // Ảnh tô màu, không có mặt người: tắt làm mờ cho nhanh.
+  await page.getByRole('checkbox', { name: 'Làm mờ khuôn mặt trước khi lưu ảnh' }).uncheck();
+
+  await quick.getByLabel('Tải ảnh cho lớp Lớp 1').setInputFiles(await toneImages(page, 'warm', 8));
+  await expect(quick.getByRole('group', { name: 'Lớp 1' })).toContainText('8 ảnh');
+  await quick.getByLabel('Tải ảnh cho lớp Lớp 2').setInputFiles(await toneImages(page, 'cool', 8));
+  await expect(quick.getByRole('group', { name: 'Lớp 2' })).toContainText('8 ảnh');
+
+  await quick.getByRole('button', { name: 'Huấn luyện nhanh' }).click();
+  await expect(quick.getByText(/Xong! Máy đoán đúng \d+% ảnh dạy\./)).toBeVisible({ timeout: 120_000 });
+  const bar = page.getByRole('navigation', { name: 'Các bước của dự án' });
+  await expect(bar.getByRole('button', { name: 'Bước 4: Huấn luyện (đã xong)' })).toBeVisible();
+
+  const [probe] = await toneImages(page, 'warm', 1, 50);
+  await quick.getByLabel('Thử với một tệp ảnh').setInputFiles(probe!);
+  const rows = quick.getByRole('list', { name: 'Máy đoán' }).getByRole('listitem');
+  await expect(rows).toHaveCount(2, { timeout: 30_000 });
+  await expect(rows.first()).toContainText('Lớp 1');
 });
 

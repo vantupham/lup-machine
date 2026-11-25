@@ -19,6 +19,9 @@ import { faceBlurSummary } from './face-blur-message';
 import { decodeStoredImage, videoFrameToStoredImage } from './image-codec.browser';
 import { CLASS_MARKERS } from './lab/class-style';
 import { ModelLab } from './lab/ModelLab';
+import { ImageLabProvider } from './lab/ImageLabContext';
+import { QuickWorkspace } from './quick/QuickWorkspace';
+import { useModeStore } from '@/ui/mode-store';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 
@@ -83,6 +86,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
     }
   };
 
+  const mode = useModeStore((s) => s.mode);
   const [blurFaces, setBlurFaces] = useFaceBlurSetting(projectId);
   const { upload, progress } = useImageUpload(projectId, (text, kind) => setMessage({ kind, text }), reload, blurFaces);
 
@@ -116,6 +120,19 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
       return t('project.data.autoSplitDone', { train: train.length, test: test.length });
     });
 
+  const logActionError = (error: unknown) => {
+    console.error('Thao tác ở khối làm nhanh lỗi', error);
+    setMessage({ kind: 'error', text: t('project.data.actionError', { message: getErrorMessage(error) }) });
+  };
+
+  /** Tên "Lớp n" đầu tiên chưa có trong dự án (cho nút "+ Thêm lớp" của khối làm nhanh). */
+  const nextClassName = () => {
+    const taken = new Set(classes.map((c) => c.name.trim().toLocaleLowerCase('vi')));
+    let n = classes.length + 1;
+    while (taken.has(t('project.defaultClass', { n }).toLocaleLowerCase('vi'))) n++;
+    return t('project.defaultClass', { n });
+  };
+
   /** Số khuôn mặt đã làm mờ trong lần chụp webcam đang mở. */
   const webcamFaces = useRef(0);
 
@@ -134,6 +151,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
   const inspectingClass = inspecting ? classes.find((c) => c.id === inspecting.classId) : undefined;
 
   return (
+    <ImageLabProvider projectId={projectId} classes={classes} samples={samples}>
     <div className="space-y-8">
       <header className="space-y-4">
         <Link to="/studio" className="text-sm text-primary hover:underline">
@@ -153,6 +171,22 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         >
           {progress ? t('project.upload.processing', progress) : message?.text}
         </p>
+      )}
+
+      {mode === 'explore' && (
+        <QuickWorkspace
+          classes={classes}
+          samples={samples}
+          samplesByClass={byClass}
+          markers={CLASS_MARKERS}
+          onWebcam={(c) => {
+            webcamFaces.current = 0;
+            setWebcam({ cls: c, split: 'train' });
+          }}
+          onUpload={(c, files) => upload(c, [...files], 'train', byClass.get(c.id)?.length ?? 0).catch(logActionError)}
+          onAddClass={() => run(async () => { await dataset.addClass(projectId, nextClassName()); return null; }).catch(logActionError)}
+          isCapturing={webcam !== null}
+        />
       )}
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
@@ -209,7 +243,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         <QualityPanel classes={classes} counts={counts} markers={CLASS_MARKERS} />
       </div>
 
-      <ModelLab projectId={projectId} projectName={projectName} classes={classes} samples={samples} />
+      <ModelLab projectName={projectName} classes={classes} samples={samples} />
 
       {inspecting && (
         <PixelInspector
@@ -229,6 +263,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         />
       )}
     </div>
+    </ImageLabProvider>
   );
 }
 

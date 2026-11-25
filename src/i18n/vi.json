@@ -828,6 +828,41 @@
       "lockedHint": "Làm xong các bước trước để mở bước này",
       "next": "Bước tiếp: {{step}}",
       "stepPrefix": "Bước {{n}}"
+    },
+    "quick": {
+      "title": "Dạy máy trong 3 bước",
+      "lead": "Làm nhanh như Teachable Machine: thu ảnh, bấm một nút để máy học, rồi thử ngay. Muốn biết máy làm thế nào, mở nắp từng bước ở phía dưới — cùng một mô hình.",
+      "columns": {
+        "data": "1. Thu ảnh",
+        "train": "2. Cho máy học",
+        "preview": "3. Xem thử"
+      },
+      "count": "{{count}} ảnh",
+      "capture": "Chụp ảnh cho lớp {{name}}",
+      "captureShort": "Chụp",
+      "upload": "Tải ảnh cho lớp {{name}}",
+      "uploadShort": "Tải ảnh",
+      "addClass": "+ Thêm lớp",
+      "train": "Huấn luyện nhanh",
+      "needClasses": "Cần ít nhất 2 lớp có ảnh.",
+      "defaults": "Dùng thiết lập mặc định ({{epochs}} lượt). Muốn tự chỉnh, xem bước ④.",
+      "openLid": "Mở nắp: xem máy học thế nào",
+      "loadingModel": "Đang tải mô hình nhận dạng ảnh…",
+      "extracting": "Đang biến ảnh thành vector: {{done}}/{{total}}…",
+      "training": "Máy đang học…",
+      "done": "Xong! Máy đoán đúng {{percent}}% ảnh dạy.",
+      "stale": "Dữ liệu vừa đổi: hãy huấn luyện lại.",
+      "error": "Có lỗi: {{message}}",
+      "needModel": "Huấn luyện xong mới xem thử được.",
+      "liveStart": "📷 Xem thử bằng webcam",
+      "liveStop": "Dừng xem thử",
+      "tryFile": "Thử với một tệp ảnh",
+      "tryFileShort": "Thử tệp ảnh",
+      "resultLabel": "Máy đoán",
+      "previewError": "Không thử được ảnh: {{message}}",
+      "epochCounter": "lượt {{epoch}}/{{total}}",
+      "notReady": "Chưa huấn luyện được: cần ít nhất 2 lớp có ảnh ở ngăn Dạy.",
+      "cameraBusy": "Đang dùng webcam để chụp ảnh; đóng hộp chụp để xem thử tiếp."
     }
   },
   "samples": {

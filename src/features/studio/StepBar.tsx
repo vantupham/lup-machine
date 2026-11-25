@@ -135,6 +135,7 @@ export function StepBar({ targets }: { readonly targets: StepTargets }) {
   return (
     <nav
       ref={barRef}
+      data-step-bar
       aria-label={t('project.steps.label')}
       className="sticky top-0 z-30 -mx-4 border-b border-rule bg-paper/95 px-4 py-2 backdrop-blur print:hidden"
     >
