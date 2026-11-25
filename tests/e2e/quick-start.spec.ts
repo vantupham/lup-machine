@@ -9,10 +9,15 @@ test('trang chủ: một cú bấm, không gõ phím là vào không gian làm v
   await page.getByRole('button', { name: 'Tạo dự án Ảnh mới' }).click();
 
   await expect(page.getByRole('heading', { level: 1, name: 'Dự án ảnh 1' })).toBeVisible();
+  const quick = page.getByRole('region', { name: 'Dạy máy trong 3 bước' });
+  await expect(quick.getByRole('group', { name: 'Lớp 1' })).toBeVisible();
+  await expect(quick.getByRole('group', { name: 'Lớp 2' })).toBeVisible();
+  // Khám phá: 6 bước chi tiết thu gọn sẵn, bấm một bước trên thanh thì mở và tới đúng bước đó.
+  await expect(page.getByRole('heading', { name: 'Dữ liệu', exact: true })).toBeHidden();
+  await page.getByRole('navigation', { name: 'Các bước của dự án' }).getByRole('button', { name: /^Bước 1:/ }).click();
   await expect(page.getByRole('article', { name: 'Lớp 1' })).toBeVisible();
-  await expect(page.getByRole('article', { name: 'Lớp 2' })).toBeVisible();
 
-  await page.getByRole('link', { name: 'Trang chủ', exact: true }).click();
+  await page.getByRole('link', { name: /^LUP·Machine/ }).click();
   const recent = page.getByRole('region', { name: 'Tiếp tục dự án gần đây' });
   await expect(recent.getByRole('link', { name: 'Mở Dự án ảnh 1' })).toBeVisible();
 });
@@ -102,8 +107,11 @@ test('khối "Dạy máy trong 3 bước": tải ảnh, Huấn luyện nhanh v�
   await page.goto('./#/studio/moi/anh');
   const quick = page.getByRole('region', { name: 'Dạy máy trong 3 bước' });
   await expect(quick).toBeVisible();
-  // Ảnh tô màu, không có mặt người: tắt làm mờ cho nhanh.
+  // Ảnh tô màu, không có mặt người: tắt làm mờ cho nhanh. Ô này ở bước Dữ liệu, đang thu gọn trong chế độ Khám phá.
+  await page.getByRole('button', { name: 'Xem từng bước bên trong' }).click();
   await page.getByRole('checkbox', { name: 'Làm mờ khuôn mặt trước khi lưu ảnh' }).uncheck();
+  await page.getByRole('button', { name: 'Thu gọn các bước' }).click();
+  await expect(page.getByRole('checkbox', { name: 'Làm mờ khuôn mặt trước khi lưu ảnh' })).toBeHidden();
 
   await quick.getByLabel('Tải ảnh cho lớp Lớp 1').setInputFiles(await toneImages(page, 'warm', 8));
   await expect(quick.getByRole('group', { name: 'Lớp 1' })).toContainText('8 ảnh');

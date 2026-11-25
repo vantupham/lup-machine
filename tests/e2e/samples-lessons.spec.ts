@@ -43,7 +43,11 @@ async function expectConfusionNear(page: Page, names: readonly string[], key: re
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
 });
 
 test('bài 3 "AI học nhầm": mô hình học theo nền — điểm Dạy cao, điểm Kiểm tra thấp', async ({ page }) => {

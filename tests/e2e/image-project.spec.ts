@@ -29,12 +29,16 @@ async function makeTwoColorPng(page: Page): Promise<Buffer> {
 async function createProject(page: Page, name: string): Promise<void> {
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill(name);
-  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo dự án Ảnh mới', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
 });
 
 test('tạo dự án ảnh có sẵn 2 lớp và trợ lý báo lớp rỗng', async ({ page }) => {

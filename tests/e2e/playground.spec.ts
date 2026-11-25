@@ -6,7 +6,11 @@ async function screenshot(page: Page, name: string) {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
 });
 
 test('k-NN: bấm vào hình để đặt điểm cần đoán, phiếu bầu cập nhật', async ({ page }) => {

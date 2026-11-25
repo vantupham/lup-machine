@@ -73,8 +73,7 @@ describe('Studio văn bản tiếng Việt', () => {
     const repos = createTestRepository();
     renderApp('/studio', repos.repository, repos.dataset, repos.experiments, repos.tables);
     await userEvent.type(await screen.findByLabelText('Tên dự án'), 'Góp ý căng tin');
-    await userEvent.click(screen.getByRole('radio', { name: /Văn bản/ }));
-    await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án Văn bản mới' }));
     expect(await screen.findByRole('button', { name: /Góp ý căng tin: khen/ })).toBeInTheDocument();
   });
 });

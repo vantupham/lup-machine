@@ -12,7 +12,10 @@ async function download(page: Page, button: string): Promise<{ name: string; pat
 
 test('lớp học qua tệp: giáo viên tạo .lupa (kèm dự án mẫu), học sinh ở máy khác làm bài và nộp .lups, giáo viên chấm và xuất Excel', async ({ browser }) => {
   test.setTimeout(180_000);
-  const vi = () => window.localStorage.setItem('lup.language', 'vi');
+  const vi = () => {
+    window.localStorage.setItem('lup.language', 'vi');
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  };
 
   // --- máy giáo viên: dự án mẫu ảnh + gói bài tập
   const teacherContext = await browser.newContext();

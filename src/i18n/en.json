@@ -5,7 +5,6 @@
   },
   "nav": {
     "label": "Main navigation",
-    "home": "Home",
     "studio": "Model Studio",
     "playground": "Playground",
     "about": "About & Privacy",
@@ -27,9 +26,6 @@
     "title": "Don't just watch AI guess right.",
     "titleMark": "See how it does it.",
     "lead": "Teach the computer with your own data, then open the lid on every step: how a photo turns into numbers, how the machine learns, and why it gets things wrong.",
-    "ctaCreate": "Create a new model",
-    "ctaStudio": "Open the Model Studio",
-    "ctaAbout": "Where does my data go?",
     "pipelineTitle": "Six steps, each one can be opened up",
     "steps": {
       "data": "Data",
@@ -64,9 +60,6 @@
     "newProject": "New project",
     "nameLabel": "Project name",
     "namePlaceholder": "e.g. Waste sorting, class 7A",
-    "typeLabel": "Data type",
-    "create": "Create project",
-    "creating": "Creating…",
     "types": {
       "image": "Image",
       "audio": "Audio",
@@ -75,15 +68,12 @@
       "tabular": "Table"
     },
     "listTitle": "Your projects",
-    "empty": "No projects yet. Create your first one.",
+    "empty": "No projects yet. Pick a data type above to create one.",
     "updatedAt": "Updated {{date}}",
     "delete": "Delete",
-    "confirmDelete": "Delete project \"{{name}}\"? This cannot be undone.",
     "loadError": "Could not read saved data. The browser may be in private mode or blocking storage.",
     "saveError": "Could not save the project: {{message}}",
     "open": "Open",
-    "namedTitle": "Create with your own name",
-    "namedLead": "Want to name it up front, e.g. to hand it in? Type a name and pick a data type.",
     "searchLabel": "Search projects",
     "searchPlaceholder": "Type a project name",
     "noMatch": "No project name contains \"{{query}}\".",
@@ -99,9 +89,10 @@
       "runs": "Training runs: {{count}}"
     },
     "deleteError": "Could not delete project \"{{name}}\": {{message}}",
-    "namedEyebrow": "Start a new experiment",
-    "nameHint": "Optional. Leave it empty to get a name like \"Image project 1\"; you can rename it any time.",
-    "namedFooter": "You go straight into the project."
+    "nameHint": "Optional. Pick a data type below to create the project.",
+    "deleted": "Deleted \"{{name}}\".",
+    "undo": "Undo",
+    "dismiss": "Dismiss"
   },
   "quickStart": {
     "title": "What do you want to teach the computer?",
@@ -866,6 +857,10 @@
       "epochCounter": "epoch {{epoch}}/{{total}}",
       "notReady": "Cannot train yet: at least 2 classes need training images.",
       "cameraBusy": "The webcam is busy capturing images; close the capture box to keep trying."
+    },
+    "details": {
+      "show": "Show every step inside",
+      "hide": "Collapse the steps"
     }
   },
   "samples": {

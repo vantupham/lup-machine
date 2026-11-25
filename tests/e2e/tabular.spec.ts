@@ -1,11 +1,14 @@
 import { expect, test } from '@playwright/test';
 
 test('Studio dữ liệu bảng: tạo dự án, nạp chim cánh cụt, huấn luyện hồi quy logistic, dự đoán', async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Chim cánh cụt E2E');
-  await page.getByRole('radio', { name: /Bảng số/ }).check();
-  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo dự án Bảng số mới', exact: true }).click();
 
   await page.getByRole('button', { name: /Chim cánh cụt Palmer/ }).click();
   await expect(page.getByTestId('table-size')).toHaveText('344 dòng × 7 cột');

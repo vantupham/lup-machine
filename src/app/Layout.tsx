@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ModeSwitch } from '@/ui/ModeSwitch';
 import { PresentationController, PresentationToggle } from '@/ui/PresentationMode';
@@ -6,14 +6,13 @@ import { useOfflineStore } from '@/ui/offline';
 import { rememberLanguage, type Language } from '@/i18n';
 import { Check } from '@/ui/icons';
 
+/** Logo dẫn về trang chủ; Giới thiệu và đổi ngôn ngữ nằm ở chân trang. */
 const NAV_ITEMS = [
-  { to: '/', key: 'nav.home', end: true },
   { to: '/studio', key: 'nav.studio', end: false, featured: true },
   { to: '/playground', key: 'nav.playground', end: false },
   { to: '/lessons', key: 'nav.lessons', end: false },
   { to: '/dao-duc', key: 'nav.ethics', end: false },
   { to: '/giao-vien', key: 'nav.teacher', end: false },
-  { to: '/about', key: 'nav.about', end: false },
 ] as const;
 
 export function Layout() {
@@ -67,14 +66,6 @@ export function Layout() {
           <div className="ml-auto flex items-center gap-3">
             <ModeSwitch />
             <PresentationToggle />
-            <button
-              type="button"
-              onClick={toggleLanguage}
-              className="btn btn-ghost px-3 py-1.5 text-sm"
-              lang={i18n.language === 'vi' ? 'en' : 'vi'}
-            >
-              {t('nav.switchTo')}
-            </button>
           </div>
         </div>
       </header>
@@ -85,6 +76,14 @@ export function Layout() {
 
       <footer className="border-t border-rule py-6 text-center font-mono text-xs text-muted print:hidden presentation:hidden">
         <p>{t('footer.privacy')}</p>
+        <p className="mt-2 flex items-center justify-center gap-4 font-sans text-sm">
+          <Link to="/about" className="text-primary hover:underline">
+            {t('nav.about')}
+          </Link>
+          <button type="button" onClick={toggleLanguage} className="text-primary hover:underline" lang={i18n.language === 'vi' ? 'en' : 'vi'}>
+            {t('nav.switchTo')}
+          </button>
+        </p>
         {offline !== 'off' && (
           <p role="status" className={`mt-1 ${offline === 'error' ? 'text-warning' : offline === 'ready' ? 'text-accent' : ''}`} data-testid="offline-status">
             {offline === 'ready' && <Check className="mr-1" />}

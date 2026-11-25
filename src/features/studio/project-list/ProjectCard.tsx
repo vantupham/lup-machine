@@ -11,7 +11,7 @@ import { ArrowRight } from '@/ui/icons';
 
 interface ProjectCardProps {
   readonly project: ProjectRecord;
-  readonly onDelete: (project: ProjectRecord) => Promise<void>;
+  readonly onDelete: (project: ProjectRecord) => void;
 }
 
 /** Thẻ một dự án: ảnh thu nhỏ hoặc biểu tượng, số liệu tóm tắt, rồi Mở / Xuất / Xóa (xóa để nhạt nhất). */
@@ -38,7 +38,7 @@ export function ProjectCard({ project, onDelete }: ProjectCardProps) {
         <ExportProjectButton projectId={project.id} projectName={project.name} />
         <button
           type="button"
-          onClick={() => void onDelete(project)}
+          onClick={() => onDelete(project)}
           aria-label={`${t('studio.delete')} ${project.name}`}
           className="ml-auto rounded px-2 py-1 text-sm text-muted transition-colors hover:text-danger"
         >

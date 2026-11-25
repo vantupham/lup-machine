@@ -10,7 +10,7 @@ export const SEARCH_THRESHOLD = 5;
 interface ProjectListProps {
   /** Đã xếp dự án sửa gần nhất lên đầu. */
   readonly projects: readonly ProjectRecord[];
-  readonly onDelete: (project: ProjectRecord) => Promise<void>;
+  readonly onDelete: (project: ProjectRecord) => void;
 }
 
 export function ProjectList({ projects, onDelete }: ProjectListProps) {

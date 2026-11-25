@@ -4,11 +4,14 @@ import { expect, test, type Page } from '@playwright/test';
 const PHOTOS = join(process.cwd(), 'tests', 'fixtures', 'photos');
 
 async function createPoseProject(page: Page, name: string) {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill(name);
-  await page.getByRole('radio', { name: /Tư thế/ }).check();
-  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo dự án Tư thế mới', exact: true }).click();
 }
 
 test('Studio tư thế (cơ thể): MoveNet thật nhận ảnh người đứng, camera chạy, nhận dạng ảnh mới', async ({ page }) => {

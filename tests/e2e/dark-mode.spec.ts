@@ -10,7 +10,11 @@ async function screenshot(page: Page, name: string) {
 }
 
 async function openPlayground(page: Page) {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   await page.goto('./#/playground/k-means');
   await expect(page.locator('input[type="range"]').first()).toBeVisible();
 }

@@ -11,8 +11,8 @@ async function exportProject(page: Page, name: string): Promise<string> {
 }
 
 async function deleteProject(page: Page, name: string): Promise<void> {
-  page.once('dialog', (dialog) => void dialog.accept());
   await page.getByRole('button', { name: `Xóa ${name}`, exact: true }).click();
+  await page.getByRole('status').filter({ hasText: `Đã xóa "${name}".` }).getByRole('button', { name: 'Đóng' }).click();
   await expect(page.getByRole('list', { name: 'Dự án của em' }).getByRole('listitem').filter({ hasText: name })).toHaveCount(0);
 }
 
@@ -24,7 +24,11 @@ async function importProject(page: Page, file: string, name: string): Promise<vo
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
 });
 
 test('dự án ảnh: xuất .lup, xóa, mở lại tệp → đủ lớp và ảnh hiển thị được', async ({ page }) => {
@@ -50,8 +54,7 @@ test('dự án ảnh: xuất .lup, xóa, mở lại tệp → đủ lớp và �
 test('dự án bảng: bảng dữ liệu và cấu hình mô hình đi theo tệp .lup', async ({ page }) => {
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Cánh cụt mang đi');
-  await page.getByRole('radio', { name: /Bảng số/ }).check();
-  await page.getByRole('button', { name: 'Tạo dự án', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo dự án Bảng số mới', exact: true }).click();
   await page.getByRole('button', { name: /Chim cánh cụt Palmer/ }).click();
   await expect(page.getByTestId('table-size')).toHaveText('344 dòng × 7 cột');
   await page.getByRole('radio', { name: /Hồi quy logistic/ }).check();

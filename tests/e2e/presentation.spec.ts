@@ -1,7 +1,11 @@
 import { expect, test } from '@playwright/test';
 
 test('chế độ trình chiếu: chữ to, ẩn thanh điều hướng và gợi ý nhỏ, con trỏ laser, Esc thoát', async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   await page.goto('./#/lessons');
   const heading = page.getByRole('heading', { level: 1 });
   const baseSize = await heading.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));

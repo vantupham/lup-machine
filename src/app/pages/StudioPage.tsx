@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { SampleDatasetsPanel } from '@/features/samples/SampleDatasetsPanel';
 import { ImportProjectPanel } from '@/features/project-file/ImportProjectPanel';
 import { ProjectList } from '@/features/studio/project-list/ProjectList';
-import { ProjectTypeCards } from '@/features/studio/quick-start/ProjectTypeCards';
-import { NamedProjectForm } from '@/features/studio/quick-start/NamedProjectForm';
+import { CreateProjectPanel } from '@/features/studio/quick-start/CreateProjectPanel';
+import { UndoToast } from '@/features/studio/project-list/UndoToast';
+import { useUndoableDelete } from '@/features/studio/project-list/useUndoableDelete';
 import { useProjectRepository } from '@/storage/repository-context';
 import type { ProjectRecord } from '@/storage/db';
 import { getErrorMessage } from '@/ui/error-message';
@@ -15,8 +16,8 @@ type LoadState =
   | { readonly status: 'error' };
 
 /**
- * Thứ tự: tạo dự án kèm tên riêng → thẻ tạo một chạm → dự án của em → dữ liệu mẫu.
- * Mở tệp .lup là lối phụ, nằm cột bên.
+ * Thứ tự: tạo dự án (tên tùy chọn + thẻ loại dữ liệu) → dự án của em → dữ liệu mẫu.
+ * Mở tệp .lup là lối phụ, nằm cột bên. Xóa một chạm, còn hoàn tác được trong vài giây.
  */
 export function StudioPage() {
   const { t } = useTranslation();
@@ -48,17 +49,21 @@ export function StudioPage() {
     };
   }, [loadProjects]);
 
-  const handleDelete = async (project: ProjectRecord) => {
-    if (!window.confirm(t('studio.confirmDelete', { name: project.name }))) return;
-    setDeleteError(null);
-    try {
-      await repository.delete(project.id);
-    } catch (error: unknown) {
+  const deletion = useUndoableDelete({
+    remove: (id) => repository.delete(id),
+    onSettled: reload,
+    onError: (project, error) => {
       console.error('Không xóa được dự án', project.id, error);
       setDeleteError(t('studio.deleteError', { name: project.name, message: getErrorMessage(error) }));
-    }
-    await reload();
+    },
+  });
+
+  const handleDelete = (project: ProjectRecord) => {
+    setDeleteError(null);
+    deletion.request(project);
   };
+
+  const visible = state.status === 'ready' ? state.projects.filter((p) => p.id !== deletion.pending?.id) : [];
 
   return (
     <div className="space-y-12">
@@ -67,12 +72,7 @@ export function StudioPage() {
         <p className="mt-2 max-w-2xl text-muted">{t('studio.lead')}</p>
       </header>
 
-      <NamedProjectForm />
-
-      <section aria-labelledby="new-project-title" className="space-y-4">
-        <h2 id="new-project-title" className="font-display text-2xl font-bold">{t('studio.newProject')}</h2>
-        <ProjectTypeCards />
-      </section>
+      <CreateProjectPanel />
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <section aria-labelledby="project-list-title">
@@ -89,12 +89,12 @@ export function StudioPage() {
               {t('studio.loadError')}
             </p>
           )}
-          {state.status === 'ready' && state.projects.length === 0 && (
+          {state.status === 'ready' && visible.length === 0 && (
             <p className="rounded border border-dashed border-rule p-6 text-muted">
               {t('studio.empty')}
             </p>
           )}
-          {state.status === 'ready' && state.projects.length > 0 && <ProjectList projects={state.projects} onDelete={handleDelete} />}
+          {visible.length > 0 && <ProjectList projects={visible} onDelete={handleDelete} />}
         </section>
         <aside className="space-y-6">
           <ImportProjectPanel onImported={reload} />
@@ -102,6 +102,10 @@ export function StudioPage() {
       </div>
 
       <SampleDatasetsPanel />
+
+      {deletion.pending && (
+        <UndoToast message={t('studio.deleted', { name: deletion.pending.name })} onUndo={deletion.undo} onDismiss={deletion.confirm} />
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import type { StoredImage } from '@/storage/db';
 import { createTestRepository, renderApp, type TestRepositories } from '../../../../../tests/setup/render';
 import * as loader from '../feature-loader.browser';
 import * as codec from '../image-codec.browser';
+import { useStepDetailsStore } from '@/features/studio/step-details';
 
 /** Ảnh giả: byte 0 = "màu" theo lớp, byte 1 = số thứ tự (để các vector hơi khác nhau). */
 const imageOf = (tone: number, n: number): StoredImage => ({ bytes: new Uint8Array([tone, n]).buffer, mime: 'image/jpeg', width: 224, height: 224 });
@@ -98,6 +99,7 @@ async function trainToEnd() {
 beforeEach(async () => {
   await i18n.changeLanguage('vi');
   useModeStore.setState({ mode: 'explore' });
+  useStepDetailsStore.setState({ isOpen: true });
 });
 
 describe('Bước 3: Biểu diễn', () => {

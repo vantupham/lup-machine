@@ -8,7 +8,11 @@ test('mất mạng sau lần mở đầu: vẫn mở trang, tạo dự án mẫu
   test.setTimeout(180_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
 
   await page.goto('./');
   await expect(page.getByTestId('offline-status')).toContainText('dùng được cả khi mất mạng', { timeout: 60_000 });
@@ -29,7 +33,11 @@ test('mất mạng sau lần mở đầu: vẫn mở trang, tạo dự án mẫu
 
 test('bộ ảnh thật: không lưu sẵn, nhưng đã dùng một lần khi có mạng thì mất mạng vẫn tạo lại được', async ({ page, context }) => {
   test.setTimeout(120_000);
-  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.addInitScript(() => {
+    window.localStorage.setItem('lup.language', 'vi');
+    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
+    window.localStorage.setItem('lup.stepDetails', 'open');
+  });
   const createFlowers = async () => {
     await page.goto('./#/studio');
     await page
