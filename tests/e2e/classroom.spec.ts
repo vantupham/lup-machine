@@ -47,7 +47,7 @@ test('lớp học qua tệp: giáo viên tạo .lupa (kèm dự án mẫu), họ
   await panel.getByRole('link', { name: 'Mở dự án', exact: true }).click();
 
   // dự án mẫu đi kèm đủ ảnh
-  await expect(student.getByRole('article', { name: 'Hình tròn' }).getByRole('tab', { name: 'Dạy (18)' })).toBeVisible();
+  await expect(student.getByRole('article', { name: 'Hình tròn' }).getByRole('tab', { name: 'Huấn luyện (18)' })).toBeVisible();
   const banner = student.getByRole('complementary', { name: 'Bài tập' });
   await expect(banner).toContainText('Thầy Minh');
 

@@ -1,5 +1,5 @@
 /**
- * Mô hình phân loại câu tiếng Việt: chia Dạy / Kiểm tra, dựng bộ từ vựng TRÊN TẬP DẠY,
+ * Mô hình phân loại câu tiếng Việt: chia Huấn luyện / Kiểm tra, dựng bộ từ vựng TRÊN TẬP HUẤN LUYỆN,
  * huấn luyện Naive Bayes (số lần xuất hiện) hoặc hồi quy logistic (TF-IDF), và giải thích từng câu.
  *
  * Giải thích chính xác: điểm của lớp c so với trung bình các lớp, s_c − tb_k(s_k), tách được thành
@@ -38,7 +38,7 @@ export interface TextData {
   readonly maxN: number;
   readonly train: TextSplit;
   readonly test: TextSplit;
-  /** Bộ từ vựng dựng trên tập Dạy. */
+  /** Bộ từ vựng dựng trên tập Huấn luyện. */
   readonly vocab: Vocabulary;
   readonly idf: readonly number[];
   /** Số câu bị bỏ vì trống hoặc thiếu nhãn. */
@@ -147,7 +147,7 @@ export interface TextExplanation {
   readonly contributions: readonly TermContribution[];
   /** base + Σ đóng góp = điểm này (để học sinh tự cộng lại kiểm tra). */
   readonly total: number;
-  /** Các từ của câu không có trong bộ từ vựng Dạy (máy bỏ qua). */
+  /** Các từ của câu không có trong bộ từ vựng Huấn luyện (máy bỏ qua). */
   readonly unknownTerms: readonly string[];
 }
 
@@ -186,7 +186,7 @@ export function relativeScore(trained: TrainedText, encoded: EncodedText, c: num
   return (s[c] as number) - s.reduce((a, b) => a + b, 0) / s.length;
 }
 
-/** Các từ nghiêng về lớp c nhiều nhất (trong bộ từ vựng Dạy). */
+/** Các từ nghiêng về lớp c nhiều nhất (trong bộ từ vựng Huấn luyện). */
 export function topTerms(trained: TrainedText, data: TextData, c: number, n: number): TermContribution[] {
   return classLeaning(trained, c)
     .map((value, j) => ({ term: data.vocab.terms[j] as string, value }))

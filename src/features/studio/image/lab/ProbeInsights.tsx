@@ -64,7 +64,7 @@ interface ProbeNeighborsProps {
   readonly vector: Float32Array;
 }
 
-/** "Giải thích bằng ví dụ" cho ảnh mới: các ảnh Dạy có vector gần nó nhất. */
+/** "Giải thích bằng ví dụ" cho ảnh mới: các ảnh Huấn luyện có vector gần nó nhất. */
 export function ProbeNeighbors({ classes, samples, features, vector }: ProbeNeighborsProps) {
   const { t } = useTranslation();
   const neighbors = useMemo(() => nearestTrainToVector(vector, samples, features, NEIGHBOR_COUNT), [vector, samples, features]);

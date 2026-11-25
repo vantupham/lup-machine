@@ -28,7 +28,7 @@ function prepared(): VectorData {
 const data = prepared();
 
 describe('prepareVectors', () => {
-  test('chia phân tầng, chuẩn hóa theo tập Dạy (trung bình 0, độ lệch chuẩn 1)', () => {
+  test('chia phân tầng, chuẩn hóa theo tập Huấn luyện (trung bình 0, độ lệch chuẩn 1)', () => {
     expect(data.train.ys.length + data.test.ys.length).toBe(48);
     expect(new Set(data.test.ys)).toEqual(new Set([0, 1, 2]));
     const col = data.train.xs.map((x) => x[17]!);

@@ -24,7 +24,7 @@ interface AudioModelLabProps {
   readonly projectName: string;
   readonly data: VectorData;
   readonly dataKey: string;
-  /** Lấy lại âm thanh của một đoạn Dạy (để nghe các láng giềng của k-NN). */
+  /** Lấy lại âm thanh của một đoạn Huấn luyện (để nghe các láng giềng của k-NN). */
   readonly trainSamples: (id: string) => Float32Array | null;
 }
 

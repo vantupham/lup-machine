@@ -28,7 +28,7 @@ test('bộ hoa: ảnh thật, mô hình học tốt; ảnh mang ghi công tác g
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   const flowers = await createAndTrain(page, 'Hoa cúc, hướng dương hay hoa hồng?');
-  console.warn(`[hoa] Dạy ${flowers.train}% / Kiểm tra ${flowers.test}%`);
+  console.warn(`[hoa] Huấn luyện ${flowers.train}% / Kiểm tra ${flowers.test}%`);
   expect(flowers.test).toBeGreaterThanOrEqual(80);
 
   await page.getByRole('group', { name: 'Bản đồ dữ liệu 2D' }).getByRole('button').first().click();
@@ -48,7 +48,7 @@ test('bộ hoa: ảnh thật, mô hình học tốt; ảnh mang ghi công tác g
 test('bộ lá đậu: bài toán thật khó hơn bộ hoa (điểm Kiểm tra thấp hơn)', async ({ page }) => {
   test.setTimeout(240_000);
   const beans = await createAndTrain(page, 'Bác sĩ lá đậu: khỏe, đốm góc hay gỉ sắt?');
-  console.warn(`[lá đậu] Dạy ${beans.train}% / Kiểm tra ${beans.test}%`);
+  console.warn(`[lá đậu] Huấn luyện ${beans.train}% / Kiểm tra ${beans.test}%`);
   expect(beans.test).toBeGreaterThan(40); // học được thật, tốt hơn đoán bừa (33%)
   expect(beans.test).toBeLessThan(95); // nhưng chưa hoàn hảo — đúng như thẻ mô tả "khó hơn"
 });

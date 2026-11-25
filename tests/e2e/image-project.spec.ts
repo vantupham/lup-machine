@@ -46,7 +46,7 @@ test('tạo dự án ảnh có sẵn 2 lớp và trợ lý báo lớp rỗng', a
   await createProject(page, 'Dự án E2E');
   await expect(page.getByRole('article', { name: 'Lớp 1' })).toBeVisible();
   await expect(page.getByRole('article', { name: 'Lớp 2' })).toBeVisible();
-  await expect(page.getByText('Lớp "Lớp 1" chưa có ảnh Dạy nào.')).toBeVisible();
+  await expect(page.getByText('Lớp "Lớp 1" chưa có ảnh Huấn luyện nào.')).toBeVisible();
   expect(errors).toEqual([]);
 });
 

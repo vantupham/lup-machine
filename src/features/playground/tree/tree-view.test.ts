@@ -30,7 +30,7 @@ describe('cây mọc từng bước', () => {
 });
 
 describe('scoresByDepth', () => {
-  test('độ chính xác tập Dạy không giảm khi cây sâu hơn', () => {
+  test('độ chính xác tập Huấn luyện không giảm khi cây sâu hơn', () => {
     const test = makeDataset2d('xor', 80, 0.05, 3);
     const scores = scoresByDepth(
       { xs: data.points, ys: data.labels },

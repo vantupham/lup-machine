@@ -61,7 +61,7 @@ function Boundary({ model, region }: { readonly model: LeafModel; readonly regio
   );
 }
 
-/** Lá Dạy trên mặt phẳng (độ vàng, số đốm) và ranh giới thật của mô hình (chính xác, không minh họa). */
+/** Lá Huấn luyện trên mặt phẳng (độ vàng, số đốm) và ranh giới thật của mô hình (chính xác, không minh họa). */
 export function LeafScatter({ samples, model }: LeafScatterProps) {
   const { t } = useTranslation();
   const regions: readonly Region[] = model.useRegion ? ['lowland', 'mountain'] : ['lowland'];

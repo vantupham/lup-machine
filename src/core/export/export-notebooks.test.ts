@@ -51,7 +51,7 @@ const PENGUIN_CLASSIFY = { target: 'Loài', features: ['Đảo', 'Dài mỏ (mm)
 const PENGUIN_MASS = { target: 'Cân nặng (g)', features: ['Dài cánh (mm)', 'Loài', 'Giới tính'], task: 'regression' } as const;
 
 describe('notebook dữ liệu bảng', () => {
-  test('bảng đã làm sạch: đủ dòng dùng được, đúng cột Dạy / Kiểm tra, số viết bằng dấu chấm', () => {
+  test('bảng đã làm sạch: đủ dòng dùng được, đúng cột Huấn luyện / Kiểm tra, số viết bằng dấu chấm', () => {
     const { table, data } = buildTabular(penguinsCsv, PENGUIN_CLASSIFY, 'tree');
     const cleaned = load(cleanedCsv(table, data));
     expect(cleaned.headers).toEqual([...PENGUIN_CLASSIFY.features, 'Loài', SPLIT_COLUMN]);

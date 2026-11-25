@@ -40,7 +40,7 @@ export interface RowPrediction {
   readonly value: number;
   /** Chỉ có ở phân loại. */
   readonly proba: readonly number[] | null;
-  /** k-NN: các láng giềng (chỉ số dòng trong tập Dạy). */
+  /** k-NN: các láng giềng (chỉ số dòng trong tập Huấn luyện). */
   readonly neighbors: readonly KnnNeighbor[] | null;
   /** Cây quyết định: các nút đi qua. */
   readonly path: readonly number[] | null;

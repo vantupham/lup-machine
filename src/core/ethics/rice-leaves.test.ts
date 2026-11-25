@@ -34,7 +34,7 @@ describe('bộ dữ liệu lá lúa', () => {
     }
   });
 
-  test('kích thước thí nghiệm: Dạy lệch 200 Đồng bằng + 20 Miền núi; Kiểm tra cân bằng 100 + 100', () => {
+  test('kích thước thí nghiệm: Huấn luyện lệch 200 Đồng bằng + 20 Miền núi; Kiểm tra cân bằng 100 + 100', () => {
     const d = biasExperimentData();
     const count = (xs: readonly { region: string }[], r: string) => xs.filter((s) => s.region === r).length;
     expect([count(d.trainBiased, 'lowland'), count(d.trainBiased, 'mountain')]).toEqual([2 * EXPERIMENT_SIZES.trainLowland, 2 * EXPERIMENT_SIZES.trainMountainFew]);

@@ -96,7 +96,7 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     await seed();
     open();
     await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: 'Huấn luyện nhanh' }));
-    expect(await within(quick()).findByText(/Xong\. Máy đoán đúng 100% ảnh dạy\./, {}, { timeout: TRAIN_WAIT_MS })).toBeInTheDocument();
+    expect(await within(quick()).findByText(/Xong\. Máy đoán đúng 100% ảnh huấn luyện\./, {}, { timeout: TRAIN_WAIT_MS })).toBeInTheDocument();
     expect(screen.getByText('Xong 50 epoch.')).toBeInTheDocument();
     expect(screen.getByText(/tất cả ảnh đã có vector/i)).toBeInTheDocument();
     expect(await repos.experiments.listRuns(projectId)).toHaveLength(1);
@@ -132,14 +132,14 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     expect(await within(quick()).findByRole('group', { name: 'Lớp 3' })).toBeInTheDocument();
   });
 
-  test('"Chụp ảnh" mở đúng hộp chụp webcam của lớp đó (ảnh vào ngăn Dạy)', async () => {
+  test('"Chụp ảnh" mở đúng hộp chụp webcam của lớp đó (ảnh vào ngăn Huấn luyện)', async () => {
     await seed();
     open();
     await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: 'Chụp ảnh cho lớp Giấy' }));
     expect(await screen.findByRole('dialog', { name: /Giấy/ })).toBeInTheDocument();
   });
 
-  test('tải ảnh từ cột 1 vào ngăn Dạy; huấn luyện rồi đổi dữ liệu thì báo cần huấn luyện lại', async () => {
+  test('tải ảnh từ cột 1 vào ngăn Huấn luyện; huấn luyện rồi đổi dữ liệu thì báo cần huấn luyện lại', async () => {
     await seed();
     open();
     await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: 'Huấn luyện nhanh' }));

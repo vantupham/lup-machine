@@ -29,7 +29,7 @@ export const BIAS_STEPS: readonly BiasStepContent[] = [
   {
     title: 'Thu thêm dữ liệu Miền núi',
     action: 'Thu thêm 200 lá Miền núi rồi huấn luyện lại',
-    explain: 'Dữ liệu Dạy giờ có số lá hai vùng gần bằng nhau. Mô hình vẫn không biết lá ở vùng nào.',
+    explain: 'Dữ liệu Huấn luyện giờ có số lá hai vùng gần bằng nhau. Mô hình vẫn không biết lá ở vùng nào.',
     takeaway:
       'Miền núi tốt lên, nhưng Đồng bằng lại giảm, và phần giảm đó đúng bằng số lá bệnh Đồng bằng bị bỏ sót thêm. Mô hình chỉ có một đường ranh giới cho cả hai vùng nên phải "chia" lỗi cho hai vùng. Thêm dữ liệu là cần thiết nhưng chưa đủ.',
   },

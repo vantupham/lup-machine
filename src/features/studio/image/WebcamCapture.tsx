@@ -4,6 +4,7 @@ import type { StoredImage } from '@/storage/db';
 import { Dialog } from '@/ui/Dialog';
 import { FaceBlurError } from './face-blur-error';
 import { useCamera } from './useCamera';
+import { useObjectUrl } from './useObjectUrl';
 import { Lock } from '@/ui/icons';
 
 /** Chụp liên tục khoảng 6–7 ảnh mỗi giây khi giữ nút. */
@@ -21,7 +22,9 @@ export function WebcamCapture({ title, remaining, captureFrame, onDone }: Webcam
   const { videoRef, state } = useCamera();
   const capturedRef = useRef<StoredImage[]>([]);
   const timerRef = useRef<number | null>(null);
-  const [count, setCount] = useState(0);
+  /** Ảnh đã chụp trong lần mở hộp này, để xem lại ngay khi đang chụp. */
+  const [shots, setShots] = useState<readonly StoredImage[]>([]);
+  const count = shots.length;
   const [error, setError] = useState<string | null>(null);
   /** Một khung hình đang được xử lý (làm mờ, mã hóa): bỏ qua nhịp chụp tiếp theo thay vì chạy chồng. */
   const busyRef = useRef(false);
@@ -35,7 +38,7 @@ export function WebcamCapture({ title, remaining, captureFrame, onDone }: Webcam
     try {
       const image = await captureFrame(video);
       capturedRef.current = [...capturedRef.current, image];
-      setCount(capturedRef.current.length);
+      setShots(capturedRef.current);
       setError(null);
     } catch (err: unknown) {
       setError(t(err instanceof FaceBlurError ? 'project.webcam.blurError' : 'project.webcam.snapError'));
@@ -101,9 +104,26 @@ export function WebcamCapture({ title, remaining, captureFrame, onDone }: Webcam
               {t('project.webcam.snap')}
             </button>
           </div>
+          {shots.length > 0 && (
+            <ul aria-label={t('project.webcam.shotsLabel')} className="grid max-h-48 grid-cols-6 gap-1 overflow-y-auto sm:grid-cols-8" data-testid="webcam-shots">
+              {[...shots].reverse().map((image, i) => (
+                <ShotThumb key={shots.length - i} image={image} />
+              ))}
+            </ul>
+          )}
           <p className="text-xs text-muted"><Lock /> {t('project.webcam.privacy')}</p>
         </div>
       </div>
     </Dialog>
+  );
+}
+
+/** Ảnh vừa chụp, thu nhỏ: đúng ảnh sẽ được lưu vào lớp. */
+function ShotThumb({ image }: { readonly image: StoredImage }) {
+  const url = useObjectUrl(image);
+  return (
+    <li>
+      <img src={url} alt="" width={48} height={48} className="aspect-square w-full rounded-sm object-cover" />
+    </li>
   );
 }

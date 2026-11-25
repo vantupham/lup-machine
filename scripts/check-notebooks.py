@@ -49,7 +49,7 @@ def main() -> int:
         ok, text = run_notebook(path)
         print(f"{'ĐẠT' if ok else 'LỖI'} {path.name}")
         for line in text.splitlines():
-            if any(key in line for key in ("accuracy", "_r2", "_mse", "Chênh lệch", "tflite", "Dạy:")):
+            if any(key in line for key in ("accuracy", "_r2", "_mse", "Chênh lệch", "tflite", "Huấn luyện:")):
                 print("   ", line)
         if not ok:
             failed += 1

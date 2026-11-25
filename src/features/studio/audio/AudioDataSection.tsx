@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { fitClip } from '@/core/audio/features';
 import { SOUND_KINDS, soundDataset } from '@/core/audio/synthetic-sounds';
@@ -10,6 +10,8 @@ import { getErrorMessage } from '@/ui/error-message';
 import { decodeAudioFile, isAudioSupported, playClip, recordClip } from './audio-io.browser';
 import { Waveform } from './viz';
 import { ClassMarker } from '@/ui/ClassMarker';
+import { nextClassName } from '@/features/studio/next-class-name';
+import { Plus, Trash2 } from '@/ui/icons';
 
 /** Thu dư một chút để không hụt phần đầu / cuối âm thanh; sau đó cắt về đúng 1 giây quanh chỗ có tiếng. */
 const RECORD_SECONDS = 1.5;
@@ -100,7 +102,15 @@ function ClassCard({ cls, index, clips, onRecord, onUpload, onDelete, onRename, 
             }}
           />
         </label>
-        <button type="button" className="btn btn-ghost ml-auto text-xs" onClick={onDeleteClass}>{t('audio.data.deleteClass')}</button>
+        <button
+          type="button"
+          className="ml-auto rounded p-1.5 text-muted transition-colors hover:bg-danger/10 hover:text-danger"
+          aria-label={t('audio.data.deleteClassAria', { name: cls.name })}
+          title={t('audio.data.deleteClass')}
+          onClick={onDeleteClass}
+        >
+          <Trash2 />
+        </button>
       </div>
       {recording && <LiveSpectrum analyser={recording} />}
       <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4">
@@ -130,7 +140,6 @@ export function AudioDataSection({ projectId, classes, clips, dataset, audio, on
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [recordingClass, setRecordingClass] = useState<{ id: string; analyser: AnalyserNode } | null>(null);
-  const [newClass, setNewClass] = useState('');
   const cancelRef = useRef<(() => void) | null>(null);
   const supported = isAudioSupported();
 
@@ -179,15 +188,11 @@ export function AudioDataSection({ projectId, classes, clips, dataset, audio, on
       await audio.addClips(soundDataset(1).map((s) => ({ projectId, classId: created[s.kind] as string, source: 'dataset' as const, samples: s.signal })));
     });
 
-  const addClass = (event: FormEvent) => {
-    event.preventDefault();
-    const name = newClass.trim();
-    if (!name) return;
+  /** Thêm "Nhóm n" (số tăng dần); đổi tên ngay trong ô tên của nhóm. */
+  const addClass = () =>
     void run(async () => {
-      await dataset.addClass(projectId, name);
-      setNewClass('');
+      await dataset.addClass(projectId, nextClassName(classes.map((c) => c.name), (n) => t('audio.data.defaultClass', { n })));
     });
-  };
 
   return (
     <div className="space-y-4">
@@ -218,13 +223,9 @@ export function AudioDataSection({ projectId, classes, clips, dataset, audio, on
           />
         ))}
       </ul>
-      <form onSubmit={addClass} className="flex flex-wrap items-end gap-2">
-        <label className="text-sm font-medium">
-          {t('audio.data.newClass')}
-          <input value={newClass} onChange={(e) => setNewClass(e.target.value)} maxLength={40} className="mt-1 block rounded border border-rule bg-paper px-2 py-1" />
-        </label>
-        <button type="submit" className="btn btn-ghost text-sm" disabled={busy || newClass.trim() === ''}>{t('audio.data.addClass')}</button>
-      </form>
+      <button type="button" className="btn btn-ghost text-sm" disabled={busy} onClick={addClass}>
+        <Plus /> {t('audio.data.addClass')}
+      </button>
       {error && <p role="alert" className="text-sm text-danger">{error}</p>}
       <p className="text-xs text-muted">{t('audio.data.privacy')}</p>
     </div>

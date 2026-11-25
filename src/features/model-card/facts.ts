@@ -15,7 +15,7 @@ export interface ModelCardFacts {
 export interface ClassFact {
   readonly name: string;
   readonly count: number;
-  /** Chỉ dự án ảnh chia sẵn ngăn Dạy / Kiểm tra. */
+  /** Chỉ dự án ảnh chia sẵn ngăn Huấn luyện / Kiểm tra. */
   readonly train: number | null;
   readonly test: number | null;
 }

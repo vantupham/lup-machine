@@ -4,6 +4,7 @@ import type { ClassRecord, SampleRecord, Split } from '@/storage/db';
 import { ACCEPTED_IMAGE_TYPES } from './image-file';
 import { SampleThumb } from './SampleThumb';
 import { ClassMarker } from '@/ui/ClassMarker';
+import { Pencil, Trash2 } from '@/ui/icons';
 
 export interface ClassPanelActions {
   readonly onUpload: (cls: ClassRecord, files: File[], split: Split) => void;
@@ -43,9 +44,11 @@ export function ClassPanel({ cls, samples, markerIndex, ...actions }: ClassPanel
         <button
           type="button"
           onClick={() => actions.onDelete(cls, samples.length)}
-          className="ml-auto text-sm text-danger hover:underline"
+          aria-label={t('project.class.deleteAria', { name: cls.name })}
+          title={t('project.class.delete')}
+          className="ml-auto rounded p-1.5 text-muted transition-colors hover:bg-danger/10 hover:text-danger"
         >
-          {t('project.class.delete')}
+          <Trash2 />
         </button>
       </header>
 
@@ -123,8 +126,14 @@ function ClassName({ cls, headingId, onRename }: ClassNameProps) {
         <h3 id={headingId} className="text-lg font-semibold">
           {cls.name}
         </h3>
-        <button type="button" onClick={() => setDraft(cls.name)} className="text-sm text-primary hover:underline">
-          {t('project.class.rename')}
+        <button
+          type="button"
+          onClick={() => setDraft(cls.name)}
+          aria-label={t('project.class.renameAria', { name: cls.name })}
+          title={t('project.class.rename')}
+          className="rounded p-1.5 text-muted transition-colors hover:bg-primary/10 hover:text-primary"
+        >
+          <Pencil />
         </button>
       </>
     );

@@ -35,7 +35,7 @@ describe('prepareData với bộ Palmer Penguins', () => {
     data.train.raw.forEach((row) => expect(row[0]! + row[1]! + row[2]!).toBe(1));
   });
 
-  test('chuẩn hóa dùng trung bình và độ lệch chuẩn của tập Dạy', () => {
+  test('chuẩn hóa dùng trung bình và độ lệch chuẩn của tập Huấn luyện', () => {
     const col = data.train.scaled.map((r) => r[3]!);
     const m = col.reduce((a, b) => a + b, 0) / col.length;
     const sd = Math.sqrt(col.reduce((s, v) => s + (v - m) ** 2, 0) / col.length);

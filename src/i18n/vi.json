@@ -159,12 +159,12 @@
     "factsNote": "Đọc thẳng từ dự án nên chính xác. Dùng để trả lời câu 2 và câu 3.",
     "factsType": "Loại dự án: {{type}}",
     "factsClass": "{{name}}: {{count}} mẫu",
-    "factsClassSplit": "{{name}}: {{count}} ảnh (Dạy {{train}} · Kiểm tra {{test}})",
+    "factsClassSplit": "{{name}}: {{count}} ảnh (Huấn luyện {{train}} · Kiểm tra {{test}})",
     "factsNoClasses": "Chưa có nhóm nào.",
     "factsTable": "Bảng dữ liệu: {{rows}} dòng × {{columns}} cột",
     "factsNoTable": "Chưa có bảng dữ liệu.",
-    "factsRun": "Lần huấn luyện gần nhất (#{{number}}, {{epochs}} epoch): đúng {{train}}% trên ngăn Dạy, {{test}}% trên ngăn Kiểm tra.",
-    "factsRunNoTest": "Lần huấn luyện gần nhất (#{{number}}, {{epochs}} epoch): đúng {{train}}% trên ngăn Dạy (chưa có ảnh Kiểm tra).",
+    "factsRun": "Lần huấn luyện gần nhất (#{{number}}, {{epochs}} epoch): đúng {{train}}% trên ngăn Huấn luyện, {{test}}% trên ngăn Kiểm tra.",
+    "factsRunNoTest": "Lần huấn luyện gần nhất (#{{number}}, {{epochs}} epoch): đúng {{train}}% trên ngăn Huấn luyện (chưa có ảnh Kiểm tra).",
     "factsNoRun": "Chưa huấn luyện lần nào.",
     "factsMeasureHint": "Độ chính xác: xem bước Đánh giá của dự án rồi ghi vào câu 3.",
     "save": "Lưu thẻ",
@@ -226,7 +226,7 @@
       "dataName": "Dữ liệu",
       "dataDescription": "Đủ mẫu, cân bằng giữa các nhóm, có xin phép khi thu ảnh hoặc giọng nói",
       "modelName": "Huấn luyện và đánh giá",
-      "modelDescription": "Có chia Dạy / Kiểm tra, ghi độ chính xác, giải thích được nhóm hay bị nhầm",
+      "modelDescription": "Có chia Huấn luyện / Kiểm tra, ghi độ chính xác, giải thích được nhóm hay bị nhầm",
       "cardName": "Thẻ mô hình và phiếu thí nghiệm",
       "cardDescription": "Trả lời trung thực, nêu được hạn chế và cách dùng có trách nhiệm"
     },
@@ -377,7 +377,7 @@
       "missed": "Bỏ sót"
     },
     "chart": {
-      "label": "Biểu đồ {{count}} lá dùng để Dạy: độ vàng theo trục ngang, số đốm theo trục đứng, kèm đường ranh giới của mô hình",
+      "label": "Biểu đồ {{count}} lá dùng để huấn luyện: độ vàng theo trục ngang, số đốm theo trục đứng, kèm đường ranh giới của mô hình",
       "xAxis": "Độ vàng lá (%)",
       "yAxis": "Số đốm",
       "healthy": "khỏe",
@@ -443,17 +443,15 @@
     },
     "data": {
       "title": "Dữ liệu",
-      "lead": "Mỗi lớp là một nhóm cần phân biệt. Ngăn Dạy để học, ngăn Kiểm tra để chấm điểm.",
+      "lead": "Mỗi lớp là một nhóm cần phân biệt. Ngăn Huấn luyện để học, ngăn Kiểm tra để chấm điểm.",
       "addClass": "Thêm lớp",
-      "newClassPlaceholder": "Tên lớp mới, ví dụ: Giấy",
-      "newClassLabel": "Tên lớp mới",
-      "autoSplit": "Tự chia Dạy / Kiểm tra (80/20)",
-      "autoSplitDone": "Đã chia lại: {{train}} ảnh Dạy, {{test}} ảnh Kiểm tra.",
+      "autoSplit": "Tự chia Huấn luyện / Kiểm tra (80/20)",
+      "autoSplitDone": "Đã chia lại: {{train}} ảnh Huấn luyện, {{test}} ảnh Kiểm tra.",
       "autoSplitHint": "Chia ngẫu nhiên nhưng có seed cố định ({{seed}}) nên lần sau chia lại vẫn ra đúng kết quả này.",
       "actionError": "Có lỗi: {{message}}"
     },
     "class": {
-      "train": "Dạy",
+      "train": "Huấn luyện",
       "test": "Kiểm tra",
       "upload": "Tải ảnh lên",
       "webcam": "Webcam",
@@ -466,10 +464,12 @@
       "empty": "Chưa có ảnh ở ngăn này.",
       "inspect": "Soi ảnh",
       "moveToTest": "Chuyển sang Kiểm tra",
-      "moveToTrain": "Chuyển sang Dạy",
+      "moveToTrain": "Chuyển sang Huấn luyện",
       "deleteSample": "Xóa ảnh",
-      "count": "{{train}} Dạy · {{test}} Kiểm tra",
-      "sample": "Ảnh {{n}}"
+      "count": "{{train}} Huấn luyện · {{test}} Kiểm tra",
+      "sample": "Ảnh {{n}}",
+      "renameAria": "Đổi tên lớp {{name}}",
+      "deleteAria": "Xóa lớp {{name}}"
     },
     "upload": {
       "processing": "Đang xử lý {{done}}/{{total}} ảnh…",
@@ -496,17 +496,18 @@
       "privacy": "Hình ảnh chỉ được xử lý trên máy này.",
       "full": "Lớp này đã đủ {{max}} ảnh.",
       "blurError": "Không làm mờ được khuôn mặt nên chưa lưu ảnh này. Kiểm tra kết nối rồi thử lại, hoặc tắt làm mờ.",
-      "snapError": "Không chụp được khung hình. Thử chụp lại."
+      "snapError": "Không chụp được khung hình. Thử chụp lại.",
+      "shotsLabel": "Ảnh vừa chụp"
     },
     "quality": {
       "title": "Kiểm tra dữ liệu",
-      "lead": "Trợ lý soát dữ liệu Dạy trước khi huấn luyện.",
+      "lead": "Trợ lý soát dữ liệu Huấn luyện trước khi huấn luyện.",
       "ok": "Dữ liệu ổn. Có thể sang bước huấn luyện.",
       "chartLabel": "Số ảnh mỗi lớp",
       "issues": {
         "too-few-classes": "Cần ít nhất 2 lớp thì máy mới có cái để phân biệt.",
-        "empty-class": "Lớp \"{{label}}\" chưa có ảnh Dạy nào.",
-        "too-few-samples": "Lớp \"{{label}}\" mới có {{count}} ảnh Dạy. Nên có ít nhất {{minimum}} ảnh.",
+        "empty-class": "Lớp \"{{label}}\" chưa có ảnh Huấn luyện nào.",
+        "too-few-samples": "Lớp \"{{label}}\" mới có {{count}} ảnh Huấn luyện. Nên có ít nhất {{minimum}} ảnh.",
         "class-imbalance": "Lớp \"{{largest}}\" có nhiều ảnh gấp {{ratio}} lần lớp \"{{smallest}}\". Mô hình sẽ dễ thiên về lớp nhiều ảnh.",
         "no-test-samples": "Lớp \"{{label}}\" chưa có ảnh Kiểm tra, nên không chấm điểm được lớp này."
       },
@@ -515,7 +516,7 @@
         "empty-class": "Tải ảnh lên hoặc chụp bằng webcam.",
         "too-few-samples": "Chụp thêm ở nhiều góc, nhiều ánh sáng khác nhau.",
         "class-imbalance": "Thêm ảnh cho lớp ít, hoặc bớt ảnh ở lớp nhiều.",
-        "no-test-samples": "Bấm \"Tự chia Dạy / Kiểm tra\" hoặc chuyển vài ảnh sang ngăn Kiểm tra."
+        "no-test-samples": "Bấm \"Tự chia Huấn luyện / Kiểm tra\" hoặc chuyển vài ảnh sang ngăn Kiểm tra."
       }
     },
     "inspector": {
@@ -558,7 +559,7 @@
       "error": "Không trích được đặc trưng: {{message}}",
       "needTwo": "Cần ít nhất 2 ảnh có vector để vẽ bản đồ.",
       "mapTitle": "Bản đồ dữ liệu 2D",
-      "mapLead": "Mỗi chấm là một ảnh. Chấm đặc: ảnh Dạy. Chấm có vòng: ảnh Kiểm tra. Bấm chấm để xem ảnh.",
+      "mapLead": "Mỗi chấm là một ảnh. Chấm đặc: ảnh Huấn luyện. Chấm có vòng: ảnh Kiểm tra. Bấm chấm để xem.",
       "mapExact": "Chính xác (phép chiếu PCA)",
       "mapExactHint": "Vị trí mỗi chấm được tính đúng bằng phép chiếu tuyến tính PCA.",
       "mapKept": "Bản đồ giữ được {{percent}}% độ biến thiên của 1.280 chiều. Phần còn lại bị ẩn, nên hai chấm gần nhau trên bản đồ chưa chắc thật sự gần nhau.",
@@ -568,7 +569,7 @@
       "vectorTitle": "1.280 con số đặc trưng của ảnh này",
       "vectorHint": "Mỗi ô là một con số: càng đậm càng lớn. Các số này đúng là dữ liệu đưa vào bước huấn luyện.",
       "vectorStats": "nhỏ nhất {{min}} · lớn nhất {{max}} · trung bình {{mean}}",
-      "neighbors": "Ảnh Dạy giống nhất (độ tương đồng cosine)",
+      "neighbors": "Ảnh Huấn luyện giống nhất (độ tương đồng cosine)",
       "pointLabel": "Ảnh lớp {{name}}, ngăn {{split}}"
     },
     "train": {
@@ -576,7 +577,7 @@
       "leadExplore": "Máy bắt đầu bằng cách đoán bừa. Sau mỗi lượt (epoch), nó so với đáp án, rồi chỉnh các con số bên trong một chút để lần sau đoán đúng hơn.",
       "leadExpert": "Tầng phân loại: logit = W·x + b (W: {{classes}} × 1280), xác suất = softmax(logit), hàm mất mát cross-entropy, tối ưu bằng Adam. Khởi tạo Glorot và trộn dữ liệu theo seed nên kết quả tái lập được.",
       "needFeatures": "Cần làm bước 3 (Biểu diễn) trước.",
-      "needClasses": "Cần ít nhất 2 lớp có ảnh Dạy.",
+      "needClasses": "Cần ít nhất 2 lớp có ảnh Huấn luyện.",
       "speed": "Tốc độ",
       "speeds": {
         "normal": "Bình thường",
@@ -597,7 +598,7 @@
       "replayHint": "Kéo để xem mô hình ở từng thời điểm. Epoch 0 là lúc máy còn đoán bừa.",
       "chartAccuracy": "Độ chính xác (%)",
       "chartLoss": "Mất mát (loss): càng thấp càng tốt",
-      "seriesTrain": "Tập Dạy",
+      "seriesTrain": "Tập Huấn luyện",
       "seriesTest": "Tập Kiểm tra",
       "notSaved": "Mỗi lần huấn luyện được ghi vào Nhật ký thí nghiệm bên dưới.",
       "stale": "Các lớp đã đổi sau lần huấn luyện trước. Cần huấn luyện lại."
@@ -608,7 +609,7 @@
       "atEpoch": "Kết quả tại epoch {{epoch}}",
       "trainScore": "Điểm trên bài đã học",
       "testScore": "Điểm trên bài chưa học",
-      "trainHint": "Tập Dạy",
+      "trainHint": "Tập Huấn luyện",
       "testHint": "Tập Kiểm tra: điểm đáng tin hơn",
       "noTest": "Chưa có ảnh Kiểm tra nên chưa có điểm khách quan.",
       "overfit": "Điểm bài đã học cao hơn hẳn điểm bài chưa học: mô hình đang \"học thuộc\" mà chưa \"hiểu bài\" (quá khớp). Thử thêm ảnh đa dạng hơn.",
@@ -636,8 +637,8 @@
       "number": "Lần",
       "time": "Thời gian",
       "settings": "Cài đặt",
-      "data": "Dạy / Kiểm tra",
-      "trainScore": "Điểm Dạy",
+      "data": "Huấn luyện / Kiểm tra",
+      "trainScore": "Điểm Huấn luyện",
       "testScore": "Điểm Kiểm tra",
       "compare": "So sánh",
       "compareLabel": "So sánh lần {{n}}",
@@ -649,7 +650,7 @@
       "delete": "Xóa",
       "deleteLabel": "Xóa lần {{n}}",
       "chartTitle": "Điểm Kiểm tra theo epoch của các lần đã chọn",
-      "chartTitleTrain": "Điểm Dạy theo epoch của các lần đã chọn",
+      "chartTitleTrain": "Điểm Huấn luyện theo epoch của các lần đã chọn",
       "run": "Lần {{n}}",
       "restored": "Đã khôi phục lần {{n}} bằng cách chạy lại với cùng seed {{seed}}.",
       "replaying": "Đang xem lại lần {{n}}.",
@@ -697,9 +698,9 @@
       "toggle": "Hiện ranh giới quyết định",
       "badge": "Chính xác cho mô hình 2D",
       "badgeHint": "Đây là một mô hình phụ chỉ học trên 2 trục của bản đồ, nên ranh giới vẽ ra đúng là ranh giới của nó.",
-      "note": "Mô hình phụ trên 2 trục đạt {{acc2d}}%, mô hình chính đạt {{accFull}}% (tập Dạy). Chênh lệch là phần bản đồ 2D bỏ mất.",
-      "noteNoMain": "Mô hình phụ học trên 2 trục đạt {{acc2d}}% trên tập Dạy.",
-      "needClasses": "Cần ít nhất 2 lớp có ảnh Dạy để vẽ ranh giới."
+      "note": "Mô hình phụ trên 2 trục đạt {{acc2d}}%, mô hình chính đạt {{accFull}}% (tập Huấn luyện). Chênh lệch là phần bản đồ 2D bỏ mất.",
+      "noteNoMain": "Mô hình phụ học trên 2 trục đạt {{acc2d}}% trên tập Huấn luyện.",
+      "needClasses": "Cần ít nhất 2 lớp có ảnh Huấn luyện để vẽ ranh giới."
     },
     "occlusion": {
       "title": "Che thử từng ô",
@@ -769,8 +770,8 @@
       "mapTitle": "Ảnh mới nằm ở đâu trên bản đồ?",
       "mapLead": "Dấu hoa thị là ảnh đang thử. Bản đồ là hình chiếu 2D nên vị trí chỉ để tham khảo.",
       "mapOutside": "Dấu hoa thị nằm ngoài vùng của mọi ảnh đã có (được ghim vào mép bản đồ): ảnh này rất khác những ảnh mô hình đã học.",
-      "neighbors": "Ảnh Dạy giống nhất",
-      "neighborsLead": "Độ tương đồng cosine giữa vector của ảnh mới và vector của từng ảnh Dạy (1 là giống hệt).",
+      "neighbors": "Ảnh Huấn luyện giống nhất",
+      "neighborsLead": "Độ tương đồng cosine giữa vector của ảnh mới và vector của từng ảnh Huấn luyện (1 là giống hệt).",
       "stillAlt": "Ảnh đang thử (đã cắt vuông 224×224 như mô hình nhận)",
       "privacy": "Ảnh thử chỉ xử lý trên máy này, không lưu vào dự án.",
       "rejected": "Không dùng được tệp này: {{reason}}.",
@@ -814,7 +815,7 @@
       "loadingModel": "Đang tải mô hình nhận dạng ảnh…",
       "extracting": "Đang biến ảnh thành vector: {{done}}/{{total}}…",
       "training": "Máy đang học…",
-      "done": "Xong. Máy đoán đúng {{percent}}% ảnh dạy.",
+      "done": "Xong. Máy đoán đúng {{percent}}% ảnh huấn luyện.",
       "stale": "Dữ liệu vừa đổi: hãy huấn luyện lại.",
       "error": "Có lỗi: {{message}}",
       "needModel": "Huấn luyện xong mới xem thử được.",
@@ -825,7 +826,7 @@
       "resultLabel": "Máy đoán",
       "previewError": "Không thử được ảnh: {{message}}",
       "epochCounter": "lượt {{epoch}}/{{total}}",
-      "notReady": "Chưa huấn luyện được: cần ít nhất 2 lớp có ảnh ở ngăn Dạy.",
+      "notReady": "Chưa huấn luyện được: cần ít nhất 2 lớp có ảnh ở ngăn Huấn luyện.",
       "cameraBusy": "Đang dùng webcam để chụp ảnh; đóng hộp chụp để xem thử tiếp."
     },
     "details": {
@@ -998,7 +999,7 @@
       "step": "Một bước",
       "run": "Chạy",
       "pause": "Tạm dừng",
-      "trainAccuracy": "Đúng trên tập Dạy",
+      "trainAccuracy": "Đúng trên tập Huấn luyện",
       "testAccuracy": "Đúng trên tập Kiểm tra"
     },
     "knn": {
@@ -1028,7 +1029,7 @@
       "no": "sai",
       "depthChart": "Độ chính xác theo độ sâu tối đa",
       "depthAxis": "độ sâu {{n}}",
-      "overfitHint": "Cây càng sâu càng thuộc tập Dạy (đường liền đi lên), nhưng tập Kiểm tra (nét đứt) có thể đi xuống: đó là quá khớp."
+      "overfitHint": "Cây càng sâu càng thuộc tập Huấn luyện (đường liền đi lên), nhưng tập Kiểm tra (nét đứt) có thể giảm: đó là quá khớp."
     },
     "regression": {
       "plotLabel": "Các điểm dữ liệu, đường của em (cam) và đường của máy (xanh)",
@@ -1193,7 +1194,7 @@
       "needNumeric": "Cần ít nhất hai cột số để vẽ bản đồ.",
       "tableTitle": "Một dòng biến thành các con số",
       "tableHint": "Đúng các con số mô hình nhận được cho dòng này.",
-      "tableCaption": "Dòng {{row}} của bảng (dòng đầu tiên của tập Dạy)",
+      "tableCaption": "Dòng {{row}} của bảng (dòng đầu tiên của tập Huấn luyện)",
       "column": "Cột",
       "original": "Giá trị gốc",
       "how": "Cách đổi",
@@ -1212,7 +1213,7 @@
       },
       "knn": {
         "name": "k láng giềng gần nhất",
-        "how": "Tìm k dòng giống nhất trong tập Dạy và lấy nhãn chiếm đa số."
+        "how": "Tìm k dòng giống nhất trong tập Huấn luyện và lấy nhãn chiếm đa số."
       },
       "linear": {
         "name": "Hồi quy tuyến tính",
@@ -1220,13 +1221,13 @@
       },
       "knn-regression": {
         "name": "k láng giềng gần nhất",
-        "how": "Lấy trung bình giá trị của k dòng giống nhất trong tập Dạy."
+        "how": "Lấy trung bình giá trị của k dòng giống nhất trong tập Huấn luyện."
       }
     },
     "model": {
       "choose": "Chọn mô hình",
       "c": "Độ \"thoải mái\" C",
-      "cHint": "C nhỏ: trọng số bị kéo về gần 0 (mô hình đơn giản). C lớn: mô hình bám sát dữ liệu Dạy hơn.",
+      "cHint": "C nhỏ: trọng số bị kéo về gần 0 (mô hình đơn giản). C lớn: mô hình bám sát dữ liệu Huấn luyện hơn.",
       "kHint": "Khoảng cách tính trên các cột đã chuẩn hóa.",
       "linearNoSettings": "Hồi quy tuyến tính không có tham số cần chỉnh: máy tính thẳng ra nghiệm bình phương tối thiểu.",
       "train": "Huấn luyện",
@@ -1237,10 +1238,10 @@
     "evaluate": {
       "confusion": "Ma trận nhầm lẫn trên tập Kiểm tra",
       "trueVsPred": "hàng: thật, cột: đoán",
-      "overfit": "Đúng trên tập Dạy cao hơn hẳn tập Kiểm tra: có thể mô hình đang học thuộc (quá khớp).",
-      "r2Train": "R² tập Dạy",
+      "overfit": "Đúng trên tập Huấn luyện cao hơn hẳn tập Kiểm tra: có thể mô hình đang học thuộc (quá khớp).",
+      "r2Train": "R² tập Huấn luyện",
       "r2Test": "R² tập Kiểm tra",
-      "rmseTrain": "Sai số RMSE tập Dạy",
+      "rmseTrain": "Sai số RMSE tập Huấn luyện",
       "rmseTest": "Sai số RMSE tập Kiểm tra",
       "regressionHint": "R² = 1: đúng hết; 0: ngang đoán bằng trung bình. RMSE là sai số điển hình, cùng đơn vị với \"{{target}}\".",
       "predVsTrue": "Giá trị thật (trục ngang) và giá trị dự đoán (trục dọc) trên tập Kiểm tra; đường chéo là đoán đúng hoàn toàn",
@@ -1251,7 +1252,7 @@
       "logisticMulti": "Mỗi lớp có một bộ trọng số (tính trên các cột đã chuẩn hóa). Lớp nào có tổng điểm cao nhất thì được chọn.",
       "weightsFor": "Điểm của lớp \"{{cls}}\" (độ lệch {{b}})",
       "linearHint": "Hệ số: dự đoán đổi bao nhiêu khi cột đó tăng 1 đơn vị, các cột khác giữ nguyên. Không phải quan hệ nhân quả.",
-      "knnHint": "k-NN không học trọng số nào: nó ghi nhớ {{n}} dòng của tập Dạy và mỗi lần dự đoán thì tìm {{k}} dòng gần nhất."
+      "knnHint": "k-NN không học trọng số: nó ghi nhớ {{n}} dòng của tập Huấn luyện và mỗi lần dự đoán thì tìm {{k}} dòng gần nhất."
     },
     "use": {
       "formLabel": "Giá trị của dòng mới",
@@ -1262,7 +1263,7 @@
       "why": "Vì sao?",
       "yes": "đúng",
       "no": "sai",
-      "neighbors": "{{k}} dòng gần nhất trong tập Dạy:",
+      "neighbors": "{{k}} dòng gần nhất trong tập Huấn luyện:",
       "neighborRow": "dòng {{row}} (khoảng cách {{distance}}):",
       "score": "Điểm lớp \"{{cls}}\" = {{b}} (độ lệch) + các đóng góp = {{score}}. Đóng góp lớn nhất:",
       "linearSum": "Dự đoán = {{b}} (độ lệch) + tổng các đóng góp (hệ số × giá trị). Đóng góp lớn nhất:"
@@ -1348,13 +1349,13 @@
       "ngram2": "Âm tiết + cặp âm tiết liền nhau",
       "sentence": "Câu để xem (sửa thoải mái)",
       "tokens": "Tách được {{n}} đơn vị:",
-      "unknown": "Không có trong bộ từ vựng của tập Dạy nên bị bỏ qua: {{words}}",
+      "unknown": "Không có trong bộ từ vựng của tập Huấn luyện nên bị bỏ qua: {{words}}",
       "vectorSize": "Vector của câu có {{total}} ô (mỗi từ trong bộ từ vựng một ô); chỉ {{nonzero}} ô khác 0.",
       "tableCaption": "Các ô khác 0 của vector",
       "term": "Từ",
       "count": "Số lần",
-      "tfidfHint": "idf = ln((1 + {{n}}) / (1 + số câu Dạy chứa từ)) + 1. TF-IDF = số lần × idf, chia độ dài vector.",
-      "frequentTitle": "Âm tiết hay gặp nhất trong mỗi nhóm (tập Dạy)",
+      "tfidfHint": "idf = ln((1 + {{n}}) / (1 + số câu Huấn luyện chứa từ)) + 1. TF-IDF = số lần × idf, rồi chuẩn hóa.",
+      "frequentTitle": "Âm tiết hay gặp nhất trong mỗi nhóm (tập Huấn luyện)",
       "frequentHint": "Hay gặp chưa chắc đã giúp phân biệt: một từ xuất hiện nhiều ở mọi nhóm thì không cho biết câu thuộc nhóm nào."
     },
     "models": {
@@ -1425,11 +1426,12 @@
       "deleteClip": "Xóa đoạn này",
       "play": "Nghe đoạn {{n}}",
       "moreClips": "… và {{n}} đoạn cũ hơn.",
-      "newClass": "Tên nhóm mới",
       "addClass": "Thêm nhóm",
       "error": "Không xử lý được âm thanh: {{message}}",
       "unsupported": "Trình duyệt này không hỗ trợ Web Audio nên chưa thu hay đọc được âm thanh. Dùng Chrome hoặc Edge bản mới.",
-      "privacy": "Âm thanh lưu trên máy này thành đoạn 1 giây, 16 kHz; tệp gốc không được giữ."
+      "privacy": "Âm thanh lưu trên máy này thành đoạn 1 giây, 16 kHz; tệp gốc không được giữ.",
+      "defaultClass": "Nhóm {{n}}",
+      "deleteClassAria": "Xóa nhóm {{name}}"
     },
     "live": {
       "badge": "Xấp xỉ",
@@ -1470,7 +1472,7 @@
       },
       "knn": {
         "name": "k láng giềng gần nhất",
-        "how": "Tìm k đoạn Dạy giống nhất (khoảng cách tính bằng dB) và lấy nhóm chiếm đa số."
+        "how": "Tìm k đoạn Huấn luyện giống nhất (khoảng cách tính bằng dB) và lấy nhóm chiếm đa số."
       }
     },
     "model": {
@@ -1491,7 +1493,7 @@
       "contributionHint": "Điểm \"{{cls}}\" so với trung bình = {{base}} (phần cố định) + tổng các ô = {{total}}. Cam đẩy về nhóm này, xanh kéo ra.",
       "distance": "cách {{d}} dB",
       "playNeighbour": "Nghe đoạn này",
-      "knnHint": "Bấm nút phát để nghe các đoạn Dạy giống nhất mà máy dựa vào."
+      "knnHint": "Bấm nút phát để nghe các đoạn Huấn luyện giống nhất mà máy dựa vào."
     }
   },
   "pose": {
@@ -1642,7 +1644,7 @@
       },
       "knn": {
         "name": "k láng giềng gần nhất",
-        "how": "Tìm k mẫu Dạy có các khớp nằm gần nhất và lấy nhóm chiếm đa số."
+        "how": "Tìm k mẫu Huấn luyện có các khớp nằm gần nhất và lấy nhóm chiếm đa số."
       }
     },
     "model": {
@@ -1661,7 +1663,7 @@
       "badImage": "Không đọc được ảnh.",
       "whyHint": "Đóng góp = (giá trị chuẩn hóa × trọng số) của x và y; cộng với phần cố định ra đúng điểm của nhóm.",
       "contributionHint": "Cam: khớp đẩy về \"{{cls}}\", xanh: kéo ra; chấm càng to ảnh hưởng càng lớn. Điểm = {{base}} + tổng các khớp = {{total}}.",
-      "neighbors": "{{k}} mẫu Dạy gần nhất thuộc các nhóm: {{labels}}."
+      "neighbors": "{{k}} mẫu Huấn luyện gần nhất thuộc các nhóm: {{labels}}."
     }
   },
   "presentation": {

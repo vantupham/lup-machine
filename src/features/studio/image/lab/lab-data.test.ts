@@ -24,7 +24,7 @@ const features = new Map<string, Float32Array>([
 ]);
 
 describe('buildTrainingData', () => {
-  test('nhãn theo thứ tự lớp; tách tập Dạy / Kiểm tra', () => {
+  test('nhãn theo thứ tự lớp; tách tập Huấn luyện / Kiểm tra', () => {
     const result = buildTrainingData(classes, samples, features);
     expect(result.readiness).toBe('ready');
     if (result.readiness !== 'ready') return;
@@ -39,7 +39,7 @@ describe('buildTrainingData', () => {
     expect(buildTrainingData(classes, samples, partial).readiness).toBe('need-features');
   });
 
-  test('cần ít nhất 2 lớp có ảnh Dạy', () => {
+  test('cần ít nhất 2 lớp có ảnh Huấn luyện', () => {
     const onlyA = samples.filter((s) => s.classId === 'a');
     expect(buildTrainingData(classes, onlyA, features).readiness).toBe('need-classes');
   });
@@ -61,7 +61,7 @@ describe('predictSamples', () => {
 });
 
 describe('nearestTrainSamples', () => {
-  test('ảnh Dạy giống nhất theo độ tương đồng cosine, loại chính nó', () => {
+  test('ảnh Huấn luyện giống nhất theo độ tương đồng cosine, loại chính nó', () => {
     const result = nearestTrainSamples('a2', samples, features, 2);
     expect(result.map((r) => r.sample.id)).toEqual(['a1', 'b1']);
     expect(result[0]!.similarity).toBeGreaterThan(result[1]!.similarity);

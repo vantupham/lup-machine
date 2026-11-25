@@ -111,7 +111,7 @@ describe('Bộ dữ liệu mẫu trong trang Mô hình', () => {
     expect(within(photos).getByText('MIT')).toBeInTheDocument();
   });
 
-  test('tạo dự án từ bộ ảnh thật: đủ 90 ảnh, đúng ngăn Dạy/Kiểm tra, mỗi ảnh mang ghi công', async () => {
+  test('tạo dự án từ bộ ảnh thật: đủ 90 ảnh, đúng ngăn Huấn luyện/Kiểm tra, mỗi ảnh mang ghi công', async () => {
     vi.stubGlobal('fetch', serveFromPublic());
     open('/studio');
     const photos = screen.getByRole('list', { name: 'Ảnh thật (giấy phép mở)' });

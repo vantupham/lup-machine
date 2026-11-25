@@ -32,7 +32,7 @@ const canteen = prepared(canteenCsv, 2);
 const SETTINGS = { alpha: 1, c: 10 };
 
 describe('prepareText', () => {
-  test('chia phân tầng, bộ từ vựng chỉ dựng từ tập Dạy', () => {
+  test('chia phân tầng, bộ từ vựng chỉ dựng từ tập Huấn luyện', () => {
     expect(topics.classNames).toEqual(['ẩm thực', 'thể thao', 'thời tiết']);
     expect(topics.train.y.length + topics.test.y.length).toBe(72);
     expect(new Set(topics.test.y)).toEqual(new Set([0, 1, 2]));
@@ -88,7 +88,7 @@ describe.each<TextModelKind>(['naive-bayes', 'logistic'])('mô hình %s', (kind)
     expect(topTerms(trainedTopics, topics, 2, 15).map((t) => t.term)).toContain('trời');
   });
 
-  test('từ chưa gặp trong tập Dạy được liệt kê và không đóng góp gì', () => {
+  test('từ chưa gặp trong tập Huấn luyện được liệt kê và không đóng góp gì', () => {
     const ex = explainText(trainedTopics, topics, 'xyzabc trời');
     expect(ex.unknownTerms).toEqual(['xyzabc']);
     expect(ex.contributions.map((t) => t.term)).toEqual(['trời']);

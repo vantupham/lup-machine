@@ -45,13 +45,13 @@ describe('nearestTrainToVector', () => {
     ['b2', Float32Array.from([0.2, 1])],
   ]);
 
-  test('chỉ lấy ảnh Dạy, xếp theo độ tương đồng cosine giảm dần', () => {
+  test('chỉ lấy ảnh Huấn luyện, xếp theo độ tương đồng cosine giảm dần', () => {
     const result = nearestTrainToVector(Float32Array.from([1, 0.1]), samples, features, 2);
     expect(result.map((r) => r.sample.id)).toEqual(['a1', 'b2']);
     expect(result[0]!.similarity).toBeGreaterThan(result[1]!.similarity);
   });
 
-  test('bỏ qua ảnh được chỉ định (khi ảnh đang xét cũng là một ảnh Dạy)', () => {
+  test('bỏ qua ảnh được chỉ định (khi ảnh đang xét cũng là một ảnh Huấn luyện)', () => {
     const result = nearestTrainToVector(Float32Array.from([1, 0]), samples, features, 3, 'a1');
     expect(result.map((r) => r.sample.id)).not.toContain('a1');
   });

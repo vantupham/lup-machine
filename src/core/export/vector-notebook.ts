@@ -1,7 +1,7 @@
 /**
  * Khung notebook Colab dùng chung cho các dự án dùng bộ phân loại vector (âm thanh, tư thế):
  * nhúng đặc trưng (float32 base64) + nhãn + cách chia, dựng lại cùng mô hình bằng scikit-learn và so với LUP Machine.
- * k-NN dùng đặc trưng gốc; hồi quy logistic dùng đặc trưng chuẩn hóa theo tập Dạy — giống LUP Machine.
+ * k-NN dùng đặc trưng gốc; hồi quy logistic dùng đặc trưng chuẩn hóa theo tập Huấn luyện — giống LUP Machine.
  */
 import type { VectorData, VectorEvaluation, VectorModelSettings } from '@/core/ml/vector-classifier';
 import { code, float32ToBase64, markdown, notebook, pyList, pyNumber, pyString, type Notebook, type NotebookCell } from './notebook';
@@ -39,7 +39,7 @@ export function vectorNotebook(input: VectorNotebookInput, text: VectorNotebookT
     markdown(
       `# ${input.projectName} — notebook xuất từ LUP Machine`,
       '',
-      `${text.what} Dựng lại bằng **Python và scikit-learn**, trên cùng dữ liệu và cùng cách chia tập Dạy / Kiểm tra, rồi so kết quả với LUP Machine.`,
+      `${text.what} Dựng lại bằng **Python và scikit-learn**, trên cùng dữ liệu và cùng cách chia tập Huấn luyện / Kiểm tra, rồi so kết quả với LUP Machine.`,
       '',
       '- **Cách chạy:** trong Colab chọn *Thời gian chạy → Chạy tất cả* (Runtime → Run all).',
       `- **Dữ liệu:** ${text.dataNote}`,
@@ -64,9 +64,9 @@ export function vectorNotebook(input: VectorNotebookInput, text: VectorNotebookT
       `y_train = np.array(${pyList(data.train.ys)})`,
       `X_test = decode(${pyString(float32ToBase64(data.test.raw))})`,
       `y_test = np.array(${pyList(data.test.ys)})`,
-      'print(f"Dạy: {X_train.shape}, Kiểm tra: {X_test.shape}")',
+      'print(f"Huấn luyện: {X_train.shape}, Kiểm tra: {X_test.shape}")',
     ),
-    markdown('## 2. Huấn luyện', '', isKnn ? 'k-NN đo khoảng cách trên đặc trưng gốc (không chuẩn hóa), giống LUP Machine.' : 'Hồi quy logistic trên đặc trưng đã chuẩn hóa theo tập Dạy, giống LUP Machine.'),
+    markdown('## 2. Huấn luyện', '', isKnn ? 'k-NN đo khoảng cách trên đặc trưng gốc (không chuẩn hóa), giống LUP Machine.' : 'Hồi quy logistic trên đặc trưng đã chuẩn hóa theo tập Huấn luyện, giống LUP Machine.'),
     code(
       ...(isKnn
         ? [`model = KNeighborsClassifier(n_neighbors=${settings.k}, algorithm="brute").fit(X_train, y_train)`, 'Z_train, Z_test = X_train, X_test']
