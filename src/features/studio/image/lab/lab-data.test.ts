@@ -1,6 +1,6 @@
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import type { SoftmaxParams } from '@/core/ml/softmax-regression';
-import { buildTrainingData, nearestTrainSamples, predictSamples } from './lab-data';
+import { buildTrainingData, nearestTrainSamples, predictSamples, testClassRecall } from './lab-data';
 
 const image = { bytes: new ArrayBuffer(1), mime: 'image/jpeg', width: 224, height: 224 };
 const cls = (id: string, order: number): ClassRecord => ({ id, projectId: 'p', name: id, order, createdAt: '' });
@@ -66,5 +66,22 @@ describe('nearestTrainSamples', () => {
     expect(result.map((r) => r.sample.id)).toEqual(['a1', 'b1']);
     expect(result[0]!.similarity).toBeGreaterThan(result[1]!.similarity);
     expect(nearestTrainSamples('a1', samples, features, 3).map((r) => r.sample.id)).not.toContain('a1');
+  });
+});
+
+describe('tỉ lệ nhận ra từng lớp trên tập Kiểm tra', () => {
+  // Mô hình chỉ nhìn chiều 0: lớp a khi x0 lớn, lớp b khi x0 nhỏ.
+  const params: SoftmaxParams = { numClasses: 3, dim: 2, weights: Float32Array.from([5, 0, -5, 0, 0, 0]), bias: Float32Array.from([0, 0, -10]) };
+
+  test('mỗi lớp một tỉ lệ; lớp không có ảnh Kiểm tra là null', () => {
+    const data = {
+      train: { xs: [], ys: [] },
+      test: { xs: [Float32Array.from([1, 0]), Float32Array.from([-1, 0]), Float32Array.from([1, 0])], ys: [0, 1, 1] },
+    };
+    expect(testClassRecall(params, data)).toEqual([1, 0.5, null]);
+  });
+
+  test('chưa có ảnh Kiểm tra thì không tính', () => {
+    expect(testClassRecall(params, { train: { xs: [], ys: [] }, test: null })).toBeNull();
   });
 });

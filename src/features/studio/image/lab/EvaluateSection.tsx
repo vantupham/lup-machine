@@ -11,6 +11,9 @@ import { StepNumber } from '@/ui/StepNumber';
 import { ClassMarker } from '@/ui/ClassMarker';
 import { StepNotebook } from '@/features/notebook/StepNotebook';
 import { FindingsPanel } from './FindingsPanel';
+import type { ImproveActions } from './improve-actions';
+import { ACCEPTED_IMAGE_TYPES } from '../image-file';
+import { Camera, ImageUp, Trash2 } from '@/ui/icons';
 
 /** Chênh lệch điểm Huấn luyện − Kiểm tra vượt ngưỡng này thì cảnh báo quá khớp. */
 export const OVERFIT_GAP = 0.15;
@@ -22,6 +25,7 @@ interface EvaluateSectionProps {
   readonly predictions: ReadonlyMap<string, SamplePrediction>;
   /** Xem vì sao mô hình đoán một ảnh như vậy (mở ảnh đó ở bước 3). */
   readonly onInspect: (sample: SampleRecord) => void;
+  readonly improve: ImproveActions;
 }
 
 type Cell = { readonly actual: number; readonly predicted: number } | null;
@@ -29,7 +33,7 @@ type Cell = { readonly actual: number; readonly predicted: number } | null;
 /** id vùng ảnh của ô ma trận đang chọn (để cuộn tới khi bấm "Xem các ảnh này"). */
 const CELL_IMAGES_ID = 'confusion-cell-images';
 
-export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions, onInspect }: EvaluateSectionProps) {
+export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions, onInspect, improve }: EvaluateSectionProps) {
   const { t, i18n } = useTranslation();
   const hasTest = Boolean(snapshot?.test);
   /** null: theo mặc định (Kiểm tra nếu có, không thì Huấn luyện). */
@@ -74,6 +78,7 @@ export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions
             }}
             cell={cell}
             onCell={setCell}
+            improve={improve}
           />
           <ThresholdPanel
             predictions={samplesBySplit[snapshot.test ? 'test' : 'train'].flatMap((s) => {
@@ -107,9 +112,10 @@ interface ConfusionPanelProps {
   readonly onSplit: (split: Split) => void;
   readonly cell: Cell;
   readonly onCell: (cell: Cell) => void;
+  readonly improve: ImproveActions;
 }
 
-function ConfusionPanel({ classes, scored, predictions, split, onSplit, cell, onCell }: ConfusionPanelProps) {
+function ConfusionPanel({ classes, scored, predictions, split, onSplit, cell, onCell, improve }: ConfusionPanelProps) {
   const { t } = useTranslation();
   const mode = useModeStore((s) => s.mode);
   const preds = scored.map((s) => predictions.get(s.id)!);
@@ -172,8 +178,15 @@ function ConfusionPanel({ classes, scored, predictions, split, onSplit, cell, on
             <p className="text-sm text-muted">{t('project.evaluate.cellEmpty')}</p>
           ) : (
             <ul className="grid grid-cols-4 gap-2 sm:grid-cols-6" data-testid="cell-samples">
-              {cellSamples.map((s) => <PredictedThumb key={s.id} sample={s} confidence={predictions.get(s.id)!.probabilities[cell.predicted]!} />)}
+              {cellSamples.map((s) => (
+                <PredictedThumb key={s.id} sample={s} confidence={predictions.get(s.id)!.probabilities[cell.predicted]!} onDelete={improve.deleteSample} />
+              ))}
             </ul>
+          )}
+          {cell.actual !== cell.predicted && classes[cell.actual] && classes[cell.predicted] && (
+            <div className="mt-3">
+              <AddImagesBar cls={classes[cell.actual]!} other={classes[cell.predicted]!} improve={improve} />
+            </div>
           )}
         </div>
       )}
@@ -181,14 +194,60 @@ function ConfusionPanel({ classes, scored, predictions, split, onSplit, cell, on
   );
 }
 
-function PredictedThumb({ sample, confidence }: { sample: SampleRecord; confidence: number }) {
+interface PredictedThumbProps {
+  readonly sample: SampleRecord;
+  readonly confidence: number;
+  readonly onDelete: (sample: SampleRecord) => void;
+}
+
+function PredictedThumb({ sample, confidence, onDelete }: PredictedThumbProps) {
   const { t } = useTranslation();
   const url = useObjectUrl(sample.image);
   return (
-    <li className="text-center text-xs">
+    <li className="relative text-center text-xs">
       <img src={url} alt="" width={80} height={80} className="w-full rounded-sm border border-rule" />
       <span className="font-mono">{t('project.evaluate.confidence', { percent: Math.round(confidence * 100) })}</span>
+      <button
+        type="button"
+        onClick={() => onDelete(sample)}
+        aria-label={t('project.improve.deleteImage')}
+        title={t('project.improve.deleteImage')}
+        className="absolute right-0.5 top-0.5 rounded-sm bg-paper/90 p-0.5 text-danger hover:bg-paper"
+      >
+        <Trash2 />
+      </button>
     </li>
+  );
+}
+
+/** Ở ô nhầm (ngoài đường chéo): thêm ảnh Huấn luyện cho lớp thật để máy học phân biệt rõ hơn. */
+function AddImagesBar({ cls, other, improve }: { readonly cls: ClassRecord; readonly other: ClassRecord; readonly improve: ImproveActions }) {
+  const { t } = useTranslation();
+  return (
+    <div className="space-y-2 rounded border border-dashed border-rule p-3 text-sm" data-testid="improve-bar">
+      <p>{t('project.improve.advice', { actual: cls.name, predicted: other.name })}</p>
+      <div className="flex flex-wrap gap-2">
+        <button type="button" className="btn btn-ghost" onClick={() => improve.capture(cls)}>
+          <Camera /> {t('project.improve.capture')}
+        </button>
+        <label className="btn btn-ghost cursor-pointer focus-within:outline focus-within:outline-2 focus-within:outline-primary">
+          <ImageUp /> {t('project.improve.upload')}
+          <input
+            type="file"
+            multiple
+            accept={ACCEPTED_IMAGE_TYPES.join(',')}
+            className="sr-only"
+            aria-label={t('project.improve.uploadLabel', { name: cls.name })}
+            onChange={(e) => {
+              // Chép danh sách tệp TRƯỚC khi xóa giá trị ô chọn tệp (FileList bị rỗng theo).
+              const files = Array.from(e.target.files ?? []);
+              e.target.value = '';
+              if (files.length > 0) improve.upload(cls, files);
+            }}
+          />
+        </label>
+      </div>
+    </div>
   );
 }
 

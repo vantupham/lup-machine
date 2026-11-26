@@ -85,6 +85,8 @@ export interface RunRecord {
   readonly guess?: { readonly testAccuracy: number } | undefined;
   /** Kết luận học sinh rút ra sau lần chạy. */
   readonly conclusion?: string | undefined;
+  /** Tỉ lệ nhận ra từng lớp trên tập Kiểm tra (null: lớp không có ảnh Kiểm tra). */
+  readonly classRecall?: readonly (number | null)[] | undefined;
 }
 
 /** Ghi chép của học sinh ở một bước của dự án (sổ tay khám phá). */

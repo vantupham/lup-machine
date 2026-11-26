@@ -75,6 +75,12 @@ test('bài 3 "AI học nhầm": mô hình học theo nền — điểm Huấn lu
   expect(neighbors.every((n) => n.startsWith('Hình vuông'))).toBe(true);
 
   // Bước "sửa dữ liệu" trong bài: chuyển 3/6 ảnh Kiểm tra mỗi lớp sang ngăn Huấn luyện rồi huấn luyện lại.
+  // Đã huấn luyện nên ứng dụng hỏi lại (đổi "đề thi"): đồng ý, và chỉ hỏi một lần.
+  const dialogs: string[] = [];
+  page.on('dialog', (dialog) => {
+    dialogs.push(dialog.message());
+    void dialog.accept();
+  });
   for (const name of ['Hình tròn', 'Hình vuông']) {
     const panel = page.getByRole('article', { name });
     await panel.getByRole('tab', { name: /Kiểm tra/ }).click();
@@ -84,6 +90,8 @@ test('bài 3 "AI học nhầm": mô hình học theo nền — điểm Huấn lu
       await expect(panel.getByRole('tab', { name: `Kiểm tra (${5 - i})` })).toBeVisible();
     }
   }
+  expect(dialogs).toHaveLength(1);
+  expect(dialogs[0]).toContain('đề thi');
   await page.getByRole('button', { name: /^(Bắt đầu huấn luyện|Huấn luyện lại)$/ }).click();
   await expect(page.getByText('Xong 50 epoch.')).toBeVisible({ timeout: 60_000 });
   const fixed = await scores(page);

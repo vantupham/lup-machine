@@ -67,6 +67,7 @@ export const lessonShortcut: Lesson = {
       title: 'Sửa dữ liệu và thí nghiệm lại',
       body: [
         'Ở mỗi lớp, chuyển 3 trong 6 ảnh Kiểm tra sang ngăn Huấn luyện (nút mũi tên hai chiều trên ảnh). Như vậy dữ liệu Huấn luyện có cả nền sáng lẫn nền tối cho mỗi hình.',
+        'Ứng dụng sẽ hỏi lại vì làm vậy là đổi "đề thi" của máy. Ở bài này ta đồng ý để có dữ liệu Huấn luyện đa dạng, nhưng nhớ rằng tập Kiểm tra mới chỉ còn 3 ảnh mỗi lớp.',
         'Làm lại bước 3 nếu được nhắc, rồi huấn luyện lại. So sánh hai lần chạy trong Nhật ký thí nghiệm.',
       ],
       predict: {
@@ -135,5 +136,6 @@ export const lessonShortcut: Lesson = {
     'Kết quả tái lập được: với cùng dữ liệu và cài đặt, các máy sẽ cho kết quả như nhau hoặc chỉ lệch rất nhỏ (do card đồ họa khác nhau tính số thực hơi khác).',
     'Đã kiểm chứng với MobileNetV2: lúc có bẫy, điểm Huấn luyện khoảng 100% còn điểm Kiểm tra rất thấp (có thể 0%).',
     'Phần liên hệ thực tế có thể mở rộng thành thảo luận về trách nhiệm và công bằng trong AI.',
+    'Hộp hỏi lại khi chuyển ảnh Kiểm tra sang Huấn luyện là dịp nói về rò rỉ dữ liệu: nếu chỉ chuyển những ảnh máy làm sai rồi chấm trên phần còn lại, điểm sẽ đẹp hơn thực tế. Ở bài này ta chuyển theo nền, không theo kết quả đoán.',
   ],
 };

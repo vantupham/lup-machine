@@ -554,6 +554,92 @@ describe('Điểm đáng chú ý ở bước Đánh giá', () => {
   });
 });
 
+describe('Vòng cải tiến', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  async function trainConfusing() {
+    await seed({ confusingTest: true });
+    open();
+    await extractAll();
+    await trainToEnd();
+    await screen.findByTestId('run-comparison', {}, SLOW_WAIT);
+  }
+
+  test('ô nhầm: gợi ý thêm ảnh cho lớp bị nhận sai; tải ảnh vào ngăn Huấn luyện của đúng lớp', async () => {
+    await trainConfusing();
+    await userEvent.click(screen.getByRole('button', { name: '2 ảnh lớp Nhựa bị đoán là Giấy' }));
+    const bar = screen.getByTestId('improve-bar');
+    expect(bar).toHaveTextContent('Thêm ảnh Nhựa đa dạng hơn rồi huấn luyện lại, xem máy còn nhầm sang Giấy không.');
+    expect(within(bar).getByRole('button', { name: 'Chụp thêm' })).toBeInTheDocument();
+
+    vi.mocked(codec.fileToStoredImage).mockResolvedValueOnce(imageOf(20, 77));
+    const file = new File([new Uint8Array([1, 2, 3])], 'nhua.jpg', { type: 'image/jpeg' });
+    await userEvent.upload(within(bar).getByLabelText('Tải thêm ảnh Huấn luyện cho lớp Nhựa'), file);
+
+    const nhua = (await repos.dataset.listClasses(projectId)).find((c) => c.name === 'Nhựa')!;
+    await waitFor(async () => {
+      const added = (await repos.dataset.listSamples(projectId)).filter((x) => x.classId === nhua.id && x.split === 'train');
+      expect(added).toHaveLength(7);
+    });
+  });
+
+  test('ô đúng (đường chéo) thì không gợi ý thêm ảnh', async () => {
+    await trainConfusing();
+    await userEvent.click(screen.getByRole('button', { name: '2 ảnh lớp Giấy bị đoán là Giấy' }));
+    expect(screen.queryByTestId('improve-bar')).toBeNull();
+  });
+
+  test('xóa ảnh Kiểm tra sau khi đã huấn luyện: hỏi lại vì điểm không còn so được; không đồng ý thì giữ ảnh', async () => {
+    await trainConfusing();
+    await userEvent.click(screen.getByRole('button', { name: '2 ảnh lớp Nhựa bị đoán là Giấy' }));
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
+    await userEvent.click(within(screen.getByTestId('cell-samples')).getAllByRole('button', { name: 'Xóa ảnh này' })[0]!);
+    await waitFor(() => expect(confirm).toHaveBeenCalledWith(expect.stringContaining('không còn so được với các lần trước')));
+    expect(await repos.dataset.listSamples(projectId)).toHaveLength(16);
+
+    confirm.mockReturnValue(true);
+    await userEvent.click(within(screen.getByTestId('cell-samples')).getAllByRole('button', { name: 'Xóa ảnh này' })[0]!);
+    await waitFor(async () => expect(await repos.dataset.listSamples(projectId)).toHaveLength(15));
+  });
+
+  test('chuyển ảnh Kiểm tra sang Huấn luyện sau khi đã huấn luyện: cảnh báo đổi "đề thi", đồng ý một lần thì không hỏi lại', async () => {
+    await trainConfusing();
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
+    await userEvent.click(screen.getAllByRole('tab', { name: 'Kiểm tra (2)' })[0]!);
+    await userEvent.click(screen.getAllByRole('button', { name: /^Chuyển sang Huấn luyện: / })[0]!);
+    await waitFor(() => expect(confirm).toHaveBeenCalledWith(expect.stringContaining('điểm sẽ đẹp hơn thực tế')));
+    const countTest = async () => (await repos.dataset.listSamples(projectId)).filter((x) => x.split === 'test').length;
+    expect(await countTest()).toBe(4);
+
+    confirm.mockReturnValue(true);
+    await userEvent.click(screen.getAllByRole('button', { name: /^Chuyển sang Huấn luyện: / })[0]!);
+    await waitFor(async () => expect(await countTest()).toBe(3));
+    // Đợi giao diện tải lại (tab còn 1 ảnh Kiểm tra) rồi mới chuyển tiếp ảnh còn lại.
+    await screen.findByRole('tab', { name: 'Kiểm tra (1)' });
+    await userEvent.click(screen.getAllByRole('button', { name: /^Chuyển sang Huấn luyện: / })[0]!);
+    await waitFor(async () => expect(await countTest()).toBe(2));
+    expect(confirm).toHaveBeenCalledTimes(2);
+  });
+
+  test('huấn luyện lại: bảng tỉ lệ nhận ra từng lớp trước / sau', async () => {
+    await trainConfusing();
+    await userEvent.click(screen.getByRole('radio', { name: 'Ít (10)' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện lại' }));
+    await screen.findByText('Kết quả so với lần #1', {}, SLOW_WAIT);
+    const table = await screen.findByTestId('class-recall', {}, SLOW_WAIT);
+    expect(within(table).getByRole('columnheader', { name: 'Lần #1' })).toBeInTheDocument();
+    // 50 epoch: ảnh Nhựa (trông giống Giấy) bị nhận sai hết; 10 epoch: máy nghiêng hẳn về Nhựa.
+    expect(within(table).getAllByRole('row').map((r) => r.textContent)).toEqual([
+      'LớpLần #1Lần #2',
+      'Nhựa0%100% (tăng)',
+      'Giấy100%0% (giảm)',
+    ]);
+    expect((await repos.experiments.listRuns(projectId))[0]?.classRecall).toEqual([1, 0]);
+  });
+});
+
 describe('Bước 6: Sử dụng', () => {
   test('sau khi huấn luyện: tải một ảnh mới, mô hình đoán lớp; ảnh thử không được lưu vào dự án', async () => {
     await seed();

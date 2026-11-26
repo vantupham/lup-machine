@@ -43,6 +43,13 @@ describe('ExperimentRepository', () => {
     expect(runs[0]!.metrics[1]!.testAccuracy).toBeNull();
   });
 
+  test('lưu tỉ lệ nhận ra từng lớp trên tập Kiểm tra (null: lớp không có ảnh Kiểm tra)', async () => {
+    const r = repo();
+    await r.addRun({ ...run(), classRecall: [1, null] });
+    expect((await r.listRuns('p1'))[0]!.classRecall).toEqual([1, null]);
+    await expect(r.addRun({ ...run(), classRecall: [1.2, 0] })).rejects.toThrow();
+  });
+
   test('lưu điểm Kiểm tra học sinh đoán trước khi huấn luyện', async () => {
     const r = repo();
     await r.addRun({ ...run(), guess: { testAccuracy: 0.75 } });

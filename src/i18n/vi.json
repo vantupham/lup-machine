@@ -872,7 +872,14 @@
       "down": "giảm {{d}} điểm",
       "same": "giữ nguyên",
       "conclusionLabel": "Kết luận của em",
-      "conclusionPlaceholder": "Thay đổi đó làm điểm tăng hay giảm? Vì sao em nghĩ vậy?"
+      "conclusionPlaceholder": "Thay đổi đó làm điểm tăng hay giảm? Vì sao em nghĩ vậy?",
+      "classTitle": "Tỉ lệ nhận ra từng lớp (tập Kiểm tra)",
+      "className": "Lớp",
+      "run": "Lần #{{n}}",
+      "trend": {
+        "up": "(tăng)",
+        "down": "(giảm)"
+      }
     },
     "findings": {
       "title": "Điểm đáng chú ý",
@@ -890,6 +897,16 @@
       "whyConfidentMistakes": "Máy dựa vào chi tiết gì mà chắc chắn như vậy?",
       "whySmallSet": "Điểm số này đáng tin đến đâu?",
       "inspect": "Ảnh {{actual}} bị đoán là {{predicted}} ({{percent}}%). Xem vì sao"
+    },
+    "improve": {
+      "advice": "Thêm ảnh {{actual}} đa dạng hơn rồi huấn luyện lại, xem máy còn nhầm sang {{predicted}} không.",
+      "capture": "Chụp thêm",
+      "upload": "Tải thêm ảnh",
+      "uploadLabel": "Tải thêm ảnh Huấn luyện cho lớp {{name}}",
+      "deleteImage": "Xóa ảnh này",
+      "confirmDelete": "Xóa ảnh này khỏi dự án?",
+      "leakMove": "Tập Kiểm tra là đề thi của máy. Chuyển ảnh này sang Huấn luyện thì đề thi đổi: điểm Kiểm tra không còn so được với các lần trước, và nếu chỉ chuyển những ảnh máy làm sai thì điểm sẽ đẹp hơn thực tế. Vẫn chuyển?",
+      "leakDelete": "Bớt ảnh Kiểm tra thì điểm Kiểm tra không còn so được với các lần trước. Vẫn xóa?"
     }
   },
   "samples": {
