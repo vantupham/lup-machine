@@ -33,6 +33,8 @@ export const newRunSchema = z.object({
   guess: z.object({ testAccuracy: z.number().min(0).max(1) }).strict().optional(),
   /** Kết luận học sinh rút ra sau lần chạy (ghi sau khi chạy xong). */
   conclusion: conclusionSchema.min(1).optional(),
+  /** Tỉ lệ nhận ra từng lớp trên tập Kiểm tra (theo thứ tự classNames; null: lớp không có ảnh Kiểm tra). */
+  classRecall: z.array(z.number().min(0).max(1).nullable()).max(50).optional(),
 });
 
 export type NewRunInput = z.infer<typeof newRunSchema>;

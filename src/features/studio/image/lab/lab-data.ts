@@ -1,4 +1,4 @@
-import { argmax } from '@/core/ml/metrics';
+import { argmax, confusionMatrix, perClassMetrics } from '@/core/ml/metrics';
 import { predictProba, type SoftmaxParams } from '@/core/ml/softmax-regression';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { nearestTrainToVector, type Neighbor } from './probe';
@@ -76,4 +76,14 @@ export function nearestTrainSamples(
 ): Neighbor[] {
   const target = features.get(sampleId);
   return target ? nearestTrainToVector(target, samples, features, k, sampleId) : [];
+}
+
+/**
+ * Tỉ lệ nhận ra (recall) từng lớp trên tập Kiểm tra của một mô hình, theo thứ tự lớp; null ở lớp
+ * không có ảnh Kiểm tra. Lưu kèm mỗi lần chạy để so sánh trước / sau theo từng lớp.
+ */
+export function testClassRecall(params: SoftmaxParams, data: TrainingData): (number | null)[] | null {
+  if (!data.test) return null;
+  const predicted = data.test.xs.map((x) => argmax(predictProba(params, x)));
+  return perClassMetrics(confusionMatrix(data.test.ys, predicted, params.numClasses)).map((m) => m.recall);
 }

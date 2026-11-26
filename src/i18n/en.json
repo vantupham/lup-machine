@@ -872,7 +872,14 @@
       "down": "down {{d}} points",
       "same": "unchanged",
       "conclusionLabel": "Your conclusion",
-      "conclusionPlaceholder": "Did that change raise or lower the score? Why do you think so?"
+      "conclusionPlaceholder": "Did that change raise or lower the score? Why do you think so?",
+      "classTitle": "Recognition rate per class (Test split)",
+      "className": "Class",
+      "run": "Run #{{n}}",
+      "trend": {
+        "up": "(up)",
+        "down": "(down)"
+      }
     },
     "findings": {
       "title": "Worth a look",
@@ -890,6 +897,16 @@
       "whyConfidentMistakes": "What detail made the model so sure?",
       "whySmallSet": "How far can you trust this score?",
       "inspect": "{{actual}} image predicted as {{predicted}} ({{percent}}%). See why"
+    },
+    "improve": {
+      "advice": "Add more varied {{actual}} images, train again, and check whether the model still confuses them with {{predicted}}.",
+      "capture": "Capture more",
+      "upload": "Upload more images",
+      "uploadLabel": "Upload more Training images for {{name}}",
+      "deleteImage": "Delete this image",
+      "confirmDelete": "Delete this image from the project?",
+      "leakMove": "The Test split is the model's exam. Moving this image into Training changes the exam: the Test score can no longer be compared with earlier runs, and if you only move the images the model got wrong, the score will look better than it really is. Move it anyway?",
+      "leakDelete": "Removing Test images means the Test score can no longer be compared with earlier runs. Delete anyway?"
     }
   },
   "samples": {

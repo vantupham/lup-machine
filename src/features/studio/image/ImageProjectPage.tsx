@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { stratifiedSplit } from '@/core/data/split';
 import type { ClassRecord, SampleRecord, Split, StoredImage } from '@/storage/db';
 import { MAX_SAMPLES_PER_CLASS, type SplitCounts } from '@/storage/repositories/dataset-repository';
-import { useDatasetRepository } from '@/storage/repository-context';
+import { useDatasetRepository, useExperimentRepository } from '@/storage/repository-context';
 import { getErrorMessage } from '@/ui/error-message';
 import { PixelInspector } from '@/features/inspector/pixel/PixelInspector';
 import { ClassPanel } from './ClassPanel';
@@ -29,6 +29,7 @@ import { BackLink } from '@/ui/BackLink';
 import { StepNumber } from '@/ui/StepNumber';
 import { nextClassName } from '@/features/studio/next-class-name';
 import { NotebookProvider } from '@/features/notebook/NotebookContext';
+import type { ImproveActions } from './lab/improve-actions';
 import { StepNotebook } from '@/features/notebook/StepNotebook';
 
 /** Lớp phân biệt bằng cả ký hiệu, không chỉ màu (thân thiện người mù màu). */
@@ -75,6 +76,7 @@ interface WorkspaceProps {
 function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: WorkspaceProps) {
   const { t } = useTranslation();
   const dataset = useDatasetRepository();
+  const experimentRepo = useExperimentRepository();
   const [message, setMessage] = useState<Message>(null);
   const [inspecting, setInspecting] = useState<SampleRecord | null>(null);
   const [webcam, setWebcam] = useState<{ cls: ClassRecord; split: Split } | null>(null);
@@ -154,6 +156,49 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
       const added = t('project.upload.added', { count: images.length, name: target.cls.name, split: t(`project.class.${target.split}`) });
       return blurFaces ? `${added} ${faceBlurSummary(t, faces, images.length)}` : added;
     });
+  };
+
+  /**
+   * Đổi tập Kiểm tra sau khi đã huấn luyện thì điểm Kiểm tra không còn so được với các lần trước
+   * (chuyển sang Huấn luyện còn là cho máy "xem trước đề thi"): hỏi lại trước.
+   */
+  const acknowledgedLeaks = useRef(new Set<'leakMove' | 'leakDelete'>());
+  const confirmTestChange = async (sample: SampleRecord, key: 'leakMove' | 'leakDelete'): Promise<boolean> => {
+    if (sample.split !== 'test' || acknowledgedLeaks.current.has(key)) return true;
+    const runs = await experimentRepo.listRuns(projectId);
+    if (runs.length === 0) return true;
+    // Đã đồng ý một lần thì không hỏi lại trong lúc dự án đang mở (bài 3 chuyển 6 ảnh liền nhau).
+    const isConfirmed = window.confirm(t(`project.improve.${key}`));
+    if (isConfirmed) acknowledgedLeaks.current.add(key);
+    return isConfirmed;
+  };
+
+  const moveSample = (sample: SampleRecord) =>
+    void (async () => {
+      if (!(await confirmTestChange(sample, 'leakMove'))) return;
+      await run(async () => {
+        await dataset.setSplits([{ id: sample.id, split: sample.split === 'train' ? 'test' : 'train' }]);
+        return null;
+      });
+    })().catch(logActionError);
+
+  const deleteSample = (sample: SampleRecord, ask = false) =>
+    void (async () => {
+      const isConfirmed = sample.split === 'test' ? await confirmTestChange(sample, 'leakDelete') : !ask || window.confirm(t('project.improve.confirmDelete'));
+      if (!isConfirmed) return;
+      await run(async () => {
+        await dataset.deleteSample(sample.id);
+        return null;
+      });
+    })().catch(logActionError);
+
+  const improve: ImproveActions = {
+    capture: (cls) => {
+      webcamFaces.current = 0;
+      setWebcam({ cls, split: 'train' });
+    },
+    upload: (cls, files) => void upload(cls, files, 'train', byClass.get(cls.id)?.length ?? 0).catch(logActionError),
+    deleteSample: (sample) => deleteSample(sample, true),
   };
 
   const inspectingClass = inspecting ? classes.find((c) => c.id === inspecting.classId) : undefined;
@@ -257,8 +302,8 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
                 }
               }}
               onInspect={setInspecting}
-              onMove={(s) => void run(async () => { await dataset.setSplits([{ id: s.id, split: s.split === 'train' ? 'test' : 'train' }]); return null; })}
-              onDeleteSample={(s) => void run(async () => { await dataset.deleteSample(s.id); return null; })}
+              onMove={moveSample}
+              onDeleteSample={(s) => deleteSample(s)}
             />
           ))}
           <StepNotebook step="data" />
@@ -266,7 +311,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         <QualityPanel classes={classes} counts={counts} />
       </div>
 
-      <ModelLab projectName={projectName} classes={classes} samples={samples} />
+      <ModelLab projectName={projectName} classes={classes} samples={samples} improve={improve} />
       </div>
 
       {inspecting && (

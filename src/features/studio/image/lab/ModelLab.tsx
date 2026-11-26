@@ -14,16 +14,18 @@ import { UseSection } from './UseSection';
 import { ExperimentPlan } from './ExperimentPlan';
 import { RunComparison } from './RunComparison';
 import { setupOf } from './run-setup';
+import type { ImproveActions } from './improve-actions';
 import { RotateCcw } from '@/ui/icons';
 
 interface ModelLabProps {
   readonly projectName: string;
   readonly classes: readonly ClassRecord[];
   readonly samples: readonly SampleRecord[];
+  readonly improve: ImproveActions;
 }
 
 /** Bước 3 Biểu diễn → 4 Huấn luyện → 5 Đánh giá → 6 Sử dụng (thử ảnh mới, xuất notebook) → Nhật ký thí nghiệm. */
-export function ModelLab({ projectName, classes, samples }: ModelLabProps) {
+export function ModelLab({ projectName, classes, samples, improve }: ModelLabProps) {
   const { t } = useTranslation();
   /** Trạng thái học máy dùng chung với khối "làm nhanh" ở đầu trang. */
   const lab = useImageLabContext();
@@ -104,6 +106,7 @@ export function ModelLab({ projectName, classes, samples }: ModelLabProps) {
         snapshot={snapshot}
         samplesBySplit={samplesBySplit}
         predictions={predictions}
+        improve={improve}
         onInspect={(sample) => {
           setSelected(sample);
           // Ảnh được mở ở bước 3 (bản đồ, láng giềng, bản đồ nhiệt): cuộn tới sau khi vẽ.

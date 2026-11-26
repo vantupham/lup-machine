@@ -45,6 +45,7 @@ export {
   Trash2,
   TriangleAlert,
   TrendingDown,
+  TrendingUp,
   X,
 } from 'lucide-react';
 export type { LucideIcon as IconComponent } from 'lucide-react';

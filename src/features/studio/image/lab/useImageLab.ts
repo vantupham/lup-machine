@@ -4,7 +4,7 @@ import { datasetFingerprint } from '@/core/data/fingerprint';
 import type { EpochSnapshot, TrainOptions } from '@/core/ml/softmax-regression';
 import type { ClassRecord, RunRecord, SampleRecord } from '@/storage/db';
 import { getErrorMessage } from '@/ui/error-message';
-import { buildTrainingData, predictSamples, type TrainingReadiness } from './lab-data';
+import { buildTrainingData, predictSamples, testClassRecall, type TrainingReadiness } from './lab-data';
 import { DEFAULT_TRAIN_OPTIONS } from './TrainSection';
 import { useExperiments } from './useExperiments';
 import { useFeatures } from './useFeatures';
@@ -31,6 +31,14 @@ function toMetrics(snapshots: readonly EpochSnapshot[]) {
  * Toàn bộ trạng thái học máy của một dự án ảnh: vector đặc trưng, huấn luyện, nhật ký thí nghiệm.
  * Dùng chung cho khối "làm nhanh" ở đầu trang và các bước 3–6 "mở nắp" bên dưới: cùng một mô hình.
  */
+/** Tỉ lệ nhận ra từng lớp của mô hình cuối cùng (chỉ khi có ảnh Kiểm tra). */
+function recallOf(done: readonly EpochSnapshot[], ready: TrainingReadiness) {
+  const final = done.at(-1);
+  if (!final || ready.readiness !== 'ready') return {};
+  const recall = testClassRecall(final.params, ready.data);
+  return recall ? { classRecall: recall } : {};
+}
+
 export function useImageLab(projectId: string, classes: readonly ClassRecord[], samples: readonly SampleRecord[]) {
   const { t } = useTranslation();
   const featureState = useFeatures(projectId, samples);
@@ -85,6 +93,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
                 counts: { train: ready.trainSamples.length, test: ready.testSamples.length },
                 metrics: toMetrics(done),
                 ...(runGuess === null ? {} : { guess: { testAccuracy: runGuess } }),
+                ...recallOf(done, ready),
               })
               .then((saved) => setCurrentRunNumber(saved.number))
               .catch((error: unknown) =>

@@ -4,7 +4,7 @@ import { diffRunSetup, isTestSetChanged } from '@/core/experiments/run-diff';
 import type { RunRecord } from '@/storage/db';
 import { RUN_CONCLUSION_MAX_LENGTH } from '@/storage/repositories/experiment-repository';
 import { AutosaveStatus } from '@/ui/AutosaveStatus';
-import { TriangleAlert } from '@/ui/icons';
+import { TrendingDown, TrendingUp, TriangleAlert } from '@/ui/icons';
 import { useAutosave } from '@/ui/useAutosave';
 import { describeChange, finalScore, setupOf } from './run-setup';
 
@@ -71,6 +71,46 @@ function Delta({ run, previous }: { readonly run: RunRecord; readonly previous: 
       {kind === 'test' && isTestSetChanged(changes) && (
         <p className="text-warning"><TriangleAlert /> {t('project.compare.unfairTest', { n: previous.number })}</p>
       )}
+      <ClassRecallTable run={run} previous={previous} />
     </div>
+  );
+}
+
+/** Tỉ lệ nhận ra từng lớp trước / sau: thấy rõ thay đổi giúp (hay hại) lớp nào. Ghép lớp theo tên. */
+function ClassRecallTable({ run, previous }: { readonly run: RunRecord; readonly previous: RunRecord }) {
+  const { t } = useTranslation();
+  if (!run.classRecall || !previous.classRecall) return null;
+  const before = new Map(previous.classNames.map((name, i) => [name, previous.classRecall?.[i] ?? null]));
+  const cell = (v: number | null | undefined) => (v === null || v === undefined ? '–' : `${Math.round(v * 100)}%`);
+  return (
+    <table className="mt-2 text-xs [&_td]:pr-4 [&_th]:pr-4" data-testid="class-recall">
+      <caption className="mb-1 text-left font-medium">{t('project.compare.classTitle')}</caption>
+      <thead>
+        <tr className="text-left text-muted">
+          <th scope="col" className="font-normal">{t('project.compare.className')}</th>
+          <th scope="col" className="font-normal">{t('project.compare.run', { n: previous.number })}</th>
+          <th scope="col" className="font-normal">{t('project.compare.run', { n: run.number })}</th>
+        </tr>
+      </thead>
+      <tbody className="font-mono">
+        {run.classNames.map((name, i) => {
+          const now = run.classRecall?.[i] ?? null;
+          const was = before.get(name);
+          const trend = now === null || was === null || was === undefined || now === was ? null : now > was ? 'up' : 'down';
+          return (
+            <tr key={name}>
+              <th scope="row" className="text-left font-sans font-normal">{name}</th>
+              <td>{cell(was)}</td>
+              <td>
+                {cell(now)}
+                {trend === 'up' && <TrendingUp className="ml-1 text-accent" />}
+                {trend === 'down' && <TrendingDown className="ml-1 text-danger" />}
+                {trend && <span className="sr-only">{' '}{t(`project.compare.trend.${trend}`)}</span>}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }
