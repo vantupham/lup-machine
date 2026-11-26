@@ -873,6 +873,23 @@
       "same": "giữ nguyên",
       "conclusionLabel": "Kết luận của em",
       "conclusionPlaceholder": "Thay đổi đó làm điểm tăng hay giảm? Vì sao em nghĩ vậy?"
+    },
+    "findings": {
+      "title": "Điểm đáng chú ý",
+      "on": "trên tập {{split}}",
+      "why": "Vì sao?",
+      "showImages": "Xem các ảnh này",
+      "allCorrect": "Máy đoán đúng hết {{total}} ảnh.",
+      "topConfusion": "Hay nhầm nhất: {{count}}/{{support}} ảnh {{actual}} bị đoán là {{predicted}}.",
+      "weakestClass": "Lớp khó nhất: máy chỉ nhận ra {{percent}}% ảnh {{name}} ({{support}} ảnh), hay nhầm sang {{other}}.",
+      "confidentMistakes": "{{count}} ảnh sai mà máy vẫn tin từ {{percent}}% trở lên. Bấm ảnh để xem máy nhìn vào đâu.",
+      "smallSet": "Chỉ có {{total}} ảnh nên mỗi ảnh làm điểm đổi {{step}} điểm.",
+      "whyAllCorrect": "Các ảnh này đã đủ khó và đủ đa dạng chưa?",
+      "whyTopConfusion": "Ảnh {{actual}} và ảnh {{predicted}} giống nhau ở điểm nào?",
+      "whyWeakestClass": "Lớp {{name}} cần thêm ảnh kiểu nào?",
+      "whyConfidentMistakes": "Máy dựa vào chi tiết gì mà chắc chắn như vậy?",
+      "whySmallSet": "Điểm số này đáng tin đến đâu?",
+      "inspect": "Ảnh {{actual}} bị đoán là {{predicted}} ({{percent}}%). Xem vì sao"
     }
   },
   "samples": {

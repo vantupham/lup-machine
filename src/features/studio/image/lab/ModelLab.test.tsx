@@ -513,6 +513,47 @@ describe('Thí nghiệm có kiểm soát', () => {
   });
 });
 
+describe('Điểm đáng chú ý ở bước Đánh giá', () => {
+  test('đoán đúng hết trên ít ảnh: báo đúng hết và nhắc mỗi ảnh làm điểm đổi nhiều', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    const findings = await screen.findByTestId('findings');
+    expect(findings).toHaveTextContent('trên tập Kiểm tra');
+    expect(screen.getByTestId('finding-all-correct')).toHaveTextContent('Máy đoán đúng hết 4 ảnh.');
+    expect(screen.getByTestId('finding-small-set')).toHaveTextContent('Chỉ có 4 ảnh nên mỗi ảnh làm điểm đổi 25 điểm.');
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện', pressed: false }));
+    expect(screen.getByTestId('finding-small-set')).toHaveTextContent('Chỉ có 12 ảnh nên mỗi ảnh làm điểm đổi 8,3 điểm.');
+  });
+
+  test('ảnh bị nhầm: chỉ cặp nhầm nhiều nhất và mở đúng ô ma trận', async () => {
+    await seed({ confusingTest: true });
+    open();
+    await extractAll();
+    await trainToEnd();
+    const top = await screen.findByTestId('finding-top-confusion');
+    expect(top).toHaveTextContent('Hay nhầm nhất: 2/2 ảnh Nhựa bị đoán là Giấy.');
+    expect(top).toHaveTextContent('Ảnh Nhựa và ảnh Giấy giống nhau ở điểm nào?');
+
+    await userEvent.click(within(top).getByRole('button', { name: 'Xem các ảnh này' }));
+    expect(screen.getByRole('button', { name: '2 ảnh lớp Nhựa bị đoán là Giấy' })).toHaveAttribute('aria-pressed', 'true');
+    expect(within(screen.getByTestId('cell-samples')).getAllByRole('listitem')).toHaveLength(2);
+
+  });
+
+  test('đổi ma trận sang tập Huấn luyện thì phát hiện tính trên tập đó', async () => {
+    await seed({ confusingTest: true });
+    open();
+    await extractAll();
+    await trainToEnd();
+    await screen.findByTestId('finding-top-confusion');
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện', pressed: false }));
+    expect(screen.getByTestId('findings')).toHaveTextContent('trên tập Huấn luyện');
+    expect(screen.getByTestId('finding-all-correct')).toHaveTextContent('Máy đoán đúng hết 12 ảnh.');
+  });
+});
+
 describe('Bước 6: Sử dụng', () => {
   test('sau khi huấn luyện: tải một ảnh mới, mô hình đoán lớp; ảnh thử không được lưu vào dự án', async () => {
     await seed();
