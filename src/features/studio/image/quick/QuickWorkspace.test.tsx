@@ -159,6 +159,9 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     open();
     await userEvent.click(await within(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).findByRole('button', { name: 'Huấn luyện nhanh' }));
     expect(await within(quick()).findByText('Có lỗi: mất mạng')).toBeInTheDocument();
+    const stages = within(quick()).getByRole('list', { name: 'Các chặng huấn luyện' });
+    expect(within(stages).getByText('Tải bộ não nhận dạng ảnh')).toHaveTextContent('(lỗi)');
+    expect(within(stages).getByText('Máy học từ các vector')).toHaveTextContent('(chưa tới)');
     expect(await repos.experiments.listRuns(projectId)).toHaveLength(0);
     vi.mocked(console.error).mockRestore();
   });
@@ -257,5 +260,47 @@ describe('khối làm nhanh kiểu Teachable Machine (chế độ Khám phá)', 
     await screen.findByRole('dialog', { name: /Giấy/ });
     expect(quick().querySelector('video')).toBeNull();
   });
-});
 
+  test('bút chì cạnh tên lớp ở cột 1: đổi tên tại chỗ; Esc thì hủy', async () => {
+    await seed();
+    open();
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    await userEvent.click(within(region).getByRole('button', { name: 'Đổi tên lớp Nhựa' }));
+    const input = within(region).getByRole('textbox', { name: 'Tên lớp' });
+    expect(input).toHaveValue('Nhựa');
+    await userEvent.keyboard('{Escape}');
+    expect(within(region).queryByRole('textbox', { name: 'Tên lớp' })).toBeNull();
+
+    await userEvent.click(within(region).getByRole('button', { name: 'Đổi tên lớp Nhựa' }));
+    await userEvent.clear(within(region).getByRole('textbox', { name: 'Tên lớp' }));
+    await userEvent.type(within(region).getByRole('textbox', { name: 'Tên lớp' }), 'Chai nhựa{Enter}');
+    expect(await within(quick()).findByRole('group', { name: 'Chai nhựa' })).toBeInTheDocument();
+    expect((await repos.dataset.listClasses(projectId)).map((c) => c.name)).toEqual(['Chai nhựa', 'Giấy']);
+  });
+
+  test('"Huấn luyện nhanh" hiện từng chặng: tải mô hình → vector → học từng lượt → sẵn sàng', async () => {
+    await seed();
+    open();
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    expect(within(region).queryByRole('list', { name: 'Các chặng huấn luyện' })).toBeNull();
+    const real = vi.mocked(loader.loadFeatureExtractor).getMockImplementation()!;
+    let release: () => void = () => undefined;
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    vi.mocked(loader.loadFeatureExtractor).mockImplementationOnce(async () => {
+      await gate;
+      return real();
+    });
+    await userEvent.click(within(region).getByRole('button', { name: 'Huấn luyện nhanh' }));
+    const stages = await within(region).findByRole('list', { name: 'Các chặng huấn luyện' });
+    expect(within(stages).getAllByRole('listitem')).toHaveLength(4);
+    expect(await within(stages).findByText('Tải bộ não nhận dạng ảnh')).toHaveTextContent('(đang làm)');
+    expect(within(stages).getByText('Sẵn sàng xem thử')).toHaveTextContent('(chưa tới)');
+    release();
+    await within(quick()).findByText(/^Xong\./, {}, { timeout: TRAIN_WAIT_MS });
+    for (const name of ['Tải bộ não nhận dạng ảnh', 'Biến ảnh thành vector', 'Máy học từ các vector', 'Sẵn sàng xem thử']) {
+      expect(within(stages).getByText(name)).toHaveTextContent('(xong)');
+    }
+  });
+});

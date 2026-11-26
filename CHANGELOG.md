@@ -4,6 +4,11 @@
 
 ## [Chưa phát hành]
 
+### Thêm (khối "Dạy máy trong 3 bước" của Studio ảnh)
+
+- **Đổi tên lớp ngay ở cột "1. Thu ảnh"**: nút bút chì cạnh tên lớp mở ô sửa tại chỗ (Enter để lưu, Esc để hủy), không cần mở các bước chi tiết.
+- **Các chặng huấn luyện ở cột "2. Cho máy học"**: bấm "Huấn luyện nhanh" thì thấy lần lượt tải mô hình nhận dạng ảnh, biến ảnh thành vector (x/y ảnh), máy học từng lượt kèm % đoán đúng, rồi sẵn sàng xem thử. Mỗi chặng có dấu chưa tới / đang làm / xong, chặng lỗi được đánh dấu riêng.
+
 ### Thêm (Giao diện sáng / tối)
 
 - **Nút đổi giao diện sáng / tối** ở thanh đầu trang (icon mặt trăng / mặt trời, cạnh nút Trình chiếu). Lựa chọn được nhớ cho lần sau.

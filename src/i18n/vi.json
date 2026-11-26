@@ -856,7 +856,22 @@
       "previewError": "Không thử được ảnh: {{message}}",
       "epochCounter": "lượt {{epoch}}/{{total}}",
       "notReady": "Chưa huấn luyện được: cần ít nhất 2 lớp có ảnh ở ngăn Huấn luyện.",
-      "cameraBusy": "Đang dùng webcam để chụp ảnh; đóng hộp chụp để xem thử tiếp."
+      "cameraBusy": "Đang dùng webcam để chụp ảnh; đóng hộp chụp để xem thử tiếp.",
+      "stages": {
+        "label": "Các chặng huấn luyện",
+        "model": "Tải bộ não nhận dạng ảnh",
+        "vectors": "Biến ảnh thành vector",
+        "vectorsDetail": "{{done}}/{{total}} ảnh",
+        "learn": "Máy học từ các vector",
+        "learnDetail": "lượt {{epoch}}/{{total}} · đúng {{percent}}%",
+        "ready": "Sẵn sàng xem thử",
+        "state": {
+          "pending": "chưa tới",
+          "active": "đang làm",
+          "done": "xong",
+          "error": "lỗi"
+        }
+      }
     },
     "details": {
       "show": "Xem từng bước bên trong",

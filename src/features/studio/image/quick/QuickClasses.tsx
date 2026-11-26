@@ -1,8 +1,9 @@
+import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { ACCEPTED_IMAGE_TYPES } from '../image-file';
 import { useObjectUrl } from '../useObjectUrl';
-import { Camera, ImageUp, Plus } from '@/ui/icons';
+import { Camera, ImageUp, Pencil, Plus } from '@/ui/icons';
 import { ClassMarker } from '@/ui/ClassMarker';
 
 /** Số ảnh thu nhỏ hiện cho mỗi lớp (ảnh mới nhất), đủ để thấy vừa chụp được gì. */
@@ -14,10 +15,11 @@ interface QuickClassesProps {
   readonly onWebcam: (cls: ClassRecord) => void;
   readonly onUpload: (cls: ClassRecord, files: readonly File[]) => void;
   readonly onAddClass: () => void;
+  readonly onRename: (cls: ClassRecord, name: string) => Promise<boolean>;
 }
 
 /** Cột 1: mỗi lớp một dòng gọn, chụp hoặc tải ảnh thẳng vào ngăn Huấn luyện. */
-export function QuickClasses({ classes, samplesByClass, onWebcam, onUpload, onAddClass }: QuickClassesProps) {
+export function QuickClasses({ classes, samplesByClass, onWebcam, onUpload, onAddClass, onRename }: QuickClassesProps) {
   const { t } = useTranslation();
   return (
     <div className="space-y-3">
@@ -25,11 +27,8 @@ export function QuickClasses({ classes, samplesByClass, onWebcam, onUpload, onAd
         const list = samplesByClass.get(cls.id) ?? [];
         return (
           <div key={cls.id} role="group" aria-label={cls.name} className="border-t border-rule pt-3 first:border-t-0 first:pt-0">
-            <div className="flex items-baseline justify-between gap-2">
-              <p className="truncate font-semibold">
-                <ClassMarker index={i} className="mr-1.5" />
-                {cls.name}
-              </p>
+            <div className="flex items-center justify-between gap-2">
+              <QuickClassName cls={cls} markerIndex={i} onRename={onRename} />
               <span className="shrink-0 font-mono text-xs text-muted">{t('project.quick.count', { count: list.length })}</span>
             </div>
             {list.length > 0 && (
@@ -67,6 +66,65 @@ export function QuickClasses({ classes, samplesByClass, onWebcam, onUpload, onAd
         <Plus /> {t('project.quick.addClass')}
       </button>
     </div>
+  );
+}
+
+interface QuickClassNameProps {
+  readonly cls: ClassRecord;
+  readonly markerIndex: number;
+  readonly onRename: (cls: ClassRecord, name: string) => Promise<boolean>;
+}
+
+/** Tên lớp kèm nút bút chì; bấm vào thì thành ô sửa tên ngay tại chỗ. */
+function QuickClassName({ cls, markerIndex, onRename }: QuickClassNameProps) {
+  const { t } = useTranslation();
+  const [draft, setDraft] = useState<string | null>(null);
+
+  if (draft === null) {
+    return (
+      <div className="flex min-w-0 items-center gap-1">
+        <p className="truncate font-semibold">
+          <ClassMarker index={markerIndex} className="mr-1.5" />
+          {cls.name}
+        </p>
+        <button
+          type="button"
+          onClick={() => setDraft(cls.name)}
+          aria-label={t('project.class.renameAria', { name: cls.name })}
+          title={t('project.class.rename')}
+          className="shrink-0 rounded p-1 text-muted transition-colors hover:bg-primary/10 hover:text-primary"
+        >
+          <Pencil />
+        </button>
+      </div>
+    );
+  }
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (await onRename(cls, draft)) setDraft(null);
+  };
+
+  return (
+    <form onSubmit={(e) => void submit(e)} className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+      <input
+        aria-label={t('project.class.renameLabel')}
+        value={draft}
+        maxLength={40}
+        autoFocus
+        onChange={(e) => setDraft(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') setDraft(null);
+        }}
+        className="min-w-0 flex-1 rounded border border-rule bg-paper px-2 py-1 text-sm"
+      />
+      <button type="submit" className="btn btn-primary px-2.5 py-1 text-sm">
+        {t('project.class.save')}
+      </button>
+      <button type="button" onClick={() => setDraft(null)} className="text-sm">
+        {t('project.class.cancel')}
+      </button>
+    </form>
   );
 }
 

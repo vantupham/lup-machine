@@ -856,7 +856,22 @@
       "previewError": "Could not try the image: {{message}}",
       "epochCounter": "epoch {{epoch}}/{{total}}",
       "notReady": "Cannot train yet: at least 2 classes need training images.",
-      "cameraBusy": "The webcam is busy capturing images; close the capture box to keep trying."
+      "cameraBusy": "The webcam is busy capturing images; close the capture box to keep trying.",
+      "stages": {
+        "label": "Training stages",
+        "model": "Load the image recognition model",
+        "vectors": "Turn images into vectors",
+        "vectorsDetail": "{{done}}/{{total}} images",
+        "learn": "Learn from the vectors",
+        "learnDetail": "epoch {{epoch}}/{{total}} · {{percent}}% right",
+        "ready": "Ready to try",
+        "state": {
+          "pending": "not yet",
+          "active": "in progress",
+          "done": "done",
+          "error": "error"
+        }
+      }
     },
     "details": {
       "show": "Show every step inside",

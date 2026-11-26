@@ -137,6 +137,18 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
     setMessage({ kind: 'error', text: t('project.data.actionError', { message: getErrorMessage(error) }) });
   };
 
+  /** Đổi tên lớp (dùng chung cho khối làm nhanh và bước 1). Trả về false nếu lỗi để ô sửa vẫn mở. */
+  const renameClass = async (cls: ClassRecord, name: string): Promise<boolean> => {
+    try {
+      await dataset.renameClass(cls.id, name);
+      await reload();
+      return true;
+    } catch (error: unknown) {
+      setMessage({ kind: 'error', text: t('project.data.actionError', { message: getErrorMessage(error) }) });
+      return false;
+    }
+  };
+
   /** Thêm "Lớp n" (số tăng dần, không trùng tên đã có); đổi tên sau bằng nút bút chì. */
   const addNextClass = () =>
     run(async () => {
@@ -240,6 +252,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
           }}
           onUpload={(c, files) => upload(c, [...files], 'train', byClass.get(c.id)?.length ?? 0).catch(logActionError)}
           onAddClass={() => addNextClass().catch(logActionError)}
+          onRename={renameClass}
           isCapturing={webcam !== null}
         />
       )}
@@ -290,16 +303,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
                 webcamFaces.current = 0;
                 setWebcam({ cls: c, split });
               }}
-              onRename={async (c, name) => {
-                try {
-                  await dataset.renameClass(c.id, name);
-                  await reload();
-                  return true;
-                } catch (error: unknown) {
-                  setMessage({ kind: 'error', text: t('project.data.actionError', { message: getErrorMessage(error) }) });
-                  return false;
-                }
-              }}
+              onRename={renameClass}
               onDelete={(c, count) => {
                 if (window.confirm(t('project.class.confirmDelete', { name: c.name, count }))) {
                   void run(async () => { await dataset.deleteClass(c.id); return null; });
