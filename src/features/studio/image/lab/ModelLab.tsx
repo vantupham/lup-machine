@@ -99,7 +99,17 @@ export function ModelLab({ projectName, classes, samples }: ModelLabProps) {
           {lab.notice.text}
         </p>
       )}
-      <EvaluateSection classes={classes} snapshot={snapshot} samplesBySplit={samplesBySplit} predictions={predictions} />
+      <EvaluateSection
+        classes={classes}
+        snapshot={snapshot}
+        samplesBySplit={samplesBySplit}
+        predictions={predictions}
+        onInspect={(sample) => {
+          setSelected(sample);
+          // Ảnh được mở ở bước 3 (bản đồ, láng giềng, bản đồ nhiệt): cuộn tới sau khi vẽ.
+          requestAnimationFrame(() => document.querySelector('[data-testid="selected-detail"]')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' }));
+        }}
+      />
       <UseSection classes={classes} samples={samples} features={lab.features} params={snapshot?.params ?? null} epoch={snapshot?.epoch ?? null} />
       {training.status === 'done' && !isStale && lastOptions && readiness.readiness === 'ready' && snapshots.length > 0 && (
         <ColabExportPanel

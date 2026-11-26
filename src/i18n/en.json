@@ -873,6 +873,23 @@
       "same": "unchanged",
       "conclusionLabel": "Your conclusion",
       "conclusionPlaceholder": "Did that change raise or lower the score? Why do you think so?"
+    },
+    "findings": {
+      "title": "Worth a look",
+      "on": "on the {{split}} split",
+      "why": "Why?",
+      "showImages": "See these images",
+      "allCorrect": "The model got all {{total}} images right.",
+      "topConfusion": "Most common mix-up: {{count}}/{{support}} {{actual}} images were predicted as {{predicted}}.",
+      "weakestClass": "Hardest class: the model recognised only {{percent}}% of {{name}} images ({{support}} images), often confusing them with {{other}}.",
+      "confidentMistakes": "{{count}} wrong images the model was still at least {{percent}}% sure about. Click an image to see where it looked.",
+      "smallSet": "Only {{total}} images, so each image moves the score by {{step}} points.",
+      "whyAllCorrect": "Are these images hard and varied enough?",
+      "whyTopConfusion": "How are {{actual}} and {{predicted}} images alike?",
+      "whyWeakestClass": "What kind of images does {{name}} need more of?",
+      "whyConfidentMistakes": "What detail made the model so sure?",
+      "whySmallSet": "How far can you trust this score?",
+      "inspect": "{{actual}} image predicted as {{predicted}} ({{percent}}%). See why"
     }
   },
   "samples": {

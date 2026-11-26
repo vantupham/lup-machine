@@ -10,6 +10,7 @@ import { ThresholdPanel } from './ThresholdPanel';
 import { StepNumber } from '@/ui/StepNumber';
 import { ClassMarker } from '@/ui/ClassMarker';
 import { StepNotebook } from '@/features/notebook/StepNotebook';
+import { FindingsPanel } from './FindingsPanel';
 
 /** Chênh lệch điểm Huấn luyện − Kiểm tra vượt ngưỡng này thì cảnh báo quá khớp. */
 export const OVERFIT_GAP = 0.15;
@@ -19,10 +20,27 @@ interface EvaluateSectionProps {
   readonly snapshot: EpochSnapshot | null;
   readonly samplesBySplit: Readonly<Record<Split, readonly SampleRecord[]>>;
   readonly predictions: ReadonlyMap<string, SamplePrediction>;
+  /** Xem vì sao mô hình đoán một ảnh như vậy (mở ảnh đó ở bước 3). */
+  readonly onInspect: (sample: SampleRecord) => void;
 }
 
-export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions }: EvaluateSectionProps) {
+type Cell = { readonly actual: number; readonly predicted: number } | null;
+
+/** id vùng ảnh của ô ma trận đang chọn (để cuộn tới khi bấm "Xem các ảnh này"). */
+const CELL_IMAGES_ID = 'confusion-cell-images';
+
+export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions, onInspect }: EvaluateSectionProps) {
   const { t, i18n } = useTranslation();
+  const hasTest = Boolean(snapshot?.test);
+  /** null: theo mặc định (Kiểm tra nếu có, không thì Huấn luyện). */
+  const [chosenSplit, setChosenSplit] = useState<Split | null>(null);
+  const split: Split = chosenSplit ?? (hasTest ? 'test' : 'train');
+  const [cell, setCell] = useState<Cell>(null);
+  const scoredSamples = samplesBySplit[split].filter((s) => predictions.has(s.id));
+  const showCell = (actual: number, predicted: number) => {
+    setCell({ actual, predicted });
+    requestAnimationFrame(() => document.getElementById(CELL_IMAGES_ID)?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' }));
+  };
   const pct = (v: number) => `${(v * 100).toLocaleString(i18n.language, { maximumFractionDigits: 1 })}%`;
 
   return (
@@ -44,7 +62,19 @@ export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions
           {snapshot.test && snapshot.train.accuracy - snapshot.test.accuracy > OVERFIT_GAP && (
             <p role="alert" className="border-l-4 border-warning pl-3 text-sm">{t('project.evaluate.overfit')}</p>
           )}
-          <ConfusionPanel classes={classes} samplesBySplit={samplesBySplit} predictions={predictions} defaultSplit={snapshot.test ? 'test' : 'train'} />
+          <FindingsPanel classes={classes} split={split} samples={scoredSamples} predictions={predictions} onShowCell={showCell} onInspect={onInspect} />
+          <ConfusionPanel
+            classes={classes}
+            scored={scoredSamples}
+            predictions={predictions}
+            split={split}
+            onSplit={(next) => {
+              setChosenSplit(next);
+              setCell(null);
+            }}
+            cell={cell}
+            onCell={setCell}
+          />
           <ThresholdPanel
             predictions={samplesBySplit[snapshot.test ? 'test' : 'train'].flatMap((s) => {
               const p = predictions.get(s.id);
@@ -70,17 +100,18 @@ function ScoreCard({ label, hint, value, testId, emphasis = false }: { label: st
 
 interface ConfusionPanelProps {
   readonly classes: readonly ClassRecord[];
-  readonly samplesBySplit: Readonly<Record<Split, readonly SampleRecord[]>>;
+  /** Ảnh của ngăn đang xem đã có dự đoán. */
+  readonly scored: readonly SampleRecord[];
   readonly predictions: ReadonlyMap<string, SamplePrediction>;
-  readonly defaultSplit: Split;
+  readonly split: Split;
+  readonly onSplit: (split: Split) => void;
+  readonly cell: Cell;
+  readonly onCell: (cell: Cell) => void;
 }
 
-function ConfusionPanel({ classes, samplesBySplit, predictions, defaultSplit }: ConfusionPanelProps) {
+function ConfusionPanel({ classes, scored, predictions, split, onSplit, cell, onCell }: ConfusionPanelProps) {
   const { t } = useTranslation();
   const mode = useModeStore((s) => s.mode);
-  const [split, setSplit] = useState<Split>(defaultSplit);
-  const [cell, setCell] = useState<{ actual: number; predicted: number } | null>(null);
-  const scored = samplesBySplit[split].filter((s) => predictions.has(s.id));
   const preds = scored.map((s) => predictions.get(s.id)!);
   const matrix = confusionMatrix(preds.map((p) => p.actual), preds.map((p) => p.predicted), classes.length);
   const max = Math.max(1, ...matrix.flat());
@@ -93,7 +124,7 @@ function ConfusionPanel({ classes, samplesBySplit, predictions, defaultSplit }: 
           <span className="font-semibold">{t('project.evaluate.matrixTitle')}</span>
           <span className="text-muted">· {t('project.evaluate.matrixOn')}</span>
           {(['test', 'train'] as const).map((s) => (
-            <button key={s} type="button" aria-pressed={split === s} onClick={() => { setSplit(s); setCell(null); }} className={`rounded px-2 py-0.5 ${split === s ? 'bg-ink text-paper' : 'border border-rule'}`}>
+            <button key={s} type="button" aria-pressed={split === s} onClick={() => onSplit(s)} className={`rounded px-2 py-0.5 ${split === s ? 'bg-ink text-paper' : 'border border-rule'}`}>
               {t(`project.class.${s}`)}
             </button>
           ))}
@@ -117,7 +148,7 @@ function ConfusionPanel({ classes, samplesBySplit, predictions, defaultSplit }: 
                     <td key={j} className="p-0.5">
                       <button
                         type="button"
-                        onClick={() => setCell({ actual: i, predicted: j })}
+                        onClick={() => onCell({ actual: i, predicted: j })}
                         aria-label={t('project.evaluate.cellLabel', { count, actual: classes[i]!.name, predicted: classes[j]!.name })}
                         aria-pressed={cell?.actual === i && cell.predicted === j}
                         className="h-12 w-14 rounded-sm border border-rule font-mono text-base font-semibold"
@@ -135,7 +166,7 @@ function ConfusionPanel({ classes, samplesBySplit, predictions, defaultSplit }: 
         {mode === 'expert' && <PerClassTable matrix={matrix} classes={classes} />}
       </div>
       {cell && (
-        <div aria-live="polite">
+        <div aria-live="polite" id={CELL_IMAGES_ID}>
           <p className="mb-2 text-sm font-medium">{t('project.evaluate.cellImages', { actual: classes[cell.actual]!.name, predicted: classes[cell.predicted]!.name })}</p>
           {cellSamples.length === 0 ? (
             <p className="text-sm text-muted">{t('project.evaluate.cellEmpty')}</p>

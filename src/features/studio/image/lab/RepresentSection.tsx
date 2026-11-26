@@ -198,7 +198,7 @@ function SelectedDetail({ sample, classes, samples, features, onSelect, params }
   const neighbors = nearestTrainSamples(sample.id, samples, features, NEIGHBOR_COUNT);
 
   return (
-    <div className="lab-card space-y-4 p-4" data-testid="selected-detail">
+    <div className="lab-card scroll-mt-24 space-y-4 p-4" data-testid="selected-detail">
       <div className="flex items-center gap-3">
         <img src={url} alt="" width={72} height={72} className="rounded-sm border border-rule" />
         <p className="text-sm font-medium">
