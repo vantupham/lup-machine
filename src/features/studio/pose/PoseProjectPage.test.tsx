@@ -1,6 +1,8 @@
 import { configure, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createTestRepository, renderApp, type TestRepositories } from '../../../../tests/setup/render';
+import { useModeStore } from '@/ui/mode-store';
+import { useStepDetailsStore } from '@/features/studio/step-details';
+import { createTestRepository, renderApp, renderWithRepositories, type TestRepositories } from '../../../../tests/setup/render';
 
 const SLOW_TEST_MS = 30_000;
 configure({ asyncUtilTimeout: 10_000 });
@@ -12,8 +14,15 @@ async function setup(): Promise<{ repos: TestRepositories; projectId: string }> 
 }
 
 function render(repos: TestRepositories, projectId: string) {
-  return renderApp(`/studio/${projectId}`, repos.repository, repos.dataset, repos.experiments, repos.tables, repos.audio, repos.poses);
+  return renderWithRepositories(`/studio/${projectId}`, repos);
 }
+
+beforeEach(() => {
+  // Các kiểm thử 6 bước dùng Chuyên sâu (chỉ có 6 bước); khối làm nhanh kiểm thử riêng ở Khám phá.
+  useModeStore.setState({ mode: 'expert' });
+  useStepDetailsStore.setState({ isOpen: false });
+  window.scrollTo = vi.fn();
+});
 
 describe('Studio tư thế & bàn tay', () => {
   test('tư thế mẫu: kính hiển vi chuẩn hóa, huấn luyện, độ quan trọng từng khớp', async () => {
@@ -76,5 +85,50 @@ describe('Studio tư thế & bàn tay', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Xóa nhóm Ngồi xổm' }));
     await waitFor(() => expect(screen.queryByRole('textbox', { name: 'Tên nhóm 5' })).toBeNull());
     vi.restoreAllMocks();
+  }, SLOW_TEST_MS);
+});
+
+describe('Studio tư thế: khối "Dạy máy trong 3 bước" (Khám phá)', () => {
+  beforeEach(() => useModeStore.setState({ mode: 'explore' }));
+  const quick = () => screen.getByRole('region', { name: 'Dạy máy trong 3 bước' });
+
+  test('6 bước thu gọn sẵn; tư thế mẫu từ cột 1; huấn luyện nhanh chạy lần lượt 4 chặng, ghi nhật ký', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    for (const name of ['1. Ghi tư thế', '2. Cho máy học', '3. Thử ngay']) expect(within(region).getByRole('heading', { name })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Xem từng bước bên trong' })).toHaveAttribute('aria-expanded', 'false');
+    // chưa có mẫu: chọn được cơ thể / bàn tay ngay ở cột 1
+    expect(within(region).getByRole('radio', { name: /Cơ thể/ })).toBeChecked();
+
+    await userEvent.click(within(region).getByRole('button', { name: /Dùng tư thế mẫu/ }));
+    for (const name of ['Giơ hai tay', 'Dang tay', 'Chống nạnh', 'Đứng nghiêm']) expect(await within(region).findByRole('group', { name })).toBeInTheDocument();
+    expect(within(region).queryByRole('radio', { name: /Bàn tay/ })).toBeNull();
+    expect(within(region).getByText('Bật camera để ghi mẫu.')).toBeInTheDocument();
+    expect(within(region).getAllByRole('button', { name: /^Ghi 1 mẫu cho nhóm/ })[0]).toBeDisabled();
+
+    await userEvent.click(within(region).getByRole('button', { name: 'Huấn luyện nhanh' }));
+    const stages = within(quick()).getByRole('list', { name: 'Các chặng huấn luyện' });
+    expect(within(stages).getByText('Biến khung xương thành 34 số')).toHaveTextContent('(đang làm)');
+    expect(await within(quick()).findByText(/^Xong\. Máy đoán đúng \d+% mẫu Kiểm tra\.$/, {}, { timeout: 5_000 })).toBeInTheDocument();
+    expect(within(stages).getByText('60 mẫu')).toBeInTheDocument();
+    for (const label of ['Biến khung xương thành 34 số', 'Chia Huấn luyện / Kiểm tra', 'Máy học: Hồi quy logistic', 'Chấm điểm']) {
+      expect(within(stages).getByText(label)).toHaveTextContent('(xong)');
+    }
+    expect(await repos.trials.list(projectId)).toHaveLength(1);
+    expect(within(quick()).getByLabelText('Thử với một ảnh')).toBeInTheDocument();
+  }, SLOW_TEST_MS);
+
+  test('bút chì đổi tên nhóm ngay ở cột 1', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    await userEvent.click(within(region).getByRole('button', { name: /Dùng tư thế mẫu/ }));
+    await userEvent.click(await within(region).findByRole('button', { name: 'Đổi tên lớp Giơ hai tay' }));
+    const input = within(region).getByRole('textbox', { name: 'Tên lớp' });
+    await userEvent.clear(input);
+    await userEvent.type(input, 'Giơ tay chào{Enter}');
+    expect(await within(quick()).findByRole('group', { name: 'Giơ tay chào' })).toBeInTheDocument();
+    expect((await repos.dataset.listClasses(projectId))[0]!.name).toBe('Giơ tay chào');
   }, SLOW_TEST_MS);
 });
