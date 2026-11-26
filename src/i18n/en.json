@@ -1797,6 +1797,29 @@
       "whyHint": "Contribution = (normalised value × weight) for x and y; added to the fixed part, they give the group score exactly.",
       "contributionHint": "Orange joints push towards \"{{cls}}\", blue pull away; bigger dots matter more. Score = {{base}} + sum of joints = {{total}}.",
       "neighbors": "The {{k}} closest training samples belong to: {{labels}}."
+    },
+    "quick": {
+      "lead": "Record poses, press one button to train, then try it. The steps below show what the computer does.",
+      "columns": {
+        "data": "1. Record poses",
+        "train": "2. Train",
+        "preview": "3. Try it"
+      },
+      "recordOne": "Record 1 sample for group {{name}}",
+      "recordOneShort": "Record 1",
+      "recordBurst": "Record {{n}} samples in a row for group {{name}}",
+      "recordBurstShort": "Record {{n}}",
+      "upload": "Upload images for group {{name}}",
+      "uploadShort": "Upload",
+      "needCamera": "Turn on the camera to record samples.",
+      "cameraElsewhere": "The camera is open in step 1.",
+      "features": "Turn the skeleton into {{count}} numbers",
+      "featuresDetail": "Samples: {{count}}",
+      "tryLive": "Try with the camera",
+      "tryLiveStop": "Stop trying",
+      "tryFile": "Try with an image",
+      "tryFileShort": "Try an image",
+      "noPose": "No clear pose in the frame yet."
     }
   },
   "theme": {

@@ -1797,6 +1797,29 @@
       "whyHint": "Đóng góp = (giá trị chuẩn hóa × trọng số) của x và y; cộng với phần cố định ra đúng điểm của nhóm.",
       "contributionHint": "Cam: khớp đẩy về \"{{cls}}\", xanh: kéo ra; chấm càng to ảnh hưởng càng lớn. Điểm = {{base}} + tổng các khớp = {{total}}.",
       "neighbors": "{{k}} mẫu Huấn luyện gần nhất thuộc các nhóm: {{labels}}."
+    },
+    "quick": {
+      "lead": "Ghi tư thế, bấm nút để máy học, rồi thử ngay. Các bước bên dưới cho thấy máy làm gì.",
+      "columns": {
+        "data": "1. Ghi tư thế",
+        "train": "2. Cho máy học",
+        "preview": "3. Thử ngay"
+      },
+      "recordOne": "Ghi 1 mẫu cho nhóm {{name}}",
+      "recordOneShort": "Ghi 1",
+      "recordBurst": "Ghi {{n}} mẫu liên tiếp cho nhóm {{name}}",
+      "recordBurstShort": "Ghi {{n}}",
+      "upload": "Tải ảnh cho nhóm {{name}}",
+      "uploadShort": "Tải ảnh",
+      "needCamera": "Bật camera để ghi mẫu.",
+      "cameraElsewhere": "Camera đang mở ở bước 1.",
+      "features": "Biến khung xương thành {{count}} số",
+      "featuresDetail": "{{count}} mẫu",
+      "tryLive": "Thử bằng camera",
+      "tryLiveStop": "Dừng thử",
+      "tryFile": "Thử với một ảnh",
+      "tryFileShort": "Thử ảnh",
+      "noPose": "Chưa thấy rõ tư thế trong khung hình."
     }
   },
   "theme": {

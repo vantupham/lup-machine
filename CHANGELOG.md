@@ -4,6 +4,15 @@
 
 ## [Chưa phát hành]
 
+### Thêm (khối "Dạy máy trong 3 bước" cho Studio tư thế)
+
+- **Studio tư thế có chế độ Khám phá / Chuyên sâu** như Studio ảnh và âm thanh.
+- **Cột "1. Ghi tư thế"**: chọn cơ thể / bàn tay (khi chưa có mẫu), một nút bật camera, mỗi nhóm một dòng có bút chì đổi tên, "Ghi 1", "Ghi 10" (đếm ngược 3 giây) và tải ảnh; chưa có nhóm thì dùng tư thế mẫu.
+- **Một camera dùng chung**: cột 1 ghi mẫu, cột 3 đoán trực tiếp từ chính khung hình đó; bước 1 cũng dùng camera này, bật ở đâu thì camera chuyển sang đó (không mở webcam hai lần).
+- **Cột "2. Cho máy học"**: 4 chặng như Studio âm thanh, chặng đầu là "Biến khung xương thành 34 số" (bàn tay: 42 số).
+- **Cột "3. Thử ngay"**: thử bằng camera hoặc một ảnh, thấy % cho từng nhóm. Ảnh và khung hình thử không được lưu.
+- `usePoseData` tách thao tác dữ liệu và camera khỏi `PoseDataSection`; bước 4–6 dùng `useVectorModel` chung.
+
 ### Thêm (khối "Dạy máy trong 3 bước" cho Studio âm thanh)
 
 - **Studio âm thanh có chế độ Khám phá / Chuyên sâu** như Studio ảnh. Khám phá: khối 3 cột ở đầu trang (thu âm thanh, cho máy học, nghe thử), 6 bước thu gọn sau nút "Xem từng bước bên trong". Chuyên sâu: chỉ 6 bước, luôn mở.

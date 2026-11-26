@@ -1,6 +1,6 @@
 /** Bước 4 Huấn luyện, 5 Đánh giá, 6 Sử dụng của Studio tư thế. */
-import { useCallback, useMemo, useState } from 'react';
-import { useVectorTrial, type TrialBase } from '@/features/trials/useVectorTrial';
+import { useCallback, useState } from 'react';
+import type { VectorModel } from '@/features/studio/quick/useVectorModel';
 import { TrialBefore } from '@/features/trials/TrialBefore';
 import { TrialAfter } from '@/features/trials/TrialAfter';
 import { StudioFindings } from '@/features/trials/StudioFindings';
@@ -8,7 +8,7 @@ import { vectorFindingSamples } from '@/features/trials/finding-samples';
 import type { Keypoint } from '@/core/pose/detectors';
 import { useTranslation } from 'react-i18next';
 import { poseNotebook } from '@/core/export/pose-notebook';
-import { contributionMap, encodeVector, evaluateVectors, importanceMap, predictVector, trainVectorModel, type TrainedVectorModel, type VectorData, type VectorModelSettings, type VectorPrediction } from '@/core/ml/vector-classifier';
+import { contributionMap, encodeVector, importanceMap, predictVector, type TrainedVectorModel, type VectorData, type VectorPrediction } from '@/core/ml/vector-classifier';
 import { keypointCount, perJoint, poseFeatures, type PoseKind } from '@/core/pose/features';
 import { ColabExportPanel } from '@/features/export/ColabExportPanel';
 import { formatPercent, RangeField, Stat } from '@/features/playground/controls';
@@ -23,8 +23,6 @@ import { PoseCamera } from './PoseCamera';
 import { grabFrame, imageFromFile, loadDetector, type PoseDetection } from './pose-io.browser';
 import { Skeleton } from './Skeleton';
 import { ClassMarker } from '@/ui/ClassMarker';
-
-const DEFAULT_SETTINGS: VectorModelSettings = { kind: 'logistic', c: 1, k: 3 };
 
 /** Tư thế trung bình của mỗi lớp (tọa độ đã chuẩn hóa, gốc tọa độ tại giữa khung vẽ) để vẽ độ quan trọng của khớp. */
 function meanPose(data: VectorData, c: number, size: number, span: number) {
@@ -121,32 +119,25 @@ function TryPose({ kind, trained, data }: { readonly kind: PoseKind; readonly tr
 
 interface PoseModelLabProps {
   readonly kind: PoseKind;
-  readonly projectId: string;
   readonly projectName: string;
-  /** Dữ liệu và cách chia của lần huấn luyện kế tiếp, cho nhật ký thí nghiệm. */
-  readonly trialBase: TrialBase;
+  /** Mô hình dùng chung với khối "Dạy máy trong 3 bước". */
+  readonly lab: VectorModel;
   readonly data: VectorData;
-  readonly dataKey: string;
   /** Khung xương gốc của một mẫu (để xem lại mẫu bị đoán sai). */
   readonly sampleOf: (id: string) => { readonly keypoints: readonly Keypoint[]; readonly width: number; readonly height: number } | null;
 }
 
-export function PoseModelLab({ kind, projectId, projectName, trialBase, data, dataKey, sampleOf }: PoseModelLabProps) {
+export function PoseModelLab({ kind, projectName, lab, data, sampleOf }: PoseModelLabProps) {
   const { t } = useTranslation();
-  const [settings, setSettings] = useState<VectorModelSettings>(DEFAULT_SETTINGS);
-  const [trained, setTrained] = useState<{ key: string; model: TrainedVectorModel; count: number } | null>(null);
-  const key = JSON.stringify([dataKey, settings]);
-  const current = trained?.key === key ? trained.model : null;
-  const evaluation = useMemo(() => (current ? evaluateVectors(current, data) : null), [current, data]);
+  const { settings, setSettings, trained, current, evaluation, key, trial } = lab;
   const cIndex = Math.max(0, C_LEVELS.findIndex((c) => c >= settings.c));
-  const trial = useVectorTrial(projectId, trialBase, settings, data);
   const VIEW = 220;
   const span = kind === 'body' ? 5 : 4;
 
   return (
     <>
       <Step n={4} id="pose-step-train" notebook="train" title={t('pose.steps.train')} done={current !== null}>
-        {current === null && <TrialBefore log={trial.log} current={trial.setup} canGuess={trial.canGuess} />}
+        {current === null && trial.setup && <TrialBefore log={trial.log} current={trial.setup} canGuess={trial.canGuess} />}
         <div className="grid gap-6 lg:grid-cols-2">
           <fieldset className="space-y-2">
             <legend className="text-sm font-medium">{t('tabular.model.choose')}</legend>
@@ -166,11 +157,7 @@ export function PoseModelLab({ kind, projectId, projectName, trialBase, data, da
             ) : (
               <RangeField label={t('playground.knn.k')} value={settings.k} min={1} max={15} onChange={(k) => setSettings({ ...settings, k })} hint={t('pose.model.kHint')} />
             )}
-            <button type="button" className="btn btn-primary" onClick={() => {
-              const model = trainVectorModel(data, settings);
-              setTrained({ key, model, count: (trained?.count ?? 0) + 1 });
-              trial.recordTrained(model);
-            }}>{t('tabular.model.train')}</button>
+            <button type="button" className="btn btn-primary" onClick={() => void lab.train()}>{t('tabular.model.train')}</button>
             <p className="text-xs text-muted" role="status">{!trained ? t('tabular.model.notTrained') : !current ? t('tabular.model.stale') : t('tabular.model.trained', { n: trained.count })}</p>
           </div>
         </div>

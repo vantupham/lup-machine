@@ -17,9 +17,17 @@ import { PoseModelLab } from './PoseModelLab';
 import { usePoseProject } from './usePoseProject';
 import { BackLink } from '@/ui/BackLink';
 import { datasetFingerprint } from '@/core/data/fingerprint';
+import type { ClassRecord } from '@/storage/db';
+import { useModeSwitch } from '@/ui/mode-store';
+import type { TrialBase } from '@/features/trials/useVectorTrial';
+import { StepDetails } from '../StepDetails';
+import { useVectorModel } from '../quick/useVectorModel';
+import { usePoseData } from './usePoseData';
+import { PoseQuickWorkspace } from './quick/PoseQuickWorkspace';
 
 /** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
 const STEP_TARGETS = studioStepTargets('pose');
+const NO_CLASSES: readonly ClassRecord[] = [];
 
 export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
   const { t } = useTranslation();
@@ -36,6 +44,7 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
     () => (classes ? checkPoseQuality(kind, samples.map((p) => ({ label: classes.find((c) => c.id === p.classId)?.name ?? '', keypoints: unpackKeypoints(p.keypoints) })), classes.map((c) => c.name)) : []),
     [classes, samples, kind],
   );
+  const actions = usePoseData({ projectId, kind, classes: classes ?? NO_CLASSES, dataset, repo: poses, onChanged: reload });
   const prepared = useMemo(() => {
     if (!classes) return null;
     const withFeatures = samples.flatMap((p) => {
@@ -47,12 +56,31 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
     return prepareVectors(examples, used.map((c) => c.name), { testRatio, seed });
   }, [classes, samples, kind, testRatio, seed]);
 
+  const data = prepared?.ok ? prepared.data : null;
+  const dataKey = JSON.stringify([kind, samples.map((p) => `${p.id}:${p.classId}`), (classes ?? NO_CLASSES).map((c) => c.name), testRatio, seed]);
+  const trialBase: TrialBase | null =
+    data && classes
+      ? {
+          split: { testRatio, seed },
+          data: {
+            fingerprint: datasetFingerprint(classes.map((c) => c.id), samples.map((p) => ({ id: p.id, classId: p.classId, split: '' }))),
+            train: data.train.ys.length,
+            test: data.test.ys.length,
+            classNames: data.classNames,
+          },
+        }
+      : null;
+  const lab = useVectorModel(projectId, trialBase, data, dataKey);
+  useModeSwitch();
+
   if (state.status === 'loading') return <p className="text-muted">{t('tabular.loading')}</p>;
   if (state.status === 'not-found') return <p role="alert">{t('project.notFound')}</p>;
   if (state.status === 'error') return <p role="alert" className="text-danger">{t('project.loadError')}</p>;
 
-  const data = prepared?.ok ? prepared.data : null;
-  const dataKey = JSON.stringify([kind, samples.map((p) => `${p.id}:${p.classId}`), state.classes.map((c) => c.name), testRatio, seed]);
+  const sampleOf = (id: string) => {
+    const sample = samples.find((p) => p.id === id);
+    return sample ? { keypoints: unpackKeypoints(sample.keypoints), width: sample.width, height: sample.height } : null;
+  };
 
   return (
     <NotebookProvider projectId={projectId} projectType="pose">
@@ -71,8 +99,23 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
 
       <StepBar targets={STEP_TARGETS} />
 
+      <StepDetails
+        quick={
+          <PoseQuickWorkspace
+            kind={kind}
+            kindLocked={kindLocked}
+            onKindChange={setKind}
+            classes={state.classes}
+            poses={samples}
+            actions={actions}
+            lab={lab}
+            prepareError={prepared && !prepared.ok ? prepared.error : null}
+          />
+        }
+      >
+
       <Step n={1} id="pose-step-data" notebook="data" title={t('pose.steps.data')} done={new Set(samples.map((p) => p.classId)).size >= 2}>
-        <PoseDataSection projectId={projectId} kind={kind} kindLocked={kindLocked} onKindChange={setKind} classes={state.classes} poses={samples} dataset={dataset} repo={poses} onChanged={reload} />
+        <PoseDataSection kind={kind} kindLocked={kindLocked} onKindChange={setKind} classes={state.classes} poses={samples} actions={actions} />
       </Step>
 
       {samples.length > 0 && (
@@ -105,28 +148,8 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
         </Step>
       )}
 
-      {data && (
-        <PoseModelLab
-          kind={kind}
-          projectId={projectId}
-          projectName={state.project.name}
-          trialBase={{
-            split: { testRatio, seed },
-            data: {
-              fingerprint: datasetFingerprint(state.classes.map((c) => c.id), samples.map((p) => ({ id: p.id, classId: p.classId, split: '' }))),
-              train: data.train.ys.length,
-              test: data.test.ys.length,
-              classNames: data.classNames,
-            },
-          }}
-          data={data}
-          dataKey={dataKey}
-          sampleOf={(id) => {
-            const sample = samples.find((p) => p.id === id);
-            return sample ? { keypoints: unpackKeypoints(sample.keypoints), width: sample.width, height: sample.height } : null;
-          }}
-        />
-      )}
+      {data && <PoseModelLab kind={kind} projectName={state.project.name} lab={lab} data={data} sampleOf={sampleOf} />}
+      </StepDetails>
     </div>
     </NotebookProvider>
   );
