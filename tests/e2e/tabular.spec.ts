@@ -3,8 +3,8 @@ import { expect, test } from '@playwright/test';
 test('Studio dữ liệu bảng: tạo dự án, nạp chim cánh cụt, huấn luyện hồi quy logistic, dự đoán', async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem('lup.language', 'vi');
-    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
-    window.localStorage.setItem('lup.stepDetails', 'open');
+    // Các spec này thao tác trong 6 bước chi tiết: dùng Chuyên sâu (không có khối làm nhanh, các bước luôn mở).
+    window.localStorage.setItem('lup.mode', 'expert');
   });
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Chim cánh cụt E2E');
@@ -45,3 +45,24 @@ test('Studio dữ liệu bảng: tạo dự án, nạp chim cánh cụt, huấn 
     await page.screenshot({ path: `${dir}/tabular-penguins.png`, fullPage: true });
   }
 });
+
+test('Studio bảng số, Khám phá: bảng Iris ở cột 1, huấn luyện nhanh, thử từng dòng Kiểm tra', async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.goto('./#/studio');
+  await page.getByLabel('Tên dự án').fill('Iris nhanh');
+  await page.getByRole('button', { name: 'Tạo dự án Bảng số mới', exact: true }).click();
+
+  const quick = page.getByRole('region', { name: 'Dạy máy trong 3 bước' });
+  await quick.getByRole('button', { name: /Hoa diên vĩ/ }).click();
+  await expect(quick.getByText('150 dòng · 5 cột')).toBeVisible();
+  await expect(quick.getByLabel('Máy cần đoán cột')).toHaveValue('Loài');
+
+  await quick.getByRole('button', { name: 'Huấn luyện nhanh' }).click();
+  await expect(quick.getByRole('list', { name: 'Các chặng huấn luyện' }).getByText('Máy học: Cây quyết định')).toContainText('(đang làm)');
+  await expect(quick.getByText(/^Xong\. Máy đoán đúng \d+% mẫu Kiểm tra\.$/)).toBeVisible({ timeout: 10_000 });
+
+  await quick.getByRole('button', { name: 'Thử một dòng Kiểm tra' }).click();
+  await expect(quick.getByText(/^Dòng \d+: Loài thật là /)).toBeVisible();
+  await expect(quick.getByRole('list', { name: 'Máy đoán' })).toBeVisible();
+});
+

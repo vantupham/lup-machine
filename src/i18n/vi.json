@@ -880,7 +880,9 @@
         "scoreDetail": "đúng {{percent}}% mẫu {{split}}",
         "done": "Xong. Máy đoán đúng {{percent}}% mẫu {{split}}.",
         "splitTest": "Kiểm tra",
-        "splitTrain": "Huấn luyện"
+        "splitTrain": "Huấn luyện",
+        "r2Detail": "R² = {{r2}} trên mẫu {{split}}",
+        "r2Done": "Xong. R² trên mẫu {{split}} là {{r2}} (càng gần 1 càng đoán sát)."
       }
     },
     "details": {
@@ -1382,6 +1384,32 @@
       "neighborRow": "dòng {{row}} (khoảng cách {{distance}}):",
       "score": "Điểm lớp \"{{cls}}\" = {{b}} (độ lệch) + các đóng góp = {{score}}. Đóng góp lớn nhất:",
       "linearSum": "Dự đoán = {{b}} (độ lệch) + tổng các đóng góp (hệ số × giá trị). Đóng góp lớn nhất:"
+    },
+    "quick": {
+      "lead": "Chọn bảng, bấm một nút để máy học, rồi thử ngay. Các bước bên dưới cho thấy máy làm gì.",
+      "columns": {
+        "data": "1. Chọn bảng",
+        "train": "2. Cho máy học",
+        "preview": "3. Thử ngay"
+      },
+      "empty": "Dùng một bảng mẫu hoặc tải tệp CSV của em.",
+      "upload": "Tải tệp CSV",
+      "uploadAria": "Tải tệp CSV cho dự án",
+      "chooseOther": "Chọn bảng khác",
+      "size": "{{rows}} dòng · {{columns}} cột",
+      "target": "Máy cần đoán cột",
+      "task": {
+        "classification": "Phân loại: đoán mỗi dòng thuộc lớp nào.",
+        "regression": "Hồi quy: đoán một con số."
+      },
+      "classes": "Các lớp của cột cần đoán",
+      "needTable": "Chọn một bảng trước.",
+      "encode": "Biến mỗi dòng thành {{count}} số",
+      "noTestRows": "Chưa có dòng Kiểm tra nào để thử.",
+      "tryFirst": "Thử một dòng Kiểm tra",
+      "tryNext": "Dòng Kiểm tra tiếp theo",
+      "rowActual": "Dòng {{row}}: {{target}} thật là {{actual}}.",
+      "predictedValue": "Máy đoán {{value}}"
     }
   },
   "export": {
@@ -1510,6 +1538,24 @@
       "total": "Tổng điểm",
       "totalHint": "Nhóm có tổng điểm lớn nhất là nhóm được chọn.",
       "totalHintBinary": "Với 2 nhóm: điểm dương thì nghiêng về nhóm này, âm thì nghiêng về nhóm kia."
+    },
+    "quick": {
+      "lead": "Gõ câu, bấm một nút để máy học, rồi thử ngay. Các bước bên dưới cho thấy máy làm gì.",
+      "columns": {
+        "data": "1. Gõ câu",
+        "train": "2. Cho máy học",
+        "preview": "3. Thử ngay"
+      },
+      "empty": "Dùng một bộ câu mẫu, hoặc gõ câu cho từng nhóm bên dưới.",
+      "sentenceInput": "Câu mới cho nhóm {{name}}",
+      "placeholder": "Gõ một câu rồi nhấn Enter",
+      "add": "Thêm",
+      "addAria": "Thêm câu vào nhóm {{name}}",
+      "duplicateName": "Đã có nhóm tên này.",
+      "needSentences": "Gõ câu cho ít nhất hai nhóm.",
+      "tokenize": "Tách {{count}} câu thành từ",
+      "tokenizeDetail": "{{words}} từ khác nhau",
+      "tryInput": "Gõ một câu để thử"
     }
   },
   "audio": {

@@ -26,8 +26,8 @@ async function importProject(page: Page, file: string, name: string): Promise<vo
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem('lup.language', 'vi');
-    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
-    window.localStorage.setItem('lup.stepDetails', 'open');
+    // Các spec này thao tác trong 6 bước chi tiết: dùng Chuyên sâu (không có khối làm nhanh, các bước luôn mở).
+    window.localStorage.setItem('lup.mode', 'expert');
   });
 });
 

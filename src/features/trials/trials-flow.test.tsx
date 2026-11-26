@@ -1,10 +1,13 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import i18n from '@/i18n';
+import { useModeStore } from '@/ui/mode-store';
 import { createTestRepository, renderWithRepositories } from '../../../tests/setup/render';
 
 beforeEach(async () => {
   await i18n.changeLanguage('vi');
+  // Nhật ký thí nghiệm nằm ở 6 bước chi tiết: dùng Chuyên sâu (không có khối làm nhanh, các bước luôn mở).
+  useModeStore.setState({ mode: 'expert' });
 });
 
 describe('Nhật ký thí nghiệm ở Studio văn bản', () => {
