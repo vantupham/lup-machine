@@ -10,7 +10,7 @@ import { LiveCamera } from '../lab/LiveCamera';
 import { predictProbe } from '../lab/probe';
 import type { ImageLab } from '../lab/useImageLab';
 import { Camera, ImageUp, Pause } from '@/ui/icons';
-import { ClassMarker } from '@/ui/ClassMarker';
+import { ProbaBars } from '@/features/studio/quick/ProbaBars';
 
 interface QuickPreviewProps {
   readonly classes: readonly ClassRecord[];
@@ -99,28 +99,6 @@ function PreviewLab({ classes, params, isCameraBusy }: PredictionProps & { reado
 }
 
 function Prediction({ classes, params, vector }: PredictionProps & { readonly vector: Float32Array }) {
-  const { t } = useTranslation();
   const { probabilities } = predictProbe(params, vector);
-  const rows = classes
-    .map((cls, i) => ({ cls, index: i, percent: Math.round((probabilities[i] ?? 0) * 100) }))
-    .sort((a, b) => b.percent - a.percent);
-
-  return (
-    <ul aria-label={t('project.quick.resultLabel')} className="space-y-2">
-      {rows.map(({ cls, index, percent }, rank) => (
-        <li key={cls.id} className="text-sm">
-          <div className="flex justify-between gap-2">
-            <span className={rank === 0 ? 'font-semibold' : ''}>
-              <ClassMarker index={index} className="mr-1.5" />
-              {cls.name}
-            </span>
-            <span className="font-mono">{percent}%</span>
-          </div>
-          <div aria-hidden="true" className="mt-1 h-2.5 overflow-hidden rounded-full bg-rule/70">
-            <div className={`h-full rounded-full ${rank === 0 ? 'bg-primary' : 'bg-muted/60'}`} style={{ width: `${percent}%` }} />
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
+  return <ProbaBars classNames={classes.map((c) => c.name)} probabilities={probabilities} />;
 }

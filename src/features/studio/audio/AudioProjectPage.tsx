@@ -17,9 +17,17 @@ import { AudioModelLab } from './AudioModelLab';
 import { useAudioProject } from './useAudioProject';
 import { BackLink } from '@/ui/BackLink';
 import { datasetFingerprint } from '@/core/data/fingerprint';
+import type { ClassRecord } from '@/storage/db';
+import { useModeSwitch } from '@/ui/mode-store';
+import { StepDetails } from '../StepDetails';
+import { useVectorModel } from '../quick/useVectorModel';
+import type { TrialBase } from '@/features/trials/useVectorTrial';
+import { useAudioData } from './useAudioData';
+import { AudioQuickWorkspace } from './quick/AudioQuickWorkspace';
 
 /** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
 const STEP_TARGETS = studioStepTargets('audio');
+const NO_CLASSES: readonly ClassRecord[] = [];
 
 export function AudioProjectPage({ projectId }: { readonly projectId: string }) {
   const { t } = useTranslation();
@@ -34,6 +42,7 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
     () => (classes ? checkAudioQuality(usable.map((c) => ({ label: classes.find((k) => k.id === c.classId)?.name ?? '', peak: peakAmplitude(clipSamples(c)) })), classes.map((c) => c.name)) : []),
     [usable, classes],
   );
+  const actions = useAudioData({ projectId, classes: classes ?? NO_CLASSES, dataset, audio, onChanged: reload });
   const prepared = useMemo(() => {
     if (!classes) return null;
     const used = classes.filter((c) => usable.some((clip) => clip.classId === c.id));
@@ -41,12 +50,30 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
     return prepareVectors(examples, used.map((c) => c.name), { testRatio, seed });
   }, [classes, usable, features, testRatio, seed]);
 
+  const data = prepared?.ok ? prepared.data : null;
+  const dataKey = JSON.stringify([usable.map((c) => `${c.id}:${c.classId}`), (classes ?? NO_CLASSES).map((c) => c.name), testRatio, seed]);
+  const trialBase: TrialBase | null = data && classes
+    ? {
+        split: { testRatio, seed },
+        data: {
+          fingerprint: datasetFingerprint(classes.map((c) => c.id), usable.map((c) => ({ id: c.id, classId: c.classId, split: '' }))),
+          train: data.train.ys.length,
+          test: data.test.ys.length,
+          classNames: data.classNames,
+        },
+      }
+    : null;
+  const lab = useVectorModel(projectId, trialBase, data, dataKey);
+  useModeSwitch();
+
   if (state.status === 'loading') return <p className="text-muted">{t('tabular.loading')}</p>;
   if (state.status === 'not-found') return <p role="alert">{t('project.notFound')}</p>;
   if (state.status === 'error') return <p role="alert" className="text-danger">{t('project.loadError')}</p>;
 
-  const data = prepared?.ok ? prepared.data : null;
-  const dataKey = JSON.stringify([usable.map((c) => `${c.id}:${c.classId}`), state.classes.map((c) => c.name), testRatio, seed]);
+  const trainSamples = (id: string) => {
+    const clip = state.clips.find((c) => c.id === id);
+    return clip ? clipSamples(clip) : null;
+  };
 
   return (
     <NotebookProvider projectId={projectId} projectType="audio">
@@ -65,8 +92,14 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
 
       <StepBar targets={STEP_TARGETS} />
 
+      <StepDetails
+        quick={
+          <AudioQuickWorkspace classes={state.classes} clips={usable} actions={actions} lab={lab} prepareError={prepared && !prepared.ok ? prepared.error : null} />
+        }
+      >
+
       <Step n={1} id="audio-step-data" notebook="data" title={t('audio.steps.data')} done={new Set(state.clips.map((c) => c.classId)).size >= 2}>
-        <AudioDataSection projectId={projectId} classes={state.classes} clips={state.clips} dataset={dataset} audio={audio} onChanged={reload} />
+        <AudioDataSection classes={state.classes} clips={state.clips} actions={actions} />
       </Step>
 
       {state.clips.length > 0 && (
@@ -99,27 +132,8 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
         </Step>
       )}
 
-      {data && (
-        <AudioModelLab
-          projectId={projectId}
-          projectName={state.project.name}
-          trialBase={{
-            split: { testRatio, seed },
-            data: {
-              fingerprint: datasetFingerprint(state.classes.map((c) => c.id), usable.map((c) => ({ id: c.id, classId: c.classId, split: '' }))),
-              train: data.train.ys.length,
-              test: data.test.ys.length,
-              classNames: data.classNames,
-            },
-          }}
-          data={data}
-          dataKey={dataKey}
-          trainSamples={(id) => {
-            const clip = state.clips.find((c) => c.id === id);
-            return clip ? clipSamples(clip) : null;
-          }}
-        />
-      )}
+      {data && <AudioModelLab projectName={state.project.name} lab={lab} data={data} trainSamples={trainSamples} />}
+      </StepDetails>
     </div>
     </NotebookProvider>
   );

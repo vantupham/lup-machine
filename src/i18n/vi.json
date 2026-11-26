@@ -871,6 +871,16 @@
           "done": "xong",
           "error": "lỗi"
         }
+      },
+      "vector": {
+        "split": "Chia Huấn luyện / Kiểm tra",
+        "splitDetail": "{{train}} Huấn luyện · {{test}} Kiểm tra",
+        "learn": "Máy học: {{model}}",
+        "score": "Chấm điểm",
+        "scoreDetail": "đúng {{percent}}% mẫu {{split}}",
+        "done": "Xong. Máy đoán đúng {{percent}}% mẫu {{split}}.",
+        "splitTest": "Kiểm tra",
+        "splitTrain": "Huấn luyện"
       }
     },
     "details": {
@@ -1599,6 +1609,24 @@
       "distance": "cách {{d}} dB",
       "playNeighbour": "Nghe đoạn này",
       "knnHint": "Bấm nút phát để nghe các đoạn Huấn luyện giống nhất mà máy dựa vào."
+    },
+    "quick": {
+      "lead": "Thu tiếng, bấm một nút để máy học, rồi thử ngay. Các bước bên dưới cho thấy máy làm gì.",
+      "columns": {
+        "data": "1. Thu âm thanh",
+        "train": "2. Cho máy học",
+        "preview": "3. Nghe thử"
+      },
+      "record": "Thu 1 giây cho nhóm {{name}}",
+      "recordShort": "Thu",
+      "upload": "Tải tệp âm thanh cho nhóm {{name}}",
+      "uploadShort": "Tải tệp",
+      "features": "Biến âm thanh thành 160 số",
+      "featuresDetail": "{{count}} đoạn",
+      "tryRecord": "Thu 1 giây để thử",
+      "tryFile": "Thử với một tệp âm thanh",
+      "tryFileShort": "Thử tệp",
+      "play": "Nghe lại"
     }
   },
   "pose": {

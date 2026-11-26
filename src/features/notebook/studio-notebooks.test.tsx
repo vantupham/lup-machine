@@ -2,10 +2,13 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import i18n from '@/i18n';
 import type { ProjectType } from '@/storage/schemas/project';
+import { useStepDetailsStore } from '@/features/studio/step-details';
 import { createTestRepository, renderWithRepositories } from '../../../tests/setup/render';
 
 beforeEach(async () => {
   await i18n.changeLanguage('vi');
+  // Studio âm thanh thu gọn 6 bước ở chế độ Khám phá: mở sẵn để thấy ô Sổ tay.
+  useStepDetailsStore.setState({ isOpen: true });
 });
 
 const FIRST_QUESTION: Record<Exclude<ProjectType, 'image'>, string> = {

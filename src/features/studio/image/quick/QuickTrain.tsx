@@ -4,7 +4,7 @@ import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { DEFAULT_TRAIN_OPTIONS } from '../lab/TrainSection';
 import type { ImageLab } from '../lab/useImageLab';
 import { ArrowDown } from '@/ui/icons';
-import { ensureStepVisible } from '@/features/studio/step-details';
+import { revealHeading } from '@/features/studio/quick/reveal-heading';
 import { TrainStages } from './TrainStages';
 
 /** Cần ít nhất chừng này lớp có ảnh Huấn luyện mới huấn luyện được (khớp với lab-data). */
@@ -72,17 +72,4 @@ function TrainProgress({ lab }: { readonly lab: ImageLab }) {
   if (isTraining) return <>{t('project.quick.training')}</>;
   if (snapshot) return <span className="font-medium text-accent">{t('project.quick.done', { percent: Math.round(snapshot.train.accuracy * 100) })}</span>;
   return null;
-}
-
-/** Cuộn tới tiêu đề một phần bên dưới (chừa chỗ cho thanh các bước) và đưa con trỏ vào đó. */
-export function revealHeading(id: string): void {
-  const heading = document.getElementById(id);
-  if (!heading) return;
-  ensureStepVisible(heading);
-  const section = heading.closest('section') ?? heading;
-  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-  const stickyBar = document.querySelector<HTMLElement>('nav[data-step-bar]')?.offsetHeight ?? 0;
-  window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY - stickyBar - 12, behavior: reduceMotion ? 'auto' : 'smooth' });
-  heading.setAttribute('tabindex', '-1');
-  heading.focus({ preventScroll: true });
 }

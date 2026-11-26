@@ -20,9 +20,9 @@ import { decodeStoredImage, videoFrameToStoredImage } from './image-codec.browse
 import { ModelLab } from './lab/ModelLab';
 import { ImageLabProvider } from './lab/ImageLabContext';
 import { QuickWorkspace } from './quick/QuickWorkspace';
-import { useModeStore, useModeSwitch } from '@/ui/mode-store';
-import { useStepDetailsStore } from '@/features/studio/step-details';
-import { ChevronDown, ChevronUp, Plus } from '@/ui/icons';
+import { useModeSwitch } from '@/ui/mode-store';
+import { StepDetails } from '@/features/studio/StepDetails';
+import { Plus } from '@/ui/icons';
 import { NotebookPrintLink } from '@/features/notebook/NotebookPrintLink';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
@@ -93,12 +93,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
     }
   };
 
-  const mode = useModeStore((s) => s.mode);
   useModeSwitch();
-  const isDetailsOpen = useStepDetailsStore((s) => s.isOpen);
-  const setDetailsOpen = useStepDetailsStore((s) => s.setOpen);
-  /** Khám phá: các bước chi tiết thu gọn tới khi người xem mở (hoặc bấm một bước). Chuyên sâu: luôn mở. */
-  const showDetails = mode === 'expert' || isDetailsOpen;
   const [blurFaces, setBlurFaces] = useFaceBlurSetting(projectId);
   const { upload, progress } = useImageUpload(projectId, (text, kind) => setMessage({ kind, text }), reload, blurFaces);
 
@@ -241,36 +236,23 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         </p>
       )}
 
-      {mode === 'explore' && (
-        <QuickWorkspace
-          classes={classes}
-          samples={samples}
-          samplesByClass={byClass}
-          onWebcam={(c) => {
-            webcamFaces.current = 0;
-            setWebcam({ cls: c, split: 'train' });
-          }}
-          onUpload={(c, files) => upload(c, [...files], 'train', byClass.get(c.id)?.length ?? 0).catch(logActionError)}
-          onAddClass={() => addNextClass().catch(logActionError)}
-          onRename={renameClass}
-          isCapturing={webcam !== null}
-        />
-      )}
-
-      {mode === 'explore' && (
-        <button
-          type="button"
-          aria-expanded={showDetails}
-          aria-controls="step-details"
-          onClick={() => setDetailsOpen(!showDetails)}
-          className="btn btn-ghost"
-        >
-          {showDetails ? <ChevronUp /> : <ChevronDown />}
-          {t(showDetails ? 'project.details.hide' : 'project.details.show')}
-        </button>
-      )}
-
-      <div id="step-details" data-step-details hidden={!showDetails} className="space-y-8">
+      <StepDetails
+        quick={
+          <QuickWorkspace
+            classes={classes}
+            samples={samples}
+            samplesByClass={byClass}
+            onWebcam={(c) => {
+              webcamFaces.current = 0;
+              setWebcam({ cls: c, split: 'train' });
+            }}
+            onUpload={(c, files) => upload(c, [...files], 'train', byClass.get(c.id)?.length ?? 0).catch(logActionError)}
+            onAddClass={() => addNextClass().catch(logActionError)}
+            onRename={renameClass}
+            isCapturing={webcam !== null}
+          />
+        }
+      >
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <section aria-labelledby="data-title" data-step-done={dataReady ? 'true' : undefined} className="space-y-4">
           <div>
@@ -320,7 +302,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
       </div>
 
       <ModelLab projectName={projectName} classes={classes} samples={samples} improve={improve} />
-      </div>
+      </StepDetails>
 
       {inspecting && (
         <PixelInspector
