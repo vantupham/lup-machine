@@ -37,6 +37,7 @@ describe('Studio âm thanh', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
     expect(await screen.findByTestId('tabular-confusion')).toBeInTheDocument();
+    expect(screen.getByTestId('studio-findings')).toHaveTextContent('Điểm đáng chú ý');
     for (const c of [0, 1, 2]) expect(screen.getByTestId(`importance-${c}`).querySelectorAll('rect')).toHaveLength(160);
     expect(screen.getByText('Thu 1 giây hoặc tải một tệp âm thanh để thử.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeInTheDocument();

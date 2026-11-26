@@ -20,6 +20,8 @@ import { ClassMarker } from '@/ui/ClassMarker';
 import { useVectorTrial, type TrialBase } from '@/features/trials/useVectorTrial';
 import { TrialBefore } from '@/features/trials/TrialBefore';
 import { TrialAfter } from '@/features/trials/TrialAfter';
+import { StudioFindings } from '@/features/trials/StudioFindings';
+import { vectorFindingSamples } from '@/features/trials/finding-samples';
 
 const DEFAULT_SETTINGS: VectorModelSettings = { kind: 'logistic', c: 1, k: 3 };
 
@@ -195,6 +197,19 @@ export function AudioModelLab({ projectId, projectName, trialBase, data, dataKey
                   <Stat label={t('playground.common.testAccuracy')} value={evaluation.testAccuracy === null ? '—' : formatPercent(evaluation.testAccuracy)} />
                 </dl>
                 <ConfusionTable matrix={evaluation.confusion} classNames={data.classNames} />
+                <StudioFindings
+                  classNames={data.classNames}
+                  dataStepId="audio-step-data"
+                  samples={vectorFindingSamples(current, data, (id, i) => {
+                    const samples = trainSamples(id);
+                    return (
+                      <span className="inline-flex items-center gap-1">
+                        <button type="button" className="btn btn-ghost px-2 py-0.5 text-xs" aria-label={t('sampleFindings.playClip')} disabled={!samples} onClick={() => samples && playClip(samples)}><Play /></button>
+                        {t('sampleFindings.clip', { n: i + 1 })}
+                      </span>
+                    );
+                  })}
+                />
               </div>
               <section aria-labelledby="audio-importance-title" className="lab-card space-y-3 p-4">
                 <div className="flex flex-wrap items-center gap-2">

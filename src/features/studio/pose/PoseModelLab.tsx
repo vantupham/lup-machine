@@ -3,6 +3,9 @@ import { useCallback, useMemo, useState } from 'react';
 import { useVectorTrial, type TrialBase } from '@/features/trials/useVectorTrial';
 import { TrialBefore } from '@/features/trials/TrialBefore';
 import { TrialAfter } from '@/features/trials/TrialAfter';
+import { StudioFindings } from '@/features/trials/StudioFindings';
+import { vectorFindingSamples } from '@/features/trials/finding-samples';
+import type { Keypoint } from '@/core/pose/detectors';
 import { useTranslation } from 'react-i18next';
 import { poseNotebook } from '@/core/export/pose-notebook';
 import { contributionMap, encodeVector, evaluateVectors, importanceMap, predictVector, trainVectorModel, type TrainedVectorModel, type VectorData, type VectorModelSettings, type VectorPrediction } from '@/core/ml/vector-classifier';
@@ -124,9 +127,11 @@ interface PoseModelLabProps {
   readonly trialBase: TrialBase;
   readonly data: VectorData;
   readonly dataKey: string;
+  /** Khung xương gốc của một mẫu (để xem lại mẫu bị đoán sai). */
+  readonly sampleOf: (id: string) => { readonly keypoints: readonly Keypoint[]; readonly width: number; readonly height: number } | null;
 }
 
-export function PoseModelLab({ kind, projectId, projectName, trialBase, data, dataKey }: PoseModelLabProps) {
+export function PoseModelLab({ kind, projectId, projectName, trialBase, data, dataKey, sampleOf }: PoseModelLabProps) {
   const { t } = useTranslation();
   const [settings, setSettings] = useState<VectorModelSettings>(DEFAULT_SETTINGS);
   const [trained, setTrained] = useState<{ key: string; model: TrainedVectorModel; count: number } | null>(null);
@@ -181,6 +186,19 @@ export function PoseModelLab({ kind, projectId, projectName, trialBase, data, da
                   <Stat label={t('playground.common.testAccuracy')} value={evaluation.testAccuracy === null ? '—' : formatPercent(evaluation.testAccuracy)} />
                 </dl>
                 <ConfusionTable matrix={evaluation.confusion} classNames={data.classNames} />
+                <StudioFindings
+                  classNames={data.classNames}
+                  dataStepId="pose-step-data"
+                  samples={vectorFindingSamples(current, data, (id, i) => {
+                    const sample = sampleOf(id);
+                    const label = t('sampleFindings.pose', { n: i + 1 });
+                    return sample ? (
+                      <Skeleton kind={kind} keypoints={sample.keypoints} width={sample.width} height={sample.height} label={label} className="h-16 w-16 rounded border border-rule bg-surface" />
+                    ) : (
+                      <span>{label}</span>
+                    );
+                  })}
+                />
               </div>
               <section aria-labelledby="pose-importance-title" className="lab-card space-y-3 p-4">
                 <div className="flex flex-wrap items-center gap-2">

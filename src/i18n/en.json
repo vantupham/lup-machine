@@ -1972,5 +1972,25 @@
     },
     "r2Test": "Test R²",
     "deltaR2": "{{label}}: {{from}} → {{to}} ({{change}})."
+  },
+  "sampleFindings": {
+    "allCorrect": "The model got all {{total}} samples right.",
+    "topConfusion": "Most common mix-up: {{count}}/{{support}} {{actual}} samples were predicted as {{predicted}}.",
+    "weakestClass": "Hardest group: the model recognised only {{percent}}% of {{name}} samples ({{support}} samples), often confusing them with {{other}}.",
+    "confidentMistakes": "{{count}} wrong samples the model was still at least {{percent}}% sure about.",
+    "smallSet": "Only {{total}} Test samples, so each one moves the score by {{step}} points.",
+    "whyAllCorrect": "Are the Test samples hard and varied enough?",
+    "whyTopConfusion": "How are {{actual}} and {{predicted}} samples alike?",
+    "whyWeakestClass": "What kind of samples does {{name}} need more of?",
+    "show": "See these {{count}} samples",
+    "label": "{{actual}} → {{predicted}} ({{percent}}%)",
+    "addData": "Add samples for {{name}} in the Data step",
+    "largestErrors": "The {{count}} rows with the largest errors in \"{{target}}\":",
+    "errorRow": "row {{row}}: actual {{actual}}, predicted {{predicted}} (off by {{diff}})",
+    "whyLargestErrors": "What makes these rows different from the others?",
+    "playClip": "Play this clip",
+    "clip": "Test clip {{n}}",
+    "pose": "Test sample {{n}}",
+    "row": "row {{row}}"
   }
 }

@@ -1972,5 +1972,25 @@
     },
     "r2Test": "R² trên tập Kiểm tra",
     "deltaR2": "{{label}}: {{from}} → {{to}} ({{change}})."
+  },
+  "sampleFindings": {
+    "allCorrect": "Máy đoán đúng hết {{total}} mẫu.",
+    "topConfusion": "Hay nhầm nhất: {{count}}/{{support}} mẫu {{actual}} bị đoán là {{predicted}}.",
+    "weakestClass": "Nhóm khó nhất: máy chỉ nhận ra {{percent}}% mẫu {{name}} ({{support}} mẫu), hay nhầm sang {{other}}.",
+    "confidentMistakes": "{{count}} mẫu sai mà máy vẫn tin từ {{percent}}% trở lên.",
+    "smallSet": "Chỉ có {{total}} mẫu Kiểm tra nên mỗi mẫu làm điểm đổi {{step}} điểm.",
+    "whyAllCorrect": "Các mẫu Kiểm tra đã đủ khó và đủ đa dạng chưa?",
+    "whyTopConfusion": "Mẫu {{actual}} và mẫu {{predicted}} giống nhau ở điểm nào?",
+    "whyWeakestClass": "Nhóm {{name}} cần thêm mẫu kiểu nào?",
+    "show": "Xem {{count}} mẫu này",
+    "label": "{{actual}} → {{predicted}} ({{percent}}%)",
+    "addData": "Thêm mẫu cho nhóm {{name}} ở bước Dữ liệu",
+    "largestErrors": "{{count}} dòng bị đoán lệch nhiều nhất về \"{{target}}\":",
+    "errorRow": "dòng {{row}}: thật {{actual}}, máy đoán {{predicted}} (lệch {{diff}})",
+    "whyLargestErrors": "Những dòng này có gì khác các dòng còn lại?",
+    "playClip": "Nghe đoạn này",
+    "clip": "đoạn Kiểm tra {{n}}",
+    "pose": "Mẫu Kiểm tra {{n}}",
+    "row": "dòng {{row}}"
   }
 }
