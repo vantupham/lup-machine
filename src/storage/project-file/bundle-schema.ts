@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { CLASS_NAME_MAX_LENGTH } from '../repositories/dataset-repository';
 import { newRunSchema } from '../repositories/experiment-repository';
+import { MAX_TRIALS_PER_PROJECT, newTrialSchema } from '../schemas/trial';
 import { TABLE_FILE_NAME_MAX_LENGTH } from '../repositories/table-repository';
 
 /** Tên các tệp JSON bên trong tệp dự án .lup (dữ liệu nhị phân nằm trong samples/ và audio/). */
@@ -15,6 +16,7 @@ export const BUNDLE_FILES = {
   runs: 'runs.json',
   modelCard: 'model-card.json',
   notebook: 'notebook.json',
+  trials: 'trials.json',
 } as const;
 
 export const MAX_BUNDLE_CLASSES = 50;
@@ -106,5 +108,15 @@ export const runsFileSchema = z
         })
         .strict(),
     ),
+  })
+  .strict();
+
+/** Nhật ký thí nghiệm của Studio âm thanh, tư thế, văn bản, bảng số (số thứ tự tăng dần, không trùng). */
+export const trialsFileSchema = z
+  .object({
+    trials: z
+      .array(newTrialSchema.extend({ number: z.number().int().min(1).max(1_000_000), createdAt: z.iso.datetime() }).strict())
+      .max(MAX_TRIALS_PER_PROJECT)
+      .refine((list) => list.every((t, i) => i === 0 || t.number > (list[i - 1]?.number ?? 0)), 'Số thứ tự lần chạy phải tăng dần'),
   })
   .strict();

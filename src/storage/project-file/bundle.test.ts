@@ -12,7 +12,7 @@ function manifest(projectType: ProjectBundle['manifest']['projectType']): Projec
 }
 
 function empty(projectType: ProjectBundle['manifest']['projectType']): ProjectBundle {
-  return { manifest: manifest(projectType), classes: [], images: [], clips: [], poses: [], table: null, runs: [], modelCard: null, notes: [] };
+  return { manifest: manifest(projectType), classes: [], images: [], clips: [], poses: [], table: null, runs: [], modelCard: null, notes: [], trials: [] };
 }
 
 const credit = { author: 'A. Tác giả', source: 'https://example.org/a', license: 'CC BY 2.0', licenseUrl: 'https://creativecommons.org/licenses/by/2.0/' };
@@ -100,6 +100,33 @@ describe('tệp dự án .lup', () => {
       files['notebook.json'] = strToU8(JSON.stringify({ notes: [{ step: 'data', text: 'x'.repeat(2001) }] }));
     });
     expect(() => decodeBundle(tooLong)).toThrow(/notebook\.json/);
+  });
+
+  test('nhật ký thí nghiệm của Studio âm thanh, tư thế, văn bản, bảng số đi theo tệp; Studio ảnh không có', () => {
+    const trials = [
+      {
+        number: 1,
+        createdAt: '2026-11-26T08:00:00.000Z',
+        settings: { kind: 'logistic', c: 1 },
+        split: { testRatio: 0.2, seed: 1 },
+        data: { fingerprint: 'f1', train: 16, test: 4, classNames: ['A', 'B'] },
+        metric: 'accuracy' as const,
+        scores: { train: 1, test: 0.75 },
+        classRecall: [1, 0.5],
+        guess: 0.8,
+        conclusion: 'C lớn hơn thì điểm Kiểm tra giảm',
+      },
+    ];
+    for (const type of ['audio', 'pose', 'text', 'tabular'] as const) {
+      const bytes = encodeBundle({ ...empty(type), trials });
+      expect(Object.keys(unzipSync(bytes))).toContain('trials.json');
+      expect(decodeBundle(bytes).trials).toEqual(trials);
+    }
+    expect(Object.keys(unzipSync(encodeBundle({ ...empty('image'), trials })))).not.toContain('trials.json');
+    const broken = rezip(encodeBundle({ ...empty('audio'), trials }), (files) => {
+      files['trials.json'] = strToU8(JSON.stringify({ trials: [{ ...trials[0], guess: 2 }] }));
+    });
+    expect(() => decodeBundle(broken)).toThrow(/trials\.json/);
   });
 
   test('dự án âm thanh: giữ đúng từng mẫu âm thanh qua tệp WAV', () => {

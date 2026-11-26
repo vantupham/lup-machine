@@ -28,6 +28,12 @@ import { findTabularSample } from './tabular-samples';
 import { UseSection } from './UseSection';
 import { useTabularProject } from './useTabularProject';
 import { BackLink } from '@/ui/BackLink';
+import { hashText } from '@/core/data/fingerprint';
+import type { TrialSetupLike } from '@/core/experiments/trial-diff';
+import { useTrialLog } from '@/features/trials/useTrialLog';
+import { TrialBefore } from '@/features/trials/TrialBefore';
+import { TrialAfter } from '@/features/trials/TrialAfter';
+import { classificationTrial, regressionTrial } from '@/features/trials/trial-input';
 
 interface TrainedState {
   readonly key: string;
@@ -66,6 +72,17 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
   const trainKey = JSON.stringify([table?.updatedAt ?? null, config]);
   const current = trained && trained.key === trainKey ? trained.model : null;
   const evaluation = useMemo(() => (current && data ? evaluateTabular(current, data) : null), [current, data]);
+  const trialLog = useTrialLog(projectId);
+  /** Cài đặt và dữ liệu của lần huấn luyện kế tiếp (để so với lần trước trong nhật ký). */
+  const trialSetup: TrialSetupLike | null =
+    data && config && table
+      ? {
+          settings: { ...config.model, target: config.target, features: config.features.join(', ') },
+          split: { testRatio: config.testRatio, seed: config.seed },
+          data: { fingerprint: hashText(table.updatedAt), train: data.train.y.length, test: data.test.y.length, classNames: data.classNames },
+        }
+      : null;
+  const canGuess = config?.task === 'classification' && (data?.test.y.length ?? 0) > 0;
 
   if (state.status === 'loading') return <p className="text-muted">{t('tabular.loading')}</p>;
   if (state.status === 'not-found') return <p role="alert">{t('project.notFound')}</p>;
@@ -78,7 +95,16 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
 
   const train = () => {
     if (!data || !config) return;
-    setTrained({ key: trainKey, model: trainTabular(data, config.model), count: (trained?.count ?? 0) + 1 });
+    const model = trainTabular(data, config.model);
+    setTrained({ key: trainKey, model, count: (trained?.count ?? 0) + 1 });
+    if (!trialSetup) return;
+    const result = evaluateTabular(model, data);
+    void trialLog.record(
+      result.task === 'classification'
+        ? classificationTrial(trialSetup, { train: result.train.accuracy, test: result.test.accuracy }, result.test.confusion)
+        : regressionTrial(trialSetup, { train: result.train.r2, test: result.test.r2 }),
+      canGuess,
+    );
   };
 
   return (
@@ -115,6 +141,7 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
             <RepresentSection data={data} />
           </Step>
           <Step n={4} id="tab-step-train" notebook="train" title={t('tabular.steps.train')} done={current !== null}>
+            {trialSetup && current === null && <TrialBefore log={trialLog} current={trialSetup} canGuess={canGuess} />}
             <ModelSection
               task={config.task}
               settings={config.model}
@@ -123,6 +150,7 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
               isStale={trained !== null && current === null}
               trainCount={trained?.count ?? 0}
             />
+            <TrialAfter log={trialLog} isCurrent={current !== null} />
           </Step>
           {current && evaluation && (
             <>

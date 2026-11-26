@@ -6,10 +6,11 @@ import { useSubmissionRepository } from '@/storage/repository-context';
 import { getErrorMessage } from '@/ui/error-message';
 import type { RunSummary } from '@/features/studio/image/lab/run-setup';
 import { InquiryRecord } from '@/features/notebook/InquiryRecord';
+import type { BundleTrial } from '@/storage/project-file/bundle';
 
 type State =
   | { readonly kind: 'loading' }
-  | { readonly kind: 'ready'; readonly notes: readonly Note[]; readonly runs: readonly RunSummary[] }
+  | { readonly kind: 'ready'; readonly notes: readonly Note[]; readonly runs: readonly RunSummary[]; readonly trials: readonly BundleTrial[] }
   | { readonly kind: 'error'; readonly message: string };
 
 interface SubmissionInquiryProps {
@@ -27,7 +28,7 @@ export function SubmissionInquiry({ submissionId, projectType }: SubmissionInqui
     let isActive = true;
     submissions.getProject(submissionId).then(
       (bundle) => {
-        if (isActive) setState({ id: submissionId, value: { kind: 'ready', notes: bundle?.notes ?? [], runs: bundle?.runs ?? [] } });
+        if (isActive) setState({ id: submissionId, value: { kind: 'ready', notes: bundle?.notes ?? [], runs: bundle?.runs ?? [], trials: bundle?.trials ?? [] } });
       },
       (error: unknown) => {
         console.error('Không đọc được dự án của bài nộp', submissionId, error);
@@ -45,7 +46,7 @@ export function SubmissionInquiry({ submissionId, projectType }: SubmissionInqui
       <h3 id="submission-inquiry-title" className="font-semibold">{t('inquiry.title')}</h3>
       {current.kind === 'loading' && <p className="text-sm text-muted">…</p>}
       {current.kind === 'error' && <p role="alert" className="text-sm text-danger">{t('inquiry.loadError', { message: current.message })}</p>}
-      {current.kind === 'ready' && <InquiryRecord projectType={projectType} notes={current.notes} runs={current.runs} />}
+      {current.kind === 'ready' && <InquiryRecord projectType={projectType} notes={current.notes} runs={current.runs} trials={current.trials} />}
     </section>
   );
 }

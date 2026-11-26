@@ -45,6 +45,9 @@ describe('Studio âm thanh', () => {
     expect(screen.getByText(/bấm Huấn luyện để cập nhật/)).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
     expect(await screen.findByText(/k-NN không học trọng số/)).toBeInTheDocument();
+    // Nhật ký thí nghiệm: lần 2 đổi mô hình so với lần 1
+    expect(await screen.findByText('Kết quả so với lần #1')).toBeInTheDocument();
+    expect(within(screen.getByRole('table', { name: 'Nhật ký thí nghiệm' })).getByTestId('trial-row-2')).toHaveTextContent('mô hình: Hồi quy logistic → k-NN');
   }, SLOW_TEST_MS);
 
   test('thêm, đổi tên và xóa nhóm; trợ lý báo nhóm chưa đủ đoạn', async () => {

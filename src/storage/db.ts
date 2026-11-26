@@ -4,6 +4,7 @@ import type { Submission } from './schemas/assignment';
 import type { Grade } from './schemas/grade';
 import type { ProjectBundle } from './project-file/bundle';
 import type { ModelCardFields } from './schemas/model-card';
+import type { NewTrialInput } from './schemas/trial';
 
 export interface ProjectRecord {
   readonly id: string;
@@ -88,6 +89,14 @@ export interface RunRecord {
   /** Tỉ lệ nhận ra từng lớp trên tập Kiểm tra (null: lớp không có ảnh Kiểm tra). */
   readonly classRecall?: readonly (number | null)[] | undefined;
 }
+
+/** Một lần huấn luyện ở Studio âm thanh, tư thế, văn bản hoặc bảng số (xem schemas/trial). */
+export type TrialRecord = NewTrialInput & {
+  readonly id: string;
+  readonly projectId: string;
+  readonly number: number;
+  readonly createdAt: string;
+};
 
 /** Ghi chép của học sinh ở một bước của dự án (sổ tay khám phá). */
 export interface NoteRecord {
@@ -191,6 +200,7 @@ export class LupDatabase extends Dexie {
   submissions!: EntityTable<SubmissionRecord, 'id'>;
   submissionProjects!: EntityTable<SubmissionProjectRecord, 'id'>;
   notes!: Dexie.Table<NoteRecord, [string, string]>;
+  trials!: EntityTable<TrialRecord, 'id'>;
 
   constructor(name: string = DEFAULT_DB_NAME) {
     super(name);
@@ -293,6 +303,22 @@ export class LupDatabase extends Dexie {
       submissions: 'id, assignmentId, [assignmentId+studentKey]',
       submissionProjects: 'id',
       notes: '[projectId+step], projectId',
+    });
+    this.version(12).stores({
+      projects: 'id, updatedAt',
+      classes: 'id, projectId',
+      samples: 'id, projectId, classId',
+      features: '[sampleId+modelId], sampleId, projectId',
+      runs: 'id, projectId',
+      dataTables: 'projectId',
+      audioClips: 'id, projectId, classId',
+      poseSamples: 'id, projectId, classId',
+      modelCards: 'projectId',
+      assignments: 'projectId',
+      submissions: 'id, assignmentId, [assignmentId+studentKey]',
+      submissionProjects: 'id',
+      notes: '[projectId+step], projectId',
+      trials: 'id, projectId',
     });
   }
 }

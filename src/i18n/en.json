@@ -1937,5 +1937,40 @@
       "filled": "With notes",
       "version": "Printed content"
     }
+  },
+  "trials": {
+    "settings": {
+      "kind": "model",
+      "c": "C",
+      "k": "k",
+      "alpha": "α",
+      "maxDepth": "tree depth",
+      "criterion": "split criterion",
+      "maxN": "tokens",
+      "features": "feature columns",
+      "target": "target column"
+    },
+    "models": {
+      "logistic": "Logistic regression",
+      "knn": "k-NN",
+      "naive-bayes": "Naive Bayes",
+      "tree": "Decision tree",
+      "linear": "Linear regression",
+      "knn-regression": "k-NN (regression)"
+    },
+    "maxN": {
+      "1": "single syllables",
+      "2": "syllable pairs too"
+    },
+    "changes": {
+      "setting": "{{name}}: {{from}} → {{to}}",
+      "seed": "seed {{from}} → {{to}}",
+      "testRatio": "Test share {{from}}% → {{to}}%",
+      "trainCount": "Training samples {{from}} → {{to}}",
+      "testCount": "Test samples {{from}} → {{to}}",
+      "samples": "samples replaced (same count)"
+    },
+    "r2Test": "Test R²",
+    "deltaR2": "{{label}}: {{from}} → {{to}} ({{change}})."
   }
 }

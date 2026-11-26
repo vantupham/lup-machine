@@ -84,7 +84,7 @@ function ClassRecallTable({ run, previous }: { readonly run: RunRecord; readonly
   const cell = (v: number | null | undefined) => (v === null || v === undefined ? '–' : `${Math.round(v * 100)}%`);
   return (
     <table className="mt-2 text-xs [&_td]:pr-4 [&_th]:pr-4" data-testid="class-recall">
-      <caption className="mb-1 text-left font-medium">{t('project.compare.classTitle')}</caption>
+      <caption className="mb-1 whitespace-nowrap text-left font-medium">{t('project.compare.classTitle')}</caption>
       <thead>
         <tr className="text-left text-muted">
           <th scope="col" className="font-normal">{t('project.compare.className')}</th>

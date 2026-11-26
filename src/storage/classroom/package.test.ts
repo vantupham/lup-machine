@@ -24,6 +24,7 @@ const starter: ProjectBundle = {
   runs: [],
   modelCard: null,
   notes: [],
+  trials: [],
 };
 
 const submission: Submission = {

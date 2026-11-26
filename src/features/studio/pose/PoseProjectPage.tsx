@@ -16,6 +16,7 @@ import { PoseInspector } from './PoseInspector';
 import { PoseModelLab } from './PoseModelLab';
 import { usePoseProject } from './usePoseProject';
 import { BackLink } from '@/ui/BackLink';
+import { datasetFingerprint } from '@/core/data/fingerprint';
 
 /** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
 const STEP_TARGETS = studioStepTargets('pose');
@@ -104,7 +105,24 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
         </Step>
       )}
 
-      {data && <PoseModelLab kind={kind} projectName={state.project.name} data={data} dataKey={dataKey} />}
+      {data && (
+        <PoseModelLab
+          kind={kind}
+          projectId={projectId}
+          projectName={state.project.name}
+          trialBase={{
+            split: { testRatio, seed },
+            data: {
+              fingerprint: datasetFingerprint(state.classes.map((c) => c.id), samples.map((p) => ({ id: p.id, classId: p.classId, split: '' }))),
+              train: data.train.ys.length,
+              test: data.test.ys.length,
+              classNames: data.classNames,
+            },
+          }}
+          data={data}
+          dataKey={dataKey}
+        />
+      )}
     </div>
     </NotebookProvider>
   );

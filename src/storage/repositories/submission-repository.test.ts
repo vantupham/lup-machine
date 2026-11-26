@@ -15,6 +15,7 @@ const project: ProjectBundle = {
   runs: [],
   modelCard: null,
   notes: [],
+  trials: [],
 };
 
 function submission(students: string, submittedAt = '2026-11-25T10:00:00.000Z'): Submission {
