@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
+import { NotebookProvider } from '@/features/notebook/NotebookContext';
+import { NotebookPrintLink } from '@/features/notebook/NotebookPrintLink';
 import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
@@ -77,20 +79,24 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
   };
 
   return (
+    <NotebookProvider projectId={projectId} projectType="text">
     <div className="space-y-8">
       <header className="space-y-2">
         <BackLink to="/studio">{t('project.back')}</BackLink>
         <p className="text-sm text-muted">{t('studio.types.text')}</p>
         <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={renameProject} />
         <AssignmentBanner projectId={projectId} />
-        <ModelCardLink projectId={projectId} />
+        <div className="flex flex-wrap gap-2">
+          <ModelCardLink projectId={projectId} />
+          <NotebookPrintLink projectId={projectId} />
+        </div>
         <p className="max-w-3xl text-muted">{t('text.lead')}</p>
         {saveError && <p role="alert" className="text-sm text-danger">{saveError}</p>}
       </header>
 
       <StepBar targets={STEP_TARGETS} />
 
-      <Step n={1} id="text-step-data" title={t('text.steps.data')} done={state.table !== null}>
+      <Step n={1} id="text-step-data" notebook="data" title={t('text.steps.data')} done={state.table !== null}>
         <TextDataSection
           hasTable={parsed !== null}
           fileName={table?.fileName ?? null}
@@ -103,17 +109,17 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
       </Step>
 
       {parsed && config && (
-        <Step n={2} id="text-step-check" title={t('text.steps.check')}>
+        <Step n={2} id="text-step-check" notebook="check" title={t('text.steps.check')}>
           <TextSetupSection headers={parsed.headers} config={config} onChange={updateConfig} issues={issues} error={prepared && !prepared.ok ? prepared.error : null} />
         </Step>
       )}
 
       {data && config && (
         <>
-          <Step n={3} id="text-step-represent" title={t('text.steps.represent')}>
+          <Step n={3} id="text-step-represent" notebook="represent" title={t('text.steps.represent')}>
             <TextRepresentSection data={data} maxN={config.maxN} onMaxNChange={(maxN) => updateConfig({ ...config, maxN })} />
           </Step>
-          <Step n={4} id="text-step-train" title={t('text.steps.train')} done={current !== null}>
+          <Step n={4} id="text-step-train" notebook="train" title={t('text.steps.train')} done={current !== null}>
             <TextModelSection
               settings={config.model}
               onChange={(model) => updateConfig({ ...config, model })}
@@ -124,10 +130,10 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
           </Step>
           {current && evaluation && (
             <>
-              <Step n={5} id="text-step-evaluate" title={t('text.steps.evaluate')}>
+              <Step n={5} id="text-step-evaluate" notebook="evaluate" title={t('text.steps.evaluate')}>
                 <TextEvaluateSection evaluation={evaluation} trained={current} data={data} />
               </Step>
-              <Step n={6} id="text-step-use" title={t('text.steps.use')}>
+              <Step n={6} id="text-step-use" notebook="use" title={t('text.steps.use')}>
                 <TextUseSection key={trainKey} trained={current} data={data} />
                 <ColabExportPanel
                   projectName={state.project.name}
@@ -149,5 +155,6 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
         </>
       )}
     </div>
+    </NotebookProvider>
   );
 }

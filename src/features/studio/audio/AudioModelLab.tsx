@@ -143,7 +143,7 @@ export function AudioModelLab({ projectName, data, dataKey, trainSamples }: Audi
 
   return (
     <>
-      <Step n={4} id="audio-step-train" title={t('audio.steps.train')} done={current !== null}>
+      <Step n={4} id="audio-step-train" notebook="train" title={t('audio.steps.train')} done={current !== null}>
         <div className="grid gap-6 lg:grid-cols-2">
           <fieldset className="space-y-2">
             <legend className="text-sm font-medium">{t('tabular.model.choose')}</legend>
@@ -174,7 +174,7 @@ export function AudioModelLab({ projectName, data, dataKey, trainSamples }: Audi
       </Step>
       {current && evaluation && (
         <>
-          <Step n={5} id="audio-step-evaluate" title={t('audio.steps.evaluate')}>
+          <Step n={5} id="audio-step-evaluate" notebook="evaluate" title={t('audio.steps.evaluate')}>
             <div className="grid gap-6 lg:grid-cols-2">
               <div className="space-y-4">
                 <dl className="grid grid-cols-2 gap-3">
@@ -206,7 +206,7 @@ export function AudioModelLab({ projectName, data, dataKey, trainSamples }: Audi
               </section>
             </div>
           </Step>
-          <Step n={6} id="audio-step-use" title={t('audio.steps.use')}>
+          <Step n={6} id="audio-step-use" notebook="use" title={t('audio.steps.use')}>
             <TryClip key={key} trained={current} data={data} trainSamples={trainSamples} />
             <ColabExportPanel
               projectName={projectName}

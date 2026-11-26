@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
+import { NotebookProvider } from '@/features/notebook/NotebookContext';
+import { NotebookPrintLink } from '@/features/notebook/NotebookPrintLink';
 import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
@@ -46,24 +48,28 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
   const dataKey = JSON.stringify([usable.map((c) => `${c.id}:${c.classId}`), state.classes.map((c) => c.name), testRatio, seed]);
 
   return (
+    <NotebookProvider projectId={projectId} projectType="audio">
     <div className="space-y-8">
       <header className="space-y-2">
         <BackLink to="/studio">{t('project.back')}</BackLink>
         <p className="text-sm text-muted">{t('studio.types.audio')}</p>
         <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={() => void reload()} />
         <AssignmentBanner projectId={projectId} />
-        <ModelCardLink projectId={projectId} />
+        <div className="flex flex-wrap gap-2">
+          <ModelCardLink projectId={projectId} />
+          <NotebookPrintLink projectId={projectId} />
+        </div>
         <p className="max-w-3xl text-muted">{t('audio.lead')}</p>
       </header>
 
       <StepBar targets={STEP_TARGETS} />
 
-      <Step n={1} id="audio-step-data" title={t('audio.steps.data')} done={new Set(state.clips.map((c) => c.classId)).size >= 2}>
+      <Step n={1} id="audio-step-data" notebook="data" title={t('audio.steps.data')} done={new Set(state.clips.map((c) => c.classId)).size >= 2}>
         <AudioDataSection projectId={projectId} classes={state.classes} clips={state.clips} dataset={dataset} audio={audio} onChanged={reload} />
       </Step>
 
       {state.clips.length > 0 && (
-        <Step n={2} id="audio-step-check" title={t('audio.steps.check')}>
+        <Step n={2} id="audio-step-check" notebook="check" title={t('audio.steps.check')}>
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="space-y-4">
               <RangeField label={t('tabular.setup.testRatio')} value={testRatio} min={0.1} max={0.5} step={0.05} onChange={setTestRatio} format={(v) => `${Math.round(v * 100)}%`} />
@@ -87,7 +93,7 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
       )}
 
       {state.clips.length > 0 && (
-        <Step n={3} id="audio-step-represent" title={t('audio.steps.represent')}>
+        <Step n={3} id="audio-step-represent" notebook="represent" title={t('audio.steps.represent')}>
           <AudioInspector classes={state.classes} clips={usable} />
         </Step>
       )}
@@ -104,5 +110,6 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
         />
       )}
     </div>
+    </NotebookProvider>
   );
 }
