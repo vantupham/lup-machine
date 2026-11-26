@@ -135,7 +135,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
         setNotice({ kind: 'error', text: t('project.quick.notReady') });
         return;
       }
-      runWith(ready, DEFAULT_TRAIN_OPTIONS, 'normal', { kind: 'new', fingerprint });
+      runWith(ready, DEFAULT_TRAIN_OPTIONS, 'paced', { kind: 'new', fingerprint });
     } finally {
       quickPending.current = false;
       setIsQuickPreparing(false);

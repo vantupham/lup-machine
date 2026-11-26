@@ -6,11 +6,12 @@ import {
   type TrainOptions,
 } from '@/core/ml/softmax-regression';
 
-export type TrainingSpeed = 'normal' | 'slow' | 'step';
+/** 'paced': chỉ dùng cho "Huấn luyện nhanh", đủ chậm để thấy số lượt và % đúng tăng dần. */
+export type TrainingSpeed = 'normal' | 'paced' | 'slow' | 'step';
 export type TrainingStatus = 'idle' | 'running' | 'waiting-step' | 'done';
 
 /** Thời gian nghỉ giữa các epoch để mắt kịp theo dõi. */
-const SPEED_DELAY_MS: Record<Exclude<TrainingSpeed, 'step'>, number> = { normal: 0, slow: 350 };
+const SPEED_DELAY_MS: Record<Exclude<TrainingSpeed, 'step'>, number> = { normal: 0, paced: 40, slow: 350 };
 
 export interface TrainingData {
   readonly train: LabeledVectors;
