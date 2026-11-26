@@ -28,8 +28,8 @@ function wav(hz: number, seconds: number, rate = 44_100): Buffer {
 test('Studio âm thanh: âm thanh mẫu, thu bằng micro (giả), tải tệp WAV và nhận ra tiếng còi', async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem('lup.language', 'vi');
-    // Các spec này thao tác trong 6 bước chi tiết: mở sẵn (Khám phá mặc định thu gọn).
-    window.localStorage.setItem('lup.stepDetails', 'open');
+    // Spec này thao tác trong 6 bước chi tiết: dùng Chuyên sâu (không có khối làm nhanh, các bước luôn mở).
+    window.localStorage.setItem('lup.mode', 'expert');
   });
   await page.goto('./#/studio');
   await page.getByLabel('Tên dự án').fill('Âm thanh E2E');
@@ -64,4 +64,26 @@ test('Studio âm thanh: âm thanh mẫu, thu bằng micro (giả), tải tệp W
   await expect(page.getByTestId('audio-prediction')).toBeVisible();
 
   if (process.env.SCREENSHOT_DIR) await page.screenshot({ path: `${process.env.SCREENSHOT_DIR}/audio-studio.png`, fullPage: true });
+});
+
+test('Studio âm thanh, Khám phá: thu bằng micro (giả) ở cột 1, huấn luyện nhanh qua 4 chặng, thử tệp WAV', async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.setItem('lup.language', 'vi'));
+  await page.goto('./#/studio');
+  await page.getByLabel('Tên dự án').fill('Âm thanh nhanh');
+  await page.getByRole('button', { name: 'Tạo dự án Âm thanh mới', exact: true }).click();
+
+  const quick = page.getByRole('region', { name: 'Dạy máy trong 3 bước' });
+  await quick.getByRole('button', { name: /Dùng âm thanh mẫu/ }).click();
+  const drum = quick.getByRole('group', { name: 'Trống' });
+  await expect(drum.getByText('16 đoạn')).toBeVisible();
+  await drum.getByRole('button', { name: 'Thu 1 giây cho nhóm Trống' }).click();
+  await expect(drum.getByText('17 đoạn')).toBeVisible({ timeout: 15_000 });
+
+  await quick.getByRole('button', { name: 'Huấn luyện nhanh' }).click();
+  const stages = quick.getByRole('list', { name: 'Các chặng huấn luyện' });
+  await expect(stages.getByText('Máy học: Hồi quy logistic')).toContainText('(đang làm)');
+  await expect(quick.getByText(/^Xong\. Máy đoán đúng \d+% mẫu Kiểm tra\.$/)).toBeVisible({ timeout: 10_000 });
+
+  await quick.getByLabel('Thử với một tệp âm thanh').setInputFiles({ name: 'thu.wav', mimeType: 'audio/wav', buffer: wav(1800, 0.6) });
+  await expect(quick.getByRole('list', { name: 'Máy đoán' }).getByRole('listitem').first()).toContainText('Còi', { timeout: 15_000 });
 });

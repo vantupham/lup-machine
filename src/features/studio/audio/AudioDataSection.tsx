@@ -1,34 +1,26 @@
-import { useEffect, useRef, useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { fitClip } from '@/core/audio/features';
-import { SOUND_KINDS, soundDataset } from '@/core/audio/synthetic-sounds';
-import type { AudioClipRecord, AudioSource, ClassRecord } from '@/storage/db';
-import { clipSamples, MAX_CLIPS_PER_CLASS, type AudioRepository } from '@/storage/repositories/audio-repository';
-import type { DatasetRepository } from '@/storage/repositories/dataset-repository';
+import type { AudioClipRecord, ClassRecord } from '@/storage/db';
+import { clipSamples, MAX_CLIPS_PER_CLASS } from '@/storage/repositories/audio-repository';
 import { ExactBadge } from '@/ui/ExactBadge';
-import { getErrorMessage } from '@/ui/error-message';
-import { decodeAudioFile, isAudioSupported, playClip, recordClip } from './audio-io.browser';
+import { playClip } from './audio-io.browser';
 import { Waveform } from './viz';
 import { ClassMarker } from '@/ui/ClassMarker';
-import { nextClassName } from '@/features/studio/next-class-name';
 import { Plus, Trash2 } from '@/ui/icons';
+import type { AudioData } from './useAudioData';
 
-/** Thu dư một chút để không hụt phần đầu / cuối âm thanh; sau đó cắt về đúng 1 giây quanh chỗ có tiếng. */
-const RECORD_SECONDS = 1.5;
 const THUMBS_SHOWN = 12;
 const LIVE_BARS = 48;
 
 interface AudioDataSectionProps {
-  readonly projectId: string;
   readonly classes: readonly ClassRecord[];
   readonly clips: readonly AudioClipRecord[];
-  readonly dataset: DatasetRepository;
-  readonly audio: AudioRepository;
-  readonly onChanged: () => Promise<void>;
+  /** Thao tác dữ liệu dùng chung với khối "Dạy máy trong 3 bước". */
+  readonly actions: AudioData;
 }
 
 /** Phổ trực tiếp của trình duyệt khi đang thu (minh họa). */
-function LiveSpectrum({ analyser }: { readonly analyser: AnalyserNode }) {
+export function LiveSpectrum({ analyser }: { readonly analyser: AnalyserNode }) {
   const { t } = useTranslation();
   const [bars, setBars] = useState<number[]>(() => new Array<number>(LIVE_BARS).fill(0));
   useEffect(() => {
@@ -135,72 +127,17 @@ function ClassCard({ cls, index, clips, onRecord, onUpload, onDelete, onRename, 
   );
 }
 
-export function AudioDataSection({ projectId, classes, clips, dataset, audio, onChanged }: AudioDataSectionProps) {
+export function AudioDataSection({ classes, clips, actions }: AudioDataSectionProps) {
   const { t } = useTranslation();
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [recordingClass, setRecordingClass] = useState<{ id: string; analyser: AnalyserNode } | null>(null);
-  const cancelRef = useRef<(() => void) | null>(null);
-  const supported = isAudioSupported();
-
-  useEffect(() => () => cancelRef.current?.(), []);
-
-  const run = async (task: () => Promise<void>) => {
-    setBusy(true);
-    setError(null);
-    try {
-      await task();
-      await onChanged();
-    } catch (err: unknown) {
-      setError(t('audio.data.error', { message: getErrorMessage(err) }));
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const add = (classId: string, source: AudioSource, signals: Float32Array[]) =>
-    audio.addClips(signals.map((s) => ({ projectId, classId, source, samples: fitClip(s) })));
-
-  const record = (classId: string) =>
-    run(async () => {
-      const rec = await recordClip(RECORD_SECONDS);
-      cancelRef.current = rec.cancel;
-      setRecordingClass({ id: classId, analyser: rec.analyser });
-      try {
-        await add(classId, 'microphone', [await rec.result]);
-      } finally {
-        setRecordingClass(null);
-        cancelRef.current = null;
-      }
-    });
-
-  const upload = (classId: string, files: readonly File[]) =>
-    run(async () => {
-      const signals: Float32Array[] = [];
-      for (const file of files) signals.push(await decodeAudioFile(file));
-      await add(classId, 'upload', signals);
-    });
-
-  const loadSamples = () =>
-    run(async () => {
-      const created: Record<string, string> = {};
-      for (const kind of SOUND_KINDS) created[kind] = (await dataset.addClass(projectId, t(`audio.samples.${kind}`))).id;
-      await audio.addClips(soundDataset(1).map((s) => ({ projectId, classId: created[s.kind] as string, source: 'dataset' as const, samples: s.signal })));
-    });
-
-  /** Thêm "Nhóm n" (số tăng dần); đổi tên ngay trong ô tên của nhóm. */
-  const addClass = () =>
-    void run(async () => {
-      await dataset.addClass(projectId, nextClassName(classes.map((c) => c.name), (n) => t('audio.data.defaultClass', { n })));
-    });
+  const { busy, error, recordingClass, isSupported } = actions;
 
   return (
     <div className="space-y-4">
-      {!supported && <p role="alert" className="text-sm text-warning">{t('audio.data.unsupported')}</p>}
+      {!isSupported && <p role="alert" className="text-sm text-warning">{t('audio.data.unsupported')}</p>}
       {classes.length === 0 && (
         <div className="lab-card space-y-2 p-4">
           <p className="text-muted">{t('audio.data.empty')}</p>
-          <button type="button" className="btn btn-primary text-sm" disabled={busy} onClick={() => void loadSamples()}>{t('audio.data.loadSamples')}</button>
+          <button type="button" className="btn btn-primary text-sm" disabled={busy} onClick={() => void actions.loadSamples()}>{t('audio.data.loadSamples')}</button>
           <p className="text-xs text-muted">{t('audio.data.samplesNote')}</p>
         </div>
       )}
@@ -211,19 +148,19 @@ export function AudioDataSection({ projectId, classes, clips, dataset, audio, on
             cls={cls}
             index={i}
             clips={clips.filter((c) => c.classId === cls.id)}
-            busy={busy || !supported}
+            busy={busy || !isSupported}
             recording={recordingClass?.id === cls.id ? recordingClass.analyser : null}
-            onRecord={() => void record(cls.id)}
-            onUpload={(files) => void upload(cls.id, files)}
-            onDelete={(clip) => void run(() => audio.deleteClip(clip.id))}
-            onRename={(name) => void run(async () => void (await dataset.renameClass(cls.id, name)))}
+            onRecord={() => void actions.record(cls.id)}
+            onUpload={(files) => void actions.upload(cls.id, files)}
+            onDelete={(clip) => void actions.deleteClip(clip.id)}
+            onRename={(name) => void actions.rename(cls.id, name)}
             onDeleteClass={() => {
-              if (window.confirm(t('audio.data.confirmDeleteClass', { name: cls.name }))) void run(() => dataset.deleteClass(cls.id));
+              if (window.confirm(t('audio.data.confirmDeleteClass', { name: cls.name }))) void actions.deleteClass(cls.id);
             }}
           />
         ))}
       </ul>
-      <button type="button" className="btn btn-ghost text-sm" disabled={busy} onClick={addClass}>
+      <button type="button" className="btn btn-ghost text-sm" disabled={busy} onClick={() => void actions.addClass()}>
         <Plus /> {t('audio.data.addClass')}
       </button>
       {error && <p role="alert" className="text-sm text-danger">{error}</p>}

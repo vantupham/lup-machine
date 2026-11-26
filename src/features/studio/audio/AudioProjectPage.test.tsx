@@ -1,6 +1,8 @@
 import { configure, fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createTestRepository, renderApp, type TestRepositories } from '../../../../tests/setup/render';
+import { useModeStore } from '@/ui/mode-store';
+import { useStepDetailsStore } from '@/features/studio/step-details';
+import { createTestRepository, renderApp, renderWithRepositories, type TestRepositories } from '../../../../tests/setup/render';
 
 async function setup(): Promise<{ repos: TestRepositories; projectId: string }> {
   const repos = createTestRepository();
@@ -9,7 +11,7 @@ async function setup(): Promise<{ repos: TestRepositories; projectId: string }> 
 }
 
 function render(repos: TestRepositories, projectId: string) {
-  return renderApp(`/studio/${projectId}`, repos.repository, repos.dataset, repos.experiments, repos.tables, repos.audio);
+  return renderWithRepositories(`/studio/${projectId}`, repos);
 }
 
 /**
@@ -18,6 +20,13 @@ function render(repos: TestRepositories, projectId: string) {
  */
 const SLOW_TEST_MS = 30_000;
 configure({ asyncUtilTimeout: 10_000 });
+
+beforeEach(() => {
+  // Các kiểm thử 6 bước dùng Chuyên sâu (chỉ có 6 bước); khối làm nhanh kiểm thử riêng ở Khám phá.
+  useModeStore.setState({ mode: 'expert' });
+  useStepDetailsStore.setState({ isOpen: false });
+  window.scrollTo = vi.fn();
+});
 
 describe('Studio âm thanh', () => {
   test('bộ âm thanh mẫu: kính hiển vi ảnh phổ, huấn luyện logistic, bản đồ vùng phổ cho từng nhóm', async () => {
@@ -84,4 +93,49 @@ describe('Studio âm thanh', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Tạo dự án Âm thanh mới' }));
     expect(await screen.findByRole('button', { name: /Dùng âm thanh mẫu/ })).toBeInTheDocument();
   });
+});
+
+describe('Studio âm thanh: khối "Dạy máy trong 3 bước" (Khám phá)', () => {
+  beforeEach(() => useModeStore.setState({ mode: 'explore' }));
+  const quick = () => screen.getByRole('region', { name: 'Dạy máy trong 3 bước' });
+
+  test('6 bước thu gọn sẵn; âm thanh mẫu từ cột 1; huấn luyện nhanh chạy lần lượt 4 chặng rồi nghe thử được', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    for (const name of ['1. Thu âm thanh', '2. Cho máy học', '3. Nghe thử']) expect(within(region).getByRole('heading', { name })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Xem từng bước bên trong' })).toHaveAttribute('aria-expanded', 'false');
+    expect(within(region).getByRole('button', { name: 'Huấn luyện nhanh' })).toBeDisabled();
+
+    await userEvent.click(within(region).getByRole('button', { name: /Dùng âm thanh mẫu/ }));
+    const bell = await within(region).findByRole('group', { name: 'Chuông' });
+    expect(within(bell).getByText('16 đoạn')).toBeInTheDocument();
+    expect(within(region).getByText('Huấn luyện xong mới xem thử được.')).toBeInTheDocument();
+
+    await userEvent.click(within(region).getByRole('button', { name: 'Huấn luyện nhanh' }));
+    const stages = within(quick()).getByRole('list', { name: 'Các chặng huấn luyện' });
+    expect(within(stages).getByText('Biến âm thanh thành 160 số')).toHaveTextContent('(đang làm)');
+    expect(within(stages).getByText('Máy học: Hồi quy logistic')).toHaveTextContent('(chưa tới)');
+    expect(await within(quick()).findByText(/^Xong\. Máy đoán đúng \d+% mẫu Kiểm tra\.$/, {}, { timeout: 5_000 })).toBeInTheDocument();
+    for (const label of ['Biến âm thanh thành 160 số', 'Chia Huấn luyện / Kiểm tra', 'Máy học: Hồi quy logistic', 'Chấm điểm']) {
+      expect(within(stages).getByText(label)).toHaveTextContent('(xong)');
+    }
+    expect(within(stages).getByText(/^\d+ Huấn luyện · \d+ Kiểm tra$/)).toBeInTheDocument();
+    // Cùng một mô hình với bước 4: nhật ký thí nghiệm có lần #1.
+    expect(await repos.trials.list(projectId)).toHaveLength(1);
+    expect(within(quick()).getByLabelText('Thử với một tệp âm thanh')).toBeInTheDocument();
+  }, SLOW_TEST_MS);
+
+  test('bút chì đổi tên nhóm ngay ở cột 1', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    await userEvent.click(within(region).getByRole('button', { name: /Dùng âm thanh mẫu/ }));
+    await userEvent.click(await within(region).findByRole('button', { name: 'Đổi tên lớp Còi' }));
+    const input = within(region).getByRole('textbox', { name: 'Tên lớp' });
+    await userEvent.clear(input);
+    await userEvent.type(input, 'Còi xe{Enter}');
+    expect(await within(quick()).findByRole('group', { name: 'Còi xe' })).toBeInTheDocument();
+    expect((await repos.dataset.listClasses(projectId)).map((c) => c.name)).toEqual(['Chuông', 'Còi xe', 'Trống']);
+  }, SLOW_TEST_MS);
 });

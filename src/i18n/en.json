@@ -871,6 +871,16 @@
           "done": "done",
           "error": "error"
         }
+      },
+      "vector": {
+        "split": "Split into Training / Test",
+        "splitDetail": "{{train}} training · {{test}} test",
+        "learn": "Learn: {{model}}",
+        "score": "Score",
+        "scoreDetail": "{{percent}}% of {{split}} samples right",
+        "done": "Done. The computer gets {{percent}}% of {{split}} samples right.",
+        "splitTest": "test",
+        "splitTrain": "training"
       }
     },
     "details": {
@@ -1599,6 +1609,24 @@
       "distance": "{{d}} dB away",
       "playNeighbour": "Play this clip",
       "knnHint": "Press play to hear the most similar training clips the computer relied on."
+    },
+    "quick": {
+      "lead": "Record sounds, press one button to train, then try it. The steps below show what the computer does.",
+      "columns": {
+        "data": "1. Record sounds",
+        "train": "2. Train",
+        "preview": "3. Listen and try"
+      },
+      "record": "Record 1 second for group {{name}}",
+      "recordShort": "Record",
+      "upload": "Upload audio files for group {{name}}",
+      "uploadShort": "Upload",
+      "features": "Turn sounds into 160 numbers",
+      "featuresDetail": "Clips: {{count}}",
+      "tryRecord": "Record 1 second to try",
+      "tryFile": "Try with an audio file",
+      "tryFileShort": "Try a file",
+      "play": "Play again"
     }
   },
   "pose": {

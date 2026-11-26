@@ -30,6 +30,7 @@ export {
   LoaderCircle,
   Lock,
   MessageSquareText,
+  Mic,
   Moon,
   NotebookPen,
   Pause,
@@ -49,6 +50,7 @@ export {
   TriangleAlert,
   TrendingDown,
   TrendingUp,
+  Upload,
   X,
 } from 'lucide-react';
 export type { LucideIcon as IconComponent } from 'lucide-react';

@@ -4,6 +4,14 @@
 
 ## [Chưa phát hành]
 
+### Thêm (khối "Dạy máy trong 3 bước" cho Studio âm thanh)
+
+- **Studio âm thanh có chế độ Khám phá / Chuyên sâu** như Studio ảnh. Khám phá: khối 3 cột ở đầu trang (thu âm thanh, cho máy học, nghe thử), 6 bước thu gọn sau nút "Xem từng bước bên trong". Chuyên sâu: chỉ 6 bước, luôn mở.
+- **Cột "1. Thu âm thanh"**: mỗi nhóm một dòng có bút chì đổi tên, nút thu 1 giây (kèm phổ trực tiếp khi đang thu) và tải tệp; chưa có nhóm thì dùng âm thanh mẫu.
+- **Cột "2. Cho máy học"**: "Huấn luyện nhanh" chạy lần lượt 4 chặng: biến âm thanh thành 160 số, chia Huấn luyện / Kiểm tra, máy học, chấm điểm. Máy học gần như tức thì nên mỗi chặng dừng khoảng 0,5 giây, kèm số liệu thật (số đoạn, số mẫu mỗi phần, % đúng). Cùng mô hình và nhật ký thí nghiệm với bước 4.
+- **Cột "3. Nghe thử"**: thu 1 giây hoặc chọn tệp, thấy % cho từng nhóm. Âm thanh thử không được lưu.
+- Phần dùng chung cho các Studio (`src/features/studio/quick/`): khung 3 cột, ô đổi tên lớp, danh sách chặng, thanh %, mô hình vector dùng chung và nhịp chặng. Studio ảnh chuyển sang dùng các phần này, giao diện không đổi.
+
 ### Thêm (khối "Dạy máy trong 3 bước" của Studio ảnh)
 
 - **Đổi tên lớp ngay ở cột "1. Thu ảnh"**: nút bút chì cạnh tên lớp mở ô sửa tại chỗ (Enter để lưu, Esc để hủy), không cần mở các bước chi tiết.
