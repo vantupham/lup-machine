@@ -16,6 +16,7 @@ import { AudioInspector } from './AudioInspector';
 import { AudioModelLab } from './AudioModelLab';
 import { useAudioProject } from './useAudioProject';
 import { BackLink } from '@/ui/BackLink';
+import { datasetFingerprint } from '@/core/data/fingerprint';
 
 /** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
 const STEP_TARGETS = studioStepTargets('audio');
@@ -100,7 +101,17 @@ export function AudioProjectPage({ projectId }: { readonly projectId: string }) 
 
       {data && (
         <AudioModelLab
+          projectId={projectId}
           projectName={state.project.name}
+          trialBase={{
+            split: { testRatio, seed },
+            data: {
+              fingerprint: datasetFingerprint(state.classes.map((c) => c.id), usable.map((c) => ({ id: c.id, classId: c.classId, split: '' }))),
+              train: data.train.ys.length,
+              test: data.test.ys.length,
+              classNames: data.classNames,
+            },
+          }}
           data={data}
           dataKey={dataKey}
           trainSamples={(id) => {

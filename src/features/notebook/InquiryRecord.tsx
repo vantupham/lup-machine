@@ -6,6 +6,9 @@ import type { Note } from '@/storage/schemas/notebook';
 import { STEP_KEYS } from '@/features/studio/StepBar';
 import { describeChange, finalScore, setupOf, type RunSummary } from '@/features/studio/image/lab/run-setup';
 import { WriteLines } from '@/features/lessons/WorksheetRecords';
+import { diffTrialSetup } from '@/core/experiments/trial-diff';
+import type { BundleTrial } from '@/storage/project-file/bundle';
+import { describeTrialChange, formatScore } from '@/features/trials/trial-text';
 
 /** Bản in: số dòng trống cho mỗi bước chưa ghi, và số hàng trống thêm vào bảng thí nghiệm. */
 const PRINT_NOTE_LINES = 3;
@@ -15,6 +18,8 @@ interface InquiryRecordProps {
   readonly projectType: ProjectType;
   readonly notes: readonly Note[];
   readonly runs: readonly RunSummary[];
+  /** Nhật ký thí nghiệm của Studio âm thanh, tư thế, văn bản, bảng số. */
+  readonly trials?: readonly BundleTrial[];
   /** Bản in: đủ mọi bước kèm câu hỏi, chừa dòng trống để viết tay. */
   readonly isPrint?: boolean;
 }
@@ -23,11 +28,13 @@ interface InquiryRecordProps {
  * Sổ tay và nhật ký thí nghiệm của một dự án, để giáo viên đọc (bài nộp) hoặc in ra giấy:
  * ghi chép theo từng bước, mỗi lần chạy đổi gì, đoán bao nhiêu, điểm thật và kết luận.
  */
-export function InquiryRecord({ projectType, notes, runs, isPrint = false }: InquiryRecordProps) {
+export function InquiryRecord({ projectType, notes, runs, trials = [], isPrint = false }: InquiryRecordProps) {
   const { t } = useTranslation();
   const steps: readonly string[] = STEP_KEYS;
   const textOf = new Map(notes.map((n) => [n.step, n.text]));
   const ordered = [...runs].sort((a, b) => a.number - b.number);
+  const isTrialStudio = projectType !== 'image';
+  const logged: readonly { readonly guess?: unknown; readonly conclusion?: string | undefined }[] = isTrialStudio ? trials : ordered;
   const shownSteps = isPrint ? steps : steps.filter((step) => textOf.has(step));
 
   return (
@@ -37,9 +44,9 @@ export function InquiryRecord({ projectType, notes, runs, isPrint = false }: Inq
           {t('inquiry.summary', {
             notes: steps.filter((s) => textOf.has(s)).length,
             steps: steps.length,
-            runs: ordered.length,
-            guesses: ordered.filter((r) => r.guess).length,
-            conclusions: ordered.filter((r) => r.conclusion).length,
+            runs: logged.length,
+            guesses: logged.filter((r) => r.guess !== undefined).length,
+            conclusions: logged.filter((r) => r.conclusion).length,
           })}
         </p>
       )}
@@ -55,7 +62,7 @@ export function InquiryRecord({ projectType, notes, runs, isPrint = false }: Inq
           </ol>
         )}
       </div>
-      <RunsTable runs={ordered} isPrint={isPrint} />
+      {isTrialStudio ? <TrialsTable trials={trials} isPrint={isPrint} /> : <RunsTable runs={ordered} isPrint={isPrint} />}
     </div>
   );
 }
@@ -124,6 +131,65 @@ function RunsTable({ runs, isPrint }: { readonly runs: readonly RunSummary[]; re
                 <td className="font-mono">{percent(run.guess?.testAccuracy)}</td>
                 <td className="font-mono">{percent(finalScore(run, 'test'))}</td>
                 <td className="whitespace-pre-wrap text-xs">{run.conclusion ?? ''}</td>
+              </tr>
+            );
+          })}
+          {isPrint &&
+            Array.from({ length: PRINT_BLANK_RUNS }, (_, i) => (
+              <tr key={`blank-${i}`}>
+                {Array.from({ length: 5 }, (__, j) => (
+                  <td key={j} className="h-9" />
+                ))}
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/** Bảng các lần chạy của Studio huấn luyện tức thì (cùng cột với bảng của Studio ảnh). */
+function TrialsTable({ trials, isPrint }: { readonly trials: readonly BundleTrial[]; readonly isPrint: boolean }) {
+  const { t, i18n } = useTranslation();
+  const ordered = [...trials].sort((a, b) => a.number - b.number);
+  if (ordered.length === 0 && !isPrint) {
+    return (
+      <div>
+        <h3 className="mb-2 font-semibold">{t('inquiry.runsTitle')}</h3>
+        <p className="text-sm text-muted">{t('inquiry.noRuns')}</p>
+      </div>
+    );
+  }
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm [&_td]:border-b [&_td]:border-rule [&_td]:py-1 [&_td]:pr-3 [&_th]:pr-3" aria-label={t('inquiry.runsTitle')}>
+        <caption className="mb-2 text-left font-semibold">{t('inquiry.runsTitle')}</caption>
+        <thead>
+          <tr className="text-left text-xs text-muted">
+            <th scope="col" className="font-normal">{t('inquiry.columns.run')}</th>
+            <th scope="col" className="font-normal">{t('inquiry.columns.changes')}</th>
+            <th scope="col" className="font-normal">{t('inquiry.columns.guess')}</th>
+            <th scope="col" className="font-normal">{t('inquiry.columns.test')}</th>
+            <th scope="col" className="font-normal">{t('inquiry.columns.conclusion')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ordered.map((trial, i) => {
+            const before = ordered[i - 1];
+            const changes = before ? diffTrialSetup(before, trial) : null;
+            return (
+              <tr key={trial.number}>
+                <td className="font-mono">#{trial.number}</td>
+                <td className="text-xs">
+                  {changes === null
+                    ? t('project.experiments.firstRun')
+                    : changes.length === 0
+                      ? t('project.experiments.noChange')
+                      : changes.map((c) => describeTrialChange(t, c)).join('; ')}
+                </td>
+                <td className="font-mono">{trial.guess === undefined ? '–' : `${Math.round(trial.guess * 100)}%`}</td>
+                <td className="font-mono">{formatScore(trial.metric, trial.scores.test, i18n.language)}</td>
+                <td className="whitespace-pre-wrap text-xs">{trial.conclusion ?? ''}</td>
               </tr>
             );
           })}

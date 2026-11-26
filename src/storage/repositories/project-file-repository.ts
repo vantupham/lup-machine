@@ -3,7 +3,7 @@ import { datasetFingerprint } from '@/core/data/fingerprint';
 import { fileSlug } from '@/core/file-name';
 import type { AudioClipRecord, ClassRecord, LupDatabase, PoseSampleRecord, ProjectRecord, RunRecord, SampleRecord, TableRecord } from '../db';
 import { CURRENT_FORMAT_VERSION } from '../schemas/manifest';
-import type { BundleRun, ProjectBundle } from '../project-file/bundle';
+import type { BundleRun, BundleTrial, ProjectBundle } from '../project-file/bundle';
 import { PROJECT_FILE_EXTENSION, ProjectFileError } from '../project-file/constants';
 import { createDexieDatasetRepository } from './dataset-repository';
 import { createDexieAudioRepository } from './audio-repository';
@@ -12,6 +12,7 @@ import { createDexieTableRepository } from './table-repository';
 import { createDexieExperimentRepository } from './experiment-repository';
 import { createDexieModelCardRepository } from './model-card-repository';
 import { createDexieNotebookRepository } from './notebook-repository';
+import { createDexieTrialRepository } from './trial-repository';
 import { pickModelCardFields } from '../schemas/model-card';
 import { alignAnswers, assignmentSchema, type Assignment } from '../schemas/assignment';
 import type { RepositoryDeps } from './project-repository';
@@ -52,6 +53,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
   const experiments = createDexieExperimentRepository(db);
   const modelCards = createDexieModelCardRepository(db);
   const notebook = createDexieNotebookRepository(db);
+  const trialRepo = createDexieTrialRepository(db);
 
   const bundleOf = async (project: ProjectRecord): Promise<ProjectBundle> => {
     const classes = await dataset.listClasses(project.id);
@@ -109,6 +111,23 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
         })),
       modelCard: card ? pickModelCardFields(card) : null,
       notes: await notebook.list(project.id),
+      trials: (await trialRepo.list(project.id))
+        .slice()
+        .reverse()
+        .map(
+          (trial): BundleTrial => ({
+            number: trial.number,
+            createdAt: trial.createdAt,
+            settings: trial.settings,
+            split: trial.split,
+            data: trial.data,
+            metric: trial.metric,
+            scores: trial.scores,
+            ...(trial.classRecall ? { classRecall: trial.classRecall } : {}),
+            ...(trial.guess !== undefined ? { guess: trial.guess } : {}),
+            ...(trial.conclusion ? { conclusion: trial.conclusion } : {}),
+          }),
+        ),
     };
   };
 
@@ -170,7 +189,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
     }));
     const table: TableRecord | null = bundle.table ? { projectId: project.id, ...bundle.table, updatedAt: timestamp } : null;
 
-    await db.transaction('rw', [db.projects, db.classes, db.samples, db.audioClips, db.poseSamples, db.dataTables, db.runs, db.modelCards, db.assignments, db.notes], async () => {
+    await db.transaction('rw', [db.projects, db.classes, db.samples, db.audioClips, db.poseSamples, db.dataTables, db.runs, db.modelCards, db.assignments, db.notes, db.trials], async () => {
       await db.projects.add(project);
       await db.classes.bulkAdd(classes);
       await db.samples.bulkAdd(samples);
@@ -180,6 +199,7 @@ export function createDexieProjectFileRepository(db: LupDatabase, deps: Reposito
       if (table) await db.dataTables.add(table);
       if (bundle.modelCard) await db.modelCards.add({ projectId: project.id, fields: bundle.modelCard, updatedAt: timestamp });
       await db.notes.bulkAdd(bundle.notes.map((note) => ({ projectId: project.id, ...note, updatedAt: timestamp })));
+      await db.trials.bulkAdd(bundle.trials.map((trial) => ({ ...trial, id: deps.newId(), projectId: project.id })));
       if (assignment) await db.assignments.add({ projectId: project.id, assignment, answers: alignAnswers(assignment.questions, []), updatedAt: timestamp });
     });
     return project;

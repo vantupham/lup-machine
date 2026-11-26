@@ -25,3 +25,8 @@ export function datasetFingerprint(classIds: readonly string[], samples: readonl
   const sampleLines = samples.map((s) => `${s.id}:${s.classId}:${s.split}`).sort();
   return fnv1a(`${classIds.join(',')}\n${sampleLines.join('\n')}`);
 }
+
+/** Băm ngắn một chuỗi (ví dụ thời điểm sửa bảng + cột đã chọn) để làm dấu vân tay dữ liệu. */
+export function hashText(text: string): string {
+  return fnv1a(text);
+}

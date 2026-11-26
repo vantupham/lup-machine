@@ -26,6 +26,7 @@ function project(): ProjectBundle {
     runs: [],
     modelCard: card,
     notes: [],
+  trials: [],
   };
 }
 

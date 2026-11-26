@@ -10,6 +10,7 @@ import type { ModelCardRepository } from './repositories/model-card-repository';
 import type { AssignmentRepository } from './repositories/assignment-repository';
 import type { SubmissionRepository } from './repositories/submission-repository';
 import type { NotebookRepository } from './repositories/notebook-repository';
+import type { TrialRepository } from './repositories/trial-repository';
 
 export interface Repositories {
   readonly projects: ProjectRepository;
@@ -23,6 +24,7 @@ export interface Repositories {
   readonly assignments: AssignmentRepository;
   readonly submissions: SubmissionRepository;
   readonly notebook: NotebookRepository;
+  readonly trials: TrialRepository;
 }
 
 const RepositoriesContext = createContext<Repositories | null>(null);
@@ -84,4 +86,8 @@ export function useSubmissionRepository(): SubmissionRepository {
 
 export function useNotebookRepository(): NotebookRepository {
   return useRepositories().notebook;
+}
+
+export function useTrialRepository(): TrialRepository {
+  return useRepositories().trials;
 }

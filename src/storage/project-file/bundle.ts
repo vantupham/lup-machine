@@ -11,6 +11,7 @@ import { parseManifest, type Manifest } from '../schemas/manifest';
 import type { ProjectType } from '../schemas/project';
 import { modelCardFileSchema, type ModelCardFields } from '../schemas/model-card';
 import { notesFileSchema, type Note } from '../schemas/notebook';
+import type { NewTrialInput } from '../schemas/trial';
 import { MAX_SAMPLES_PER_CLASS } from '../repositories/dataset-repository';
 import { MAX_CLIPS_PER_CLASS } from '../repositories/audio-repository';
 import { MAX_POSES_PER_CLASS } from '../repositories/pose-repository';
@@ -26,6 +27,7 @@ import {
   posesFileSchema,
   runsFileSchema,
   tableFileSchema,
+  trialsFileSchema,
 } from './bundle-schema';
 
 /** Nội dung một dự án, độc lập với id trong IndexedDB (lớp được tham chiếu bằng chỉ số). */
@@ -41,7 +43,11 @@ export interface ProjectBundle {
   readonly modelCard: ModelCardFields | null;
   /** Sổ tay khám phá: ghi chép của học sinh theo từng bước. */
   readonly notes: readonly Note[];
+  /** Nhật ký thí nghiệm (Studio âm thanh, tư thế, văn bản, bảng số). */
+  readonly trials: readonly BundleTrial[];
 }
+
+export type BundleTrial = NewTrialInput & { readonly number: number; readonly createdAt: string };
 
 export interface BundleImage {
   readonly classIndex: number;
@@ -81,10 +87,10 @@ export type BundleRun = Omit<RunRecord, 'id' | 'projectId'> & { readonly matches
 /** Tệp dữ liệu nào được phép có trong từng loại dự án. */
 const ALLOWED_DATA: Record<ProjectType, ReadonlySet<string>> = {
   image: new Set([BUNDLE_FILES.classes, BUNDLE_FILES.images, BUNDLE_FILES.runs]),
-  audio: new Set([BUNDLE_FILES.classes, BUNDLE_FILES.audio]),
-  pose: new Set([BUNDLE_FILES.classes, BUNDLE_FILES.poses]),
-  text: new Set([BUNDLE_FILES.table, BUNDLE_FILES.tableCsv]),
-  tabular: new Set([BUNDLE_FILES.table, BUNDLE_FILES.tableCsv]),
+  audio: new Set([BUNDLE_FILES.classes, BUNDLE_FILES.audio, BUNDLE_FILES.trials]),
+  pose: new Set([BUNDLE_FILES.classes, BUNDLE_FILES.poses, BUNDLE_FILES.trials]),
+  text: new Set([BUNDLE_FILES.table, BUNDLE_FILES.tableCsv, BUNDLE_FILES.trials]),
+  tabular: new Set([BUNDLE_FILES.table, BUNDLE_FILES.tableCsv, BUNDLE_FILES.trials]),
 };
 
 const KNOWN_JSON: ReadonlySet<string> = new Set(Object.values(BUNDLE_FILES));
@@ -101,6 +107,7 @@ export function encodeBundle(bundle: ProjectBundle): Uint8Array {
   const files: Record<string, Uint8Array> = { [BUNDLE_FILES.manifest]: json(bundle.manifest) };
   if (bundle.modelCard) files[BUNDLE_FILES.modelCard] = json(bundle.modelCard);
   if (bundle.notes.length > 0) files[BUNDLE_FILES.notebook] = json({ notes: bundle.notes });
+  if (bundle.trials.length > 0 && bundle.manifest.projectType !== 'image') files[BUNDLE_FILES.trials] = json({ trials: bundle.trials });
   const type = bundle.manifest.projectType;
   if (type === 'image' || type === 'audio' || type === 'pose') files[BUNDLE_FILES.classes] = json({ classes: bundle.classes });
   if (type === 'image') {
@@ -325,5 +332,6 @@ export function decodeBundle(bytes: Uint8Array): ProjectBundle {
     runs,
     modelCard: readJson(files, BUNDLE_FILES.modelCard, modelCardFileSchema),
     notes: readJson(files, BUNDLE_FILES.notebook, notesFileSchema)?.notes ?? [],
+    trials: type === 'image' ? [] : (readJson(files, BUNDLE_FILES.trials, trialsFileSchema)?.trials ?? []),
   };
 }

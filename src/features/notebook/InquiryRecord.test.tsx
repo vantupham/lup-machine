@@ -54,4 +54,21 @@ describe('Sổ tay và thí nghiệm của một dự án', () => {
     expect(screen.getByText('Chưa có ghi chép nào.')).toBeInTheDocument();
     expect(screen.getByText('Chưa huấn luyện lần nào.')).toBeInTheDocument();
   });
+
+  test('Studio văn bản: bảng các lần chạy lấy từ nhật ký thí nghiệm chung', () => {
+    const base = {
+      split: { testRatio: 0.2, seed: 1 },
+      data: { fingerprint: 'f1', train: 40, test: 10, classNames: ['khen', 'chê'] },
+      metric: 'accuracy' as const,
+      createdAt: '2026-11-26T08:00:00.000Z',
+    };
+    const trials = [
+      { ...base, number: 1, settings: { kind: 'naive-bayes', alpha: 1 }, scores: { train: 1, test: 0.8 }, guess: 0.7 },
+      { ...base, number: 2, settings: { kind: 'logistic', alpha: 1 }, scores: { train: 1, test: 0.9 }, conclusion: 'Logistic tốt hơn' },
+    ];
+    render(<InquiryRecord projectType="text" notes={[]} runs={[]} trials={trials} />);
+    expect(screen.getByTestId('inquiry-summary')).toHaveTextContent('0/6 bước có ghi chép · 2 lần chạy · 1 lần đoán trước · 1 lần có kết luận');
+    const rows = within(screen.getByRole('table', { name: 'Các lần huấn luyện' })).getAllByRole('row').slice(1);
+    expect(rows.map((r) => r.textContent)).toEqual(['#1Lần đầu70%80%', '#2mô hình: Naive Bayes → Hồi quy logistic–90%Logistic tốt hơn']);
+  });
 });

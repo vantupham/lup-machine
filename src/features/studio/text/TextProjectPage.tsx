@@ -25,6 +25,12 @@ import { TextRepresentSection } from './TextRepresentSection';
 import { TextSetupSection } from './TextSetupSection';
 import { TextUseSection } from './TextUseSection';
 import { BackLink } from '@/ui/BackLink';
+import { hashText } from '@/core/data/fingerprint';
+import type { TrialSetupLike } from '@/core/experiments/trial-diff';
+import { useTrialLog } from '@/features/trials/useTrialLog';
+import { TrialBefore } from '@/features/trials/TrialBefore';
+import { TrialAfter } from '@/features/trials/TrialAfter';
+import { classificationTrial } from '@/features/trials/trial-input';
 
 interface TrainedState {
   readonly key: string;
@@ -63,6 +69,22 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
   const trainKey = JSON.stringify([table?.updatedAt ?? null, config]);
   const current = trained && trained.key === trainKey ? trained.model : null;
   const evaluation = useMemo(() => (current && data ? evaluateText(current, data) : null), [current, data]);
+  const trialLog = useTrialLog(projectId);
+  /** Cài đặt và dữ liệu của lần huấn luyện kế tiếp (để so với lần trước trong nhật ký). */
+  const trialSetup: TrialSetupLike | null =
+    data && config && table
+      ? {
+          settings: { ...config.model, maxN: config.maxN },
+          split: { testRatio: config.testRatio, seed: config.seed },
+          data: {
+            fingerprint: hashText(`${table.updatedAt}|${config.textColumn}|${config.labelColumn}`),
+            train: data.train.y.length,
+            test: data.test.y.length,
+            classNames: data.classNames,
+          },
+        }
+      : null;
+  const canGuess = (data?.test.y.length ?? 0) > 0;
 
   if (state.status === 'loading') return <p className="text-muted">{t('tabular.loading')}</p>;
   if (state.status === 'not-found') return <p role="alert">{t('project.notFound')}</p>;
@@ -75,7 +97,12 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
 
   const train = () => {
     if (!data || !config) return;
-    setTrained({ key: trainKey, model: trainText(data, config.model), count: (trained?.count ?? 0) + 1 });
+    const model = trainText(data, config.model);
+    setTrained({ key: trainKey, model, count: (trained?.count ?? 0) + 1 });
+    if (trialSetup) {
+      const scores = evaluateText(model, data);
+      void trialLog.record(classificationTrial(trialSetup, { train: scores.trainAccuracy, test: scores.testAccuracy }, scores.confusion), canGuess);
+    }
   };
 
   return (
@@ -120,6 +147,7 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
             <TextRepresentSection data={data} maxN={config.maxN} onMaxNChange={(maxN) => updateConfig({ ...config, maxN })} />
           </Step>
           <Step n={4} id="text-step-train" notebook="train" title={t('text.steps.train')} done={current !== null}>
+            {trialSetup && current === null && <TrialBefore log={trialLog} current={trialSetup} canGuess={canGuess} />}
             <TextModelSection
               settings={config.model}
               onChange={(model) => updateConfig({ ...config, model })}
@@ -127,6 +155,7 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
               isStale={trained !== null && current === null}
               trainCount={trained?.count ?? 0}
             />
+            <TrialAfter log={trialLog} isCurrent={current !== null} />
           </Step>
           {current && evaluation && (
             <>

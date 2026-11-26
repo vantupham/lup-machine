@@ -11,6 +11,7 @@ import { createDexieTableRepository } from './table-repository';
 import { createDexieExperimentRepository } from './experiment-repository';
 import { createDexieModelCardRepository } from './model-card-repository';
 import { createDexieNotebookRepository } from './notebook-repository';
+import { createDexieTrialRepository } from './trial-repository';
 import { createDexieProjectFileRepository, projectFileName, ProjectFileError } from './project-file-repository';
 
 let db: LupDatabase;
@@ -23,6 +24,7 @@ const repos = () => ({
   experiments: createDexieExperimentRepository(db),
   cards: createDexieModelCardRepository(db),
   notebook: createDexieNotebookRepository(db),
+  trials: createDexieTrialRepository(db),
   files: createDexieProjectFileRepository(db),
 });
 
@@ -110,6 +112,23 @@ describe('ProjectFileRepository', () => {
     expect(await r.notebook.list(copy.id)).toEqual([{ step: 'represent', text: 'Mèo nằm bên trái bản đồ' }]);
     expect((await r.experiments.listRuns(copy.id))[0]?.guess).toEqual({ testAccuracy: 0.9 });
     expect((await r.experiments.listRuns(copy.id))[0]?.conclusion).toBe('Máy học nhanh');
+  });
+
+  test('nhật ký thí nghiệm của Studio văn bản đi theo tệp .lup', async () => {
+    const r = repos();
+    const project = await r.projects.create({ name: 'Căng tin', projectType: 'text' });
+    const saved = await r.trials.add(project.id, {
+      settings: { kind: 'naive-bayes', alpha: 1, maxN: 1 },
+      split: { testRatio: 0.2, seed: 1 },
+      data: { fingerprint: 'f1', train: 40, test: 10, classNames: ['khen', 'chê'] },
+      metric: 'accuracy',
+      scores: { train: 1, test: 0.9 },
+      guess: 0.7,
+    });
+    await r.trials.setConclusion(saved.id, 'Naive Bayes đủ tốt');
+    const copy = await r.files.importProject((await r.files.exportProject(project.id)).bytes);
+    const [imported] = await r.trials.list(copy.id);
+    expect(imported).toMatchObject({ number: 1, settings: { kind: 'naive-bayes', alpha: 1, maxN: 1 }, guess: 0.7, conclusion: 'Naive Bayes đủ tốt' });
   });
 
   test('dự án âm thanh và tư thế', async () => {

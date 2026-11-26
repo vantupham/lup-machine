@@ -19,6 +19,7 @@ const project: ProjectBundle = {
   runs: [],
   modelCard: null,
   notes: [],
+  trials: [],
 };
 
 function submission(students: string, testAccuracy: number | null): Submission {

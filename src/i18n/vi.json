@@ -1937,5 +1937,40 @@
       "filled": "Kèm ghi chép",
       "version": "Nội dung bản in"
     }
+  },
+  "trials": {
+    "settings": {
+      "kind": "mô hình",
+      "c": "C",
+      "k": "k",
+      "alpha": "α",
+      "maxDepth": "độ sâu cây",
+      "criterion": "tiêu chí tách",
+      "maxN": "cách tách từ",
+      "features": "cột đặc trưng",
+      "target": "cột cần đoán"
+    },
+    "models": {
+      "logistic": "Hồi quy logistic",
+      "knn": "k-NN",
+      "naive-bayes": "Naive Bayes",
+      "tree": "Cây quyết định",
+      "linear": "Hồi quy tuyến tính",
+      "knn-regression": "k-NN (hồi quy)"
+    },
+    "maxN": {
+      "1": "âm tiết đơn",
+      "2": "thêm cặp âm tiết"
+    },
+    "changes": {
+      "setting": "{{name}}: {{from}} → {{to}}",
+      "seed": "seed {{from}} → {{to}}",
+      "testRatio": "tỉ lệ Kiểm tra {{from}}% → {{to}}%",
+      "trainCount": "mẫu Huấn luyện {{from}} → {{to}}",
+      "testCount": "mẫu Kiểm tra {{from}} → {{to}}",
+      "samples": "đã thay mẫu (số lượng giữ nguyên)"
+    },
+    "r2Test": "R² trên tập Kiểm tra",
+    "deltaR2": "{{label}}: {{from}} → {{to}} ({{change}})."
   }
 }

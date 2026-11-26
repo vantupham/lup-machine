@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { ProjectRecord, RunRecord } from '@/storage/db';
+import type { ProjectRecord, RunRecord, TrialRecord } from '@/storage/db';
 import type { Note } from '@/storage/schemas/notebook';
-import { useExperimentRepository, useNotebookRepository, useProjectRepository } from '@/storage/repository-context';
+import { useExperimentRepository, useNotebookRepository, useProjectRepository, useTrialRepository } from '@/storage/repository-context';
 import { getErrorMessage } from '@/ui/error-message';
 import { BackLink } from '@/ui/BackLink';
 import { Info, Printer } from '@/ui/icons';
@@ -12,7 +12,7 @@ import { InquiryRecord } from './InquiryRecord';
 
 type Loaded =
   | { readonly kind: 'loading' }
-  | { readonly kind: 'ready'; readonly project: ProjectRecord; readonly notes: readonly Note[]; readonly runs: readonly RunRecord[] }
+  | { readonly kind: 'ready'; readonly project: ProjectRecord; readonly notes: readonly Note[]; readonly runs: readonly RunRecord[]; readonly trials: readonly TrialRecord[] }
   | { readonly kind: 'error'; readonly message: string };
 
 /**
@@ -25,17 +25,18 @@ export function NotebookPrintPage() {
   const projects = useProjectRepository();
   const notebook = useNotebookRepository();
   const experiments = useExperimentRepository();
+  const trialRepo = useTrialRepository();
   const [loaded, setLoaded] = useState<{ readonly id: string; readonly value: Loaded } | null>(null);
   const [isBlank, setIsBlank] = useState(false);
 
   useEffect(() => {
     let isActive = true;
-    Promise.all([projects.findById(projectId), notebook.list(projectId), experiments.listRuns(projectId)]).then(
-      ([project, notes, runs]) => {
+    Promise.all([projects.findById(projectId), notebook.list(projectId), experiments.listRuns(projectId), trialRepo.list(projectId)]).then(
+      ([project, notes, runs, trials]) => {
         if (!isActive) return;
         setLoaded({
           id: projectId,
-          value: project ? { kind: 'ready', project, notes, runs } : { kind: 'error', message: t('project.notFound') },
+          value: project ? { kind: 'ready', project, notes, runs, trials } : { kind: 'error', message: t('project.notFound') },
         });
       },
       (error: unknown) => {
@@ -46,7 +47,7 @@ export function NotebookPrintPage() {
     return () => {
       isActive = false;
     };
-  }, [projects, notebook, experiments, projectId, t]);
+  }, [projects, notebook, experiments, trialRepo, projectId, t]);
 
   const state: Loaded = loaded?.id === projectId ? loaded.value : { kind: 'loading' };
   if (state.kind === 'loading') return <p>…</p>;
@@ -93,7 +94,7 @@ export function NotebookPrintPage() {
             </div>
           </div>
         </header>
-        <InquiryRecord projectType={state.project.projectType} notes={isBlank ? [] : state.notes} runs={isBlank ? [] : state.runs} isPrint />
+        <InquiryRecord projectType={state.project.projectType} notes={isBlank ? [] : state.notes} runs={isBlank ? [] : state.runs} trials={isBlank ? [] : state.trials} isPrint />
       </article>
     </div>
   );

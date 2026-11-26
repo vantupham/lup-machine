@@ -39,6 +39,9 @@ describe('Studio tư thế & bàn tay', () => {
     await userEvent.click(screen.getByRole('radio', { name: /k láng giềng/ }));
     await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
     expect(await screen.findByText(/k-NN không học trọng số/)).toBeInTheDocument();
+    // Nhật ký thí nghiệm: lần 2 đổi mô hình so với lần 1
+    expect(await screen.findByText('Kết quả so với lần #1')).toBeInTheDocument();
+    expect(within(screen.getByRole('table', { name: 'Nhật ký thí nghiệm' })).getByTestId('trial-row-2')).toHaveTextContent('mô hình: Hồi quy logistic → k-NN');
   }, SLOW_TEST_MS);
 
   test('chọn bàn tay: cử chỉ mẫu có 21 điểm; lựa chọn được ghi nhớ khi mở lại', async () => {
