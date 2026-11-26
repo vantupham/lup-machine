@@ -29,7 +29,7 @@ function project(): ProjectBundle {
   };
 }
 
-function lups(students: string, accuracy: number): File {
+function lups(students: string, accuracy: number, extra: Partial<ProjectBundle> = {}): File {
   const submission: Submission = {
     assignment: sampleAssignment,
     submitter: { students, className: '7A' },
@@ -38,7 +38,7 @@ function lups(students: string, accuracy: number): File {
     includesData: false,
     summary: { projectType: 'image', classes: [{ name: 'Giấy', count: 20, train: 15, test: 5 }], table: null, latestRun: { number: 2, epochs: 20, trainAccuracy: 1, testAccuracy: accuracy, matchesData: false } },
   };
-  return new File([encodeSubmissionPackage({ submission, project: project() }, meta) as Uint8Array<ArrayBuffer>], `${students}.lups`);
+  return new File([encodeSubmissionPackage({ submission, project: { ...project(), ...extra } }, meta) as Uint8Array<ArrayBuffer>], `${students}.lups`);
 }
 
 describe('Góc giáo viên – chấm bài', () => {
@@ -127,6 +127,34 @@ describe('Góc giáo viên – chấm bài', () => {
     const [created] = await r.repository.findAll();
     expect(created?.name).toBe('Chi – Phân loại rác bằng ảnh');
     expect((await r.modelCards.get(created!.id))?.purpose).toBe('Phân loại rác');
+  });
+
+  test('xem Sổ tay và các lần thí nghiệm của học sinh trong bài nộp', async () => {
+    const user = userEvent.setup();
+    const options = { epochs: 50, learningRate: 0.001, batchSize: 16, seed: 42 };
+    const run = (number: number, epochs: number, test: number) => ({
+      number,
+      createdAt: '2026-11-25T09:00:00.000Z',
+      fingerprint: 'f1',
+      matchesData: false,
+      options: { ...options, epochs },
+      classNames: ['Giấy', 'Nhựa'],
+      counts: { train: 30, test: 10 },
+      metrics: [{ epoch: epochs, trainLoss: 0.1, trainAccuracy: 1, testLoss: 0.3, testAccuracy: test }],
+    });
+    const file = lups('Dũng', 0.8, {
+      notes: [{ step: 'evaluate', text: 'Hay nhầm nhựa trong với giấy trắng' }],
+      runs: [{ ...run(1, 50, 0.7), guess: { testAccuracy: 0.9 } }, { ...run(2, 200, 0.8), conclusion: 'Học lâu hơn thì tăng 10 điểm' }],
+    });
+    renderWithRepositories('/giao-vien?tab=cham-bai', createTestRepository());
+    await user.upload(screen.getByLabelText('Chọn tệp .lups'), [file]);
+    await user.click(await screen.findByRole('button', { name: 'Chấm bài Dũng' }));
+
+    const inquiry = await screen.findByRole('region', { name: 'Sổ tay và thí nghiệm' });
+    expect(await within(inquiry).findByTestId('inquiry-summary')).toHaveTextContent('1/6 bước có ghi chép · 2 lần chạy · 1 lần đoán trước · 1 lần có kết luận');
+    expect(within(inquiry).getByTestId('inquiry-note-evaluate')).toHaveTextContent('Hay nhầm nhựa trong với giấy trắng');
+    const rows = within(within(inquiry).getByRole('table', { name: 'Các lần huấn luyện' })).getAllByRole('row').slice(1);
+    expect(rows.map((r) => r.textContent)).toEqual(['#1Lần đầu90%70%', '#2số epoch 50 → 200–80%Học lâu hơn thì tăng 10 điểm']);
   });
 
   test('xóa một bài nộp và xóa cả bài tập', async () => {

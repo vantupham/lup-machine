@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { stratifiedSplit } from '@/core/data/split';
 import type { ClassRecord, SampleRecord, Split, StoredImage } from '@/storage/db';
@@ -22,7 +22,7 @@ import { ImageLabProvider } from './lab/ImageLabContext';
 import { QuickWorkspace } from './quick/QuickWorkspace';
 import { useModeStore, useModeSwitch } from '@/ui/mode-store';
 import { useStepDetailsStore } from '@/features/studio/step-details';
-import { ChevronDown, ChevronUp, Plus } from '@/ui/icons';
+import { ChevronDown, ChevronUp, Plus, Printer } from '@/ui/icons';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { BackLink } from '@/ui/BackLink';
@@ -211,7 +211,12 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         <BackLink to="/studio">{t('project.back')}</BackLink>
         <ProjectTitle projectId={projectId} name={projectName} onRenamed={() => void reload()} />
         <AssignmentBanner projectId={projectId} />
-        <ModelCardLink projectId={projectId} />
+        <div className="flex flex-wrap gap-2">
+          <ModelCardLink projectId={projectId} />
+          <Link to={`/studio/${projectId}/so-tay`} className="inline-flex items-center gap-2 rounded-full border border-rule px-3 py-1 text-sm hover:bg-surface">
+            <Printer /> {t('inquiry.print.link')}
+          </Link>
+        </div>
       </header>
 
       <StepBar targets={IMAGE_STEP_TARGETS} />

@@ -220,7 +220,10 @@
       "error": "Could not create the package: {{message}}",
       "titleRequired": "The assignment needs a title.",
       "criterionRequired": "Every criterion needs a name.",
-      "questionRequired": "Questions cannot be empty."
+      "questionRequired": "Questions cannot be empty.",
+      "rubricTemplates": "Rubric template",
+      "useDefaultRubric": "Product",
+      "useSkillsRubric": "5 skills"
     },
     "defaultRubric": {
       "dataName": "Data",
@@ -273,6 +276,18 @@
       "submitted": "Created {{file}}. Send this file to your teacher.",
       "submitError": "Could not create the submission: {{message}}",
       "checkError": "Could not check the submission requirements. Reload the page to try again."
+    },
+    "skillsRubric": {
+      "describeName": "Describe",
+      "describeDescription": "Records what was observed at each step: image counts, the map, the charts, the confusion matrix.",
+      "explainName": "Explain",
+      "explainDescription": "Answers \"Why?\" with reasons and points to evidence in the app.",
+      "analyzeName": "Analyse",
+      "analyzeDescription": "Identifies confused classes, confident mistakes, and their likely causes.",
+      "experimentName": "Experiment",
+      "experimentDescription": "Changes one thing at a time, guesses first, then compares with the previous run.",
+      "improveName": "Improve",
+      "improveDescription": "Fixes data or settings based on evidence, keeps the Test split fair, and draws a conclusion."
     }
   },
   "grading": {
@@ -1791,5 +1806,32 @@
     "saving": "Saving…",
     "saved": "Saved",
     "error": "Could not save: {{message}}"
+  },
+  "inquiry": {
+    "title": "Notebook and experiments",
+    "summary": "{{notes}}/{{steps}} steps with notes · {{runs}} runs · {{guesses}} guesses made in advance · {{conclusions}} runs with a conclusion",
+    "notesTitle": "Notes by step",
+    "noNotes": "No notes yet.",
+    "runsTitle": "Training runs",
+    "noRuns": "No training runs yet.",
+    "loadError": "Could not read the notebook of this submission: {{message}}",
+    "columns": {
+      "run": "Run",
+      "changes": "Changed",
+      "guess": "Guess",
+      "test": "Test score",
+      "conclusion": "Conclusion"
+    },
+    "print": {
+      "link": "Print notebook",
+      "title": "Experiment notebook",
+      "button": "Print",
+      "hint": "Print it blank to write by hand in class, or with the notes so far as a report.",
+      "name": "Name",
+      "className": "Class",
+      "blank": "Blank",
+      "filled": "With notes",
+      "version": "Printed content"
+    }
   }
 }

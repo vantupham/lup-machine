@@ -22,6 +22,24 @@ function defaultRubric(t: Translate): RubricCriterion[] {
   ];
 }
 
+/** Thang chấm theo 5 năng lực học sinh rèn qua dự án (mỗi năng lực 2 điểm, tổng 10). */
+const SKILLS = ['describe', 'explain', 'analyze', 'experiment', 'improve'] as const;
+const SKILL_POINTS = 2;
+
+function skillsRubric(t: Translate): RubricCriterion[] {
+  return SKILLS.map((skill) => ({
+    criterion: t(`classroom.skillsRubric.${skill}Name`),
+    description: t(`classroom.skillsRubric.${skill}Description`),
+    maxPoints: SKILL_POINTS,
+  }));
+}
+
+type RubricTemplate = 'product' | 'skills';
+const RUBRIC_TEMPLATES: Record<RubricTemplate, (t: Translate) => RubricCriterion[]> = { product: defaultRubric, skills: skillsRubric };
+
+const sameRubric = (a: readonly RubricCriterion[], b: readonly RubricCriterion[]) =>
+  a.length === b.length && a.every((c, i) => c.criterion === b[i]?.criterion && c.description === b[i]?.description && c.maxPoints === b[i]?.maxPoints);
+
 /** Lỗi nhập liệu thường gặp, báo bằng lời dễ hiểu trước khi kiểm tra bằng schema. */
 function validationError(t: Translate, title: string, questions: readonly string[], rubric: readonly RubricCriterion[]): string | null {
   if (title.trim() === '') return t('classroom.create.titleRequired');
@@ -105,6 +123,25 @@ export function CreateAssignmentForm() {
         />
       </div>
       <QuestionsEditor questions={questions} onChange={setQuestions} />
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-muted">{t('classroom.create.rubricTemplates')}:</span>
+        <span className="inline-flex overflow-hidden rounded border border-rule" role="group" aria-label={t('classroom.create.rubricTemplates')}>
+          {(Object.keys(RUBRIC_TEMPLATES) as RubricTemplate[]).map((key) => {
+            const isCurrent = sameRubric(rubric, RUBRIC_TEMPLATES[key](t));
+            return (
+              <button
+                key={key}
+                type="button"
+                aria-pressed={isCurrent}
+                onClick={() => setRubric(RUBRIC_TEMPLATES[key](t))}
+                className={`px-3 py-1 ${isCurrent ? 'bg-ink text-paper' : ''}`}
+              >
+                {t(key === 'product' ? 'classroom.create.useDefaultRubric' : 'classroom.create.useSkillsRubric')}
+              </button>
+            );
+          })}
+        </span>
+      </div>
       <RubricEditor rubric={rubric} onChange={setRubric} />
       <div>
         <label htmlFor="assignment-starter" className="mb-1 block font-semibold">{t('classroom.create.starterLabel')}</label>
