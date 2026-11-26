@@ -1,7 +1,9 @@
 import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { parseCsv } from '@/core/tabular/csv';
-import { createTestRepository, renderApp, type TestRepositories } from '../../../../tests/setup/render';
+import { useModeStore } from '@/ui/mode-store';
+import { useStepDetailsStore } from '@/features/studio/step-details';
+import { createTestRepository, renderApp, renderWithRepositories, type TestRepositories } from '../../../../tests/setup/render';
 import { draftsFrom, draftsToCsv } from './SentenceEditor';
 
 async function setup(): Promise<{ repos: TestRepositories; projectId: string }> {
@@ -11,8 +13,15 @@ async function setup(): Promise<{ repos: TestRepositories; projectId: string }> 
 }
 
 function render(repos: TestRepositories, projectId: string) {
-  return renderApp(`/studio/${projectId}`, repos.repository, repos.dataset, repos.experiments, repos.tables);
+  return renderWithRepositories(`/studio/${projectId}`, repos);
 }
+
+beforeEach(() => {
+  // Các kiểm thử 6 bước dùng Chuyên sâu (chỉ có 6 bước); khối làm nhanh kiểm thử riêng ở Khám phá.
+  useModeStore.setState({ mode: 'expert' });
+  useStepDetailsStore.setState({ isOpen: false });
+  window.scrollTo = vi.fn();
+});
 
 describe('Studio văn bản tiếng Việt', () => {
   test('bộ câu chủ đề: tách âm tiết, TF-IDF, huấn luyện Naive Bayes, giải thích từng từ', async () => {
@@ -89,5 +98,62 @@ describe('trình soạn câu', () => {
     expect(drafts).toEqual([{ name: 'khen', lines: 'Ngon, rẻ\nSạch sẽ' }, { name: 'chê', lines: 'Chậm' }]);
     const csv = draftsToCsv([...drafts, { name: 'trống', lines: '\n  \n' }]);
     expect(parseCsv(csv)).toMatchObject({ ok: true, table: { headers: ['nhãn', 'văn bản'], rows: [['khen', 'Ngon, rẻ'], ['khen', 'Sạch sẽ'], ['chê', 'Chậm']] } });
+  });
+});
+
+describe('Studio văn bản: khối "Dạy máy trong 3 bước" (Khám phá)', () => {
+  beforeEach(() => useModeStore.setState({ mode: 'explore' }));
+  const quick = () => screen.getByRole('region', { name: 'Dạy máy trong 3 bước' });
+
+  test('gõ câu ngay ở cột 1 cho hai nhóm, đổi tên nhóm; huấn luyện nhanh qua 4 chặng rồi thử một câu', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    for (const name of ['1. Gõ câu', '2. Cho máy học', '3. Thử ngay']) expect(within(region).getByRole('heading', { name })).toBeInTheDocument();
+    expect(within(region).getByText('Gõ câu cho ít nhất hai nhóm.')).toBeInTheDocument();
+
+    // đổi tên nhóm chưa có câu (chỉ ở khối làm nhanh), rồi gõ câu: bảng được tạo với tên mới
+    await userEvent.click(within(region).getByRole('button', { name: 'Đổi tên lớp Nhóm 1' }));
+    await userEvent.clear(within(region).getByRole('textbox', { name: 'Tên lớp' }));
+    await userEvent.type(within(region).getByRole('textbox', { name: 'Tên lớp' }), 'khen{Enter}');
+    const sentences = { khen: ['Cơm rất ngon', 'Cô bán hàng vui vẻ', 'Đồ ăn ngon và rẻ', 'Nước mát ngon lắm'], 'Nhóm 2': ['Cơm nguội lạnh', 'Phải chờ rất lâu', 'Đồ ăn đắt quá', 'Bàn ghế bẩn quá'] };
+    for (const [group, list] of Object.entries(sentences)) {
+      for (const text of list) await userEvent.type(within(quick()).getByRole('textbox', { name: `Câu mới cho nhóm ${group}` }), `${text}{Enter}`);
+    }
+    expect(await within(quick()).findByRole('group', { name: 'Nhóm 2' })).toHaveTextContent('4 câu');
+    expect(within(quick()).getByRole('group', { name: 'khen' })).toHaveTextContent('4 câu');
+
+    // đổi tên nhóm đã có câu: mọi ô nhãn trong bảng đổi theo
+    await userEvent.click(within(quick()).getByRole('button', { name: 'Đổi tên lớp Nhóm 2' }));
+    await userEvent.clear(within(quick()).getByRole('textbox', { name: 'Tên lớp' }));
+    await userEvent.type(within(quick()).getByRole('textbox', { name: 'Tên lớp' }), 'chê{Enter}');
+    expect(await within(quick()).findByRole('group', { name: 'chê' })).toHaveTextContent('4 câu');
+    const csv = (await repos.tables.get(projectId))!.csv;
+    expect(csv).toContain('chê,Cơm nguội lạnh');
+    expect(csv).not.toContain('Nhóm 2');
+
+    await userEvent.click(within(quick()).getByRole('button', { name: 'Huấn luyện nhanh' }));
+    const stages = within(quick()).getByRole('list', { name: 'Các chặng huấn luyện' });
+    expect(within(stages).getByText('Tách 8 câu thành từ')).toHaveTextContent('(đang làm)');
+    expect(await within(quick()).findByText(/^Xong\. Máy đoán đúng \d+% mẫu Kiểm tra\.$/, {}, { timeout: 5_000 })).toBeInTheDocument();
+    expect(within(stages).getByText('Máy học: Naive Bayes')).toHaveTextContent('(xong)');
+    expect(await repos.trials.list(projectId)).toHaveLength(1);
+
+    await userEvent.type(within(quick()).getByLabelText('Gõ một câu để thử'), 'cơm ngon');
+    const rows = within(within(quick()).getByRole('list', { name: 'Máy đoán' })).getAllByRole('listitem');
+    expect(rows[0]).toHaveTextContent(/^khen/);
+  }, 30_000);
+
+  test('bộ câu mẫu từ cột 1; không cho đổi tên trùng nhóm đã có', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    await userEvent.click(within(region).getByRole('button', { name: /Chủ đề: thời tiết/ }));
+    expect(await within(region).findByRole('group', { name: 'thời tiết' })).toHaveTextContent('24 câu');
+    expect(within(region).queryByRole('group', { name: 'Nhóm 1' })).toBeNull();
+    await userEvent.click(within(region).getByRole('button', { name: 'Đổi tên lớp thời tiết' }));
+    await userEvent.clear(within(region).getByRole('textbox', { name: 'Tên lớp' }));
+    await userEvent.type(within(region).getByRole('textbox', { name: 'Tên lớp' }), 'thể thao{Enter}');
+    expect(within(region).getByRole('alert')).toHaveTextContent('Đã có nhóm tên này.');
   });
 });

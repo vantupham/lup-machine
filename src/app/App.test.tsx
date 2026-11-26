@@ -51,16 +51,12 @@ describe('Khung ứng dụng', () => {
     },
   );
 
-  test('dự án ảnh hiện công tắc chế độ học; dự án văn bản thì không (không có nội dung đổi theo chế độ)', async () => {
+  test.each(['image', 'audio', 'pose', 'text', 'tabular'] as const)('dự án %s hiện công tắc chế độ học (Khám phá có khối "Dạy máy trong 3 bước")', async (projectType) => {
     const repos = createTestRepository();
-    const image = await repos.repository.create({ name: 'Ảnh', projectType: 'image' });
-    const text = await repos.repository.create({ name: 'Câu', projectType: 'text' });
-    const imageView = renderWithRepositories(`/studio/${image.id}`, repos);
+    const project = await repos.repository.create({ name: 'Dự án', projectType });
+    renderWithRepositories(`/studio/${project.id}`, repos);
     expect(await screen.findByRole('radio', { name: /chuyên sâu/i })).toBeInTheDocument();
-    imageView.unmount();
-    renderWithRepositories(`/studio/${text.id}`, repos);
-    expect(await screen.findByRole('heading', { level: 1, name: 'Câu' })).toBeInTheDocument();
-    expect(screen.queryByRole('radio', { name: /chuyên sâu/i })).toBeNull();
+    expect(await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' })).toBeInTheDocument();
   });
 
   test('trang không tồn tại', () => {

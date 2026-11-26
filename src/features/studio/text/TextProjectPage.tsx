@@ -7,7 +7,7 @@ import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
 import { textNotebook } from '@/core/export/text-notebook';
 import { parseCsv } from '@/core/tabular/csv';
-import { evaluateText, prepareText, trainText, type TrainedText } from '@/core/text/text-model';
+import { prepareText } from '@/core/text/text-model';
 import { checkTextQuality } from '@/core/text/text-quality';
 import { ColabExportPanel } from '@/features/export/ColabExportPanel';
 import { isTextConfig } from '@/storage/repositories/table-repository';
@@ -25,20 +25,15 @@ import { TextRepresentSection } from './TextRepresentSection';
 import { TextSetupSection } from './TextSetupSection';
 import { TextUseSection } from './TextUseSection';
 import { BackLink } from '@/ui/BackLink';
-import { hashText } from '@/core/data/fingerprint';
-import type { TrialSetupLike } from '@/core/experiments/trial-diff';
-import { useTrialLog } from '@/features/trials/useTrialLog';
 import { TrialBefore } from '@/features/trials/TrialBefore';
 import { TrialAfter } from '@/features/trials/TrialAfter';
-import { classificationTrial } from '@/features/trials/trial-input';
 import { StudioFindings } from '@/features/trials/StudioFindings';
 import { encodeText, predictProbaText } from '@/core/text/text-model';
-
-interface TrainedState {
-  readonly key: string;
-  readonly model: TrainedText;
-  readonly count: number;
-}
+import { useModeSwitch } from '@/ui/mode-store';
+import { StepDetails } from '../StepDetails';
+import { findTextSample, type TextSampleId } from './text-samples';
+import { useTextModel } from './useTextModel';
+import { TextQuickWorkspace } from './quick/TextQuickWorkspace';
 
 /** Id tiêu đề 6 bước trên trang, cho thanh các bước. */
 const STEP_TARGETS = studioStepTargets('text');
@@ -46,7 +41,6 @@ const STEP_TARGETS = studioStepTargets('text');
 export function TextProjectPage({ projectId }: { readonly projectId: string }) {
   const { t } = useTranslation();
   const { state, saveTable, saveConfig, renameProject } = useTabularProject(projectId);
-  const [trained, setTrained] = useState<TrainedState | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const table = state.status === 'ready' ? state.table : null;
@@ -68,25 +62,9 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
   const data = prepared?.ok ? prepared.data : null;
   const issues = useMemo(() => checkTextQuality(examples), [examples]);
 
-  const trainKey = JSON.stringify([table?.updatedAt ?? null, config]);
-  const current = trained && trained.key === trainKey ? trained.model : null;
-  const evaluation = useMemo(() => (current && data ? evaluateText(current, data) : null), [current, data]);
-  const trialLog = useTrialLog(projectId);
-  /** Cài đặt và dữ liệu của lần huấn luyện kế tiếp (để so với lần trước trong nhật ký). */
-  const trialSetup: TrialSetupLike | null =
-    data && config && table
-      ? {
-          settings: { ...config.model, maxN: config.maxN },
-          split: { testRatio: config.testRatio, seed: config.seed },
-          data: {
-            fingerprint: hashText(`${table.updatedAt}|${config.textColumn}|${config.labelColumn}`),
-            train: data.train.y.length,
-            test: data.test.y.length,
-            classNames: data.classNames,
-          },
-        }
-      : null;
-  const canGuess = (data?.test.y.length ?? 0) > 0;
+  const model = useTextModel(projectId, table, config, data);
+  const { current, evaluation, trialLog, trialSetup, canGuess, key: trainKey } = model;
+  useModeSwitch();
 
   if (state.status === 'loading') return <p className="text-muted">{t('tabular.loading')}</p>;
   if (state.status === 'not-found') return <p role="alert">{t('project.notFound')}</p>;
@@ -97,14 +75,18 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
     saveConfig(next).catch((err: unknown) => setSaveError(t('tabular.saveError', { message: getErrorMessage(err) })));
   };
 
-  const train = () => {
-    if (!data || !config) return;
-    const model = trainText(data, config.model);
-    setTrained({ key: trainKey, model, count: (trained?.count ?? 0) + 1 });
-    if (trialSetup) {
-      const scores = evaluateText(model, data);
-      void trialLog.record(classificationTrial(trialSetup, { train: scores.trainAccuracy, test: scores.testAccuracy }, scores.confusion), canGuess);
-    }
+  /** Khối làm nhanh sửa bảng câu: lưu bảng mới rồi giữ cài đặt cũ (mô hình, cách chia) nếu các cột vẫn còn. */
+  const saveCsvKeepConfig = async (csv: string) => {
+    await saveTable({ csv, fileName: table?.fileName ?? t('text.editor.fileName'), sampleId: null });
+    const next = parseCsv(csv);
+    if (config && next.ok && isTextConfigValid(config, next.table)) await saveConfig(config);
+  };
+
+  const loadSample = async (id: TextSampleId) => {
+    const sample = findTextSample(id);
+    if (!sample) return;
+    await saveTable({ csv: await sample.load(), fileName: sample.fileName, sampleId: sample.id });
+    model.reset();
   };
 
   return (
@@ -125,6 +107,21 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
 
       <StepBar targets={STEP_TARGETS} />
 
+      <StepDetails
+        quick={
+          <TextQuickWorkspace
+            parsed={parsed}
+            config={config}
+            examples={examples}
+            data={data}
+            prepareError={prepared && !prepared.ok ? prepared.error : null}
+            model={model}
+            onSaveCsv={saveCsvKeepConfig}
+            onLoadSample={loadSample}
+          />
+        }
+      >
+
       <Step n={1} id="text-step-data" notebook="data" title={t('text.steps.data')} done={state.table !== null}>
         <TextDataSection
           hasTable={parsed !== null}
@@ -132,7 +129,7 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
           examples={examples}
           onSave={async (input) => {
             await saveTable(input);
-            setTrained(null);
+            model.reset();
           }}
         />
       </Step>
@@ -153,9 +150,9 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
             <TextModelSection
               settings={config.model}
               onChange={(model) => updateConfig({ ...config, model })}
-              onTrain={train}
-              isStale={trained !== null && current === null}
-              trainCount={trained?.count ?? 0}
+              onTrain={model.train}
+              isStale={model.trained !== null && current === null}
+              trainCount={model.trained?.count ?? 0}
             />
             <TrialAfter log={trialLog} isCurrent={current !== null} />
           </Step>
@@ -194,6 +191,7 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
           )}
         </>
       )}
+      </StepDetails>
     </div>
     </NotebookProvider>
   );

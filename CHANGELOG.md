@@ -4,6 +4,16 @@
 
 ## [Chưa phát hành]
 
+### Thêm (khối "Dạy máy trong 3 bước" cho Studio văn bản và bảng số)
+
+- **Cả 5 Studio giờ đều có Khám phá / Chuyên sâu** và khối "Dạy máy trong 3 bước".
+- **Văn bản, cột "1. Gõ câu"**: bộ câu mẫu, mỗi nhóm một dòng có bút chì đổi tên, số câu và ô gõ câu mới (Enter để thêm). Chưa có bảng thì có sẵn hai nhóm trống để gõ ngay; "Thêm nhóm" tạo nhóm mới, nhóm chỉ vào bảng khi có câu đầu tiên. Đổi tên nhóm đã có câu thì mọi ô nhãn trong bảng đổi theo; không cho trùng tên nhóm khác.
+- **Bảng số, cột "1. Chọn bảng"**: bảng mẫu hoặc tệp CSV, chọn cột máy cần đoán (tự biết phân loại hay hồi quy), các lớp kèm số dòng và bút chì đổi tên (đổi mọi ô của cột cần đoán).
+- **Cột "2. Cho máy học"**: 4 chặng như Studio âm thanh: văn bản "Tách N câu thành từ" (số từ khác nhau), bảng số "Biến mỗi dòng thành N số" (số dòng). Hồi quy chấm bằng R² (số thập phân theo ngôn ngữ đang dùng).
+- **Cột "3. Thử ngay"**: văn bản gõ một câu để thử; bảng số thử lần lượt từng dòng Kiểm tra, thấy giá trị thật và máy đoán gì.
+- Sửa bảng ở khối làm nhanh giữ lại cài đặt cũ (mô hình, cách chia, n-gram) nếu các cột vẫn còn.
+- Phần dùng chung: `PacedQuickTrain` (cột 2 cho mọi Studio học tức thì), `score-text` (độ chính xác / R²), `table-edit` (đổi giá trị một cột); `useTextModel`, `useTabularModel` tách trạng thái mô hình khỏi trang.
+
 ### Thêm (khối "Dạy máy trong 3 bước" cho Studio tư thế)
 
 - **Studio tư thế có chế độ Khám phá / Chuyên sâu** như Studio ảnh và âm thanh.

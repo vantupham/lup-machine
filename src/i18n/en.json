@@ -880,7 +880,9 @@
         "scoreDetail": "{{percent}}% of {{split}} samples right",
         "done": "Done. The computer gets {{percent}}% of {{split}} samples right.",
         "splitTest": "test",
-        "splitTrain": "training"
+        "splitTrain": "training",
+        "r2Detail": "R² = {{r2}} on {{split}} samples",
+        "r2Done": "Done. R² on {{split}} samples is {{r2}} (closer to 1 means closer guesses)."
       }
     },
     "details": {
@@ -1382,6 +1384,32 @@
       "neighborRow": "row {{row}} (distance {{distance}}):",
       "score": "Score of \"{{cls}}\" = {{b}} (intercept) + contributions = {{score}}. Largest contributions:",
       "linearSum": "Prediction = {{b}} (intercept) + sum of contributions (coefficient × value). Largest contributions:"
+    },
+    "quick": {
+      "lead": "Pick a table, press one button to train, then try it. The steps below show what the computer does.",
+      "columns": {
+        "data": "1. Pick a table",
+        "train": "2. Train",
+        "preview": "3. Try it"
+      },
+      "empty": "Use a sample table or upload your own CSV file.",
+      "upload": "Upload a CSV file",
+      "uploadAria": "Upload a CSV file for the project",
+      "chooseOther": "Pick another table",
+      "size": "{{rows}} rows · {{columns}} columns",
+      "target": "Column to predict",
+      "task": {
+        "classification": "Classification: guess which class each row belongs to.",
+        "regression": "Regression: guess a number."
+      },
+      "classes": "Classes of the column to predict",
+      "needTable": "Pick a table first.",
+      "encode": "Turn each row into {{count}} numbers",
+      "noTestRows": "There are no test rows to try yet.",
+      "tryFirst": "Try a test row",
+      "tryNext": "Next test row",
+      "rowActual": "Row {{row}}: the real {{target}} is {{actual}}.",
+      "predictedValue": "Prediction: {{value}}"
     }
   },
   "export": {
@@ -1510,6 +1538,24 @@
       "total": "Total score",
       "totalHint": "The group with the highest total score is chosen.",
       "totalHintBinary": "With 2 groups: a positive score leans towards this group, a negative one towards the other."
+    },
+    "quick": {
+      "lead": "Type sentences, press one button to train, then try it. The steps below show what the computer does.",
+      "columns": {
+        "data": "1. Type sentences",
+        "train": "2. Train",
+        "preview": "3. Try it"
+      },
+      "empty": "Use a sample set, or type sentences for each group below.",
+      "sentenceInput": "New sentence for group {{name}}",
+      "placeholder": "Type a sentence and press Enter",
+      "add": "Add",
+      "addAria": "Add a sentence to group {{name}}",
+      "duplicateName": "A group with this name already exists.",
+      "needSentences": "Type sentences for at least two groups.",
+      "tokenize": "Split {{count}} sentences into words",
+      "tokenizeDetail": "Different words: {{words}}",
+      "tryInput": "Type a sentence to try"
     }
   },
   "audio": {

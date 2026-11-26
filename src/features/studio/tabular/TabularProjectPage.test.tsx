@@ -1,6 +1,8 @@
 import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createTestRepository, renderApp, type TestRepositories } from '../../../../tests/setup/render';
+import { useModeStore } from '@/ui/mode-store';
+import { useStepDetailsStore } from '@/features/studio/step-details';
+import { createTestRepository, renderApp, renderWithRepositories, type TestRepositories } from '../../../../tests/setup/render';
 
 async function setup(): Promise<{ repos: TestRepositories; projectId: string }> {
   const repos = createTestRepository();
@@ -9,8 +11,15 @@ async function setup(): Promise<{ repos: TestRepositories; projectId: string }> 
 }
 
 function render(repos: TestRepositories, projectId: string) {
-  return renderApp(`/studio/${projectId}`, repos.repository, repos.dataset, repos.experiments, repos.tables);
+  return renderWithRepositories(`/studio/${projectId}`, repos);
 }
+
+beforeEach(() => {
+  // Các kiểm thử 6 bước dùng Chuyên sâu (chỉ có 6 bước); khối làm nhanh kiểm thử riêng ở Khám phá.
+  useModeStore.setState({ mode: 'expert' });
+  useStepDetailsStore.setState({ isOpen: false });
+  window.scrollTo = vi.fn();
+});
 
 describe('Studio dữ liệu bảng', () => {
   test('nạp bộ Iris, huấn luyện cây quyết định, đánh giá và dự đoán một dòng mới', async () => {
@@ -98,4 +107,54 @@ describe('trang Mô hình tạo được dự án dữ liệu bảng', () => {
     expect(screen.getByRole('button', { name: /Hoa diên vĩ/ })).toBeInTheDocument();
     expect(await repos.dataset.listClasses((await repos.repository.findAll())[0]!.id)).toEqual([]);
   });
+});
+
+describe('Studio bảng số: khối "Dạy máy trong 3 bước" (Khám phá)', () => {
+  beforeEach(() => useModeStore.setState({ mode: 'explore' }));
+  const quick = () => screen.getByRole('region', { name: 'Dạy máy trong 3 bước' });
+
+  test('bảng Iris từ cột 1, đổi tên lớp; huấn luyện nhanh qua 4 chặng; thử từng dòng Kiểm tra', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    for (const name of ['1. Chọn bảng', '2. Cho máy học', '3. Thử ngay']) expect(within(region).getByRole('heading', { name })).toBeInTheDocument();
+    expect(within(region).getByText('Chọn một bảng trước.')).toBeInTheDocument();
+
+    await userEvent.click(within(region).getByRole('button', { name: /Hoa diên vĩ/ }));
+    expect(await within(region).findByText('150 dòng · 5 cột')).toBeInTheDocument();
+    expect(within(region).getByLabelText('Máy cần đoán cột')).toHaveValue('Loài');
+    const classes = within(region).getByRole('list', { name: 'Các lớp của cột cần đoán' });
+    expect(within(classes).getAllByRole('listitem').map((li) => li.textContent)).toEqual(['setosa50 dòng', 'versicolor50 dòng', 'virginica50 dòng']);
+
+    await userEvent.click(within(classes).getByRole('button', { name: 'Đổi tên lớp setosa' }));
+    await userEvent.clear(within(region).getByRole('textbox', { name: 'Tên lớp' }));
+    await userEvent.type(within(region).getByRole('textbox', { name: 'Tên lớp' }), 'diên vĩ biển{Enter}');
+    expect(await within(quick()).findByRole('button', { name: 'Đổi tên lớp diên vĩ biển' })).toBeInTheDocument();
+    expect((await repos.tables.get(projectId))!.csv).not.toContain('setosa');
+
+    await userEvent.click(within(quick()).getByRole('button', { name: 'Huấn luyện nhanh' }));
+    const stages = within(quick()).getByRole('list', { name: 'Các chặng huấn luyện' });
+    expect(within(stages).getByText('Biến mỗi dòng thành 4 số')).toHaveTextContent('(đang làm)');
+    expect(await within(quick()).findByText(/^Xong\. Máy đoán đúng \d+% mẫu Kiểm tra\.$/, {}, { timeout: 5_000 })).toBeInTheDocument();
+    expect(within(stages).getByText('Máy học: Cây quyết định')).toHaveTextContent('(xong)');
+    expect(await repos.trials.list(projectId)).toHaveLength(1);
+
+    await userEvent.click(within(quick()).getByRole('button', { name: 'Thử một dòng Kiểm tra' }));
+    expect(within(quick()).getByText(/^Dòng \d+: Loài thật là /)).toBeInTheDocument();
+    expect(within(quick()).getByRole('list', { name: 'Máy đoán' })).toBeInTheDocument();
+    await userEvent.click(within(quick()).getByRole('button', { name: 'Dòng Kiểm tra tiếp theo' }));
+  }, 30_000);
+
+  test('Penguins: đổi cột cần đoán sang cân nặng thì thành hồi quy, chấm bằng R²', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    const region = await screen.findByRole('region', { name: 'Dạy máy trong 3 bước' });
+    await userEvent.click(within(region).getByRole('button', { name: /Chim cánh cụt/ }));
+    await userEvent.selectOptions(await within(region).findByLabelText('Máy cần đoán cột'), 'Cân nặng (g)');
+    expect(within(region).getByText('Hồi quy: đoán một con số.')).toBeInTheDocument();
+    await userEvent.click(within(region).getByRole('button', { name: 'Huấn luyện nhanh' }));
+    expect(await within(quick()).findByText(/^Xong\. R² trên mẫu Kiểm tra là -?\d+,\d{2}/, {}, { timeout: 5_000 })).toBeInTheDocument();
+    await userEvent.click(within(quick()).getByRole('button', { name: 'Thử một dòng Kiểm tra' }));
+    expect(within(quick()).getByTestId('quick-regression')).toHaveTextContent(/^Máy đoán /);
+  }, 30_000);
 });
