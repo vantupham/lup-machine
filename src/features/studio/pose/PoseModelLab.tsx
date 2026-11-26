@@ -126,7 +126,7 @@ export function PoseModelLab({ kind, projectName, data, dataKey }: { readonly ki
 
   return (
     <>
-      <Step n={4} id="pose-step-train" title={t('pose.steps.train')} done={current !== null}>
+      <Step n={4} id="pose-step-train" notebook="train" title={t('pose.steps.train')} done={current !== null}>
         <div className="grid gap-6 lg:grid-cols-2">
           <fieldset className="space-y-2">
             <legend className="text-sm font-medium">{t('tabular.model.choose')}</legend>
@@ -153,7 +153,7 @@ export function PoseModelLab({ kind, projectName, data, dataKey }: { readonly ki
       </Step>
       {current && evaluation && (
         <>
-          <Step n={5} id="pose-step-evaluate" title={t('pose.steps.evaluate')}>
+          <Step n={5} id="pose-step-evaluate" notebook="evaluate" title={t('pose.steps.evaluate')}>
             <div className="grid gap-6 lg:grid-cols-2">
               <div className="space-y-4">
                 <dl className="grid grid-cols-2 gap-3">
@@ -189,7 +189,7 @@ export function PoseModelLab({ kind, projectName, data, dataKey }: { readonly ki
               </section>
             </div>
           </Step>
-          <Step n={6} id="pose-step-use" title={t('pose.steps.use')}>
+          <Step n={6} id="pose-step-use" notebook="use" title={t('pose.steps.use')}>
             <TryPose key={key} kind={kind} trained={current} data={data} />
             <ColabExportPanel
               projectName={projectName}

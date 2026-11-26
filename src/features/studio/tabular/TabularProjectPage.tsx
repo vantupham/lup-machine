@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
+import { NotebookProvider } from '@/features/notebook/NotebookContext';
+import { NotebookPrintLink } from '@/features/notebook/NotebookPrintLink';
 import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
@@ -80,35 +82,39 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
   };
 
   return (
+    <NotebookProvider projectId={projectId} projectType="tabular">
     <div className="space-y-8">
       <header className="space-y-2">
         <BackLink to="/studio">{t('project.back')}</BackLink>
         <p className="text-sm text-muted">{t('studio.types.tabular')}</p>
         <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={renameProject} />
         <AssignmentBanner projectId={projectId} />
-        <ModelCardLink projectId={projectId} />
+        <div className="flex flex-wrap gap-2">
+          <ModelCardLink projectId={projectId} />
+          <NotebookPrintLink projectId={projectId} />
+        </div>
         <p className="max-w-3xl text-muted">{t('tabular.lead')}</p>
         {saveError && <p role="alert" className="text-sm text-danger">{saveError}</p>}
       </header>
 
       <StepBar targets={STEP_TARGETS} />
 
-      <Step n={1} id="tab-step-data" title={t('tabular.steps.data')} done={state.table !== null}>
+      <Step n={1} id="tab-step-data" notebook="data" title={t('tabular.steps.data')} done={state.table !== null}>
         <DataSection table={table} parsed={parsed} columns={columns} onSave={async (input) => { await saveTable(input); setTrained(null); }} />
       </Step>
 
       {parsed && config && (
-        <Step n={2} id="tab-step-check" title={t('tabular.steps.check')}>
+        <Step n={2} id="tab-step-check" notebook="check" title={t('tabular.steps.check')}>
           <SetupSection columns={columns} config={config} onChange={updateConfig} issues={issues} error={prepared && !prepared.ok ? prepared.error : null} />
         </Step>
       )}
 
       {data && config && (
         <>
-          <Step n={3} id="tab-step-represent" title={t('tabular.steps.represent')}>
+          <Step n={3} id="tab-step-represent" notebook="represent" title={t('tabular.steps.represent')}>
             <RepresentSection data={data} />
           </Step>
-          <Step n={4} id="tab-step-train" title={t('tabular.steps.train')} done={current !== null}>
+          <Step n={4} id="tab-step-train" notebook="train" title={t('tabular.steps.train')} done={current !== null}>
             <ModelSection
               task={config.task}
               settings={config.model}
@@ -120,10 +126,10 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
           </Step>
           {current && evaluation && (
             <>
-              <Step n={5} id="tab-step-evaluate" title={t('tabular.steps.evaluate')}>
+              <Step n={5} id="tab-step-evaluate" notebook="evaluate" title={t('tabular.steps.evaluate')}>
                 <EvaluateSection evaluation={evaluation} trained={current} data={data} />
               </Step>
-              <Step n={6} id="tab-step-use" title={t('tabular.steps.use')}>
+              <Step n={6} id="tab-step-use" notebook="use" title={t('tabular.steps.use')}>
                 <UseSection key={trainKey} trained={current} data={data} />
                 {parsed && (
                   <ColabExportPanel
@@ -148,5 +154,6 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
         </>
       )}
     </div>
+    </NotebookProvider>
   );
 }

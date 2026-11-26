@@ -1800,6 +1800,110 @@
         "observe": "Which new images make the model wrong or unsure?",
         "explain": "How does the region the model looks at explain that mistake?"
       }
+    },
+    "audio": {
+      "data": {
+        "observe": "How many clips does each group have? How do clips in one group differ (loudness, voice, noise)?",
+        "explain": "Why record each group in several places and with several voices?"
+      },
+      "check": {
+        "observe": "What does the assistant point out? Are any clips too quiet or nearly silent?",
+        "explain": "Changing the seed changes which samples are in Test. Why might the score change?"
+      },
+      "represent": {
+        "observe": "In which frequency bands and time segments do the mel spectrograms of two groups differ?",
+        "explain": "Why does the model use 160 numbers instead of the whole waveform?"
+      },
+      "train": {
+        "observe": "When you change the model type or its setting, how do the Training and Test scores change?",
+        "explain": "Why can k-NN make predictions without learning any weights?"
+      },
+      "evaluate": {
+        "observe": "Which groups get confused with each other? Which part of the spectrum does the model listen to?",
+        "explain": "Why are those two groups easy to confuse?"
+      },
+      "use": {
+        "observe": "Which new sounds make the model wrong or unsure?",
+        "explain": "How do the orange spectrum cells explain the prediction?"
+      }
+    },
+    "pose": {
+      "data": {
+        "observe": "How many samples does each group have? How do samples in one group differ (person, angle, distance)?",
+        "explain": "Why record several people and several angles for each group?"
+      },
+      "check": {
+        "observe": "What does the assistant point out about your data?",
+        "explain": "Changing the seed changes which samples are in Test. Why might the score change?"
+      },
+      "represent": {
+        "observe": "How do the joint coordinates change after normalisation?",
+        "explain": "Why normalise by torso length or hand size?"
+      },
+      "train": {
+        "observe": "When you change the model type or its setting, how do the Training and Test scores change?",
+        "explain": "Why can k-NN make predictions without learning any weights?"
+      },
+      "evaluate": {
+        "observe": "Which groups get confused? Which joints does the model rely on most?",
+        "explain": "Why do those joints help tell the groups apart?"
+      },
+      "use": {
+        "observe": "Which poses make the model wrong or hesitant?",
+        "explain": "Which joints pull the model towards the wrong group, and why?"
+      }
+    },
+    "text": {
+      "data": {
+        "observe": "How many sentences does each group have? What do sentences in one group have in common?",
+        "explain": "Why does each group need sentences written in many different ways?"
+      },
+      "check": {
+        "observe": "What does the assistant point out? Do the groups have similar numbers of sentences?",
+        "explain": "Changing the seed changes which samples are in Test. Why might the score change?"
+      },
+      "represent": {
+        "observe": "Which syllables are frequent in each group? Which syllables have a high TF-IDF in the sentence shown?",
+        "explain": "Why does a word that appears in every group help little?"
+      },
+      "train": {
+        "observe": "When you change the model type or its setting, how do the Training and Test scores change?",
+        "explain": "The model only counts syllables. Why can it still tell which group a sentence belongs to?"
+      },
+      "evaluate": {
+        "observe": "Which Test sentences were predicted wrongly? What are the typical words of each group?",
+        "explain": "Why do those sentences fool the model (sarcasm, negation, unknown words)?"
+      },
+      "use": {
+        "observe": "Which new sentences does the model get wrong?",
+        "explain": "How do the green and red words explain that mistake?"
+      }
+    },
+    "tabular": {
+      "data": {
+        "observe": "How many rows and columns does the table have? Which columns are numbers and which are text?",
+        "explain": "How was this data collected? Which cases might be missing?"
+      },
+      "check": {
+        "observe": "Which column will you predict, and which columns are features? What does the assistant point out?",
+        "explain": "Why should a column that already contains the answer not be used as a feature?"
+      },
+      "represent": {
+        "observe": "On the two-column map, do the groups stand apart?",
+        "explain": "Why are the columns standardised before they go into the model?"
+      },
+      "train": {
+        "observe": "When you change the model type or its setting, how do the Training and Test scores change?",
+        "explain": "Why is a more complex model not always better on the Test split?"
+      },
+      "evaluate": {
+        "observe": "Where does the model make the biggest mistakes? Which column matters most?",
+        "explain": "Does a large coefficient mean that column causes the result? Why?"
+      },
+      "use": {
+        "observe": "How does the prediction change when you change one column of the new row?",
+        "explain": "Why is a prediction less reliable for a row that is very different from the Training data?"
+      }
     }
   },
   "autosave": {

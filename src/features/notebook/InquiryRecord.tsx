@@ -25,7 +25,7 @@ interface InquiryRecordProps {
  */
 export function InquiryRecord({ projectType, notes, runs, isPrint = false }: InquiryRecordProps) {
   const { t } = useTranslation();
-  const steps = projectType === 'image' ? [...STEP_KEYS] : [...new Set(notes.map((n) => n.step))].sort();
+  const steps: readonly string[] = STEP_KEYS;
   const textOf = new Map(notes.map((n) => [n.step, n.text]));
   const ordered = [...runs].sort((a, b) => a.number - b.number);
   const shownSteps = isPrint ? steps : steps.filter((step) => textOf.has(step));

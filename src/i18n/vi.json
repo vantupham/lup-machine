@@ -1800,6 +1800,110 @@
         "observe": "Ảnh mới nào làm máy đoán sai hoặc không chắc chắn?",
         "explain": "Vùng máy nhìn vào giải thích lỗi đó thế nào?"
       }
+    },
+    "audio": {
+      "data": {
+        "observe": "Mỗi nhóm có bao nhiêu đoạn? Các đoạn trong cùng một nhóm khác nhau ra sao (to nhỏ, giọng, tiếng ồn)?",
+        "explain": "Vì sao nên thu mỗi nhóm ở nhiều chỗ và bằng nhiều giọng khác nhau?"
+      },
+      "check": {
+        "observe": "Trợ lý nhắc gì? Có đoạn nào quá nhỏ hoặc gần như im lặng không?",
+        "explain": "Đổi seed thì các mẫu Kiểm tra đổi theo. Vì sao điểm có thể khác đi?"
+      },
+      "represent": {
+        "observe": "Ảnh phổ mel của hai nhóm khác nhau ở dải tần nào, đoạn thời gian nào?",
+        "explain": "Vì sao máy dùng 160 con số thay vì toàn bộ dạng sóng?"
+      },
+      "train": {
+        "observe": "Đổi loại mô hình hoặc tham số thì điểm Huấn luyện và điểm Kiểm tra thay đổi thế nào?",
+        "explain": "Vì sao k-NN không học trọng số mà vẫn đoán được?"
+      },
+      "evaluate": {
+        "observe": "Nhóm nào hay bị nhầm với nhóm nào? Mô hình nghe vào vùng phổ nào?",
+        "explain": "Vì sao hai nhóm đó dễ bị nhầm với nhau?"
+      },
+      "use": {
+        "observe": "Âm thanh mới nào làm máy đoán sai hoặc không chắc chắn?",
+        "explain": "Vùng phổ tô cam cho biết vì sao máy đoán như vậy?"
+      }
+    },
+    "pose": {
+      "data": {
+        "observe": "Mỗi nhóm có bao nhiêu mẫu? Các mẫu trong một nhóm khác nhau thế nào (người, góc đứng, khoảng cách)?",
+        "explain": "Vì sao nên ghi nhiều người và nhiều góc cho mỗi nhóm?"
+      },
+      "check": {
+        "observe": "Trợ lý nhắc gì về dữ liệu của em?",
+        "explain": "Đổi seed thì các mẫu Kiểm tra đổi theo. Vì sao điểm có thể khác đi?"
+      },
+      "represent": {
+        "observe": "Sau khi chuẩn hóa, tọa độ các khớp thay đổi ra sao?",
+        "explain": "Vì sao phải chuẩn hóa theo chiều dài thân hoặc cỡ bàn tay?"
+      },
+      "train": {
+        "observe": "Đổi loại mô hình hoặc tham số thì điểm Huấn luyện và điểm Kiểm tra thay đổi thế nào?",
+        "explain": "Vì sao k-NN không học trọng số mà vẫn đoán được?"
+      },
+      "evaluate": {
+        "observe": "Nhóm nào hay bị nhầm? Mô hình dựa vào khớp nào nhiều nhất?",
+        "explain": "Vì sao các khớp đó giúp phân biệt các nhóm?"
+      },
+      "use": {
+        "observe": "Tư thế nào làm máy đoán sai hoặc phân vân?",
+        "explain": "Khớp nào kéo máy về nhóm sai, và vì sao?"
+      }
+    },
+    "text": {
+      "data": {
+        "observe": "Mỗi nhóm có bao nhiêu câu? Câu trong cùng một nhóm giống nhau ở điểm nào?",
+        "explain": "Vì sao cần câu viết theo nhiều cách khác nhau cho mỗi nhóm?"
+      },
+      "check": {
+        "observe": "Trợ lý nhắc gì về dữ liệu? Các nhóm có số câu gần bằng nhau không?",
+        "explain": "Đổi seed thì các mẫu Kiểm tra đổi theo. Vì sao điểm có thể khác đi?"
+      },
+      "represent": {
+        "observe": "Âm tiết nào hay gặp ở mỗi nhóm? Âm tiết nào có TF-IDF cao trong câu đang xem?",
+        "explain": "Vì sao một từ xuất hiện ở mọi nhóm lại ít giúp phân biệt?"
+      },
+      "train": {
+        "observe": "Đổi loại mô hình hoặc tham số thì điểm Huấn luyện và điểm Kiểm tra thay đổi thế nào?",
+        "explain": "Mô hình chỉ đếm âm tiết. Vì sao nó vẫn đoán được câu thuộc nhóm nào?"
+      },
+      "evaluate": {
+        "observe": "Câu Kiểm tra nào bị đoán sai? Từ đặc trưng của mỗi nhóm là gì?",
+        "explain": "Vì sao những câu đó làm máy nhầm (mỉa mai, phủ định, từ lạ)?"
+      },
+      "use": {
+        "observe": "Câu mới nào làm máy đoán sai?",
+        "explain": "Các từ tô xanh, tô đỏ giải thích lỗi đó thế nào?"
+      }
+    },
+    "tabular": {
+      "data": {
+        "observe": "Bảng có bao nhiêu dòng, bao nhiêu cột? Cột nào là số, cột nào là chữ?",
+        "explain": "Dữ liệu này được thu thập ra sao? Có thể thiếu trường hợp nào?"
+      },
+      "check": {
+        "observe": "Em chọn cột nào để đoán, cột nào làm đặc trưng? Trợ lý nhắc gì?",
+        "explain": "Vì sao không nên dùng một cột chứa sẵn đáp án làm đặc trưng?"
+      },
+      "represent": {
+        "observe": "Trên bản đồ hai cột, các nhóm có tách nhau không?",
+        "explain": "Vì sao phải chuẩn hóa các cột trước khi đưa vào mô hình?"
+      },
+      "train": {
+        "observe": "Đổi loại mô hình hoặc tham số thì điểm Huấn luyện và điểm Kiểm tra thay đổi thế nào?",
+        "explain": "Vì sao mô hình phức tạp hơn chưa chắc tốt hơn trên tập Kiểm tra?"
+      },
+      "evaluate": {
+        "observe": "Mô hình sai nhiều nhất ở đâu? Cột nào quan trọng nhất?",
+        "explain": "Hệ số lớn có nghĩa là cột đó gây ra kết quả không? Vì sao?"
+      },
+      "use": {
+        "observe": "Đổi một cột của dòng mới thì dự đoán thay đổi thế nào?",
+        "explain": "Vì sao dự đoán cho một dòng rất khác dữ liệu Huấn luyện thì kém tin cậy?"
+      }
     }
   },
   "autosave": {

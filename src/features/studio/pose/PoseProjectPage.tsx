@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
+import { NotebookProvider } from '@/features/notebook/NotebookContext';
+import { NotebookPrintLink } from '@/features/notebook/NotebookPrintLink';
 import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { useTranslation } from 'react-i18next';
@@ -52,24 +54,28 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
   const dataKey = JSON.stringify([kind, samples.map((p) => `${p.id}:${p.classId}`), state.classes.map((c) => c.name), testRatio, seed]);
 
   return (
+    <NotebookProvider projectId={projectId} projectType="pose">
     <div className="space-y-8">
       <header className="space-y-2">
         <BackLink to="/studio">{t('project.back')}</BackLink>
         <p className="text-sm text-muted">{t('studio.types.pose')}</p>
         <ProjectTitle projectId={projectId} name={state.project.name} onRenamed={() => void reload()} />
         <AssignmentBanner projectId={projectId} />
-        <ModelCardLink projectId={projectId} />
+        <div className="flex flex-wrap gap-2">
+          <ModelCardLink projectId={projectId} />
+          <NotebookPrintLink projectId={projectId} />
+        </div>
         <p className="max-w-3xl text-muted">{t('pose.lead')}</p>
       </header>
 
       <StepBar targets={STEP_TARGETS} />
 
-      <Step n={1} id="pose-step-data" title={t('pose.steps.data')} done={new Set(samples.map((p) => p.classId)).size >= 2}>
+      <Step n={1} id="pose-step-data" notebook="data" title={t('pose.steps.data')} done={new Set(samples.map((p) => p.classId)).size >= 2}>
         <PoseDataSection projectId={projectId} kind={kind} kindLocked={kindLocked} onKindChange={setKind} classes={state.classes} poses={samples} dataset={dataset} repo={poses} onChanged={reload} />
       </Step>
 
       {samples.length > 0 && (
-        <Step n={2} id="pose-step-check" title={t('pose.steps.check')}>
+        <Step n={2} id="pose-step-check" notebook="check" title={t('pose.steps.check')}>
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="space-y-4">
               <RangeField label={t('tabular.setup.testRatio')} value={testRatio} min={0.1} max={0.5} step={0.05} onChange={setTestRatio} format={(v) => `${Math.round(v * 100)}%`} />
@@ -93,12 +99,13 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
       )}
 
       {samples.length > 0 && (
-        <Step n={3} id="pose-step-represent" title={t('pose.steps.represent')}>
+        <Step n={3} id="pose-step-represent" notebook="represent" title={t('pose.steps.represent')}>
           <PoseInspector kind={kind} classes={state.classes} poses={samples} />
         </Step>
       )}
 
       {data && <PoseModelLab kind={kind} projectName={state.project.name} data={data} dataKey={dataKey} />}
     </div>
+    </NotebookProvider>
   );
 }
