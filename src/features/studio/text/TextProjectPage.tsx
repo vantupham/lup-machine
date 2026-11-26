@@ -31,6 +31,8 @@ import { useTrialLog } from '@/features/trials/useTrialLog';
 import { TrialBefore } from '@/features/trials/TrialBefore';
 import { TrialAfter } from '@/features/trials/TrialAfter';
 import { classificationTrial } from '@/features/trials/trial-input';
+import { StudioFindings } from '@/features/trials/StudioFindings';
+import { encodeText, predictProbaText } from '@/core/text/text-model';
 
 interface TrainedState {
   readonly key: string;
@@ -161,6 +163,15 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
             <>
               <Step n={5} id="text-step-evaluate" notebook="evaluate" title={t('text.steps.evaluate')}>
                 <TextEvaluateSection evaluation={evaluation} trained={current} data={data} />
+                <StudioFindings
+                  classNames={data.classNames}
+                  dataStepId="text-step-data"
+                  samples={data.test.texts.map((text, i) => {
+                    const proba = predictProbaText(current, encodeText(data, text));
+                    const predicted = evaluation.testPredictions[i] as number;
+                    return { id: `row-${data.test.rowNumbers[i]}`, actual: data.test.y[i] as number, predicted, confidence: proba[predicted] ?? 0, evidence: <q>{text}</q> };
+                  })}
+                />
               </Step>
               <Step n={6} id="text-step-use" notebook="use" title={t('text.steps.use')}>
                 <TextUseSection key={trainKey} trained={current} data={data} />

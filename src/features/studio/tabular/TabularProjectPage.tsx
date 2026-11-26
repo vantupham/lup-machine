@@ -34,6 +34,9 @@ import { useTrialLog } from '@/features/trials/useTrialLog';
 import { TrialBefore } from '@/features/trials/TrialBefore';
 import { TrialAfter } from '@/features/trials/TrialAfter';
 import { classificationTrial, regressionTrial } from '@/features/trials/trial-input';
+import { StudioFindings } from '@/features/trials/StudioFindings';
+import { RegressionFindings } from '@/features/trials/RegressionFindings';
+import { predictRow } from '@/core/tabular/models';
 
 interface TrainedState {
   readonly key: string;
@@ -156,6 +159,23 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
             <>
               <Step n={5} id="tab-step-evaluate" notebook="evaluate" title={t('tabular.steps.evaluate')}>
                 <EvaluateSection evaluation={evaluation} trained={current} data={data} />
+                {evaluation.task === 'classification' ? (
+                  <StudioFindings
+                    classNames={data.classNames}
+                    dataStepId="tab-step-data"
+                    samples={data.test.y.map((actual, i) => {
+                      const proba = predictRow(current, { raw: data.test.raw[i] as number[], scaled: data.test.scaled[i] as number[] }).proba ?? [];
+                      const predicted = evaluation.testPredictions[i] as number;
+                      const row = data.test.rowNumbers[i] as number;
+                      return { id: `row-${row}`, actual, predicted, confidence: proba[predicted] ?? 0, evidence: <span className="font-mono">{t('sampleFindings.row', { row })}</span> };
+                    })}
+                  />
+                ) : (
+                  <RegressionFindings
+                    target={config.target}
+                    rows={data.test.y.map((actual, i) => ({ rowNumber: data.test.rowNumbers[i] as number, actual, predicted: evaluation.testPredictions[i] as number }))}
+                  />
+                )}
               </Step>
               <Step n={6} id="tab-step-use" notebook="use" title={t('tabular.steps.use')}>
                 <UseSection key={trainKey} trained={current} data={data} />

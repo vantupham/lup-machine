@@ -121,6 +121,10 @@ export function PoseProjectPage({ projectId }: { readonly projectId: string }) {
           }}
           data={data}
           dataKey={dataKey}
+          sampleOf={(id) => {
+            const sample = samples.find((p) => p.id === id);
+            return sample ? { keypoints: unpackKeypoints(sample.keypoints), width: sample.width, height: sample.height } : null;
+          }}
         />
       )}
     </div>

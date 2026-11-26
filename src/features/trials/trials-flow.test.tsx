@@ -23,6 +23,7 @@ describe('Nhật ký thí nghiệm ở Studio văn bản', () => {
     expect(first).toHaveTextContent('Đây là lần chạy đầu tiên.');
     expect(within(first).getByTestId('trial-guess')).toHaveTextContent(/^Em đoán 90%\. Điểm Kiểm tra thực tế: \d+%/);
     expect(screen.queryByTestId('trial-before')).toBeNull();
+    expect(screen.getByTestId('studio-findings')).toHaveTextContent('trên tập Kiểm tra');
 
     // Đổi mô hình: khung "đã đổi gì" hiện lại
     await user.click(screen.getByRole('radio', { name: /Hồi quy logistic/ }));
@@ -76,6 +77,7 @@ describe('Nhật ký thí nghiệm ở Studio bảng số (hồi quy)', () => {
     await user.click(screen.getByRole('button', { name: 'Huấn luyện' }));
     const delta = await screen.findByTestId('trial-delta');
     expect(delta).toHaveTextContent(/^R² trên tập Kiểm tra: [\d,-]+ → [\d,-]+ \(/);
+    expect(screen.getByTestId('finding-largest-errors')).toHaveTextContent(/dòng bị đoán lệch nhiều nhất về "Cân nặng \(g\)":/);
     const [latest] = await r.trials.list(project.id);
     expect(latest).toMatchObject({ number: 2, metric: 'r2', settings: { kind: 'knn-regression', target: 'Cân nặng (g)' } });
   });

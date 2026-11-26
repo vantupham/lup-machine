@@ -32,6 +32,7 @@ describe('Studio tư thế & bàn tay', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
     expect(await screen.findByTestId('tabular-confusion')).toBeInTheDocument();
+    expect(screen.getByTestId('studio-findings')).toHaveTextContent('Điểm đáng chú ý');
     for (const c of [0, 1, 2, 3]) expect(screen.getByTestId(`pose-importance-${c}`).querySelectorAll('circle[data-value]')).toHaveLength(17);
     expect(screen.getByText('Bật camera hoặc tải một ảnh lên để thử.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeInTheDocument();
