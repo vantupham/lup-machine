@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ModeSwitch } from '@/ui/ModeSwitch';
 import { useModeSwitchStore } from '@/ui/mode-store';
 import { PresentationController, PresentationToggle } from '@/ui/PresentationMode';
+import { ThemeToggle } from '@/ui/ThemeToggle';
 import { useOfflineStore } from '@/ui/offline';
 import { rememberLanguage, type Language } from '@/i18n';
 import { Check } from '@/ui/icons';
@@ -66,6 +67,7 @@ export function Layout() {
           <div className="ml-auto flex items-center gap-3">
             {showModeSwitch && <ModeSwitch />}
             <PresentationToggle />
+            <ThemeToggle />
           </div>
         </div>
       </header>

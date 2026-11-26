@@ -11,6 +11,7 @@
 /*
  * Token màu dùng cho utility Tailwind (bg-paper, text-ink…). Giá trị thật nằm ở :root bên dưới,
  * tự đổi sáng/tối theo color-scheme — utility không cần biến thể dark:.
+ * Giao diện do người dùng chọn (nút Sáng/Tối, mặc định sáng): data-theme="dark" ở <html> → color-scheme: dark.
  */
 @theme {
   --color-paper: var(--paper-light);
@@ -22,9 +23,11 @@
   --color-primary: var(--primary-light);
   --color-primary-ink: var(--primary-ink-light);
   --color-accent: var(--accent-light);
+  --color-accent-ink: var(--accent-ink-light);
   --color-highlight: var(--highlight-light);
   --color-warning: var(--warning-light);
   --color-danger: var(--danger-light);
+  --color-danger-ink: var(--danger-ink-light);
 
   --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -35,11 +38,12 @@
 }
 
 /*
- * Bảng màu thô cho từng chế độ. color-scheme: light dark để trình duyệt vẽ thanh cuộn, ô nhập,
+ * Bảng màu thô cho từng chế độ. color-scheme cũng quyết định trình duyệt vẽ thanh cuộn, ô nhập,
  * <select>, ô chọn ngày… theo chế độ tối thay vì để lại mảng trắng.
+ * Mặc định sáng, không tự theo hệ điều hành; public/theme-init.js đặt data-theme trước khi vẽ trang.
  */
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   accent-color: var(--color-primary);
 
   --paper-light: #f7f5ef;
@@ -51,9 +55,11 @@
   --primary-light: #1d4ed8;
   --primary-ink-light: #ffffff;
   --accent-light: #0f766e;
+  --accent-ink-light: #ffffff;
   --highlight-light: #fde68a;
   --warning-light: #b45309;
   --danger-light: #b91c1c;
+  --danger-ink-light: #ffffff;
   --shadow-tint-light: rgb(27 36 51 / 0.08);
   --shadow-tint-hover-light: rgb(29 78 216 / 0.18);
 
@@ -66,9 +72,11 @@
   --primary-dark: #7aa7ff;
   --primary-ink-dark: #0e1420;
   --accent-dark: #4fd1c5;
+  --accent-ink-dark: #0e1420;
   --highlight-dark: #6b5a1e;
   --warning-dark: #f6b94a;
   --danger-dark: #f87171;
+  --danger-ink-dark: #0e1420;
   --shadow-tint-dark: rgb(0 0 0 / 0.35);
   --shadow-tint-hover-dark: rgb(122 167 255 / 0.25);
 
@@ -76,9 +84,14 @@
   --shadow-tint-hover: var(--shadow-tint-hover-light);
 }
 
+/* Giao diện tối do người dùng chọn. Khi in, khối @media print bên dưới đè lại thành sáng. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
 /* Dự phòng cho trình duyệt chưa có light-dark() (Chrome < 123, Safari < 17.5). */
-@media (prefers-color-scheme: dark) {
-  :root {
+@supports not (color: light-dark(white, black)) {
+  :root[data-theme='dark'] {
     --color-paper: var(--paper-dark);
     --color-surface: var(--surface-dark);
     --color-ink: var(--ink-dark);
@@ -88,9 +101,11 @@
     --color-primary: var(--primary-dark);
     --color-primary-ink: var(--primary-ink-dark);
     --color-accent: var(--accent-dark);
+    --color-accent-ink: var(--accent-ink-dark);
     --color-highlight: var(--highlight-dark);
     --color-warning: var(--warning-dark);
     --color-danger: var(--danger-dark);
+    --color-danger-ink: var(--danger-ink-dark);
     --shadow-tint: var(--shadow-tint-dark);
     --shadow-tint-hover: var(--shadow-tint-hover-dark);
   }
@@ -111,9 +126,11 @@
     --color-primary: light-dark(var(--primary-light), var(--primary-dark));
     --color-primary-ink: light-dark(var(--primary-ink-light), var(--primary-ink-dark));
     --color-accent: light-dark(var(--accent-light), var(--accent-dark));
+    --color-accent-ink: light-dark(var(--accent-ink-light), var(--accent-ink-dark));
     --color-highlight: light-dark(var(--highlight-light), var(--highlight-dark));
     --color-warning: light-dark(var(--warning-light), var(--warning-dark));
     --color-danger: light-dark(var(--danger-light), var(--danger-dark));
+    --color-danger-ink: light-dark(var(--danger-ink-light), var(--danger-ink-dark));
     --shadow-tint: light-dark(var(--shadow-tint-light), var(--shadow-tint-dark));
     --shadow-tint-hover: light-dark(var(--shadow-tint-hover-light), var(--shadow-tint-hover-dark));
   }
@@ -213,7 +230,7 @@ body {
   }
   .btn-danger {
     background: var(--color-danger);
-    color: #fff;
+    color: var(--color-danger-ink);
   }
   .mark {
     background: linear-gradient(transparent 55%, var(--color-highlight) 55%);
@@ -258,7 +275,9 @@ body {
 }
 
 @media print {
-  :root {
+  /* Kèm [data-theme] để thắng :root[data-theme='dark'] (độ ưu tiên cao hơn :root). */
+  :root,
+  :root[data-theme] {
     color-scheme: light;
     --color-paper: #ffffff;
     --color-surface: #ffffff;

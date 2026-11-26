@@ -79,7 +79,7 @@ export function EmbeddingMap({ points, classes, selectedId, wrongIds, axisLabels
           >
             <circle className="focus opacity-0" cx={cx} cy={cy} r={11} fill="none" stroke="var(--color-primary)" strokeWidth={2} />
             {sample.split === 'test' && <circle cx={cx} cy={cy} r={8} fill="none" stroke={colorFor(i)} strokeWidth={1.5} />}
-            {wrongIds.has(sample.id) && <circle cx={cx} cy={cy} r={10} fill="none" stroke="#C62828" strokeWidth={2.5} data-testid="wrong-ring" />}
+            {wrongIds.has(sample.id) && <circle cx={cx} cy={cy} r={10} fill="none" className="stroke-danger" strokeWidth={2.5} data-testid="wrong-ring" />}
             {isSelected && <circle cx={cx} cy={cy} r={13} fill="none" stroke="var(--color-ink)" strokeWidth={1.5} strokeDasharray="3 2" />}
             <ChartMarker index={i} cx={cx} cy={cy} size={sample.split === 'test' ? 7 : 10} />
           </g>

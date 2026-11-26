@@ -165,7 +165,7 @@ export function StepBar({ targets }: { readonly targets: StepTargets }) {
                 >
                   <span
                     aria-hidden="true"
-                    className={`flex size-5 items-center justify-center rounded-full font-mono text-[11px] ${step.done ? 'bg-accent text-white' : isActive ? 'bg-paper text-ink' : 'bg-rule/70'}`}
+                    className={`flex size-5 items-center justify-center rounded-full font-mono text-[11px] ${step.done ? 'bg-accent text-accent-ink' : isActive ? 'bg-paper text-ink' : 'bg-rule/70'}`}
                   >
                     {step.done ? <Check strokeWidth={3} className="size-3" /> : i + 1}
                   </span>

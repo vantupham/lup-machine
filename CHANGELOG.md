@@ -4,6 +4,18 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Giao diện sáng / tối)
+
+- **Nút đổi giao diện sáng / tối** ở thanh đầu trang (icon mặt trăng / mặt trời, cạnh nút Trình chiếu). Lựa chọn được nhớ cho lần sau.
+- **Mặc định là giao diện sáng**, không còn tự theo chế độ tối của hệ điều hành. Máy đang đặt tối sẽ thấy ứng dụng sáng cho tới khi bấm chọn giao diện tối.
+- Không nháy nền sáng khi mở lại trang đang ở giao diện tối: tệp nhỏ `theme-init.js` đặt giao diện trước khi vẽ trang. Đây là tệp riêng vì CSP chặn script nội tuyến; tệp được lưu sẵn để dùng khi mất mạng.
+- Bản in (phiếu bài tập, sổ tay) vẫn luôn nền trắng chữ đen, kể cả khi đang ở giao diện tối.
+
+### Sửa (độ tương phản ở giao diện tối)
+
+- Chữ trắng trên nền xanh ngọc (công tắc Khám phá / Chuyên sâu, bước đã xong ở thanh bước) chỉ đạt tỉ lệ 1.9:1. Chữ trên nền đỏ (nút Xoá) chỉ đạt 2.8:1. Thêm token `accent-ink` và `danger-ink`: chữ trắng ở giao diện sáng, chữ sẫm ở giao diện tối, đều đạt chuẩn AA.
+- Vòng đánh dấu ảnh đoán sai trên bản đồ PCA dùng token `danger`, nên đổi màu theo giao diện.
+
 ### Thêm (Bước ⑥ Sử dụng của Studio ảnh)
 
 - Studio ảnh có đủ **6 bước**: bước ⑥ **Sử dụng: thử với ảnh mới** không còn "sắp có". Bước này bị sót khi đóng giai đoạn 1; bốn Studio còn lại đã có từ trước.

@@ -17,7 +17,7 @@ export function ModeSwitch() {
           key={m}
           title={t(`mode.${m}Hint`)}
           className={`cursor-pointer rounded px-2.5 py-1 font-medium transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary ${
-            mode === m ? 'bg-accent text-white' : 'text-muted'
+            mode === m ? 'bg-accent text-accent-ink' : 'text-muted'
           }`}
         >
           <input
