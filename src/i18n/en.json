@@ -1756,6 +1756,11 @@
       "neighbors": "The {{k}} closest training samples belong to: {{labels}}."
     }
   },
+  "theme": {
+    "dark": "Dark theme",
+    "toDark": "Switch to dark theme (easier on the eyes in a dim room)",
+    "toLight": "Switch to light theme"
+  },
   "presentation": {
     "enter": "Present",
     "enterHint": "Show on the classroom screen: large text, fewer details, laser pointer",

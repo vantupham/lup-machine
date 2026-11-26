@@ -1756,6 +1756,11 @@
       "neighbors": "{{k}} mẫu Huấn luyện gần nhất thuộc các nhóm: {{labels}}."
     }
   },
+  "theme": {
+    "dark": "Giao diện tối",
+    "toDark": "Chuyển sang giao diện tối (dịu mắt khi phòng tối)",
+    "toLight": "Chuyển sang giao diện sáng"
+  },
   "presentation": {
     "enter": "Trình chiếu",
     "enterHint": "Chiếu lên màn hình lớp: chữ to, ẩn chi tiết phụ, có con trỏ laser",

@@ -121,7 +121,7 @@ function ClassCard({ cls, index, clips, onRecord, onUpload, onDelete, onRename, 
             </button>
             <button
               type="button"
-              className="absolute top-0 right-0 hidden rounded bg-danger px-1 text-xs text-white group-hover:block group-focus-within:block"
+              className="absolute top-0 right-0 hidden rounded bg-danger px-1 text-xs text-danger-ink group-hover:block group-focus-within:block"
               aria-label={t('audio.data.deleteClip')}
               onClick={() => onDelete(clip)}
             >

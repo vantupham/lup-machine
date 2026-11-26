@@ -196,7 +196,7 @@ export function PoseDataSection({ projectId, kind, kindLocked, onKindChange, cla
                 {mine.slice(-THUMBS_SHOWN).map((p) => (
                   <li key={p.id} className="group relative">
                     <Skeleton kind={p.kind} keypoints={unpackKeypoints(p.keypoints)} width={p.width} height={p.height} label={t('pose.data.thumb', { name: cls.name })} color={colorFor(i)} />
-                    <button type="button" className="absolute top-0 right-0 hidden rounded bg-danger px-1 text-xs text-white group-hover:block group-focus-within:block" aria-label={t('pose.data.deletePose')} onClick={() => void run(async () => (await repo.deletePose(p.id), null))}>×</button>
+                    <button type="button" className="absolute top-0 right-0 hidden rounded bg-danger px-1 text-xs text-danger-ink group-hover:block group-focus-within:block" aria-label={t('pose.data.deletePose')} onClick={() => void run(async () => (await repo.deletePose(p.id), null))}>×</button>
                   </li>
                 ))}
               </ul>

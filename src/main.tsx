@@ -18,12 +18,15 @@ import { createDexieTrialRepository } from './storage/repositories/trial-reposit
 import { LupDatabase } from './storage/db';
 import { initialLanguage } from './i18n';
 import { registerServiceWorker, useOfflineStore } from './ui/offline';
+import { applyTheme, readTheme } from './ui/theme-store';
 import './index.css';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Không tìm thấy phần tử #root');
 
 document.documentElement.lang = initialLanguage();
+// public/theme-init.js đã đặt data-theme trước khi vẽ; gọi lại để đồng bộ màu thanh trình duyệt (theme-color).
+applyTheme(readTheme());
 const db = new LupDatabase();
 const repositories: Repositories = {
   projects: createDexieProjectRepository(db),
