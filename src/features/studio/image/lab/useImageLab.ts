@@ -57,6 +57,8 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
   /** Mỗi lần bắt đầu huấn luyện (bất kỳ nút nào) tăng số này: "Huấn luyện nhanh" biết có lần khác chen vào. */
   const runCounter = useRef(0);
   const quickPending = useRef(false);
+  /** "Huấn luyện nhanh" đang chuẩn bị (tải mô hình, trích vector) trước khi bắt đầu học: để giao diện hiện đúng bước. */
+  const [isQuickPreparing, setIsQuickPreparing] = useState(false);
 
   const readiness = useMemo(() => buildTrainingData(classes, samples, features), [classes, samples, features]);
   const fingerprint = useMemo(() => datasetFingerprint(classes.map((c) => c.id), samples), [classes, samples]);
@@ -119,6 +121,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
   const trainQuick = async () => {
     if (isTraining || quickPending.current) return;
     quickPending.current = true;
+    setIsQuickPreparing(true);
     // Đã chủ động huấn luyện: không để việc tự khôi phục lần chạy cũ chen vào nữa.
     restoreAttempted.current = true;
     const startedRuns = runCounter.current;
@@ -132,9 +135,10 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
         setNotice({ kind: 'error', text: t('project.quick.notReady') });
         return;
       }
-      runWith(ready, DEFAULT_TRAIN_OPTIONS, 'normal', { kind: 'new', fingerprint });
+      runWith(ready, DEFAULT_TRAIN_OPTIONS, 'paced', { kind: 'new', fingerprint });
     } finally {
       quickPending.current = false;
+      setIsQuickPreparing(false);
     }
   };
 
@@ -178,6 +182,7 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
     shownEpoch,
     snapshot,
     isTraining,
+    isQuickPreparing,
     predictions,
     notice,
     lastOptions,

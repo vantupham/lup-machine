@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { DEFAULT_TRAIN_OPTIONS } from '../lab/TrainSection';
 import type { ImageLab } from '../lab/useImageLab';
 import { ArrowDown } from '@/ui/icons';
 import { ensureStepVisible } from '@/features/studio/step-details';
+import { TrainStages } from './TrainStages';
 
 /** Cần ít nhất chừng này lớp có ảnh Huấn luyện mới huấn luyện được (khớp với lab-data). */
 const MIN_CLASSES_WITH_IMAGES = 2;
@@ -21,7 +23,10 @@ export function QuickTrain({ classes, samples, lab }: QuickTrainProps) {
   const classesWithImages = new Set(samples.filter((s) => s.split === 'train' && ids.has(s.classId)).map((s) => s.classId)).size;
   const isReady = classesWithImages >= MIN_CLASSES_WITH_IMAGES;
   const isExtracting = lab.status.phase === 'loading-model' || lab.status.phase === 'extracting';
-  const isBusy = isExtracting || lab.isTraining;
+  const isBusy = isExtracting || lab.isTraining || lab.isQuickPreparing;
+  /** Đã bấm "Huấn luyện nhanh" ít nhất một lần: từ đó mới hiện các chặng. */
+  const [hasStarted, setHasStarted] = useState(false);
+  const showStages = hasStarted && (isBusy || !lab.isStale);
 
   return (
     <div className="space-y-3">
@@ -29,16 +34,20 @@ export function QuickTrain({ classes, samples, lab }: QuickTrainProps) {
         type="button"
         className="btn btn-primary w-full justify-center py-3 text-base"
         disabled={!isReady || isBusy}
-        onClick={() => void lab.trainQuick()}
+        onClick={() => {
+          setHasStarted(true);
+          void lab.trainQuick();
+        }}
       >
         {t('project.quick.train')}
       </button>
       {!isReady && <p className="text-sm text-warning">{t('project.quick.needClasses')}</p>}
+      {showStages && <TrainStages lab={lab} />}
       <div className="min-h-10 text-sm">
         <p aria-live="polite">
           <TrainProgress lab={lab} />
         </p>
-        {lab.isTraining && (
+        {lab.isTraining && !showStages && (
           <p aria-hidden="true" className="font-mono text-xs text-muted">
             {t('project.quick.epochCounter', { epoch: lab.snapshots.length, total: lab.lastOptions?.epochs ?? DEFAULT_TRAIN_OPTIONS.epochs })}
           </p>

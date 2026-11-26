@@ -27,6 +27,7 @@ export {
   ImageUp,
   Info,
   Lightbulb,
+  LoaderCircle,
   Lock,
   MessageSquareText,
   Moon,
