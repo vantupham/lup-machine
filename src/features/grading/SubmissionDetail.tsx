@@ -9,6 +9,7 @@ import { PROJECT_NAME_MAX_LENGTH } from '@/storage/schemas/manifest';
 import { getErrorMessage } from '@/ui/error-message';
 import { FactsPanel } from '@/features/model-card/FactsPanel';
 import { GradeForm } from './GradeForm';
+import { SubmissionInquiry } from './SubmissionInquiry';
 import { ArrowRight } from '@/ui/icons';
 
 interface SubmissionDetailProps {
@@ -68,6 +69,7 @@ export function SubmissionDetail({ submission, onSaved, onDelete, onClose }: Sub
             )}
           </div>
           <FactsPanel facts={summary} />
+          <SubmissionInquiry submissionId={submission.id} projectType={summary.projectType} />
         </div>
         <div className="space-y-5">
           <GradeForm key={submission.id} submission={submission} onSaved={onSaved} />

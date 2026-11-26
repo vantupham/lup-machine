@@ -220,7 +220,10 @@
       "error": "Không tạo được gói: {{message}}",
       "titleRequired": "Cần đặt tên bài.",
       "criterionRequired": "Mỗi tiêu chí cần có tên.",
-      "questionRequired": "Câu hỏi không được để trống."
+      "questionRequired": "Câu hỏi không được để trống.",
+      "rubricTemplates": "Mẫu thang chấm",
+      "useDefaultRubric": "Sản phẩm",
+      "useSkillsRubric": "5 năng lực"
     },
     "defaultRubric": {
       "dataName": "Dữ liệu",
@@ -273,6 +276,18 @@
       "submitted": "Đã tạo {{file}}. Gửi tệp này cho thầy cô.",
       "submitError": "Không tạo được bài nộp: {{message}}",
       "checkError": "Không kiểm tra được điều kiện nộp bài. Tải lại trang để thử lại."
+    },
+    "skillsRubric": {
+      "describeName": "Mô tả",
+      "describeDescription": "Ghi đúng điều quan sát được ở từng bước: số ảnh, bản đồ, biểu đồ, ma trận nhầm lẫn.",
+      "explainName": "Giải thích",
+      "explainDescription": "Trả lời câu \"Vì sao?\" bằng lý lẽ, có dẫn bằng chứng trong ứng dụng.",
+      "analyzeName": "Phân tích",
+      "analyzeDescription": "Chỉ ra lớp hay bị nhầm, ảnh sai mà máy vẫn chắc chắn, và nguyên nhân có thể.",
+      "experimentName": "Thử nghiệm",
+      "experimentDescription": "Mỗi lần chỉ đổi một thứ, đoán trước rồi so với lần chạy trước.",
+      "improveName": "Cải tiến",
+      "improveDescription": "Sửa dữ liệu hoặc cài đặt dựa trên bằng chứng, giữ tập Kiểm tra công bằng, có kết luận."
     }
   },
   "grading": {
@@ -1791,5 +1806,32 @@
     "saving": "Đang lưu…",
     "saved": "Đã lưu",
     "error": "Chưa lưu được: {{message}}"
+  },
+  "inquiry": {
+    "title": "Sổ tay và thí nghiệm",
+    "summary": "{{notes}}/{{steps}} bước có ghi chép · {{runs}} lần chạy · {{guesses}} lần đoán trước · {{conclusions}} lần có kết luận",
+    "notesTitle": "Ghi chép theo bước",
+    "noNotes": "Chưa có ghi chép nào.",
+    "runsTitle": "Các lần huấn luyện",
+    "noRuns": "Chưa huấn luyện lần nào.",
+    "loadError": "Không đọc được sổ tay của bài nộp: {{message}}",
+    "columns": {
+      "run": "Lần",
+      "changes": "Đổi gì",
+      "guess": "Đoán",
+      "test": "Điểm Kiểm tra",
+      "conclusion": "Kết luận"
+    },
+    "print": {
+      "link": "In sổ tay",
+      "title": "Sổ tay thí nghiệm",
+      "button": "In",
+      "hint": "In trống để ghi tay trên lớp, hoặc in kèm ghi chép đã có làm báo cáo.",
+      "name": "Họ tên",
+      "className": "Lớp",
+      "blank": "Bản trống",
+      "filled": "Kèm ghi chép",
+      "version": "Nội dung bản in"
+    }
   }
 }

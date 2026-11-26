@@ -51,6 +51,23 @@ describe('Lớp học qua tệp: giáo viên tạo gói, học sinh làm và n�
     expect(clicked).toEqual([]);
   });
 
+  test('giáo viên: đổi sang thang chấm 5 năng lực (mỗi năng lực 2 điểm) rồi quay lại thang sản phẩm', async () => {
+    const user = userEvent.setup();
+    renderWithRepositories('/giao-vien', createTestRepository());
+    const templates = screen.getByRole('group', { name: 'Mẫu thang chấm' });
+    expect(within(templates).getByRole('button', { name: 'Sản phẩm' })).toHaveAttribute('aria-pressed', 'true');
+
+    await user.click(within(templates).getByRole('button', { name: '5 năng lực' }));
+    expect(within(templates).getByRole('button', { name: '5 năng lực' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByTestId('rubric-total')).toHaveTextContent('Tổng: 10 điểm');
+    const names = [1, 2, 3, 4, 5].map((n) => (screen.getByLabelText(`Tiêu chí ${n}`) as HTMLInputElement).value);
+    expect(names).toEqual(['Mô tả', 'Giải thích', 'Phân tích', 'Thử nghiệm', 'Cải tiến']);
+    expect(screen.getByLabelText('Mô tả tiêu chí 4')).toHaveValue('Mỗi lần chỉ đổi một thứ, đoán trước rồi so với lần chạy trước.');
+
+    await user.click(within(templates).getByRole('button', { name: 'Sản phẩm' }));
+    expect(screen.queryByLabelText('Tiêu chí 4')).toBeNull();
+  });
+
   test('trọn vòng: tạo gói → học sinh mở → trả lời → điền thẻ → nộp bài không kèm dữ liệu gốc', async () => {
     const user = userEvent.setup();
     const teacher = createTestRepository();
