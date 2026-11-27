@@ -1032,7 +1032,11 @@
         "BatchNormalization": "normalisation: brings numbers to the same scale",
         "ReLU": "keeps positive numbers, negatives become 0",
         "Add": "shortcut: adds the block input to its output"
-      }
+      },
+      "frozen": "Frozen: {{count}} numbers",
+      "stageBlocks": "{{count}} blocks",
+      "legend": "Each slab is a block. Height: image size. Thickness: channels. Click for details.",
+      "scrollHint": "Scroll sideways to see the whole diagram."
     },
     "trainStep": {
       "title": "One learning step",

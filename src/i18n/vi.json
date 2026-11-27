@@ -1032,7 +1032,11 @@
         "BatchNormalization": "chuẩn hóa: đưa các số về cùng thang",
         "ReLU": "giữ số dương, số âm thành 0",
         "Add": "lối tắt: cộng đầu vào khối vào đầu ra"
-      }
+      },
+      "frozen": "Đóng băng: {{count}} số",
+      "stageBlocks": "{{count}} khối",
+      "legend": "Mỗi tấm là một khối. Cao: cạnh ảnh. Dày: số kênh. Bấm để xem chi tiết.",
+      "scrollHint": "Kéo ngang để xem hết sơ đồ."
     },
     "trainStep": {
       "title": "Một bước học",

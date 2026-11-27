@@ -154,6 +154,24 @@ body {
   border-radius: 4px;
 }
 
+/* Sơ đồ mạng (bước 4): khối SVG bấm được có viền focus theo hình, đường nối Dense chạy khi đang huấn luyện. */
+.network-slab:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 2px var(--color-primary)) drop-shadow(0 0 1px var(--color-primary));
+}
+.network-slab:hover {
+  filter: brightness(1.08);
+}
+.network-flow line {
+  stroke-dasharray: 4 6;
+  animation: network-flow 0.9s linear infinite;
+}
+@keyframes network-flow {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

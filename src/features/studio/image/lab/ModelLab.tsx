@@ -89,7 +89,8 @@ export function ModelLab({ projectName, classes, samples, improve }: ModelLabPro
       />
       <TrainSection
         readiness={readiness}
-        numClasses={classes.length}
+        classNames={classes.map((c) => c.name)}
+        inputImage={(selectedSample ?? samplesBySplit.train[0] ?? samples[0])?.image}
         snapshots={snapshots}
         status={isStale ? 'idle' : training.status}
         selectedEpoch={lab.shownEpoch}

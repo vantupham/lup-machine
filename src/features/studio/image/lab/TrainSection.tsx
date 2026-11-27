@@ -4,6 +4,7 @@ import type { EpochSnapshot, TrainOptions } from '@/core/ml/softmax-regression';
 import { useModeStore } from '@/ui/mode-store';
 import { LineChart } from './LineChart';
 import { NetworkMap } from './NetworkMap';
+import type { StoredImage } from '@/storage/db';
 import type { TrainingReadiness } from './lab-data';
 import type { TrainingSpeed, TrainingStatus } from './useTraining';
 import { ArrowRight, Info } from '@/ui/icons';
@@ -22,7 +23,9 @@ export const EPOCH_LEVELS = [
 
 interface TrainSectionProps {
   readonly readiness: TrainingReadiness;
-  readonly numClasses: number;
+  readonly classNames: readonly string[];
+  /** Ảnh vẽ ở đầu vào sơ đồ mạng (ảnh đang chọn hoặc ảnh Huấn luyện đầu tiên). */
+  readonly inputImage?: StoredImage | undefined;
   readonly snapshots: readonly EpochSnapshot[];
   readonly status: TrainingStatus;
   readonly selectedEpoch: number | null;
@@ -73,11 +76,11 @@ export function TrainSection(props: TrainSectionProps) {
       <div>
         <h2 id="train-title" className="flex items-center gap-3 text-2xl font-semibold"><StepNumber n={4} />{t('project.train.title')}</h2>
         <p className="max-w-3xl text-sm text-muted">
-          {mode === 'expert' ? t('project.train.leadExpert', { classes: props.numClasses }) : t('project.train.leadExplore')}
+          {mode === 'expert' ? t('project.train.leadExpert', { classes: props.classNames.length }) : t('project.train.leadExplore')}
         </p>
       </div>
 
-      <NetworkMap numClasses={props.numClasses} isTraining={isActive} />
+      <NetworkMap classNames={props.classNames} isTraining={isActive} inputImage={props.inputImage} />
 
       {readiness.readiness !== 'ready' ? (
         <p className="text-sm text-warning">{t(readiness.readiness === 'need-features' ? 'project.train.needFeatures' : 'project.train.needClasses')}</p>
