@@ -168,7 +168,26 @@ export function PoseModelLab({ kind, projectName, lab, data, sampleOf }: PoseMod
           </div>
         </div>
         <TrialAfter log={trial.log} isCurrent={current !== null} />
-        <VectorGrowth trained={current} data={data} c={settings.c} featureNames={featureNames} />
+        <VectorGrowth
+          trained={current}
+          data={data}
+          c={settings.c}
+          featureNames={featureNames}
+          renderRow={(row, cls, title) => (
+            <figure className="w-40 space-y-1">
+              <Skeleton
+                kind={kind}
+                keypoints={meanPose(data, cls, VIEW, span)}
+                width={VIEW}
+                height={VIEW}
+                label={t('growth.logistic.poseShape', { title })}
+                jointValues={Array.from({ length: keypointCount(kind) }, (_, j) => Math.hypot(row[2 * j] ?? 0, row[2 * j + 1] ?? 0))}
+                color={colorFor(cls)}
+              />
+              <figcaption className="text-xs text-muted">{t('growth.logistic.poseShapeNote')}</figcaption>
+            </figure>
+          )}
+        />
       </Step>
       {current && evaluation && (
         <>

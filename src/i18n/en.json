@@ -2322,7 +2322,13 @@
       "slider": "Iteration {{n}} / {{max}}",
       "status": "Iteration {{n}}: objective {{objective}}, {{accuracy}}% of the Training set correct.",
       "towards": "Leaning towards {{cls}} (positive) or the other class (negative)",
-      "note": "Each iteration, L-BFGS takes a step that lowers the objective, guided by the last few steps."
+      "note": "Each iteration, L-BFGS takes a step that lowers the objective, guided by the last few steps.",
+      "wordsTowards": "Words pulling towards this side (large text: large weight)",
+      "wordsAway": "Words pushing away",
+      "audioShape": "Weights on the spectrogram: {{title}}",
+      "audioShapeNote": "Each cell is a frequency band (vertical) in one part of the clip (horizontal). Blue: positive, orange: negative.",
+      "poseShape": "Weights on the skeleton: {{title}}",
+      "poseShapeNote": "Large dot: joint with large x, y weights."
     },
     "tree": {
       "title": "Watch the tree grow node by node",
@@ -2334,7 +2340,15 @@
       "leaf": "leaf, predicts {{cls}}",
       "searchTitle": "Node {{id}}: {{count}} thresholds tried on column {{feature}}",
       "searchLabel": "Impurity decrease of {{count}} thresholds",
-      "searchNote": "Thresholds tried from {{lo}} to {{hi}}. Orange dot: threshold {{threshold}} lowers impurity the most ({{improvement}})."
+      "searchNote": "Thresholds tried from {{lo}} to {{hi}}. Orange dot: threshold {{threshold}} lowers impurity the most ({{improvement}}).",
+      "diagramLabel": "Tree diagram: {{count}} nodes built",
+      "nodeLabel": "Diagram, node {{id}} ({{samples}} rows): {{text}}",
+      "yes": "yes",
+      "no": "no",
+      "rows": "Node {{id}} · {{n}} rows",
+      "pending": "not built yet",
+      "legend": "Class colors",
+      "listTitle": "Nodes in the order the machine built them"
     },
     "audioFeature": "band {{band}}, part {{part}}"
   }

@@ -100,8 +100,10 @@ describe('Studio dữ liệu bảng', () => {
     fireEvent.change(slider, { target: { value: slider.getAttribute('max')! } });
     const root = within(steps).getAllByRole('listitem')[0]!.textContent!;
     const rootThreshold = /≤ ([\d,]+)\?/.exec(root)![1];
-    // Mặc định soi nút vừa tách gần nhất; bấm nút gốc để xem các ngưỡng đã thử ở gốc.
-    await userEvent.click(within(steps).getByRole('button', { name: /^Nút 0 / }));
+    // Sơ đồ cây: đủ các nút, nút gốc là câu hỏi; bấm nút gốc trên sơ đồ để xem các ngưỡng đã thử ở gốc.
+    const diagram = within(growth).getByTestId('tree-diagram');
+    expect(within(diagram).getByRole('button', { name: /^Sơ đồ, nút 0 \(120 dòng\): .+ ≤ / })).toBeInTheDocument();
+    await userEvent.click(within(diagram).getByRole('button', { name: /^Sơ đồ, nút 0 / }));
     expect(within(growth).getByTestId('threshold-search')).toHaveTextContent(`ngưỡng ${rootThreshold} giảm tạp chất nhiều nhất`);
 
     await userEvent.click(screen.getByRole('radio', { name: /Hồi quy logistic/ }));

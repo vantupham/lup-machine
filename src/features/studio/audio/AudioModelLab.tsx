@@ -9,6 +9,7 @@ import { audioNotebook } from '@/core/export/audio-notebook';
 import { formatPercent, RangeField, SelectField, Stat } from '@/features/playground/controls';
 import { ColabExportPanel } from '@/features/export/ColabExportPanel';
 import { colorFor } from '@/features/studio/image/lab/class-style';
+import { NEGATIVE, POSITIVE } from '@/features/studio/image/lab/step-visuals';
 import { ExactBadge } from '@/ui/ExactBadge';
 import { getErrorMessage } from '@/ui/error-message';
 import { version as appVersion } from '../../../../package.json';
@@ -179,7 +180,18 @@ export function AudioModelLab({ projectName, lab, data, trainSamples }: AudioMod
           </div>
         </div>
         <TrialAfter log={trial.log} isCurrent={current !== null} />
-        <VectorGrowth trained={current} data={data} c={settings.c} featureNames={featureNames} />
+        <VectorGrowth
+          trained={current}
+          data={data}
+          c={settings.c}
+          featureNames={featureNames}
+          renderRow={(row, _cls, title) => (
+            <figure className="space-y-1">
+              <FeatureGrid values={row} diverging colors={[POSITIVE, NEGATIVE]} label={t('growth.logistic.audioShape', { title })} />
+              <figcaption className="text-xs text-muted">{t('growth.logistic.audioShapeNote')}</figcaption>
+            </figure>
+          )}
+        />
       </Step>
       {current && evaluation && (
         <>

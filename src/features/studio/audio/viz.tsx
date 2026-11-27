@@ -71,7 +71,20 @@ export function SpectrogramHeat({ db, label, bounds, frame }: { readonly db: rea
 }
 
 /** Lưới 40 dải × 4 đoạn. Thường: càng sáng càng to. Hai chiều (diverging): xanh dương = âm, cam = dương. */
-export function FeatureGrid({ values, label, diverging = false, testId }: { readonly values: ArrayLike<number>; readonly label: string; readonly diverging?: boolean; readonly testId?: string }) {
+export function FeatureGrid({
+  values,
+  label,
+  diverging = false,
+  testId,
+  colors = ['#D55E00', '#0072B2'],
+}: {
+  readonly values: ArrayLike<number>;
+  readonly label: string;
+  readonly diverging?: boolean;
+  readonly testId?: string;
+  /** Màu [dương, âm] khi `diverging`. */
+  readonly colors?: readonly [string, string];
+}) {
   const bands = AUDIO.nMels;
   const segments = AUDIO.timeSegments;
   const cell = 8;
@@ -84,7 +97,7 @@ export function FeatureGrid({ values, label, diverging = false, testId }: { read
       {arr.map((v, i) => {
         const s = Math.floor(i / bands);
         const m = i % bands;
-        const fill = diverging ? (v >= 0 ? '#D55E00' : '#0072B2') : '#E69F00';
+        const fill = diverging ? (v >= 0 ? colors[0] : colors[1]) : '#E69F00';
         const opacity = diverging ? Math.abs(v) / maxAbs : (v - min) / Math.max(1e-9, max - min);
         return <rect key={i} x={s * cell * 3} y={(bands - 1 - m) * cell} width={cell * 3 - 0.5} height={cell - 0.5} fill={fill} fillOpacity={opacity} data-value={v.toFixed(4)} />;
       })}

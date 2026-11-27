@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FEATURE_LENGTH, AUDIO } from '@/core/audio/features';
 import type { TrainedVectorModel, VectorData } from '@/core/ml/vector-classifier';
@@ -8,6 +8,7 @@ import type { PreparedData } from '@/core/tabular/prepare';
 import { encodeText, type TextData, type TrainedText } from '@/core/text/text-model';
 import { LogisticGrowth } from './LogisticGrowth';
 import { TreeGrowth } from './TreeGrowth';
+import { WordWeights } from './WordWeights';
 
 /** Bảng số: cây mọc từng nút, hoặc các vòng lặp của hồi quy logistic (trên dữ liệu đã chuẩn hóa, như khi huấn luyện). */
 export function TabularGrowth({ trained, data, c }: { readonly trained: TrainedModel; readonly data: PreparedData; readonly c: number }) {
@@ -24,13 +25,30 @@ export function TabularGrowth({ trained, data, c }: { readonly trained: TrainedM
 export function TextGrowth({ trained, data, c }: { readonly trained: TrainedText | null; readonly data: TextData; readonly c: number }) {
   const xs = useMemo(() => (trained?.kind === 'logistic' ? data.train.texts.map((text) => encodeText(data, text).tfidf) : null), [trained, data]);
   if (!xs) return null;
-  return <LogisticGrowth xs={xs} ys={data.train.y} numClasses={data.classNames.length} c={c} classNames={data.classNames} featureNames={data.vocab.terms} />;
+  return (
+    <LogisticGrowth
+      xs={xs}
+      ys={data.train.y}
+      numClasses={data.classNames.length}
+      c={c}
+      classNames={data.classNames}
+      featureNames={data.vocab.terms}
+      renderRow={(row, _cls, title) => <WordWeights weights={row} terms={data.vocab.terms} label={title} />}
+    />
+  );
 }
 
 /** Âm thanh / tư thế: các vòng lặp của hồi quy logistic trên đặc trưng đã chuẩn hóa. */
-export function VectorGrowth({ trained, data, c, featureNames }: { readonly trained: TrainedVectorModel | null; readonly data: VectorData; readonly c: number; readonly featureNames: readonly string[] }) {
+export function VectorGrowth({ trained, data, c, featureNames, renderRow }: {
+  readonly trained: TrainedVectorModel | null;
+  readonly data: VectorData;
+  readonly c: number;
+  readonly featureNames: readonly string[];
+  /** Hình dạng tự nhiên của một hàng trọng số (ảnh phổ, khung xương). */
+  readonly renderRow?: (row: readonly number[], cls: number, title: string) => ReactNode;
+}) {
   if (trained?.kind !== 'logistic') return null;
-  return <LogisticGrowth xs={data.train.xs} ys={data.train.ys} numClasses={data.classNames.length} c={c} classNames={data.classNames} featureNames={featureNames} />;
+  return <LogisticGrowth xs={data.train.xs} ys={data.train.ys} numClasses={data.classNames.length} c={c} classNames={data.classNames} featureNames={featureNames} renderRow={renderRow} />;
 }
 
 /** Tên 160 đặc trưng âm thanh: số thứ s·40 + m là "dải m, phần s". */
