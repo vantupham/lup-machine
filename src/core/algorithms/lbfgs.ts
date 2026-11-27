@@ -12,6 +12,8 @@ export interface LbfgsOptions {
   /** Dừng khi chuẩn vô cùng của gradient nhỏ hơn mức này. */
   readonly gradientTolerance?: number;
   readonly memory?: number;
+  /** Gọi với điểm xuất phát (vòng 0) và sau mỗi bước được nhận: để ghi lại quá trình tối ưu. */
+  readonly onIteration?: (iteration: number, x: readonly number[], value: number) => void;
 }
 
 export interface LbfgsResult {
@@ -62,10 +64,11 @@ function searchDirection(g: readonly number[], ss: readonly number[][], ys: read
 export function minimizeLbfgs(
   fn: (x: readonly number[]) => ValueAndGradient,
   x0: readonly number[],
-  { maxIterations = 1000, gradientTolerance = 1e-9, memory = 10 }: LbfgsOptions = {},
+  { maxIterations = 1000, gradientTolerance = 1e-9, memory = 10, onIteration }: LbfgsOptions = {},
 ): LbfgsResult {
   let x = [...x0];
   let current = fn(x);
+  onIteration?.(0, x, current.value);
   const ss: number[][] = [];
   const ys: number[][] = [];
   let stalled = 0;
@@ -111,6 +114,7 @@ export function minimizeLbfgs(
     stalled = decrease < STALL_RELATIVE_DECREASE ? stalled + 1 : 0;
     x = next;
     current = nextEval;
+    onIteration?.(iter + 1, x, current.value);
     if (stalled >= MAX_STALLED_STEPS) {
       return { x, value: current.value, iterations: iter + 1, converged: maxAbs(current.gradient) < gradientTolerance };
     }

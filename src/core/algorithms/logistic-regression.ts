@@ -24,6 +24,8 @@ export interface LogisticOptions {
    * Mặc định 1e-6: chặt hơn mặc định 1e-4 của scikit-learn mà vẫn nhanh trên trình duyệt.
    */
   readonly tolerance?: number;
+  /** Gọi ở mỗi vòng lặp L-BFGS (vòng 0 = mọi trọng số bằng 0) với mô hình tạm và giá trị hàm mục tiêu. */
+  readonly onIteration?: (iteration: number, model: LogisticModel, objective: number) => void;
 }
 
 export const DEFAULT_LOGISTIC_TOLERANCE = 1e-6;
@@ -60,7 +62,7 @@ export function fitLogisticRegression(
   xs: readonly Vector[],
   ys: readonly number[],
   numClasses: number,
-  { c = 1, maxIterations = 2000, tolerance = DEFAULT_LOGISTIC_TOLERANCE }: LogisticOptions = {},
+  { c = 1, maxIterations = 2000, tolerance = DEFAULT_LOGISTIC_TOLERANCE, onIteration }: LogisticOptions = {},
 ): LogisticModel {
   if (xs.length === 0) throw new RangeError('Cần ít nhất một mẫu để huấn luyện');
   if (xs.length !== ys.length) throw new RangeError('Số mẫu và số nhãn không bằng nhau');
@@ -109,17 +111,40 @@ export function fitLogisticRegression(
     return { value, gradient: grad };
   };
 
+  const toModel = (x: readonly number[], converged: boolean): LogisticModel => {
+    const weights = Array.from({ length: rows }, (_, k) => x.slice(k * stride, k * stride + d));
+    let intercepts = Array.from({ length: rows }, (_, k) => x[k * stride + d] as number);
+    if (rows > 1) {
+      const mean = intercepts.reduce((a, b) => a + b, 0) / rows;
+      intercepts = intercepts.map((b) => b - mean);
+    }
+    return { numClasses, weights, intercepts, converged };
+  };
   const result = minimizeLbfgs(objective, new Array<number>(rows * stride).fill(0), {
     maxIterations,
     gradientTolerance: tolerance * xs.length,
+    ...(onIteration ? { onIteration: (iteration: number, x: readonly number[], value: number) => onIteration(iteration, toModel(x, false), value) } : {}),
   });
-  const weights = Array.from({ length: rows }, (_, k) => result.x.slice(k * stride, k * stride + d));
-  let intercepts = Array.from({ length: rows }, (_, k) => result.x[k * stride + d] as number);
-  if (rows > 1) {
-    const mean = intercepts.reduce((a, b) => a + b, 0) / rows;
-    intercepts = intercepts.map((b) => b - mean);
-  }
-  return { numClasses, weights, intercepts, converged: result.converged };
+  return toModel(result.x, result.converged);
+}
+
+export interface LogisticIterate {
+  readonly iteration: number;
+  /** Hàm mục tiêu: tổng loss + ‖W‖² / (2C). */
+  readonly objective: number;
+  readonly model: LogisticModel;
+}
+
+/** Huấn luyện như fitLogisticRegression và ghi lại mô hình sau mỗi vòng lặp L-BFGS (để phát lại ở bước 4). */
+export function fitLogisticHistory(
+  xs: readonly Vector[],
+  ys: readonly number[],
+  numClasses: number,
+  options: Omit<LogisticOptions, 'onIteration'> = {},
+): { readonly model: LogisticModel; readonly history: readonly LogisticIterate[] } {
+  const history: LogisticIterate[] = [];
+  const model = fitLogisticRegression(xs, ys, numClasses, { ...options, onIteration: (iteration, m, objective) => history.push({ iteration, objective, model: m }) });
+  return { model, history };
 }
 
 /**

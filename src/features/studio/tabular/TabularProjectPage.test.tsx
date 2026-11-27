@@ -83,6 +83,38 @@ describe('Studio dữ liệu bảng', () => {
     expect(screen.getByTestId('tabular-prediction')).toHaveTextContent('Máy đoán: setosa');
   });
 
+  test('cây mọc từng nút và các vòng lặp L-BFGS của hồi quy logistic (Iris)', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    await userEvent.click(await screen.findByRole('button', { name: /Hoa diên vĩ/ }));
+    await screen.findByTestId('table-size');
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
+    await screen.findByText('Đã huấn luyện (lần 1).');
+
+    const growth = screen.getByTestId('tree-growth');
+    await userEvent.click(within(growth).getByText('Xem cây mọc từng nút'));
+    const steps = within(growth).getByTestId('tree-steps');
+    expect(within(steps).getAllByRole('listitem')).toHaveLength(1);
+    expect(steps).toHaveTextContent(/^Nút 0 \(120 dòng, tạp chất 0,667\): lá, đoán /);
+    const slider = within(growth).getByRole('slider');
+    fireEvent.change(slider, { target: { value: slider.getAttribute('max')! } });
+    const root = within(steps).getAllByRole('listitem')[0]!.textContent!;
+    const rootThreshold = /≤ ([\d,]+)\?/.exec(root)![1];
+    // Mặc định soi nút vừa tách gần nhất; bấm nút gốc để xem các ngưỡng đã thử ở gốc.
+    await userEvent.click(within(steps).getByRole('button', { name: /^Nút 0 / }));
+    expect(within(growth).getByTestId('threshold-search')).toHaveTextContent(`ngưỡng ${rootThreshold} giảm tạp chất nhiều nhất`);
+
+    await userEvent.click(screen.getByRole('radio', { name: /Hồi quy logistic/ }));
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
+    await screen.findByText('Đã huấn luyện (lần 2).');
+    const logistic = screen.getByTestId('logistic-growth');
+    await userEvent.click(within(logistic).getByText(/Xem máy học qua từng vòng lặp/));
+    expect(within(logistic).getByTestId('logistic-iterate')).toHaveTextContent(/^Vòng \d+: hàm mục tiêu [\d,]+, đúng [\d,]+% tập Huấn luyện\.$/);
+    fireEvent.change(within(logistic).getByRole('slider'), { target: { value: '0' } });
+    // Vòng 0: mọi trọng số bằng 0, ba lớp bằng điểm nhau nên máy đoán cùng một lớp: đúng 1/3 tập Huấn luyện.
+    expect(within(logistic).getByTestId('logistic-iterate')).toHaveTextContent('Vòng 0: hàm mục tiêu 131,833, đúng 33,3% tập Huấn luyện.');
+  });
+
   test('Penguins: báo dòng thiếu và mất cân bằng; đổi sang hồi quy cân nặng có phương trình', async () => {
     const { repos, projectId } = await setup();
     render(repos, projectId);

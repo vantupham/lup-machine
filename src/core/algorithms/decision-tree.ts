@@ -76,37 +76,61 @@ interface BestSplit {
   readonly right: number[];
 }
 
+export interface SplitCandidate {
+  readonly threshold: number;
+  /** Mức giảm tạp chất: tạp chất nút cha − trung bình có trọng số của hai nút con. */
+  readonly improvement: number;
+  /** Số mẫu sang nhánh trái (≤ ngưỡng). */
+  readonly left: number;
+}
+
+/**
+ * Mọi ngưỡng hợp lệ của đặc trưng `feature` tại một nút (giữa hai giá trị liền nhau khác nhau), theo thứ tự tăng.
+ * Dùng cho cả việc dựng cây lẫn biểu đồ "thử mọi ngưỡng" ở bước 4.
+ */
+export function splitCandidates(
+  indices: readonly number[],
+  xs: readonly Vector[],
+  ys: readonly number[],
+  numClasses: number,
+  feature: number,
+  criterion: Criterion,
+  minLeaf = 1,
+): SplitCandidate[] {
+  const n = indices.length;
+  const parentImpurity = impurity(countLabels(indices, ys, numClasses), criterion);
+  const sorted = [...indices].sort((a, b) => (xs[a]![feature] as number) - (xs[b]![feature] as number));
+  const left = new Array<number>(numClasses).fill(0);
+  const right = countLabels(sorted, ys, numClasses);
+  const out: SplitCandidate[] = [];
+  for (let p = 1; p < n; p++) {
+    const moved = ys[sorted[p - 1] as number] as number;
+    left[moved]! += 1;
+    right[moved]! -= 1;
+    const prev = xs[sorted[p - 1] as number]![feature] as number;
+    const curr = xs[sorted[p] as number]![feature] as number;
+    if (curr <= prev + FEATURE_THRESHOLD) continue;
+    if (p < minLeaf || n - p < minLeaf) continue;
+    const improvement = parentImpurity - (p / n) * impurity(left, criterion) - ((n - p) / n) * impurity(right, criterion);
+    let threshold = prev / 2 + curr / 2;
+    if (threshold === curr || !Number.isFinite(threshold)) threshold = prev;
+    out.push({ threshold, improvement, left: p });
+  }
+  return out;
+}
+
 function findBestSplit(
   indices: readonly number[],
   xs: readonly Vector[],
   ys: readonly number[],
   numClasses: number,
-  parentImpurity: number,
   criterion: Criterion,
   minLeaf: number,
 ): BestSplit | null {
-  const n = indices.length;
   let best: { feature: number; threshold: number; improvement: number } | null = null;
-
   for (let f = 0; f < (xs[0]?.length ?? 0); f++) {
-    const sorted = [...indices].sort((a, b) => (xs[a]![f] as number) - (xs[b]![f] as number));
-    const left = new Array<number>(numClasses).fill(0);
-    const right = countLabels(sorted, ys, numClasses);
-    for (let p = 1; p < n; p++) {
-      const moved = ys[sorted[p - 1] as number] as number;
-      left[moved]! += 1;
-      right[moved]! -= 1;
-      const prev = xs[sorted[p - 1] as number]![f] as number;
-      const curr = xs[sorted[p] as number]![f] as number;
-      if (curr <= prev + FEATURE_THRESHOLD) continue;
-      if (p < minLeaf || n - p < minLeaf) continue;
-      const improvement =
-        parentImpurity - (p / n) * impurity(left, criterion) - ((n - p) / n) * impurity(right, criterion);
-      if (best === null || improvement > best.improvement) {
-        let threshold = prev / 2 + curr / 2;
-        if (threshold === curr || !Number.isFinite(threshold)) threshold = prev;
-        best = { feature: f, threshold, improvement };
-      }
+    for (const c of splitCandidates(indices, xs, ys, numClasses, f, criterion, minLeaf)) {
+      if (best === null || c.improvement > best.improvement) best = { feature: f, threshold: c.threshold, improvement: c.improvement };
     }
   }
   if (best === null) return null;
@@ -117,6 +141,15 @@ function findBestSplit(
     left: indices.filter((i) => (xs[i]![feature] as number) <= threshold),
     right: indices.filter((i) => (xs[i]![feature] as number) > threshold),
   };
+}
+
+/** Các mẫu (số thứ tự) rơi vào nút `nodeId`, đi từ gốc theo các câu hỏi của cây. */
+export function nodeSamples(tree: DecisionTree, xs: readonly Vector[], nodeId: number): number[] {
+  return xs.flatMap((x, i) => {
+    let node = tree.nodes[0]!;
+    while (node.id !== nodeId && node.split) node = tree.nodes[(x[node.split.feature] as number) <= node.split.threshold ? node.split.left : node.split.right]!;
+    return node.id === nodeId ? [i] : [];
+  });
 }
 
 export function fitTree(xs: readonly Vector[], ys: readonly number[], numClasses: number, options: TreeOptions): DecisionTree {
@@ -139,7 +172,7 @@ export function fitTree(xs: readonly Vector[], ys: readonly number[], numClasses
       indices.length >= 2 * minLeaf &&
       nodeImpurity > PURE_EPSILON;
     const best = canSplit
-      ? findBestSplit(indices, xs, ys, numClasses, nodeImpurity, options.criterion, minLeaf)
+      ? findBestSplit(indices, xs, ys, numClasses, options.criterion, minLeaf)
       : null;
     if (best === null) return id;
 

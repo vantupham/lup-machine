@@ -4,6 +4,12 @@
 
 ## [Chưa phát hành]
 
+### Thêm (bước 4 Huấn luyện của văn bản, bảng số, âm thanh, tư thế: mô hình hình thành ra sao)
+
+- **Hồi quy logistic** (cả 4 Studio): mục "Xem máy học qua từng vòng lặp (L-BFGS)" huấn luyện lại đúng như vừa rồi và ghi mô hình sau mỗi vòng: biểu đồ hàm mục tiêu và % đúng tập Huấn luyện, thanh trượt vòng lặp, 6 đặc trưng nặng ký nhất của mỗi lớp (từ, cột, dải tần × phần thời gian, khớp x / y). Vòng 0 là mọi trọng số bằng 0 (Iris: hàm mục tiêu 120 · ln 3 = 131,833, đúng 33,3 %).
+- **Cây quyết định** (bảng số): mục "Xem cây mọc từng nút" theo đúng thứ tự máy dựng, và biểu đồ mức giảm tạp chất của mọi ngưỡng đã thử ở nút đang soi; chấm cam là ngưỡng cây đã chọn (Iris: gốc "Dài cánh hoa ≤ 2,45").
+- Lõi: `minimizeLbfgs` có `onIteration`; `fitLogisticHistory` (mô hình cuối trùng khớp `fitLogisticRegression`); `splitCandidates` dùng chung cho việc dựng cây và biểu đồ; `nodeSamples`. Các test so khớp scikit-learn có sẵn vẫn qua.
+
 ### Thêm (bước 4 Huấn luyện của Studio ảnh: bản đồ trọng số)
 
 - **Trọng số của tầng Dense theo epoch**: mỗi lớp một lưới 64 × 20 ô (1280 trọng số, xanh dương / cam), đi theo thanh phát lại epoch; cập nhật trực tiếp khi đang huấn luyện. Tùy chọn "chỉ hiện phần thay đổi so với epoch trước".

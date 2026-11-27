@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { TabularGrowth } from '@/features/studio/growth/StudioGrowth';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { NotebookProvider } from '@/features/notebook/NotebookContext';
 import { NotebookPrintLink } from '@/features/notebook/NotebookPrintLink';
@@ -157,6 +158,7 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
               trainCount={model.trained?.count ?? 0}
             />
             <TrialAfter log={trialLog} isCurrent={current !== null} />
+            {current && <TabularGrowth trained={current} data={data} c={config.model.c} />}
           </Step>
           {current && evaluation && (
             <>

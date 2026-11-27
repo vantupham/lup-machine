@@ -1,5 +1,6 @@
 /** Bước 4 Huấn luyện, 5 Đánh giá, 6 Sử dụng của Studio tư thế. */
 import { useCallback, useState } from 'react';
+import { VectorGrowth, usePoseFeatureNames } from '@/features/studio/growth/StudioGrowth';
 import { VectorKnnCode } from '@/features/code-trace/VectorKnnCode';
 import type { VectorModel } from '@/features/studio/quick/useVectorModel';
 import { TrialBefore } from '@/features/trials/TrialBefore';
@@ -138,6 +139,7 @@ export function PoseModelLab({ kind, projectName, lab, data, sampleOf }: PoseMod
   const VIEW = 220;
   const span = kind === 'body' ? 5 : 4;
 
+  const featureNames = usePoseFeatureNames(kind);
   return (
     <>
       <Step n={4} id="pose-step-train" notebook="train" title={t('pose.steps.train')} done={current !== null}>
@@ -166,6 +168,7 @@ export function PoseModelLab({ kind, projectName, lab, data, sampleOf }: PoseMod
           </div>
         </div>
         <TrialAfter log={trial.log} isCurrent={current !== null} />
+        <VectorGrowth trained={current} data={data} c={settings.c} featureNames={featureNames} />
       </Step>
       {current && evaluation && (
         <>
