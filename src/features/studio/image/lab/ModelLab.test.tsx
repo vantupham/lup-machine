@@ -171,6 +171,23 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     expect(screen.getByText('Phát lại: epoch 0')).toBeInTheDocument();
   });
 
+  test('Mã Python: chưa huấn luyện thì nhắc; huấn luyện xong chạy mã với đúng dữ liệu của dự án', async () => {
+    await seed();
+    open();
+    await extractAll();
+    const panel = () => screen.getByTestId('code-trace');
+    await userEvent.click(within(panel()).getByText('Mã Python'));
+    expect(within(panel()).getByText('Huấn luyện một lần để chạy mã với dữ liệu của bạn.')).toBeVisible();
+
+    await trainToEnd();
+    await userEvent.click(within(panel()).getByRole('button', { name: /Chạy 1 dòng/ }));
+    const vars = within(panel()).getByRole('region', { name: 'Biến' });
+    expect(within(vars).getByText('X_train').parentElement).toHaveTextContent('(12, 1280)');
+    expect(within(vars).getByText('EPOCHS').parentElement).toHaveTextContent('50');
+    await userEvent.click(within(panel()).getByRole('button', { name: /Đến hết epoch/ }));
+    expect(within(panel()).getByTestId('code-trace-console').textContent).toMatch(/^epoch 1: loss \d\.\d{3}, đúng \d+%$/);
+  });
+
   test('chế độ từng bước: mỗi lần bấm chạy đúng 1 epoch', async () => {
     await seed();
     open();

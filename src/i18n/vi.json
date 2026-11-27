@@ -2023,6 +2023,34 @@
       }
     }
   },
+  "codeTrace": {
+    "title": "Mã Python",
+    "lead": "Chạy từng dòng mã với dữ liệu của bạn. Số trong khung là số thật.",
+    "exactHint": "Số do trình duyệt vừa tính, đã đối chiếu khớp với bản Python.",
+    "needRun": "Huấn luyện một lần để chạy mã với dữ liệu của bạn.",
+    "helpers": "Hàm hỗ trợ ({{file}})",
+    "helpersNote": "Các hàm chương trình dùng, cho cùng kết quả với trình duyệt.",
+    "reset": "Về đầu",
+    "step": "Chạy 1 dòng",
+    "play": "Chạy",
+    "pause": "Tạm dừng",
+    "toEpochEnd": "Đến hết epoch",
+    "speed": "Tốc độ",
+    "speeds": {
+      "slow": "Chậm",
+      "medium": "Vừa",
+      "fast": "Nhanh"
+    },
+    "start": "Bấm Chạy hoặc Chạy 1 dòng để bắt đầu.",
+    "position": "Epoch {{epoch}} · dòng {{line}}",
+    "finished": "Chương trình đã chạy xong.",
+    "current": "Đang chạy:",
+    "variables": "Biến",
+    "noVariables": "Chưa có biến nào.",
+    "changed": "vừa đổi",
+    "console": "Màn hình (print)",
+    "consoleEmpty": "Chưa in dòng nào."
+  },
   "autosave": {
     "saving": "Đang lưu…",
     "saved": "Đã lưu",

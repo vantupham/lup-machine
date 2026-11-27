@@ -38,6 +38,8 @@ interface TrainSectionProps {
   readonly renderPlan?: ((options: TrainOptions) => ReactNode) | undefined;
   /** Hiện dưới kết quả huấn luyện (so sánh với lần trước, kết luận). */
   readonly afterResult?: ReactNode;
+  /** Khung "Mã Python" của bước (đặt cuối bước, trước Sổ tay). */
+  readonly codeTrace?: ReactNode;
 }
 
 function isValid(o: TrainOptions): boolean {
@@ -136,6 +138,7 @@ export function TrainSection(props: TrainSectionProps) {
       {props.guessResult && <GuessResult {...props.guessResult} />}
       {!isActive && props.afterResult}
       {snapshots.length > 0 && <Charts {...props} />}
+      {props.codeTrace}
       <StepNotebook step="train" />
     </section>
   );

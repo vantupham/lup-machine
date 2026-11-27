@@ -2023,6 +2023,34 @@
       }
     }
   },
+  "codeTrace": {
+    "title": "Python code",
+    "lead": "Run the code line by line on your data. The numbers are real.",
+    "exactHint": "Numbers computed by the browser, checked to match the Python version.",
+    "needRun": "Train once to run the code on your data.",
+    "helpers": "Helper functions ({{file}})",
+    "helpersNote": "Functions the program uses, giving the same results as the browser.",
+    "reset": "Restart",
+    "step": "Run 1 line",
+    "play": "Run",
+    "pause": "Pause",
+    "toEpochEnd": "To end of epoch",
+    "speed": "Speed",
+    "speeds": {
+      "slow": "Slow",
+      "medium": "Medium",
+      "fast": "Fast"
+    },
+    "start": "Press Run or Run 1 line to start.",
+    "position": "Epoch {{epoch}} · line {{line}}",
+    "finished": "The program has finished.",
+    "current": "Running:",
+    "variables": "Variables",
+    "noVariables": "No variables yet.",
+    "changed": "just changed",
+    "console": "Output (print)",
+    "consoleEmpty": "Nothing printed yet."
+  },
   "autosave": {
     "saving": "Saving…",
     "saved": "Saved",
