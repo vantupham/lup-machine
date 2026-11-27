@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { cellAt } from '@/core/ml/weight-stats';
 import { useTranslation } from 'react-i18next';
 import { ClassMarker } from '@/ui/ClassMarker';
 import { colorFor } from './class-style';
@@ -9,7 +10,15 @@ export const NEGATIVE = '#D55E00';
 const COLUMNS = 64;
 
 /** 1280 số có dấu thành lưới 64 × 20 ô trên một canvas: xanh là dương, cam là âm, càng đậm càng lớn. */
-export function SignedStrip({ values, label, testId }: { readonly values: ArrayLike<number>; readonly label: string; readonly testId?: string }) {
+interface SignedStripProps {
+  readonly values: ArrayLike<number>;
+  readonly label: string;
+  readonly testId?: string;
+  /** Bấm vào một ô: số thứ tự ô (0…n−1). */
+  readonly onPick?: (index: number) => void;
+}
+
+export function SignedStrip({ values, label, testId, onPick }: SignedStripProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   const rows = Math.ceil(values.length / COLUMNS);
   useEffect(() => {
@@ -34,7 +43,15 @@ export function SignedStrip({ values, label, testId }: { readonly values: ArrayL
       role="img"
       aria-label={label}
       data-testid={testId}
-      className="h-auto w-full max-w-xl rounded-sm border border-rule bg-paper [image-rendering:pixelated]"
+      onClick={
+        onPick
+          ? (e) => {
+              const box = e.currentTarget.getBoundingClientRect();
+              if (box.width > 0 && box.height > 0) onPick(cellAt((e.clientX - box.left) / box.width, (e.clientY - box.top) / box.height, COLUMNS, values.length));
+            }
+          : undefined
+      }
+      className={`h-auto w-full max-w-xl rounded-sm border border-rule bg-paper [image-rendering:pixelated] ${onPick ? 'cursor-crosshair' : ''}`}
     />
   );
 }

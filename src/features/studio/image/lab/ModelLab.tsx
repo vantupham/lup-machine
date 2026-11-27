@@ -19,6 +19,7 @@ import { setupOf } from './run-setup';
 import type { ImproveActions } from './improve-actions';
 import { RotateCcw } from '@/ui/icons';
 import { TrainStepExplorer } from './TrainStepExplorer';
+import { WeightMap } from './WeightMap';
 
 interface ModelLabProps {
   readonly projectName: string;
@@ -104,6 +105,20 @@ export function ModelLab({ projectName, classes, samples, improve }: ModelLabPro
         }
         onStep={training.step}
         onFinish={training.finish}
+        weightMap={
+          hasRun && lastOptions && readiness.readiness === 'ready' ? (
+            <WeightMap
+              snapshots={snapshots}
+              epoch={lab.shownEpoch ?? snapshots.at(-1)!.epoch}
+              classes={classes}
+              train={readiness.data.train}
+              test={readiness.data.test}
+              samples={readiness.trainSamples}
+              options={lastOptions}
+              isTraining={training.status === 'running' || training.status === 'waiting-step'}
+            />
+          ) : undefined
+        }
         stepExplorer={
           hasRun && lastOptions && readiness.readiness === 'ready' && (snapshots.at(-1)?.epoch ?? 0) > 0 ? (
             <TrainStepExplorer
