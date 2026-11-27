@@ -4,6 +4,12 @@
 
 ## [Chưa phát hành]
 
+### Thêm (bước 4 Huấn luyện của Studio ảnh: "Một bước học")
+
+- Sau khi huấn luyện xong: chọn epoch, lô và một ảnh trong lô (ảnh nhỏ bấm được), rồi đi qua 6 chặng: **Đưa vào** (1280 số của ảnh) → **Tính điểm** (thanh điểm từng lớp; Chuyên sâu: 3 tích W·x lớn nhất) → **Xác suất, loss** → **Sai lệch** (p − đáp án) → **Hướng chỉnh** (gradient 1280 trọng số của lớp đúng, trung bình cả lô; xanh dương / cam) → **Cập nhật** (mức thay đổi thật sau Adam; xác suất và loss của ảnh trước → sau).
+- Mỗi chặng ghi dòng tương ứng trong `softmax_train.py` (khung Mã Python bên dưới).
+- `core/ml/train-step.ts` tính lại đúng lô bằng cùng seed, thứ tự trộn và Adam: trọng số sau lô cuối của mỗi epoch trùng khớp tuyệt đối ảnh chụp epoch đó (có test). Lời văn không khẳng định mọi ảnh đều tốt lên (máy chỉnh theo cả lô).
+
 ### Thêm (bước 4 Huấn luyện của Studio ảnh: sơ đồ mạng từng tầng)
 
 - **Sơ đồ "Mạng gồm những gì"** ở đầu bước 4: ảnh 224 × 224 × 3 → 19 khối MobileNetV2 (ô vuông nhỏ dần theo kích thước, số kênh tăng tới 1280) → trung bình 7 × 7 → **Dense (đang học)** → softmax. Câu tóm tắt: 155 tầng, 410 208 số học sẵn trên ImageNet và đóng băng; huấn luyện chỉ chỉnh 1280 × k + k số của tầng cuối.

@@ -1035,6 +1035,40 @@
         "ReLU": "giữ số dương, số âm thành 0",
         "Add": "lối tắt: cộng đầu vào khối vào đầu ra"
       }
+    },
+    "trainStep": {
+      "title": "Một bước học",
+      "exactHint": "Tính lại đúng lô đó bằng cùng seed và cùng phép tính của lần huấn luyện vừa rồi.",
+      "lead": "Chọn epoch, lô và một ảnh để xem máy tính điểm, đo sai rồi chỉnh trọng số ra sao.",
+      "epoch": "Epoch (1 đến {{max}})",
+      "batch": "Lô (trong {{max}} lô)",
+      "batchImages": "{{count}} ảnh trong lô này. Bấm để chọn ảnh:",
+      "pick": "Ảnh {{n}} trong lô",
+      "stages": "Các chặng",
+      "stage": {
+        "input": "Đưa vào",
+        "logits": "Tính điểm",
+        "proba": "Xác suất, loss",
+        "error": "Sai lệch",
+        "gradient": "Hướng chỉnh",
+        "update": "Cập nhật"
+      },
+      "prev": "Chặng trước",
+      "next": "Chặng sau",
+      "inputText": "Ảnh này thuộc lớp \"{{cls}}\". Máy chỉ thấy 1280 số do MobileNetV2 tạo ra:",
+      "vector": "1280 số của ảnh",
+      "logitsText": "Mỗi lớp được một điểm: cộng 1280 tích trọng số × số của ảnh, thêm độ lệch.",
+      "topTerms": "Ba tích lớn nhất của lớp {{cls}}:",
+      "probaText": "Softmax đổi điểm thành xác suất. Lớp đúng \"{{cls}}\" được {{p}}%, nên loss = −log p = {{loss}}.",
+      "errorText": "Sai lệch = xác suất − đáp án. Lớp đúng \"{{cls}}\" âm (cần tăng), các lớp khác dương (cần giảm).",
+      "gradientText": "Hướng chỉnh trọng số của lớp \"{{cls}}\": sai lệch × 1280 số, lấy trung bình cả {{count}} ảnh trong lô.",
+      "gradientLabel": "Gradient của 1280 trọng số lớp {{cls}}",
+      "colorNote": "Xanh: dương, cam: âm. Ô càng đậm, số càng lớn.",
+      "updateText": "Adam bước ngược hướng gradient một bước nhỏ (tốc độ học {{lr}}). Mức thay đổi thật của trọng số lớp \"{{cls}}\":",
+      "deltaLabel": "Mức thay đổi của 1280 trọng số lớp {{cls}}",
+      "beforeAfter": "Xác suất lớp đúng của ảnh này: {{before}}% → {{after}}%; loss: {{lossBefore}} → {{lossAfter}}.",
+      "batchNote": "Máy chỉnh theo cả lô, nên có ảnh tốt lên, có ảnh chưa.",
+      "pythonLine": "Mã Python dòng {{n}}:"
     }
   },
   "samples": {
