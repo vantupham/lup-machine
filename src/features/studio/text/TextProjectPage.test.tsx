@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { parseCsv } from '@/core/tabular/csv';
 import { useModeStore } from '@/ui/mode-store';
@@ -48,6 +48,35 @@ describe('Studio văn bản tiếng Việt', () => {
     expect([...marks].map((m) => m.textContent)).toContain('trời');
     expect(screen.getByTestId('text-highlight')).toHaveTextContent('Hôm nay trời nắng, gió mát.');
     expect(screen.getByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeInTheDocument();
+  });
+
+  test('Mã Python: TF-IDF của câu đang xem, huấn luyện Naive Bayes, đoán câu đang gõ (cùng số với trang)', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    await userEvent.click(await screen.findByRole('button', { name: /Chủ đề: thời tiết/ }));
+    await screen.findByTestId('text-size');
+    const panel = (file: string) => document.querySelector<HTMLElement>(`[data-program="${file}"]`)!;
+    const runToPrint = async (file: string, times: number) => {
+      await userEvent.click(within(panel(file)).getByText('Mã Python'));
+      for (let i = 0; i < times; i++) await userEvent.click(within(panel(file)).getByRole('button', { name: /Đến dòng in tiếp theo/ }));
+      return within(panel(file)).getByTestId('code-trace-console').textContent!;
+    };
+
+    fireEvent.change(screen.getByLabelText('Câu để xem (sửa thoải mái)'), { target: { value: 'Trời mưa, trời lạnh' } });
+    const tfidfRow = within(screen.getByTestId('tfidf-table')).getByRole('rowheader', { name: 'trời' }).closest('tr')!;
+    const [count, idf, tfidf] = within(tfidfRow).getAllByRole('cell').map((c) => c.textContent);
+    expect(await runToPrint('text_vectorize.py', 1)).toBe(`trời: đếm ${count}, idf ${idf}, TF-IDF ${tfidf}`);
+
+    await userEvent.click(within(panel('naive_bayes.py')).getByText('Mã Python'));
+    expect(within(panel('naive_bayes.py')).getByText('Huấn luyện một lần để chạy mã với dữ liệu của bạn.')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
+    await screen.findByTestId('tabular-confusion');
+    for (let i = 0; i < 3; i++) await userEvent.click(within(panel('naive_bayes.py')).getByRole('button', { name: /Đến dòng in tiếp theo/ }));
+    expect(within(panel('naive_bayes.py')).getByTestId('code-trace-console').textContent).toMatch(/thời tiết: \d+ câu, hay gặp: /);
+
+    fireEvent.change(screen.getByLabelText('Gõ một câu'), { target: { value: 'Hôm nay trời nắng, gió mát.' } });
+    const printed = await runToPrint('text_predict.py', 4);
+    expect(printed.split('\n').at(-1)).toBe('Máy đoán: thời tiết');
   });
 
   test('tự gõ câu cho từng nhóm, trợ lý báo câu mâu thuẫn; đổi mô hình thì phải huấn luyện lại', async () => {
@@ -120,7 +149,8 @@ describe('Studio văn bản: khối "Dạy máy trong 3 bước" (Khám phá)', 
     for (const [group, list] of Object.entries(sentences)) {
       for (const text of list) await userEvent.type(within(quick()).getByRole('textbox', { name: `Câu mới cho nhóm ${group}` }), `${text}{Enter}`);
     }
-    expect(await within(quick()).findByRole('group', { name: 'Nhóm 2' })).toHaveTextContent('4 câu');
+    // Mỗi câu được lưu vào bảng rồi mới đếm lại: chờ câu cuối được lưu (CI chậm có thể còn thấy "3 câu").
+    await waitFor(() => expect(within(quick()).getByRole('group', { name: 'Nhóm 2' })).toHaveTextContent('4 câu'));
     expect(within(quick()).getByRole('group', { name: 'khen' })).toHaveTextContent('4 câu');
 
     // đổi tên nhóm đã có câu: mọi ô nhãn trong bảng đổi theo

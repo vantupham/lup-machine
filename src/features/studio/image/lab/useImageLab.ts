@@ -54,6 +54,14 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
   /** Số thứ tự trong nhật ký của lần chạy đang hiện (lần mới: có sau khi lưu xong). */
   const [currentRunNumber, setCurrentRunNumber] = useState<number | null>(null);
   const restoreAttempted = useRef(false);
+  /** Lưu nhật ký là việc bất đồng bộ: chỉ cập nhật trạng thái khi trang còn mở. */
+  const isMounted = useRef(true);
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
   /** Mỗi lần bắt đầu huấn luyện (bất kỳ nút nào) tăng số này: "Huấn luyện nhanh" biết có lần khác chen vào. */
   const runCounter = useRef(0);
   const quickPending = useRef(false);
@@ -97,10 +105,13 @@ export function useImageLab(projectId: string, classes: readonly ClassRecord[], 
                 ...(runGuess === null ? {} : { guess: { testAccuracy: runGuess } }),
                 ...recallOf(done, ready),
               })
-              .then((saved) => setCurrentRunNumber(saved.number))
-              .catch((error: unknown) =>
-                setNotice({ kind: 'error', text: t('project.experiments.saveError', { message: getErrorMessage(error) }) }),
-              )
+              .then((saved) => {
+                if (isMounted.current) setCurrentRunNumber(saved.number);
+              })
+              .catch((error: unknown) => {
+                // Lưu xong sau khi đã rời trang (hoặc kết thúc kiểm thử): không còn giao diện để báo.
+                if (isMounted.current) setNotice({ kind: 'error', text: t('project.experiments.saveError', { message: getErrorMessage(error) }) });
+              })
         : undefined;
     training.start(ready.data, options, speed, onDone);
   };

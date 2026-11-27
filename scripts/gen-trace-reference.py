@@ -169,12 +169,52 @@ def predict_reference() -> None:
     write("predict.reference.json", {"weights": weights.tolist(), "bias": bias.tolist(), "cases": cases})
 
 
+def text_reference() -> None:
+    """Studio văn bản: TF-IDF một câu, huấn luyện Naive Bayes, đoán một câu (cùng bộ câu mẫu)."""
+    sentences = [
+        "Món ăn rất ngon",
+        "Cơm ngon, giá rẻ",
+        "Phục vụ chậm quá",
+        "Đồ ăn nguội và dở",
+        "Nhân viên vui vẻ, món ngon",
+        "Chờ lâu, đồ ăn dở",
+    ]
+    ys = [1, 1, 0, 0, 1, 0]
+    class_names = ["chê", "khen"]
+    max_n = 2
+    docs = [lup_helpers.text_terms(t, max_n) for t in sentences]
+    vocab = sorted({term for doc in docs for term in doc})
+    df = [sum(term in doc for doc in docs) for term in vocab]
+    counts = np.array([[doc.count(term) for term in vocab] for doc in docs])
+    probe = "Món ngon nhưng chờ lâu quá"
+
+    vectorize_out, _ = run("text_vectorize.py", {"sentence": probe, "MAX_N": max_n, "vocab": vocab, "df": df, "N": len(sentences)})
+    nb_out, nb = run("naive_bayes.py", {"X": counts, "y": np.array(ys), "VOCAB": vocab, "CLASS_NAMES": class_names, "ALPHA": 1.0})
+    predict_out, _ = run(
+        "text_predict.py",
+        {"sentence": probe, "MAX_N": max_n, "vocab": vocab, "log_prior": nb["log_prior"], "log_prob": nb["log_prob"], "CLASS_NAMES": class_names},
+    )
+    write(
+        "text.reference.json",
+        {
+            "input": {"sentences": sentences, "ys": ys, "classNames": class_names, "maxN": max_n, "probe": probe, "alpha": 1.0},
+            "vocab": vocab,
+            "logPrior": nb["log_prior"].tolist(),
+            "logProb": nb["log_prob"].tolist(),
+            "vectorize": vectorize_out,
+            "naiveBayes": nb_out,
+            "predict": predict_out,
+        },
+    )
+
+
 def main() -> None:
     softmax_reference()
     data_check_reference()
     represent_reference()
     evaluate_reference()
     predict_reference()
+    text_reference()
 
 
 if __name__ == "__main__":
