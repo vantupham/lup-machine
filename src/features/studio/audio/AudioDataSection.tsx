@@ -52,7 +52,8 @@ function ClassCard({ cls, index, clips, onRecord, onUpload, onDelete, onRename, 
   readonly onRecord: () => void;
   readonly onUpload: (files: readonly File[]) => void;
   readonly onDelete: (clip: AudioClipRecord) => void;
-  readonly onRename: (name: string) => void;
+  /** Trả về false nếu lưu lỗi (vd. trùng tên) để ô trả lại tên cũ. */
+  readonly onRename: (name: string) => Promise<boolean>;
   readonly onDeleteClass: () => void;
   readonly busy: boolean;
   readonly recording: AnalyserNode | null;
@@ -69,7 +70,16 @@ function ClassCard({ cls, index, clips, onRecord, onUpload, onDelete, onRename, 
           value={name}
           maxLength={40}
           onChange={(e) => setName(e.target.value)}
-          onBlur={() => name.trim() && name.trim() !== cls.name && onRename(name.trim())}
+          onBlur={() => {
+            // Rời ô là lưu; để trống hoặc không đổi thì trả lại tên cũ.
+            const next = name.trim();
+            if (next && next !== cls.name) {
+              void onRename(next).then((ok) => {
+                if (!ok) setName(cls.name);
+              });
+            } else setName(cls.name);
+          }}
+          onKeyDown={(e) => !e.nativeEvent.isComposing && e.key === 'Enter' && e.currentTarget.blur()}
           className="flex-1 rounded border border-rule bg-paper px-2 py-1 font-semibold"
         />
         <span className="font-mono text-xs text-muted" data-testid={`clip-count-${index}`}>{t('audio.data.clipCount', { n: clips.length })}</span>
@@ -153,7 +163,7 @@ export function AudioDataSection({ classes, clips, actions }: AudioDataSectionPr
             onRecord={() => void actions.record(cls.id)}
             onUpload={(files) => void actions.upload(cls.id, files)}
             onDelete={(clip) => void actions.deleteClip(clip.id)}
-            onRename={(name) => void actions.rename(cls.id, name)}
+            onRename={(name) => actions.rename(cls.id, name)}
             onDeleteClass={() => {
               if (window.confirm(t('audio.data.confirmDeleteClass', { name: cls.name }))) void actions.deleteClass(cls.id);
             }}

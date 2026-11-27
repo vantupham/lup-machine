@@ -1,5 +1,6 @@
-import { useId, useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useInlineEdit } from '@/features/studio/useInlineEdit';
 import type { ClassRecord, SampleRecord, Split } from '@/storage/db';
 import { ACCEPTED_IMAGE_TYPES } from './image-file';
 import { SampleThumb } from './SampleThumb';
@@ -116,19 +117,21 @@ interface ClassNameProps {
   readonly onRename: (cls: ClassRecord, name: string) => Promise<boolean>;
 }
 
+/** Tên lớp kèm bút chì: bấm vào thì sửa tại chỗ, Enter hoặc rời ô là tự lưu, Esc hủy. */
 function ClassName({ cls, headingId, onRename }: ClassNameProps) {
   const { t } = useTranslation();
-  const [draft, setDraft] = useState<string | null>(null);
+  const { isEditing, isSaving, start, triggerRef, inputRef, inputProps } = useInlineEdit({ value: cls.name, onSave: (name) => onRename(cls, name) });
 
-  if (draft === null) {
+  if (!isEditing) {
     return (
       <>
         <h3 id={headingId} className="text-lg font-semibold">
           {cls.name}
         </h3>
         <button
+          ref={triggerRef}
           type="button"
-          onClick={() => setDraft(cls.name)}
+          onClick={start}
           aria-label={t('project.class.renameAria', { name: cls.name })}
           title={t('project.class.rename')}
           className="rounded p-1.5 text-muted transition-colors hover:bg-primary/10 hover:text-primary"
@@ -139,30 +142,20 @@ function ClassName({ cls, headingId, onRename }: ClassNameProps) {
     );
   }
 
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (await onRename(cls, draft)) setDraft(null);
-  };
-
   return (
-    <form onSubmit={submit} className="flex items-center gap-2">
+    <>
       <h3 id={headingId} className="sr-only">
         {cls.name}
       </h3>
       <input
+        ref={inputRef}
+        {...inputProps}
         aria-label={t('project.class.renameLabel')}
-        value={draft}
+        title={t('project.class.renameHint')}
         maxLength={40}
-        autoFocus
-        onChange={(e) => setDraft(e.target.value)}
-        className="rounded border border-rule bg-paper px-2 py-1"
+        aria-busy={isSaving}
+        className="rounded border border-primary bg-paper px-2 py-1 text-lg font-semibold"
       />
-      <button type="submit" className="btn btn-primary px-3 py-1 text-sm">
-        {t('project.class.save')}
-      </button>
-      <button type="button" onClick={() => setDraft(null)} className="text-sm">
-        {t('project.class.cancel')}
-      </button>
-    </form>
+    </>
   );
 }

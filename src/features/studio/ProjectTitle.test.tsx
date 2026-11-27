@@ -30,23 +30,47 @@ describe('đổi tên dự án ngay trên tiêu đề', () => {
     expect(screen.getByRole('button', { name: 'Đổi tên dự án' })).toHaveFocus();
   });
 
-  test('Esc hoặc Hủy thì giữ tên cũ', async () => {
+  test('bấm ra ngoài thì tự lưu, không có nút Lưu', async () => {
     const { repos, project } = await openProject('image');
+    await userEvent.click(screen.getByRole('button', { name: 'Đổi tên dự án' }));
+    expect(screen.queryByRole('button', { name: 'Lưu' })).toBeNull();
+    const input = screen.getByRole('textbox', { name: 'Tên dự án mới' });
+    await userEvent.clear(input);
+    await userEvent.type(input, 'Phân loại rác');
+    await userEvent.click(document.body);
+    expect(await screen.findByRole('heading', { level: 1, name: 'Phân loại rác' })).toBeInTheDocument();
+    expect((await repos.repository.findById(project.id))?.name).toBe('Phân loại rác');
+  });
+
+  test('Esc thì giữ tên cũ, không lưu', async () => {
+    const { repos, project } = await openProject('image');
+    const update = vi.spyOn(repos.repository, 'update');
     await userEvent.click(screen.getByRole('button', { name: 'Đổi tên dự án' }));
     await userEvent.type(screen.getByRole('textbox', { name: 'Tên dự án mới' }), ' sửa dở{Escape}');
     expect(screen.getByRole('heading', { level: 1, name: 'Dự án ảnh 1' })).toBeInTheDocument();
-    await userEvent.click(screen.getByRole('button', { name: 'Đổi tên dự án' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Hủy' }));
+    expect(screen.getByRole('button', { name: 'Đổi tên dự án' })).toHaveFocus();
+    expect(update).not.toHaveBeenCalled();
     expect((await repos.repository.findById(project.id))?.name).toBe('Dự án ảnh 1');
   });
 
-  test('tên trống thì báo lỗi, không lưu', async () => {
+  test('xóa trống thì giữ tên cũ, không lưu', async () => {
     const { repos, project } = await openProject('text');
     await userEvent.click(screen.getByRole('button', { name: 'Đổi tên dự án' }));
     await userEvent.clear(screen.getByRole('textbox', { name: 'Tên dự án mới' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Lưu' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('Tên dự án cần từ 1 đến 100 ký tự.');
+    await userEvent.keyboard('{Enter}');
+    expect(screen.getByRole('heading', { level: 1, name: 'Dự án ảnh 1' })).toBeInTheDocument();
     expect((await repos.repository.findById(project.id))?.name).toBe('Dự án ảnh 1');
+  });
+
+  test('lưu lỗi thì báo lỗi và giữ ô nhập', async () => {
+    const { repos } = await openProject('text');
+    vi.spyOn(repos.repository, 'update').mockRejectedValueOnce(new Error('ổ đĩa đầy'));
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    await userEvent.click(screen.getByRole('button', { name: 'Đổi tên dự án' }));
+    await userEvent.type(screen.getByRole('textbox', { name: 'Tên dự án mới' }), ' mới{Enter}');
+    expect(await screen.findByRole('alert')).toHaveTextContent('Không đổi được tên: ổ đĩa đầy');
+    expect(screen.getByRole('textbox', { name: 'Tên dự án mới' })).toHaveValue('Dự án ảnh 1 mới');
+    error.mockRestore();
   });
 
   test('lưu mà không đổi tên thì không ghi gì (không đẩy dự án lên đầu danh sách)', async () => {
@@ -54,7 +78,7 @@ describe('đổi tên dự án ngay trên tiêu đề', () => {
     const before = (await repos.repository.findById(project.id))!.updatedAt;
     const update = vi.spyOn(repos.repository, 'update');
     await userEvent.click(screen.getByRole('button', { name: 'Đổi tên dự án' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Lưu' }));
+    await userEvent.keyboard('{Enter}');
     expect(screen.getByRole('button', { name: 'Đổi tên dự án' })).toHaveFocus();
     expect(update).not.toHaveBeenCalled();
     expect((await repos.repository.findById(project.id))!.updatedAt).toBe(before);

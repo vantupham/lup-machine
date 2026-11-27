@@ -217,8 +217,21 @@ describe('Trang dự án ảnh', () => {
     await userEvent.type(input, 'Giấy{Enter}');
     expect(await screen.findByRole('alert')).toHaveTextContent(/đã có/i);
     expect(screen.getByLabelText('Tên lớp')).toBeInTheDocument();
-    await userEvent.click(screen.getByRole('button', { name: 'Hủy' }));
+    await userEvent.keyboard('{Escape}');
     expect(screen.queryByLabelText('Tên lớp')).toBeNull();
+    expect(await screen.findByRole('article', { name: 'Nhựa' })).toBeInTheDocument();
+  });
+
+  test('đổi tên lớp rồi bấm ra ngoài thì tự lưu, không cần nút Lưu', async () => {
+    await seed();
+    openProject();
+    await userEvent.click(within(await screen.findByRole('article', { name: 'Nhựa' })).getByRole('button', { name: 'Đổi tên lớp Nhựa' }));
+    expect(screen.queryByRole('button', { name: 'Lưu' })).toBeNull();
+    const input = screen.getByLabelText('Tên lớp');
+    await userEvent.clear(input);
+    await userEvent.type(input, 'Chai nhựa');
+    await userEvent.click(document.body);
+    expect(await screen.findByRole('article', { name: 'Chai nhựa' })).toBeInTheDocument();
   });
 
   test('xóa lớp sau khi xác nhận', async () => {
