@@ -2296,5 +2296,33 @@
     "clip": "Test clip {{n}}",
     "pose": "Test sample {{n}}",
     "row": "row {{row}}"
+  },
+  "growth": {
+    "logistic": {
+      "title": "Watch the machine learn iteration by iteration (L-BFGS)",
+      "lead": "Logistic regression takes {{count}} iterations from all-zero weights to the final model.",
+      "exactHint": "Retrains exactly as just now and records the model after every iteration.",
+      "objective": "Objective (loss + penalty on large weights)",
+      "objectiveSeries": "objective",
+      "accuracy": "% correct on the Training set",
+      "axis": "iteration {{n}}",
+      "slider": "Iteration {{n}} / {{max}}",
+      "status": "Iteration {{n}}: objective {{objective}}, {{accuracy}}% of the Training set correct.",
+      "towards": "Leaning towards {{cls}} (positive) or the other class (negative)",
+      "note": "Each iteration, L-BFGS takes a step that lowers the objective, guided by the last few steps."
+    },
+    "tree": {
+      "title": "Watch the tree grow node by node",
+      "lead": "The tree has {{count}} nodes. At each node the machine tries every column and threshold, then picks the best question.",
+      "exactHint": "Recomputed on exactly the Training rows reaching that node; the chosen threshold matches the tree on the page.",
+      "slider": "Grown {{n}} / {{max}} nodes",
+      "node": "Node {{id}} ({{samples}} rows, impurity {{impurity}}):",
+      "split": "{{feature}} ≤ {{threshold}}?",
+      "leaf": "leaf, predicts {{cls}}",
+      "searchTitle": "Node {{id}}: {{count}} thresholds tried on column {{feature}}",
+      "searchLabel": "Impurity decrease of {{count}} thresholds",
+      "searchNote": "Thresholds tried from {{lo}} to {{hi}}. Orange dot: threshold {{threshold}} lowers impurity the most ({{improvement}})."
+    },
+    "audioFeature": "band {{band}}, part {{part}}"
   }
 }

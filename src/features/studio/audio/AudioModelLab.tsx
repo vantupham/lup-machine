@@ -1,5 +1,6 @@
 /** Bước 4 Huấn luyện, 5 Đánh giá, 6 Sử dụng của Studio âm thanh. */
 import { useState } from 'react';
+import { VectorGrowth, useAudioFeatureNames } from '@/features/studio/growth/StudioGrowth';
 import { VectorKnnCode } from '@/features/code-trace/VectorKnnCode';
 import { useTranslation } from 'react-i18next';
 import { contributionMap, encodeVector, importanceMap, predictVector, type VectorData, type TrainedVectorModel } from '@/core/ml/vector-classifier';
@@ -144,6 +145,7 @@ export function AudioModelLab({ projectName, lab, data, trainSamples }: AudioMod
   const { t } = useTranslation();
   const { settings, setSettings, trained, current, evaluation, key, trial } = lab;
   const cIndex = Math.max(0, C_LEVELS.findIndex((c) => c >= settings.c));
+  const featureNames = useAudioFeatureNames();
 
   return (
     <>
@@ -177,6 +179,7 @@ export function AudioModelLab({ projectName, lab, data, trainSamples }: AudioMod
           </div>
         </div>
         <TrialAfter log={trial.log} isCurrent={current !== null} />
+        <VectorGrowth trained={current} data={data} c={settings.c} featureNames={featureNames} />
       </Step>
       {current && evaluation && (
         <>

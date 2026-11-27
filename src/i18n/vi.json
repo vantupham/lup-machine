@@ -2296,5 +2296,33 @@
     "clip": "đoạn Kiểm tra {{n}}",
     "pose": "Mẫu Kiểm tra {{n}}",
     "row": "dòng {{row}}"
+  },
+  "growth": {
+    "logistic": {
+      "title": "Xem máy học qua từng vòng lặp (L-BFGS)",
+      "lead": "Hồi quy logistic đi {{count}} vòng lặp từ mọi trọng số bằng 0 tới mô hình cuối.",
+      "exactHint": "Huấn luyện lại đúng như vừa rồi và ghi lại mô hình sau mỗi vòng lặp.",
+      "objective": "Hàm mục tiêu (loss + phạt trọng số lớn)",
+      "objectiveSeries": "mục tiêu",
+      "accuracy": "% đúng trên tập Huấn luyện",
+      "axis": "vòng {{n}}",
+      "slider": "Vòng lặp {{n}} / {{max}}",
+      "status": "Vòng {{n}}: hàm mục tiêu {{objective}}, đúng {{accuracy}}% tập Huấn luyện.",
+      "towards": "Nghiêng về {{cls}} (dương) hay lớp kia (âm)",
+      "note": "Mỗi vòng, L-BFGS đi một bước theo hướng làm hàm mục tiêu giảm, dựa trên vài bước trước đó."
+    },
+    "tree": {
+      "title": "Xem cây mọc từng nút",
+      "lead": "Cây có {{count}} nút. Ở mỗi nút, máy thử mọi cột và ngưỡng rồi chọn câu hỏi tốt nhất.",
+      "exactHint": "Tính lại trên đúng các dòng Huấn luyện đi tới nút đó; ngưỡng chọn trùng cây trên trang.",
+      "slider": "Đã mọc {{n}} / {{max}} nút",
+      "node": "Nút {{id}} ({{samples}} dòng, tạp chất {{impurity}}):",
+      "split": "{{feature}} ≤ {{threshold}}?",
+      "leaf": "lá, đoán {{cls}}",
+      "searchTitle": "Nút {{id}}: {{count}} ngưỡng đã thử ở cột {{feature}}",
+      "searchLabel": "Mức giảm tạp chất của {{count}} ngưỡng",
+      "searchNote": "Thử ngưỡng từ {{lo}} đến {{hi}}. Chấm cam: ngưỡng {{threshold}} giảm tạp chất nhiều nhất ({{improvement}})."
+    },
+    "audioFeature": "dải {{band}}, phần {{part}}"
   }
 }
