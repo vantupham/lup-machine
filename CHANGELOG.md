@@ -4,6 +4,13 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Studio văn bản: Mã Python ở bước 3, 4, 6)
+
+- **Bước 3**: `text_vectorize.py` chạy với câu đang xem: tách âm tiết (và cụm 2 âm tiết), đếm theo bộ từ vựng, idf, TF-IDF chia độ dài; dòng in trùng từng chữ với bảng TF-IDF bên cạnh.
+- **Bước 4**: `naive_bayes.py` huấn luyện từng câu: đếm số câu và số lần mỗi từ theo lớp, log P(lớp), log P(từ | lớp) có làm trơn α, in 3 từ hay gặp mỗi lớp. Hồi quy logistic (L-BFGS) không chạy từng dòng; khung nói rõ điều đó.
+- **Bước 6**: `text_predict.py` đoán câu đang gõ bằng mô hình Naive Bayes vừa huấn luyện.
+- Số đối chiếu Python (`text.reference.json`): bộ từ vựng, log P và mọi dòng in khớp trang.
+
 ### Thêm (Studio ảnh, bước 5–6: nhận ra đúng theo lớp, Mã Python chấm điểm và dự đoán)
 
 - **Bước 5**: thanh "Mỗi lớp nhận ra đúng bao nhiêu" (cả Khám phá, đọc thẳng từ hàng ma trận, theo tập đang xem) và khung Mã Python `evaluate.py`: softmax mọi ảnh → argmax → số đúng → ma trận nhầm lẫn → độ nhớ từng lớp. Chấm đúng tập và epoch đang xem; bộ lá đậu thật in `đúng 13/18 ảnh (72.2%)`, khớp điểm Kiểm tra trên trang.

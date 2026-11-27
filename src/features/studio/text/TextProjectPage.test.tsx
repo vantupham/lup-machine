@@ -50,6 +50,35 @@ describe('Studio văn bản tiếng Việt', () => {
     expect(screen.getByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeInTheDocument();
   });
 
+  test('Mã Python: TF-IDF của câu đang xem, huấn luyện Naive Bayes, đoán câu đang gõ (cùng số với trang)', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    await userEvent.click(await screen.findByRole('button', { name: /Chủ đề: thời tiết/ }));
+    await screen.findByTestId('text-size');
+    const panel = (file: string) => document.querySelector<HTMLElement>(`[data-program="${file}"]`)!;
+    const runToPrint = async (file: string, times: number) => {
+      await userEvent.click(within(panel(file)).getByText('Mã Python'));
+      for (let i = 0; i < times; i++) await userEvent.click(within(panel(file)).getByRole('button', { name: /Đến dòng in tiếp theo/ }));
+      return within(panel(file)).getByTestId('code-trace-console').textContent!;
+    };
+
+    fireEvent.change(screen.getByLabelText('Câu để xem (sửa thoải mái)'), { target: { value: 'Trời mưa, trời lạnh' } });
+    const tfidfRow = within(screen.getByTestId('tfidf-table')).getByRole('rowheader', { name: 'trời' }).closest('tr')!;
+    const [count, idf, tfidf] = within(tfidfRow).getAllByRole('cell').map((c) => c.textContent);
+    expect(await runToPrint('text_vectorize.py', 1)).toBe(`trời: đếm ${count}, idf ${idf}, TF-IDF ${tfidf}`);
+
+    await userEvent.click(within(panel('naive_bayes.py')).getByText('Mã Python'));
+    expect(within(panel('naive_bayes.py')).getByText('Huấn luyện một lần để chạy mã với dữ liệu của bạn.')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
+    await screen.findByTestId('tabular-confusion');
+    for (let i = 0; i < 3; i++) await userEvent.click(within(panel('naive_bayes.py')).getByRole('button', { name: /Đến dòng in tiếp theo/ }));
+    expect(within(panel('naive_bayes.py')).getByTestId('code-trace-console').textContent).toMatch(/thời tiết: \d+ câu, hay gặp: /);
+
+    fireEvent.change(screen.getByLabelText('Gõ một câu'), { target: { value: 'Hôm nay trời nắng, gió mát.' } });
+    const printed = await runToPrint('text_predict.py', 4);
+    expect(printed.split('\n').at(-1)).toBe('Máy đoán: thời tiết');
+  });
+
   test('tự gõ câu cho từng nhóm, trợ lý báo câu mâu thuẫn; đổi mô hình thì phải huấn luyện lại', async () => {
     const { repos, projectId } = await setup();
     render(repos, projectId);

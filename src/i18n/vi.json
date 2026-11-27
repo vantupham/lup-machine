@@ -1611,6 +1611,9 @@
       "tokenize": "Tách {{count}} câu thành từ",
       "tokenizeDetail": "{{words}} từ khác nhau",
       "tryInput": "Gõ một câu để thử"
+    },
+    "code": {
+      "logisticOnly": "Chạy từng dòng có cho Naive Bayes. Hồi quy logistic dùng L-BFGS, quá nhiều phép tính để chạy từng dòng."
     }
   },
   "audio": {

@@ -1611,6 +1611,9 @@
       "tokenize": "Split {{count}} sentences into words",
       "tokenizeDetail": "Different words: {{words}}",
       "tryInput": "Type a sentence to try"
+    },
+    "code": {
+      "logisticOnly": "Line-by-line runs are available for Naive Bayes. Logistic regression uses L-BFGS, too many operations to step through."
     }
   },
   "audio": {

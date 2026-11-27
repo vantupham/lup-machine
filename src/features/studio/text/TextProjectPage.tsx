@@ -21,6 +21,7 @@ import { examplesFrom, initialTextConfig, isTextConfigValid } from './text-confi
 import { TextDataSection } from './TextDataSection';
 import { TextEvaluateSection } from './TextEvaluateSection';
 import { TextModelSection } from './TextModelSection';
+import { NaiveBayesCode } from './TextCodePanels';
 import { TextRepresentSection } from './TextRepresentSection';
 import { TextSetupSection } from './TextSetupSection';
 import { TextUseSection } from './TextUseSection';
@@ -155,6 +156,7 @@ export function TextProjectPage({ projectId }: { readonly projectId: string }) {
               trainCount={model.trained?.count ?? 0}
             />
             <TrialAfter log={trialLog} isCurrent={current !== null} />
+            <NaiveBayesCode data={data} trained={current} />
           </Step>
           {current && evaluation && (
             <>

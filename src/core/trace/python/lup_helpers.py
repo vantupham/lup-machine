@@ -116,3 +116,13 @@ def mobilenet_v2(images):
     model = keras.applications.MobileNetV2(input_shape=(224, 224, 3), alpha=0.35, include_top=False, pooling="avg")
     x = keras.applications.mobilenet_v2.preprocess_input(np.asarray(images, dtype=np.float32))
     return model.predict(x, verbose=0)
+
+
+def text_terms(sentence, max_n):
+    """Câu thành các âm tiết (chữ thường), thêm cụm 2 âm tiết liền nhau nếu max_n = 2."""
+    import re
+    import unicodedata
+
+    tokens = re.findall(r"\w+", unicodedata.normalize("NFC", sentence).lower())
+    pairs = [" ".join(tokens[i : i + 2]) for i in range(len(tokens) - 1)] if max_n == 2 else []
+    return tokens + pairs
