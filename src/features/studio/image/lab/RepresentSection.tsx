@@ -19,6 +19,24 @@ import { UMAP_MIN_POINTS } from '@/core/ml/umap-limits';
 import { Check, Circle } from '@/ui/icons';
 import { StepNumber } from '@/ui/StepNumber';
 import { StepNotebook } from '@/features/notebook/StepNotebook';
+import { CodeTracePanel } from '@/features/code-trace/CodeTracePanel';
+import { HELPERS_PROGRAM } from '@/core/trace/helpers-program';
+import { nearest, REPRESENT_PROGRAM, similarities, traceRepresent, type RepresentInput } from '@/core/trace/represent-trace';
+import { CosineExplainer } from './CosineExplainer';
+
+/** Cạnh ảnh đưa vào MobileNetV2. */
+const IMAGE_SIDE = 224;
+
+/** Dữ liệu cho represent.py: mọi ảnh đã có vector (theo thứ tự ảnh) và ảnh đang chọn; null nếu chưa chọn. */
+function useRepresentInput(samples: readonly SampleRecord[], features: ReadonlyMap<string, Float32Array>, selectedId: string | null): RepresentInput | null {
+  return useMemo(() => {
+    const list = samples.filter((s) => features.has(s.id));
+    const index = list.findIndex((s) => s.id === selectedId);
+    if (index < 0) return null;
+    const input = { features: list.map((s) => features.get(s.id)!), splits: list.map((s) => s.split), index, size: IMAGE_SIDE };
+    return similarities(input).length > 0 ? input : null;
+  }, [samples, features, selectedId]);
+}
 
 const NEIGHBOR_COUNT = 3;
 
@@ -62,8 +80,24 @@ export function RepresentSection(props: RepresentSectionProps) {
         {status.phase === 'error' && <p role="alert" className="text-sm text-danger">{t('project.represent.error', { message: status.message })}</p>}
       </div>
       <MapAndDetail {...props} />
+      <RepresentCode {...props} />
       <StepNotebook step="represent" />
     </section>
+  );
+}
+
+function RepresentCode({ samples, features, selected }: RepresentSectionProps) {
+  const { t } = useTranslation();
+  const input = useRepresentInput(samples, features, selected?.id ?? null);
+  const createTrace = useMemo(() => (input ? () => traceRepresent(input) : null), [input]);
+  return (
+    <CodeTracePanel
+      program={REPRESENT_PROGRAM}
+      helpers={HELPERS_PROGRAM}
+      create={createTrace}
+      emptyHint={t('project.cosine.codeEmpty')}
+      jumpLabel={t('codeTrace.toNextPrint')}
+    />
   );
 }
 
@@ -196,6 +230,10 @@ function SelectedDetail({ sample, classes, samples, features, onSelect, params }
   const url = useObjectUrl(sample.image);
   const nameOf = (id: string) => classes.find((c) => c.id === id)?.name ?? '';
   const neighbors = nearestTrainSamples(sample.id, samples, features, NEIGHBOR_COUNT);
+  const input = useRepresentInput(samples, features, sample.id);
+  const top = input ? nearest(similarities(input))[0] : undefined;
+  const withFeatures = samples.filter((s) => features.has(s.id));
+  const topSample = top ? withFeatures[top.index] : undefined;
 
   return (
     <div className="lab-card scroll-mt-24 space-y-4 p-4" data-testid="selected-detail">
@@ -222,6 +260,14 @@ function SelectedDetail({ sample, classes, samples, features, onSelect, params }
             ))}
           </ul>
         </div>
+      )}
+      {top && topSample && (
+        <CosineExplainer
+          selected={features.get(sample.id)!}
+          neighbor={features.get(topSample.id)!}
+          neighborName={t('project.cosine.neighborName', { n: top.index, name: nameOf(topSample.classId) })}
+          result={top}
+        />
       )}
       {params && params.dim === features.get(sample.id)!.length ? (
         <PredictionExplainer sample={sample} vector={features.get(sample.id)!} classes={classes} params={params} />

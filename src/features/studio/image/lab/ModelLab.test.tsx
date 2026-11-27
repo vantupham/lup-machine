@@ -84,6 +84,9 @@ async function seed({ perClass = 6, testPerClass = 2, confusingTest = false } = 
   }
 }
 
+/** Khung "Mã Python" của một chương trình (trang có một khung cho mỗi bước 2, 3, 4). */
+const codePanel = (file: string) => document.querySelector<HTMLElement>(`[data-program="${file}"]`)!;
+
 const open = () => renderApp(`/studio/${projectId}`, repos.repository, repos.dataset, repos.experiments);
 
 async function extractAll() {
@@ -134,6 +137,29 @@ describe('Bước 3: Biểu diễn', () => {
     expect(within(detail).getAllByText(/^Nhựa · /)).toHaveLength(3);
   });
 
+  test('so với ảnh giống nhất: phép tính cosine bằng số thật; mã Python in cùng 3 ảnh', async () => {
+    await seed();
+    open();
+    await extractAll();
+    const code = codePanel('represent.py');
+    await userEvent.click(within(code).getByText('Mã Python'));
+    expect(within(code).getByText('Chọn một chấm trên bản đồ để chạy mã với ảnh đó.')).toBeInTheDocument();
+
+    const map = screen.getByRole('group', { name: 'Bản đồ dữ liệu 2D' });
+    await userEvent.click(within(map).getAllByRole('button', { name: /ảnh lớp nhựa, ngăn huấn luyện/i })[0]!);
+    const cosine = await screen.findByTestId('cosine-explainer');
+    expect(cosine).toHaveTextContent(/So với ảnh giống nhất \(ảnh \d+, lớp Nhựa\)/);
+    expect(within(cosine).getByTestId('cosine-formula').textContent).toMatch(/^độ giống = a·b \/ \(\|a\| × \|b\|\) = [\d,]+ \/ \([\d,]+ × [\d,]+\) = [\d,]+$/);
+    expect(within(cosine).getAllByTestId('feature-strip-compact')).toHaveLength(2);
+
+    const jump = within(code).getByRole('button', { name: /Đến dòng in tiếp theo/ });
+    for (let i = 0; i < 3; i++) await userEvent.click(jump);
+    const printed = within(code).getByTestId('code-trace-console').textContent!.split('\n');
+    expect(printed).toHaveLength(3);
+    const topIndex = /ảnh (\d+), lớp/.exec(cosine.textContent!)![1];
+    expect(printed[0]).toMatch(new RegExp(`^ảnh ${topIndex}: giống \\d\\.\\d{2}$`));
+  });
+
   test('báo lỗi khi không tải được mô hình', async () => {
     vi.mocked(loader.loadFeatureExtractor).mockRejectedValueOnce(new Error('mạng lỗi'));
     await seed();
@@ -175,7 +201,7 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     await seed();
     open();
     await extractAll();
-    const panel = () => screen.getByTestId('code-trace');
+    const panel = () => codePanel('softmax_train.py');
     await userEvent.click(within(panel()).getByText('Mã Python'));
     expect(within(panel()).getByText('Huấn luyện một lần để chạy mã với dữ liệu của bạn.')).toBeVisible();
 

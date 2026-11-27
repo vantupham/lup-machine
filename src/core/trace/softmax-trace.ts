@@ -17,22 +17,14 @@ import {
   type TrainOptions,
 } from '@/core/ml/softmax-regression';
 import { createProgram, lineOf } from './program';
-import { array, scalar, text, type TraceValue } from './trace-value';
+import { pythonFixed, pythonPercent } from './python-format';
+import { array, scalar, text, type TraceStep, type TraceValue } from './trace-value';
+
+export type { TraceStep } from './trace-value';
 import programSource from './python/softmax_train.py?raw';
-import helpersSource from './python/lup_helpers.py?raw';
 
 export const SOFTMAX_PROGRAM = createProgram('softmax_train.py', programSource);
-export const HELPERS_PROGRAM = createProgram('lup_helpers.py', helpersSource);
-
-export interface TraceStep {
-  /** Dòng (đếm từ 0) vừa chạy. */
-  readonly line: number;
-  readonly changed: Readonly<Record<string, TraceValue>>;
-  /** Dòng chữ chương trình in ra màn hình ở bước này. */
-  readonly output?: string;
-  /** Epoch đang chạy (0 trước vòng lặp). */
-  readonly epoch: number;
-}
+export { HELPERS_PROGRAM } from './helpers-program';
 
 const at = (anchor: string) => lineOf(SOFTMAX_PROGRAM, anchor);
 const LINES = {
@@ -59,17 +51,8 @@ const LINES = {
   print: at('print(f"epoch'),
 } as const;
 
-/** Làm tròn kiểu Python cho `:.0%`: đúng nửa thì về số chẵn (12,5 → 12). */
-export function pythonPercent(value: number): string {
-  const scaled = value * 100;
-  const floor = Math.floor(scaled);
-  const diff = scaled - floor;
-  const rounded = diff > 0.5 || (diff === 0.5 && floor % 2 !== 0) ? floor + 1 : floor;
-  return `${rounded}%`;
-}
-
 export function epochLine(epoch: number, loss: number, accuracy: number): string {
-  return `epoch ${epoch}: loss ${loss.toFixed(3)}, đúng ${pythonPercent(accuracy)}`;
+  return `epoch ${epoch}: loss ${pythonFixed(loss, 3)}, đúng ${pythonPercent(accuracy)}`;
 }
 
 const weightsView = (params: SoftmaxParams) =>

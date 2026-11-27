@@ -58,6 +58,12 @@ test('bài 3 "AI học nhầm": mô hình học theo nền — điểm Huấn lu
   await page.goto('./#/lessons/ai-hoc-nham');
   await page.getByRole('button', { name: 'Tạo dự án mẫu cho bài này' }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Thử thách: AI học nhầm điều gì?' })).toBeVisible({ timeout: 30_000 });
+  // Bước 2 "Soi kỹ từng ảnh" bắt được bẫy ngay trên điểm ảnh, trước khi huấn luyện.
+  await page.getByRole('button', { name: 'Soi kỹ 48 ảnh' }).click();
+  await expect(page.getByText('Đã soi hết 48 ảnh.')).toBeVisible({ timeout: 60_000 });
+  const findings = page.getByRole('list', { name: 'Điều tìm thấy' });
+  await expect(findings).toContainText('Chỉ nhìn độ sáng nền đã phân biệt "Hình tròn" và "Hình vuông" đúng 100% ảnh Huấn luyện.');
+  await expect(findings).not.toContainText('gần trùng');
   await extractAndTrain(page);
 
   const trap = await scores(page);
@@ -136,6 +142,9 @@ test('bài 4 "AI làm bác sĩ cây trồng": mọi khẳng định của bài �
   await expect(page.getByRole('heading', { level: 1, name: 'AI làm bác sĩ cây trồng' })).toBeVisible();
   await page.getByRole('button', { name: 'Tạo dự án mẫu cho bài này' }).click();
   await expect(page.getByRole('heading', { level: 1, name: /Bác sĩ lá đậu/ })).toBeVisible({ timeout: 30_000 });
+  // Ảnh thật: không báo nhầm ảnh gần trùng hay lối tắt nền (đã đo: gần nhất cách 40/256 ô, nền đúng tối đa 63 %).
+  await page.getByRole('button', { name: 'Soi kỹ 90 ảnh' }).click();
+  await expect(page.getByText('Không thấy ảnh gần trùng hay lối tắt nền.')).toBeVisible({ timeout: 120_000 });
   await page.getByRole('button', { name: /Biến ảnh thành vector \(90 ảnh/ }).click();
   await expect(page.getByText('Tất cả ảnh đã có vector đặc trưng.')).toBeVisible({ timeout: 120_000 });
   await page.getByRole('button', { name: 'Bắt đầu huấn luyện' }).click();

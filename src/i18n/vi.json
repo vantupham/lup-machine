@@ -949,6 +949,55 @@
       "confirmDelete": "Xóa ảnh này khỏi dự án?",
       "leakMove": "Tập Kiểm tra là đề thi của máy. Chuyển ảnh này sang Huấn luyện thì đề thi đổi: điểm Kiểm tra không còn so được với các lần trước, và nếu chỉ chuyển những ảnh máy làm sai thì điểm sẽ đẹp hơn thực tế. Vẫn chuyển?",
       "leakDelete": "Bớt ảnh Kiểm tra thì điểm Kiểm tra không còn so được với các lần trước. Vẫn xóa?"
+    },
+    "journey": {
+      "label": "Dữ liệu đi đâu",
+      "images": "{{count}} ảnh",
+      "imagesSub": "mỗi ảnh {{side}} × {{side}} điểm × 3 màu = {{numbers}} số",
+      "classes": "{{count}} lớp",
+      "classesSub": "mỗi ảnh mang nhãn một lớp",
+      "split": "{{train}} Huấn luyện, {{test}} Kiểm tra",
+      "splitSub": "máy học từ phần đầu, bị chấm điểm bằng phần sau"
+    },
+    "deepCheck": {
+      "title": "Soi kỹ từng ảnh",
+      "lead": "Máy đo từng ảnh để tìm ảnh gần trùng và nền khác nhau giữa các lớp.",
+      "exactHint": "Đo trực tiếp trên điểm ảnh, không cần mô hình.",
+      "run": "Soi kỹ {{count}} ảnh",
+      "rerun": "Soi thêm {{count}} ảnh mới",
+      "allDone": "Đã soi hết {{count}} ảnh.",
+      "running": "Đang soi {{done}}/{{total}} ảnh…",
+      "error": "Không soi được ảnh: {{message}}",
+      "brightnessTitle": "Độ sáng nền (viền ảnh) theo lớp",
+      "brightnessNote": "Mỗi chấm là một ảnh. Chấm đặc: Huấn luyện. Chấm rỗng: Kiểm tra.",
+      "dark": "Tối",
+      "light": "Sáng",
+      "classSummary": ": nền trung bình {{mean}}, từ {{min}} đến {{max}}",
+      "findings": "Điều tìm thấy",
+      "ok": "Không thấy ảnh gần trùng hay lối tắt nền.",
+      "shortcut": "Chỉ nhìn độ sáng nền đã phân biệt \"{{a}}\" và \"{{b}}\" đúng {{percent}}% ảnh Huấn luyện. Lớp \"{{bright}}\" nền sáng hơn hẳn.",
+      "shortcutTip": "Máy có thể học nền thay vì vật. Chụp mỗi lớp trên nhiều nền khác nhau.",
+      "leakTitle": "{{count}} cặp ảnh Kiểm tra gần trùng ảnh Huấn luyện.",
+      "leakTip": "Điểm Kiểm tra sẽ cao giả vì máy đã thấy ảnh gần như y hệt. Xóa hoặc chuyển một ảnh mỗi cặp.",
+      "sameTitle": "{{count}} cặp ảnh gần trùng trong cùng một tập.",
+      "sameTip": "Ảnh gần như y hệt nhau ít giúp máy học thêm. Thử chụp đa dạng hơn.",
+      "pairLabel": "Ảnh {{a}} ({{splitA}}) và ảnh {{b}} ({{splitB}})",
+      "pairDiff": "khác {{diff}}/256 ô",
+      "fingerprint": "Dấu vân tay 16 × 16 của ảnh {{n}}",
+      "fingerprintNote": "Dấu vân tay: thu ảnh còn 16 × 16 ô, ô sáng hơn trung bình tô đậm.",
+      "more": "và {{count}} cặp khác",
+      "codeEmpty": "Bấm Soi kỹ để chạy mã với ảnh của bạn.",
+      "flat": "{{count}} ảnh gần như một màu nên không so dấu vân tay (dấu vân tay chỉ toàn nhiễu)."
+    },
+    "cosine": {
+      "title": "So với {{name}}",
+      "neighborName": "ảnh giống nhất (ảnh {{n}}, lớp {{name}})",
+      "exactHint": "Phép tính cosine trên đúng 1280 số của hai ảnh.",
+      "selected": "Ảnh đang chọn",
+      "neighbor": "Ảnh giống nhất",
+      "formula": "độ giống = a·b / (|a| × |b|) = {{dot}} / ({{na}} × {{nb}}) = {{sim}}",
+      "note": "1 là cùng hướng, 0 là không liên quan. Ô đậm cùng chỗ thì độ giống cao.",
+      "codeEmpty": "Chọn một chấm trên bản đồ để chạy mã với ảnh đó."
     }
   },
   "samples": {
@@ -2049,7 +2098,9 @@
     "noVariables": "Chưa có biến nào.",
     "changed": "vừa đổi",
     "console": "Màn hình (print)",
-    "consoleEmpty": "Chưa in dòng nào."
+    "consoleEmpty": "Chưa in dòng nào.",
+    "toNextPrint": "Đến dòng in tiếp theo",
+    "positionLine": "Dòng {{line}}"
   },
   "autosave": {
     "saving": "Đang lưu…",

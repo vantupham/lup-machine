@@ -1,5 +1,5 @@
-"""Chạy đúng chương trình Python hiển thị ở khung "Mã Python" (bước Huấn luyện của Studio ảnh)
-trên một bộ dữ liệu nhỏ cố định, rồi ghi kết quả để Vitest so với vết chạy của trình duyệt.
+"""Chạy đúng các chương trình Python hiển thị ở khung "Mã Python" của Studio ảnh trên dữ liệu nhỏ cố định,
+rồi ghi kết quả để Vitest so với vết chạy của trình duyệt (src/core/trace/*.reference.json).
 
 Cách chạy (cần numpy):
     python scripts/gen-trace-reference.py
@@ -14,52 +14,126 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-PYTHON_DIR = ROOT / "src" / "core" / "trace" / "python"
-OUT = ROOT / "src" / "core" / "trace" / "softmax-trace.reference.json"
+TRACE_DIR = ROOT / "src" / "core" / "trace"
+PYTHON_DIR = TRACE_DIR / "python"
 
-N, DIM, NUM_CLASSES = 11, 4, 3
-OPTIONS = {"epochs": 6, "learningRate": 0.05, "batchSize": 4, "seed": 7}
+sys.path.insert(0, str(PYTHON_DIR))
+import lup_helpers  # noqa: E402 - cần sys.path ở trên
 
 
-def fixture() -> tuple[np.ndarray, np.ndarray]:
-    """Dữ liệu tất định: mỗi lớp lệch về một chiều, cộng thêm nhiễu theo công thức sin."""
-    ys = np.array([i % NUM_CLASSES for i in range(N)], dtype=np.int64)
+def run(program: str, namespace: dict) -> tuple[list[str], dict]:
+    """Chạy một file .py trong `namespace`, trả về các dòng in ra và namespace sau khi chạy."""
+    source = (PYTHON_DIR / program).read_text(encoding="utf-8")
+    printed = io.StringIO()
+    with contextlib.redirect_stdout(printed):
+        exec(compile(source, program, "exec"), namespace)  # noqa: S102 - mã của chính dự án
+    return printed.getvalue().splitlines(), namespace
+
+
+def write(name: str, data: dict) -> None:
+    out = TRACE_DIR / name
+    out.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    sys.stdout.write(f"Đã ghi {out.relative_to(ROOT)}\n")
+
+
+def softmax_reference() -> None:
+    n, dim, num_classes = 11, 4, 3
+    options = {"epochs": 6, "learningRate": 0.05, "batchSize": 4, "seed": 7}
+    ys = np.array([i % num_classes for i in range(n)], dtype=np.int64)
     xs = np.array(
-        [[np.sin(i * 1.7 + j * 0.9) * 0.5 + (1.0 if j == ys[i] else 0.0) for j in range(DIM)] for i in range(N)],
+        [[np.sin(i * 1.7 + j * 0.9) * 0.5 + (1.0 if j == ys[i] else 0.0) for j in range(dim)] for i in range(n)],
         dtype=np.float32,
     )
-    return xs, ys
+    output, ns = run(
+        "softmax_train.py",
+        {
+            # Trình duyệt giữ vector dạng float32 nhưng tính bằng float64: đưa vào numpy y như vậy.
+            "X_train": xs.astype(np.float64),
+            "y_train": ys,
+            "NUM_CLASSES": num_classes,
+            "EPOCHS": options["epochs"],
+            "LEARNING_RATE": options["learningRate"],
+            "BATCH_SIZE": options["batchSize"],
+            "SEED": options["seed"],
+        },
+    )
+    write(
+        "softmax-trace.reference.json",
+        {
+            "input": {"xs": xs.tolist(), "ys": ys.tolist(), "options": options},
+            "output": output,
+            "final": {
+                "weights": ns["W"].astype(np.float64).ravel().tolist(),
+                "bias": ns["b"].astype(np.float64).tolist(),
+                "lastBatchLoss": float(ns["loss"]),
+            },
+        },
+    )
+
+
+def fixture_image(size: int, background: int, square: tuple[int, int, int, int]) -> np.ndarray:
+    """Ảnh vuông nền đều, có một hình vuông sáng khác nền; kênh màu lệch nhau để ảnh không xám sẵn."""
+    gray = np.full((size, size), background, dtype=np.float64)
+    x, y, side, value = square
+    gray[y : y + side, x : x + side] = value
+    rgb = np.stack([gray, gray * 0.9 + 10, gray * 0.8 + 5], axis=-1)
+    return np.clip(np.round(rgb), 0, 255).astype(np.uint8)
+
+
+def data_check_reference() -> None:
+    size = 32  # chia hết cho 16 (dấu vân tay) và viền 32 // 14 = 2 điểm
+    specs = [
+        (0, "train", 200, (4, 4, 10, 120)),
+        (0, "train", 210, (12, 8, 12, 100)),
+        (1, "train", 30, (6, 14, 8, 150)),
+        (1, "train", 45, (16, 4, 10, 170)),
+        (0, "test", 40, (10, 10, 10, 160)),
+    ]
+    images = [fixture_image(size, bg, sq) for _, _, bg, sq in specs]
+    labels = [label for label, *_ in specs]
+    splits = [split for _, split, *_ in specs]
+    # Ảnh Kiểm tra chụp lại từ ảnh Huấn luyện số 0 (sáng hơn một chút): "lộ đề".
+    images.append(np.clip(images[0].astype(np.int64) + 3, 0, 255).astype(np.uint8))
+    labels.append(0)
+    splits.append("test")
+    # Hai ảnh gần như một màu: dấu vân tay chỉ là nhiễu, phải bị bỏ qua dù "trùng".
+    for background in (100, 101):
+        images.append(fixture_image(size, background, (0, 0, 1, background + 2)))
+        labels.append(1)
+        splits.append("test")
+    output, _ = run(
+        "data_check.py",
+        {"images": images, "labels": labels, "splits": splits, "CLASS_NAMES": ["Tròn", "Vuông"], "MAX_DIFF": 16, "MIN_CONTRAST": 8},
+    )
+    write(
+        "data-check.reference.json",
+        {
+            "input": {"size": size, "rgb": [img.ravel().tolist() for img in images], "labels": labels, "splits": splits},
+            "output": output,
+            "borders": [lup_helpers.border_brightness(lup_helpers.luminance(img)) for img in images],
+            "hashes": [lup_helpers.average_hash(lup_helpers.luminance(img)).astype(int).tolist() for img in images],
+            "contrasts": [lup_helpers.block_contrast(lup_helpers.luminance(img)) for img in images],
+        },
+    )
+
+
+def represent_reference() -> None:
+    dim = 5
+    features = np.array([[np.sin(k * 1.3 + j * 0.7) + 1.2 for j in range(dim)] for k in range(6)], dtype=np.float32)
+    splits = ["train", "train", "test", "train", "train", "test"]
+    original = lup_helpers.mobilenet_v2
+    lup_helpers.mobilenet_v2 = lambda images: features.astype(np.float64)  # thay MobileNet bằng vector cố định
+    try:
+        output, _ = run("represent.py", {"images": [None] * len(features), "splits": splits, "i": 2})
+    finally:
+        lup_helpers.mobilenet_v2 = original
+    write("represent.reference.json", {"input": {"features": features.tolist(), "splits": splits, "index": 2}, "output": output})
 
 
 def main() -> None:
-    xs, ys = fixture()
-    sys.path.insert(0, str(PYTHON_DIR))
-    source = (PYTHON_DIR / "softmax_train.py").read_text(encoding="utf-8")
-    namespace = {
-        # Trình duyệt giữ vector dạng float32 nhưng tính bằng float64: đưa vào numpy y như vậy.
-        "X_train": xs.astype(np.float64),
-        "y_train": ys,
-        "NUM_CLASSES": NUM_CLASSES,
-        "EPOCHS": OPTIONS["epochs"],
-        "LEARNING_RATE": OPTIONS["learningRate"],
-        "BATCH_SIZE": OPTIONS["batchSize"],
-        "SEED": OPTIONS["seed"],
-    }
-    printed = io.StringIO()
-    with contextlib.redirect_stdout(printed):
-        exec(compile(source, "softmax_train.py", "exec"), namespace)  # noqa: S102 - mã của chính dự án
-
-    reference = {
-        "input": {"xs": xs.tolist(), "ys": ys.tolist(), "options": OPTIONS},
-        "output": printed.getvalue().splitlines(),
-        "final": {
-            "weights": namespace["W"].astype(np.float64).ravel().tolist(),
-            "bias": namespace["b"].astype(np.float64).tolist(),
-            "lastBatchLoss": float(namespace["loss"]),
-        },
-    }
-    OUT.write_text(json.dumps(reference, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
-    sys.stdout.write(f"Đã ghi {OUT.relative_to(ROOT)}\n")
+    softmax_reference()
+    data_check_reference()
+    represent_reference()
 
 
 if __name__ == "__main__":

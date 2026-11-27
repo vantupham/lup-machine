@@ -62,3 +62,14 @@ export function formatValue(value: TraceValue): string {
     }
   }
 }
+
+/** Một bước của vết chạy: dòng mã vừa chạy và các biến dòng đó vừa đổi. */
+export interface TraceStep {
+  /** Dòng (đếm từ 0) vừa chạy. */
+  readonly line: number;
+  readonly changed: Readonly<Record<string, TraceValue>>;
+  /** Dòng chữ chương trình in ra màn hình ở bước này. */
+  readonly output?: string;
+  /** Vòng lặp ngoài cùng đang chạy (epoch khi huấn luyện; 0 nếu không có). */
+  readonly epoch: number;
+}
