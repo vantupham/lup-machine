@@ -39,6 +39,8 @@ interface TrainSectionProps {
   readonly renderPlan?: ((options: TrainOptions) => ReactNode) | undefined;
   /** Hiện dưới kết quả huấn luyện (so sánh với lần trước, kết luận). */
   readonly afterResult?: ReactNode;
+  /** Bản đồ trọng số theo epoch (có ngay khi có epoch đầu tiên). */
+  readonly weightMap?: ReactNode;
   /** Khung "Một bước học" (sau khi huấn luyện xong). */
   readonly stepExplorer?: ReactNode;
   /** Khung "Mã Python" của bước (đặt cuối bước, trước Sổ tay). */
@@ -143,6 +145,7 @@ export function TrainSection(props: TrainSectionProps) {
       {props.guessResult && <GuessResult {...props.guessResult} />}
       {!isActive && props.afterResult}
       {snapshots.length > 0 && <Charts {...props} />}
+      {snapshots.length > 0 && props.weightMap}
       {!isActive && props.stepExplorer}
       {props.codeTrace}
       <StepNotebook step="train" />

@@ -1069,6 +1069,25 @@
       "beforeAfter": "Xác suất lớp đúng của ảnh này: {{before}}% → {{after}}%; loss: {{lossBefore}} → {{lossAfter}}.",
       "batchNote": "Máy chỉnh theo cả lô, nên có ảnh tốt lên, có ảnh chưa.",
       "pythonLine": "Mã Python dòng {{n}}:"
+    },
+    "weightMap": {
+      "title": "Trọng số của tầng Dense (epoch {{epoch}})",
+      "exactHint": "Đúng các trọng số đã lưu sau mỗi epoch, cùng thanh phát lại ở trên.",
+      "lead": "Mỗi lớp có 1280 trọng số, mỗi ô một trọng số. Kéo thanh phát lại để xem chúng hình thành.",
+      "delta": "Chỉ hiện phần thay đổi so với epoch trước",
+      "rowLabel": "1280 trọng số của lớp {{cls}}",
+      "deltaLabel": "Thay đổi của 1280 trọng số lớp {{cls}} trong epoch này",
+      "colorNote": "Xanh: dương (ô bật mạnh thì điểm lớp tăng), cam: âm. Bấm một ô để xem ô đó là gì.",
+      "cell": "Ô số (0 đến {{max}})",
+      "cellTitle": "Ô {{j}}: trọng số của từng lớp",
+      "topImages": "Ảnh Huấn luyện có số thứ {{j}} lớn nhất:",
+      "cellNote": "Ô có trọng số dương lớn ở một lớp nghĩa là: ảnh nào bật mạnh ô này thì được cộng điểm cho lớp đó.",
+      "normTitle": "Độ lớn trọng số theo epoch",
+      "updateTitle": "Máy chỉnh nhiều bao nhiêu mỗi epoch",
+      "batchLossTitle": "Loss theo từng lô",
+      "batchLossChart": "Loss từng lô ({{perEpoch}} lô mỗi epoch)",
+      "batchAxis": "lô {{n}}",
+      "batchLossNote": "Đường răng cưa: mỗi lô có ảnh khác nhau nên loss lên xuống, nhưng xu hướng chung thường giảm dần."
     }
   },
   "samples": {

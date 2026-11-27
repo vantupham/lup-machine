@@ -4,6 +4,13 @@
 
 ## [Chưa phát hành]
 
+### Thêm (bước 4 Huấn luyện của Studio ảnh: bản đồ trọng số)
+
+- **Trọng số của tầng Dense theo epoch**: mỗi lớp một lưới 64 × 20 ô (1280 trọng số, xanh dương / cam), đi theo thanh phát lại epoch; cập nhật trực tiếp khi đang huấn luyện. Tùy chọn "chỉ hiện phần thay đổi so với epoch trước".
+- **Bấm một ô** (hoặc gõ số ô): trọng số của ô đó cho từng lớp và 3 ảnh Huấn luyện bật ô đó mạnh nhất. Bộ lá đậu thật: ô 267 bật mạnh ở ảnh nền đất đỏ, trọng số dương cho "Bệnh gỉ sắt".
+- Biểu đồ độ lớn trọng số ‖W‖ và mức chỉnh mỗi epoch ‖ΔW‖; mục "Loss theo từng lô" (tính lại cả lần huấn luyện khi mở).
+- Lõi: `core/ml/weight-stats.ts`; `train-step.ts` dùng chung vòng huấn luyện cho tính lại một lô và loss từng lô.
+
 ### Thêm (bước 4 Huấn luyện của Studio ảnh: "Một bước học")
 
 - Sau khi huấn luyện xong: chọn epoch, lô và một ảnh trong lô (ảnh nhỏ bấm được), rồi đi qua 6 chặng: **Đưa vào** (1280 số của ảnh) → **Tính điểm** (thanh điểm từng lớp; Chuyên sâu: 3 tích W·x lớn nhất) → **Xác suất, loss** → **Sai lệch** (p − đáp án) → **Hướng chỉnh** (gradient 1280 trọng số của lớp đúng, trung bình cả lô; xanh dương / cam) → **Cập nhật** (mức thay đổi thật sau Adam; xác suất và loss của ảnh trước → sau).

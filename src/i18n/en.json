@@ -1069,6 +1069,25 @@
       "beforeAfter": "Probability of the true class for this image: {{before}}% → {{after}}%; loss: {{lossBefore}} → {{lossAfter}}.",
       "batchNote": "The machine adjusts for the whole batch, so some images improve and some do not yet.",
       "pythonLine": "Python code line {{n}}:"
+    },
+    "weightMap": {
+      "title": "Weights of the Dense layer (epoch {{epoch}})",
+      "exactHint": "Exactly the weights saved after each epoch, tied to the replay slider above.",
+      "lead": "Each class has 1280 weights, one per cell. Drag the replay slider to watch them form.",
+      "delta": "Show only the change from the previous epoch",
+      "rowLabel": "1280 weights of class {{cls}}",
+      "deltaLabel": "Change of the 1280 weights of class {{cls}} in this epoch",
+      "colorNote": "Blue: positive (a strongly active cell raises the class score), orange: negative. Click a cell to see what it is.",
+      "cell": "Cell number (0 to {{max}})",
+      "cellTitle": "Cell {{j}}: weight for each class",
+      "topImages": "Training images with the largest number {{j}}:",
+      "cellNote": "A large positive weight for a class means: images that activate this cell strongly get points for that class.",
+      "normTitle": "Size of the weights by epoch",
+      "updateTitle": "How much the machine adjusts each epoch",
+      "batchLossTitle": "Loss per batch",
+      "batchLossChart": "Loss per batch ({{perEpoch}} batches per epoch)",
+      "batchAxis": "batch {{n}}",
+      "batchLossNote": "A jagged line: each batch holds different images, so the loss goes up and down, but the trend usually falls."
     }
   },
   "samples": {

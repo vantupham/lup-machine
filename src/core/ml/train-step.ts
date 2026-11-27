@@ -40,30 +40,69 @@ export function batchesPerEpoch(trainSize: number, batchSize: number): number {
   return Math.ceil(trainSize / batchSize);
 }
 
+interface Run {
+  readonly rng: () => number;
+  readonly params: SoftmaxParams;
+  readonly adamW: AdamState;
+  readonly adamB: AdamState;
+  readonly indices: readonly number[];
+  readonly perEpoch: number;
+}
+
+/** Trạng thái ban đầu giống hệt trainSoftmax: cùng seed, cùng khởi tạo, cùng thứ tự lấy số ngẫu nhiên. */
+function startRun(train: LabeledVectors, test: LabeledVectors | null, options: TrainOptions): Run {
+  const rng = createRng(options.seed);
+  const numClasses = Math.max(...train.ys, ...(test?.ys ?? [])) + 1;
+  const params = initParams(train.xs[0]!.length, numClasses, rng);
+  return {
+    rng,
+    params,
+    adamW: new AdamState(params.weights.length),
+    adamB: new AdamState(params.bias.length),
+    indices: train.xs.map((_, i) => i),
+    perEpoch: batchesPerEpoch(train.xs.length, options.batchSize),
+  };
+}
+
+/** Các lô của một epoch (trộn bằng rng của lần chạy, như trainSoftmax). */
+function epochBatches(run: Run, batchSize: number): number[][] {
+  const order = shuffle(run.indices, run.rng);
+  return Array.from({ length: run.perEpoch }, (_, b) => order.slice(b * batchSize, (b + 1) * batchSize));
+}
+
+/** Một bước học trên một lô: tính loss, gradient rồi để Adam chỉnh trọng số (thay đổi run.params tại chỗ). */
+function runBatch(run: Run, train: LabeledVectors, batch: readonly number[], learningRate: number) {
+  const result = lossAndGradient(run.params, batch.map((i) => train.xs[i]!), batch.map((i) => train.ys[i]!));
+  run.adamW.apply(run.params.weights, result.gradW, learningRate);
+  run.adamB.apply(run.params.bias, result.gradB, learningRate);
+  return result;
+}
+
 /** Chạy lại huấn luyện từ đầu tới đúng lô cần xem (lô đó chạy luôn, giữ lại trọng số trước / sau). */
 export function replayBatch(train: LabeledVectors, test: LabeledVectors | null, options: TrainOptions, at: BatchLocation): ReplayedBatch {
   const perEpoch = batchesPerEpoch(train.xs.length, options.batchSize);
   if (!(Number.isInteger(at.epoch) && at.epoch >= 1 && at.epoch <= options.epochs)) throw new RangeError(`Epoch phải từ 1 đến ${options.epochs}`);
   if (!(Number.isInteger(at.batch) && at.batch >= 0 && at.batch < perEpoch)) throw new RangeError(`Lô phải từ 0 đến ${perEpoch - 1}`);
-  const rng = createRng(options.seed);
-  const numClasses = Math.max(...train.ys, ...(test?.ys ?? [])) + 1;
-  const params = initParams(train.xs[0]!.length, numClasses, rng);
-  const adamW = new AdamState(params.weights.length);
-  const adamB = new AdamState(params.bias.length);
-  const indices = train.xs.map((_, i) => i);
+  const run = startRun(train, test, options);
   for (let epoch = 1; epoch <= at.epoch; epoch++) {
-    const order = shuffle(indices, rng);
-    for (let b = 0; b < perEpoch; b++) {
-      const batch = order.slice(b * options.batchSize, (b + 1) * options.batchSize);
-      const { loss, gradW, gradB } = lossAndGradient(params, batch.map((i) => train.xs[i]!), batch.map((i) => train.ys[i]!));
+    for (const [b, batch] of epochBatches(run, options.batchSize).entries()) {
       const isTarget = epoch === at.epoch && b === at.batch;
-      const before = isTarget ? copyParams(params) : null;
-      adamW.apply(params.weights, gradW, options.learningRate);
-      adamB.apply(params.bias, gradB, options.learningRate);
-      if (before) return { indices: batch, before, after: copyParams(params), gradW, gradB, batchLoss: loss };
+      const before = isTarget ? copyParams(run.params) : null;
+      const { loss, gradW, gradB } = runBatch(run, train, batch, options.learningRate);
+      if (before) return { indices: batch, before, after: copyParams(run.params), gradW, gradB, batchLoss: loss };
     }
   }
   throw new Error('Không tới được lô cần xem');
+}
+
+/** Loss trung bình của từng lô, theo đúng thứ tự huấn luyện (mọi epoch). Tính lại cả lần huấn luyện. */
+export function batchLosses(train: LabeledVectors, test: LabeledVectors | null, options: TrainOptions): number[] {
+  const run = startRun(train, test, options);
+  const losses: number[] = [];
+  for (let epoch = 1; epoch <= options.epochs; epoch++) {
+    for (const batch of epochBatches(run, options.batchSize)) losses.push(runBatch(run, train, batch, options.learningRate).loss);
+  }
+  return losses;
 }
 
 export interface SampleStep {

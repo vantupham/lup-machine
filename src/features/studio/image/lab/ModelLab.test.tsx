@@ -231,6 +231,32 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     expect(within(box).getByRole('button', { name: /Chặng sau/ })).toBeDisabled();
   });
 
+  test('bản đồ trọng số: theo thanh phát lại, phần thay đổi, ô 0 là đặc trưng màu tối; loss từng lô', async () => {
+    await seed();
+    open();
+    await extractAll();
+    await trainToEnd();
+    const map = screen.getByTestId('weight-map');
+    expect(map).toHaveTextContent('Trọng số của tầng Dense (epoch 50)');
+    expect(within(map).getAllByRole('img', { name: /^1280 trọng số của lớp/ })).toHaveLength(2);
+
+    fireEvent.change(screen.getByRole('slider', { name: /phát lại/i }), { target: { value: '0' } });
+    expect(map).toHaveTextContent('Trọng số của tầng Dense (epoch 0)');
+    expect(within(map).getByRole('checkbox', { name: /phần thay đổi/ })).toBeDisabled();
+    fireEvent.change(screen.getByRole('slider', { name: /phát lại/i }), { target: { value: '10' } });
+    await userEvent.click(within(map).getByRole('checkbox', { name: /phần thay đổi/ }));
+    expect(within(map).getAllByRole('img', { name: /^Thay đổi của 1280 trọng số lớp/ })).toHaveLength(2);
+
+    // Ảnh giả: số 0 của vector = màu / 255 → lớp "Giấy" (màu sáng) có số 0 lớn nhất.
+    fireEvent.change(within(map).getByLabelText('Ô số (0 đến 1279)'), { target: { value: '0' } });
+    const cell = within(map).getByTestId('weight-cell');
+    expect(cell).toHaveTextContent('Ô 0: trọng số của từng lớp');
+    expect(within(cell).getAllByText(/^x\[0\] = 0,9/)).toHaveLength(3);
+
+    await userEvent.click(within(map).getByText('Loss theo từng lô'));
+    expect(within(map).getByTestId('batch-loss')).toHaveTextContent('Loss từng lô (1 lô mỗi epoch)');
+  });
+
   test('phát lại epoch 0: mô hình còn đoán bừa', async () => {
     await seed();
     open();
