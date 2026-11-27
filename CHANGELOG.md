@@ -4,6 +4,12 @@
 
 ## [Chưa phát hành]
 
+### Đổi (sửa tên lớp và tên dự án tự lưu)
+
+- Bấm bút chì cạnh tên lớp (bước 1 Studio ảnh, khối "Dạy máy trong 3 bước" của cả 5 Studio) hoặc "Đổi tên" dự án: gõ xong nhấn **Enter hoặc bấm ra ngoài là tự lưu**, Esc để hủy; bỏ nút Lưu / Hủy. Để trống hoặc không đổi thì giữ tên cũ; lưu lỗi (vd. trùng tên) thì ô vẫn mở để sửa tiếp. Enter dùng để chốt chữ của bộ gõ tiếng Việt không bị tính là lưu.
+- Ô tên nhóm ở bước 1 Studio âm thanh: để trống hoặc lưu lỗi thì trả lại tên cũ, Enter là lưu (như Studio tư thế).
+- Lõi: hook dùng chung `useInlineEdit`.
+
 ### Thêm (bước 4 Huấn luyện của văn bản, bảng số, âm thanh, tư thế: mô hình hình thành ra sao)
 
 - **Hồi quy logistic** (cả 4 Studio): mục "Xem máy học qua từng vòng lặp (L-BFGS)" huấn luyện lại đúng như vừa rồi và ghi mô hình sau mỗi vòng: biểu đồ hàm mục tiêu và % đúng tập Huấn luyện, thanh trượt vòng lặp, 6 đặc trưng nặng ký nhất của mỗi lớp (từ, cột, dải tần × phần thời gian, khớp x / y). Vòng 0 là mọi trọng số bằng 0 (Iris: hàm mục tiêu 120 · ln 3 = 131,833, đúng 33,3 %).

@@ -1,5 +1,5 @@
-import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useInlineEdit } from '@/features/studio/useInlineEdit';
 import { ClassMarker } from '@/ui/ClassMarker';
 import { Pencil } from '@/ui/icons';
 
@@ -13,12 +13,12 @@ interface InlineClassNameProps {
   readonly onRename: (name: string) => Promise<boolean>;
 }
 
-/** Tên lớp kèm nút bút chì; bấm vào thì thành ô sửa tên ngay tại chỗ (Enter lưu, Esc hủy). */
+/** Tên lớp kèm nút bút chì; bấm vào thì thành ô sửa tên ngay tại chỗ (Enter / rời ô là lưu, Esc hủy). */
 export function InlineClassName({ name, markerIndex, onRename }: InlineClassNameProps) {
   const { t } = useTranslation();
-  const [draft, setDraft] = useState<string | null>(null);
+  const { isEditing, isSaving, start, triggerRef, inputRef, inputProps } = useInlineEdit({ value: name, onSave: onRename });
 
-  if (draft === null) {
+  if (!isEditing) {
     return (
       <div className="flex min-w-0 items-center gap-1">
         <p className="truncate font-semibold">
@@ -26,8 +26,9 @@ export function InlineClassName({ name, markerIndex, onRename }: InlineClassName
           {name}
         </p>
         <button
+          ref={triggerRef}
           type="button"
-          onClick={() => setDraft(name)}
+          onClick={start}
           aria-label={t('project.class.renameAria', { name })}
           title={t('project.class.rename')}
           className="shrink-0 rounded p-1 text-muted transition-colors hover:bg-primary/10 hover:text-primary"
@@ -38,31 +39,15 @@ export function InlineClassName({ name, markerIndex, onRename }: InlineClassName
     );
   }
 
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    const next = draft.trim();
-    if (!next || next === name || (await onRename(next))) setDraft(null);
-  };
-
   return (
-    <form onSubmit={(e) => void submit(e)} className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
-      <input
-        aria-label={t('project.class.renameLabel')}
-        value={draft}
-        maxLength={MAX_NAME_LENGTH}
-        autoFocus
-        onChange={(e) => setDraft(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') setDraft(null);
-        }}
-        className="min-w-0 flex-1 rounded border border-rule bg-paper px-2 py-1 text-sm"
-      />
-      <button type="submit" className="btn btn-primary px-2.5 py-1 text-sm">
-        {t('project.class.save')}
-      </button>
-      <button type="button" onClick={() => setDraft(null)} className="text-sm">
-        {t('project.class.cancel')}
-      </button>
-    </form>
+    <input
+      ref={inputRef}
+      {...inputProps}
+      aria-label={t('project.class.renameLabel')}
+      title={t('project.class.renameHint')}
+      maxLength={MAX_NAME_LENGTH}
+      aria-busy={isSaving}
+      className="min-w-0 flex-1 rounded border border-primary bg-paper px-2 py-1 text-sm font-semibold"
+    />
   );
 }

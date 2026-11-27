@@ -92,6 +92,13 @@ describe('Studio âm thanh', () => {
     await vi.waitFor(async () => expect((await repos.dataset.listClasses(projectId))[0]!.name).toBe('Chuông chùa'));
     expect((await screen.findAllByText(/Chuông chùa #1/, {}, { timeout: 5_000 })).length).toBeGreaterThan(0);
 
+    // Xóa trống rồi Enter: không lưu, ô trả lại tên cũ.
+    const second = screen.getByRole('textbox', { name: 'Tên nhóm 2' });
+    await userEvent.clear(second);
+    await userEvent.type(second, '{Enter}');
+    expect(second).toHaveValue('Còi');
+    expect((await repos.dataset.listClasses(projectId))[1]!.name).toBe('Còi');
+
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     const card = screen.getByTestId('clip-count-3').closest('li')!;
     await userEvent.click(within(card).getByRole('button', { name: 'Xóa nhóm Nhóm 4' }));

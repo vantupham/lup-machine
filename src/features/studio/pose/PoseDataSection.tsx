@@ -161,7 +161,7 @@ function GroupNameInput({ name, label, onRename }: GroupNameInputProps) {
       maxLength={40}
       onChange={(e) => setDraft(e.target.value)}
       onBlur={commit}
-      onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+      onKeyDown={(e) => !e.nativeEvent.isComposing && e.key === 'Enter' && e.currentTarget.blur()}
       className="min-w-0 flex-1 rounded border border-transparent bg-transparent px-2 py-1 font-semibold hover:border-rule focus:border-rule focus:bg-paper"
     />
   );
