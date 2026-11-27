@@ -1,6 +1,7 @@
 import { trainSoftmax, type LabeledVectors } from '@/core/ml/softmax-regression';
 import reference from './softmax-trace.reference.json';
-import { epochLine, pythonPercent, SOFTMAX_PROGRAM, traceSoftmaxTraining, type TraceStep } from './softmax-trace';
+import { pythonFixed, pythonPercent } from './python-format';
+import { epochLine, SOFTMAX_PROGRAM, traceSoftmaxTraining, type TraceStep } from './softmax-trace';
 
 /** Số đối chiếu do `scripts/gen-trace-reference.py` sinh ra bằng cách chạy CHÍNH file softmax_train.py. */
 const train: LabeledVectors = {
@@ -71,6 +72,13 @@ describe('định dạng kiểu Python', () => {
     expect(pythonPercent(0.375)).toBe('38%');
     expect(pythonPercent(10 / 11)).toBe('91%');
     expect(pythonPercent(1)).toBe('100%');
+  });
+
+  test('số thập phân đúng nửa cũng về số chẵn', () => {
+    expect(pythonFixed(2.5, 0)).toBe('2');
+    expect(pythonFixed(3.5, 0)).toBe('4');
+    expect(pythonFixed(0.125, 2)).toBe('0.12');
+    expect(pythonFixed(1.0786, 3)).toBe('1.079');
   });
 
   test('dòng in mỗi epoch', () => {

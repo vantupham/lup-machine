@@ -949,6 +949,55 @@
       "confirmDelete": "Delete this image from the project?",
       "leakMove": "The Test split is the model's exam. Moving this image into Training changes the exam: the Test score can no longer be compared with earlier runs, and if you only move the images the model got wrong, the score will look better than it really is. Move it anyway?",
       "leakDelete": "Removing Test images means the Test score can no longer be compared with earlier runs. Delete anyway?"
+    },
+    "journey": {
+      "label": "Where the data goes",
+      "images": "{{count}} images",
+      "imagesSub": "each {{side}} × {{side}} pixels × 3 colours = {{numbers}} numbers",
+      "classes": "{{count}} classes",
+      "classesSub": "each image carries one class label",
+      "split": "{{train}} Training, {{test}} Test",
+      "splitSub": "the machine learns from the first, is scored on the second"
+    },
+    "deepCheck": {
+      "title": "Look closely at each image",
+      "lead": "Each image is measured to find near-duplicates and backgrounds that differ by class.",
+      "exactHint": "Measured directly on the pixels, no model needed.",
+      "run": "Check {{count}} images",
+      "rerun": "Check {{count}} new images",
+      "allDone": "All {{count}} images checked.",
+      "running": "Checking {{done}}/{{total}} images…",
+      "error": "Could not check images: {{message}}",
+      "brightnessTitle": "Background brightness (image border) by class",
+      "brightnessNote": "Each dot is an image. Filled: Training. Hollow: Test.",
+      "dark": "Dark",
+      "light": "Bright",
+      "classSummary": ": mean background {{mean}}, from {{min}} to {{max}}",
+      "findings": "Findings",
+      "ok": "No near-duplicates or background shortcuts found.",
+      "shortcut": "Background brightness alone separates \"{{a}}\" and \"{{b}}\" for {{percent}}% of Training images. \"{{bright}}\" has a much brighter background.",
+      "shortcutTip": "The machine may learn the background instead of the object. Photograph each class on several backgrounds.",
+      "leakTitle": "{{count}} Test images are near-duplicates of Training images.",
+      "leakTip": "The Test score will be falsely high because the machine has seen almost the same image. Delete or move one image of each pair.",
+      "sameTitle": "{{count}} near-duplicate pairs within the same set.",
+      "sameTip": "Almost identical images teach the machine little. Try more varied photos.",
+      "pairLabel": "Image {{a}} ({{splitA}}) and image {{b}} ({{splitB}})",
+      "pairDiff": "{{diff}}/256 cells differ",
+      "fingerprint": "16 × 16 fingerprint of image {{n}}",
+      "fingerprintNote": "Fingerprint: shrink the image to 16 × 16 cells, cells brighter than average are dark.",
+      "more": "and {{count}} more pairs",
+      "codeEmpty": "Press Check to run the code on your images.",
+      "flat": "{{count}} images are almost one colour, so their fingerprints are not compared (they are mostly noise)."
+    },
+    "cosine": {
+      "title": "Compared with {{name}}",
+      "neighborName": "the most similar image (image {{n}}, class {{name}})",
+      "exactHint": "Cosine computed on exactly the 1280 numbers of both images.",
+      "selected": "Selected image",
+      "neighbor": "Most similar image",
+      "formula": "similarity = a·b / (|a| × |b|) = {{dot}} / ({{na}} × {{nb}}) = {{sim}}",
+      "note": "1 means same direction, 0 means unrelated. Dark cells in the same places mean high similarity.",
+      "codeEmpty": "Pick a dot on the map to run the code on that image."
     }
   },
   "samples": {
@@ -2049,7 +2098,9 @@
     "noVariables": "No variables yet.",
     "changed": "just changed",
     "console": "Output (print)",
-    "consoleEmpty": "Nothing printed yet."
+    "consoleEmpty": "Nothing printed yet.",
+    "toNextPrint": "To next print",
+    "positionLine": "Line {{line}}"
   },
   "autosave": {
     "saving": "Saving…",

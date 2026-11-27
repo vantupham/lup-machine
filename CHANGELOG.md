@@ -4,6 +4,17 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Studio ảnh, bước 1–3: soi kỹ dữ liệu, so sánh vector, Mã Python)
+
+- **Bước 1** có sơ đồ "Dữ liệu đi đâu" với số thật: N ảnh (mỗi ảnh 224 × 224 × 3 = 150 528 số) → k lớp → Huấn luyện / Kiểm tra.
+- **Bước 2 "Soi kỹ từng ảnh"** (đo trực tiếp trên điểm ảnh, không cần mô hình):
+  - biểu đồ độ sáng nền (viền ảnh) theo lớp, chấm đặc là Huấn luyện, chấm rỗng là Kiểm tra;
+  - **lối tắt nền**: cảnh báo khi chỉ nhìn độ sáng nền đã phân biệt hai lớp đúng ≥ 90 % ảnh Huấn luyện và chênh ≥ 40 (ảnh thật tối đa 67 %; bộ "bẫy nền" của bài 3: 100 %);
+  - **ảnh gần trùng** bằng dấu vân tay 16 × 16 (≤ 16/256 ô khác nhau; ảnh thật khác nhau cách ít nhất 32). Cặp Huấn luyện–Kiểm tra là "lộ đề". Ảnh gần như một màu (độ tương phản < 8; ảnh thật ≥ 14, bộ bẫy nền ≤ 2,7) không so vì dấu vân tay chỉ toàn nhiễu;
+  - khung Mã Python `data_check.py` chạy với số đo thật.
+- **Bước 3**: khi chọn một chấm, hai dải 1280 số của ảnh đó và ảnh giống nhất đặt cạnh nhau (vẽ bằng canvas) kèm phép tính cosine bằng số thật; khung Mã Python `represent.py` in 3 ảnh giống nhất.
+- `scripts/gen-trace-reference.py` chạy cả 3 chương trình bằng Python thật để đối chiếu; `lup_helpers.py` thêm `luminance`, `average_hash`, `block_contrast`, `border_brightness`, `best_threshold`, `mobilenet_v2`.
+
 ### Thêm (khung "Mã Python" ở bước Huấn luyện của Studio ảnh)
 
 - **Bước 4 Huấn luyện có khung "Mã Python"** (thu gọn sẵn ở cả Khám phá và Chuyên sâu): chương trình numpy 27 dòng làm đúng việc trình duyệt vừa làm (khởi tạo trọng số, trộn, chia lô, softmax, loss, đạo hàm, Adam, chấm điểm mỗi epoch).

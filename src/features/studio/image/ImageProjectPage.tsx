@@ -9,6 +9,8 @@ import { getErrorMessage } from '@/ui/error-message';
 import { PixelInspector } from '@/features/inspector/pixel/PixelInspector';
 import { ClassPanel } from './ClassPanel';
 import { QualityPanel } from './QualityPanel';
+import { DataJourney } from './DataJourney';
+import { DeepCheckPanel } from './deep-check/DeepCheckPanel';
 import { StepBar, type StepTargets } from '@/features/studio/StepBar';
 import { ProjectTitle } from '@/features/studio/ProjectTitle';
 import { WebcamCapture } from './WebcamCapture';
@@ -259,6 +261,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
             <h2 id="data-title" className="flex items-center gap-3 text-2xl font-semibold"><StepNumber n={1} />{t('project.data.title')}</h2>
             <p className="max-w-2xl text-sm text-muted">{t('project.data.lead')}</p>
           </div>
+          <DataJourney classCount={classes.length} samples={samples} />
           <div className="rounded border border-rule bg-surface p-3">
             <label className="flex items-center gap-2 font-medium">
               <input type="checkbox" checked={blurFaces} onChange={(e) => setBlurFaces(e.target.checked)} aria-describedby="blur-faces-hint" />
@@ -300,6 +303,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         </section>
         <QualityPanel classes={classes} counts={counts} />
       </div>
+      <DeepCheckPanel classes={classes} samples={samples} />
 
       <ModelLab projectName={projectName} classes={classes} samples={samples} improve={improve} />
       </StepDetails>

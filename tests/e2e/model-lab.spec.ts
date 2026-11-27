@@ -86,7 +86,7 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   expect(testScore).toBeGreaterThanOrEqual(75);
 
   // Khung "Mã Python": chạy lại chương trình với vector MobileNet thật vừa tính.
-  const trace = page.getByTestId('code-trace');
+  const trace = page.locator('[data-program="softmax_train.py"]');
   await trace.getByText('Mã Python', { exact: true }).click();
   await trace.getByRole('button', { name: /Chạy 1 dòng/ }).click();
   await expect(trace.getByRole('region', { name: 'Biến' })).toContainText('X_train(16, 1280)');
