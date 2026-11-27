@@ -206,6 +206,31 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     expect(within(code).getByText('Bấm Chạy hoặc Chạy 1 dòng để bắt đầu.')).toBeInTheDocument();
   });
 
+  test('một bước học: chọn epoch, lô, ảnh; đi qua 6 chặng với số thật và dòng Python tương ứng', async () => {
+    await seed();
+    open();
+    await extractAll();
+    expect(screen.queryByTestId('train-step')).toBeNull();
+    await trainToEnd();
+    const box = screen.getByTestId('train-step');
+    expect(within(box).getByText('12 ảnh trong lô này. Bấm để chọn ảnh:')).toBeInTheDocument();
+    expect(within(box).getAllByRole('button', { name: /Ảnh \d+ trong lô/ })).toHaveLength(12);
+
+    fireEvent.change(within(box).getByLabelText('Epoch (1 đến 50)'), { target: { value: '20' } });
+    await userEvent.click(within(box).getByRole('button', { name: 'Ảnh 3 trong lô' }));
+    const view = () => within(box).getByTestId('step-view');
+    expect(view()).toHaveTextContent('Mã Python dòng 17: X, y = X_train[batch], y_train[batch]');
+    await userEvent.click(within(box).getByRole('button', { name: /Chặng sau/ }));
+    expect(within(view()).getByTestId('step-logits').querySelectorAll('li')).toHaveLength(2);
+    await userEvent.click(within(box).getByRole('button', { name: /Chặng sau/ }));
+    expect(view()).toHaveTextContent(/loss = −log p = \d+,\d{3}/);
+    await userEvent.click(within(box).getByRole('button', { name: /5\. Hướng chỉnh/ }));
+    expect(within(view()).getByRole('img', { name: /Gradient của 1280 trọng số lớp/ })).toBeInTheDocument();
+    await userEvent.click(within(box).getByRole('button', { name: /Chặng sau/ }));
+    expect(within(view()).getByTestId('step-before-after')).toHaveTextContent(/Xác suất lớp đúng của ảnh này: [\d,]+% → [\d,]+%; loss: [\d,]+ → [\d,]+\./);
+    expect(within(box).getByRole('button', { name: /Chặng sau/ })).toBeDisabled();
+  });
+
   test('phát lại epoch 0: mô hình còn đoán bừa', async () => {
     await seed();
     open();

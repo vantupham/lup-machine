@@ -39,6 +39,8 @@ interface TrainSectionProps {
   readonly renderPlan?: ((options: TrainOptions) => ReactNode) | undefined;
   /** Hiện dưới kết quả huấn luyện (so sánh với lần trước, kết luận). */
   readonly afterResult?: ReactNode;
+  /** Khung "Một bước học" (sau khi huấn luyện xong). */
+  readonly stepExplorer?: ReactNode;
   /** Khung "Mã Python" của bước (đặt cuối bước, trước Sổ tay). */
   readonly codeTrace?: ReactNode;
 }
@@ -141,6 +143,7 @@ export function TrainSection(props: TrainSectionProps) {
       {props.guessResult && <GuessResult {...props.guessResult} />}
       {!isActive && props.afterResult}
       {snapshots.length > 0 && <Charts {...props} />}
+      {!isActive && props.stepExplorer}
       {props.codeTrace}
       <StepNotebook step="train" />
     </section>

@@ -18,6 +18,7 @@ import { RunComparison } from './RunComparison';
 import { setupOf } from './run-setup';
 import type { ImproveActions } from './improve-actions';
 import { RotateCcw } from '@/ui/icons';
+import { TrainStepExplorer } from './TrainStepExplorer';
 
 interface ModelLabProps {
   readonly projectName: string;
@@ -103,6 +104,18 @@ export function ModelLab({ projectName, classes, samples, improve }: ModelLabPro
         }
         onStep={training.step}
         onFinish={training.finish}
+        stepExplorer={
+          hasRun && lastOptions && readiness.readiness === 'ready' && (snapshots.at(-1)?.epoch ?? 0) > 0 ? (
+            <TrainStepExplorer
+              train={readiness.data.train}
+              test={readiness.data.test}
+              options={lastOptions}
+              samples={readiness.trainSamples}
+              classes={classes}
+              lastEpoch={snapshots.at(-1)!.epoch}
+            />
+          ) : undefined
+        }
         codeTrace={<CodeTracePanel program={SOFTMAX_PROGRAM} helpers={HELPERS_PROGRAM} create={createTrace} />}
       />
       {isStale && <p role="status" className="text-sm text-warning"><RotateCcw /> {t('project.train.stale')}</p>}

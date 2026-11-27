@@ -1035,6 +1035,40 @@
         "ReLU": "keeps positive numbers, negatives become 0",
         "Add": "shortcut: adds the block input to its output"
       }
+    },
+    "trainStep": {
+      "title": "One learning step",
+      "exactHint": "Recomputes exactly that batch with the same seed and maths as the last training run.",
+      "lead": "Pick an epoch, a batch and an image to see how the machine scores, measures the error, then adjusts the weights.",
+      "epoch": "Epoch (1 to {{max}})",
+      "batch": "Batch (of {{max}})",
+      "batchImages": "{{count}} images in this batch. Click to pick one:",
+      "pick": "Image {{n}} in the batch",
+      "stages": "Stages",
+      "stage": {
+        "input": "Input",
+        "logits": "Scores",
+        "proba": "Probability, loss",
+        "error": "Error",
+        "gradient": "Direction",
+        "update": "Update"
+      },
+      "prev": "Previous stage",
+      "next": "Next stage",
+      "inputText": "This image belongs to \"{{cls}}\". The machine only sees the 1280 numbers MobileNetV2 produced:",
+      "vector": "The image's 1280 numbers",
+      "logitsText": "Each class gets a score: the sum of 1280 weight × number products, plus a bias.",
+      "topTerms": "Three largest products for {{cls}}:",
+      "probaText": "Softmax turns scores into probabilities. The true class \"{{cls}}\" gets {{p}}%, so loss = −log p = {{loss}}.",
+      "errorText": "Error = probability − answer. The true class \"{{cls}}\" is negative (should rise), the others positive (should fall).",
+      "gradientText": "Direction to adjust the weights of \"{{cls}}\": error × the 1280 numbers, averaged over all {{count}} images of the batch.",
+      "gradientLabel": "Gradient of the 1280 weights of {{cls}}",
+      "colorNote": "Blue: positive, orange: negative. Darker cells mean larger numbers.",
+      "updateText": "Adam takes a small step against the gradient (learning rate {{lr}}). Actual change of the weights of \"{{cls}}\":",
+      "deltaLabel": "Change of the 1280 weights of {{cls}}",
+      "beforeAfter": "Probability of the true class for this image: {{before}}% → {{after}}%; loss: {{lossBefore}} → {{lossAfter}}.",
+      "batchNote": "The machine adjusts for the whole batch, so some images improve and some do not yet.",
+      "pythonLine": "Python code line {{n}}:"
     }
   },
   "samples": {
