@@ -89,6 +89,13 @@ export function topScoring(params: SoftmaxParams, xs: readonly ArrayLike<number>
     .slice(0, count);
 }
 
+/** Giá trị tuyệt đối lớn nhất (0 nếu rỗng). */
+export function maxAbs(values: ArrayLike<number>): number {
+  let max = 0;
+  for (let i = 0; i < values.length; i++) max = Math.max(max, Math.abs(values[i] as number));
+  return max;
+}
+
 /** Số thứ tự các phần tử, từ giá trị lớn nhất đến nhỏ nhất (bằng nhau thì số thứ tự nhỏ trước). */
 export function rankOrder(values: ArrayLike<number>): number[] {
   return Array.from({ length: values.length }, (_, i) => i).sort((a, b) => (values[b] as number) - (values[a] as number) || a - b);

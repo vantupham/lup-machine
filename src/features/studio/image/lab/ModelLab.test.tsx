@@ -220,6 +220,10 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     await userEvent.click(within(box).getByRole('button', { name: 'Ảnh 3 trong lô' }));
     const view = () => within(box).getByTestId('step-view');
     expect(view()).toHaveTextContent('Mã Python dòng 17: X, y = X_train[batch], y_train[batch]');
+    // Dòng chảy 6 chặng, chặng đang xem được đánh dấu; chặng 1 vẽ 32 số lớn nhất của vector.
+    expect(within(within(box).getByTestId('step-flow')).getAllByRole('button')).toHaveLength(6);
+    expect(within(box).getByRole('button', { name: '1. Đưa vào' })).toHaveAttribute('aria-current', 'step');
+    expect(within(view()).getByTestId('step-input-top').querySelectorAll('rect')).toHaveLength(32);
     await userEvent.click(within(box).getByRole('button', { name: /Chặng sau/ }));
     expect(within(view()).getByTestId('step-logits').querySelectorAll('li')).toHaveLength(2);
     await userEvent.click(within(box).getByRole('button', { name: /Chặng sau/ }));
@@ -227,6 +231,7 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     await userEvent.click(within(box).getByRole('button', { name: /5\. Hướng chỉnh/ }));
     expect(within(view()).getByRole('img', { name: /Gradient của 1280 trọng số lớp/ })).toBeInTheDocument();
     await userEvent.click(within(box).getByRole('button', { name: /Chặng sau/ }));
+    expect(within(view()).getByTestId('step-proba-shift').querySelectorAll('li')).toHaveLength(2);
     expect(within(view()).getByTestId('step-before-after')).toHaveTextContent(/Xác suất lớp đúng của ảnh này: [\d,]+% → [\d,]+%; loss: [\d,]+ → [\d,]+\./);
     expect(within(box).getByRole('button', { name: /Chặng sau/ })).toBeDisabled();
   });
