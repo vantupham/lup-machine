@@ -1004,6 +1004,37 @@
       "formula": "similarity = a·b / (|a| × |b|) = {{dot}} / ({{na}} × {{nb}}) = {{sim}}",
       "note": "1 means same direction, 0 means unrelated. Dark cells in the same places mean high similarity.",
       "codeEmpty": "Pick a dot on the map to run the code on that image."
+    },
+    "network": {
+      "title": "What the network is made of",
+      "exactHint": "Read straight from the MobileNetV2 model file the page uses.",
+      "summary": "MobileNetV2 has {{layers}} layers with {{frozen}} numbers pre-learned on ImageNet, kept fixed (frozen). Training only adjusts the {{trainable}} numbers of the last layer.",
+      "input": "Image",
+      "pool": "7 × 7 average",
+      "dense": "Dense (learning)",
+      "denseTraining": "Dense (adjusting…)",
+      "output": "{{count}} probabilities",
+      "blocks": {
+        "stem": "Stem",
+        "block": "Block {{n}}",
+        "head": "Head"
+      },
+      "blockLabel": "{{name}}: output {{shape}}, frozen",
+      "blockTitle": "{{name}}: output {{shape}}",
+      "blockParams": "{{params}} pre-learned numbers ({{stats}} of them normalisation statistics).",
+      "frozenNote": "Frozen: these numbers do not change when you train.",
+      "featureMapHint": "See the feature maps of layer {{layer}} in step 3 (Expert mode).",
+      "denseTitle": "Dense layer: the only part that learns",
+      "denseCount": "{{dim}} × {{k}} = {{weights}} weights + {{bias}} biases = {{total}} numbers.",
+      "denseNote": "For every batch of images, all these numbers are nudged slightly so the loss goes down.",
+      "kinds": {
+        "ZeroPadding2D": "adds a border of zeros around the image",
+        "Conv2D": "convolution: slides filters to find edges, then mixes channels",
+        "DepthwiseConv2D": "convolution on each channel separately (lighter)",
+        "BatchNormalization": "normalisation: brings numbers to the same scale",
+        "ReLU": "keeps positive numbers, negatives become 0",
+        "Add": "shortcut: adds the block input to its output"
+      }
     }
   },
   "samples": {
