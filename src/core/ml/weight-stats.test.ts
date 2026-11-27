@@ -1,7 +1,7 @@
 import reference from '@/core/trace/softmax-trace.reference.json';
 import { lossAndGradient, trainSoftmax, type LabeledVectors } from './softmax-regression';
 import { batchesPerEpoch, batchLosses, replayBatch } from './train-step';
-import { cellAt, rowDelta, topActivating, updateNorms, weightNorms, weightRow } from './weight-stats';
+import { cellAt, classContributions, rankOrder, rowDelta, topActivating, topScoring, updateNorms, weightNorms, weightRow } from './weight-stats';
 
 const train: LabeledVectors = { xs: reference.input.xs.map((r) => Float32Array.from(r)), ys: reference.input.ys };
 const options = reference.input.options;
@@ -49,3 +49,46 @@ describe('loss từng lô', () => {
     expect(losses[batchesPerEpoch(train.xs.length, options.batchSize) + 1]).toBe(again);
   });
 });
+
+describe('đọc trọng số theo nghĩa: đặc trưng nào cộng điểm, ảnh nào tiêu biểu', () => {
+  /** 2 lớp, 3 đặc trưng. Lớp 0 dựa vào đặc trưng 0, lớp 1 dựa vào đặc trưng 2. */
+  const tiny = { numClasses: 2, dim: 3, weights: Float32Array.from([2, 0.5, -1, -1, 0.25, 3]), bias: Float32Array.from([0.1, -0.1]) };
+  const data: LabeledVectors = {
+    xs: [Float32Array.from([1, 0, 0]), Float32Array.from([3, 2, 0]), Float32Array.from([0, 1, 2]), Float32Array.from([0, 0, 4])],
+    ys: [0, 0, 1, 1],
+  };
+
+  test('đóng góp trung bình W[k, j]·x[j] trên các ảnh của lớp k, lớn nhất trước', () => {
+    const top = classContributions(tiny, data, 0, 2);
+    // lớp 0: x trung bình = (2, 1, 0) → đóng góp (4, 0,5, 0)
+    expect(top.map((c) => c.index)).toEqual([0, 1]);
+    expect(top[0]!.value).toBeCloseTo(4, 6);
+    expect(top[0]!.weight).toBeCloseTo(2, 6);
+    expect(top[0]!.meanX).toBeCloseTo(2, 6);
+    expect(classContributions(tiny, data, 1, 1)[0]).toMatchObject({ index: 2 });
+  });
+
+  test('lớp không có ảnh nào: không có đóng góp', () => {
+    expect(classContributions(tiny, { xs: data.xs, ys: [0, 0, 0, 0] }, 1, 3)).toEqual([]);
+  });
+
+  test('ảnh có điểm (logit) cao nhất cho lớp k', () => {
+    // điểm lớp 1: -0,1 ; -2,6 ; 6,15 ; 11,9
+    expect(topScoring(tiny, data.xs, 1, 2)).toEqual([
+      { index: 3, score: expect.closeTo(11.9, 5) },
+      { index: 2, score: expect.closeTo(6.15, 5) },
+    ]);
+  });
+
+  test('thứ tự từ lớn đến nhỏ (bằng nhau thì số thứ tự nhỏ trước)', () => {
+    expect(rankOrder([0.5, -2, 3, 0.5])).toEqual([2, 0, 3, 1]);
+  });
+
+  test('trên dữ liệu huấn luyện thật: đóng góp lớn nhất của mỗi lớp là dương sau khi học', () => {
+    const last = params.at(-1)!;
+    for (let k = 0; k < last.numClasses; k++) {
+      expect(classContributions(last, train, k, 1)[0]!.value).toBeGreaterThan(0);
+    }
+  });
+});
+

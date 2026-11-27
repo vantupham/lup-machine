@@ -624,7 +624,9 @@
         "few": "Short ({{n}})",
         "medium": "Medium ({{n}})",
         "many": "Long ({{n}})"
-      }
+      },
+      "play": "Play",
+      "pause": "Pause"
     },
     "evaluate": {
       "title": "Evaluate",
@@ -1075,13 +1077,13 @@
     "weightMap": {
       "title": "Weights of the Dense layer (epoch {{epoch}})",
       "exactHint": "Exactly the weights saved after each epoch, tied to the replay slider above.",
-      "lead": "Each class has 1280 weights, one per cell. Drag the replay slider to watch them form.",
+      "lead": "Each class has 1280 weights. These are the ones that matter most.",
       "delta": "Show only the change from the previous epoch",
       "rowLabel": "1280 weights of class {{cls}}",
       "deltaLabel": "Change of the 1280 weights of class {{cls}} in this epoch",
-      "colorNote": "Blue: positive (a strongly active cell raises the class score), orange: negative. Click a cell to see what it is.",
-      "cell": "Cell number (0 to {{max}})",
-      "cellTitle": "Cell {{j}}: weight for each class",
+      "colorNote": "Blue: positive, adds points. Orange: negative, takes points away. Click a feature or a bar for details.",
+      "cell": "Feature number (0 to {{max}})",
+      "cellTitle": "Feature {{j}}: weight for each class",
       "topImages": "Training images with the largest number {{j}}:",
       "cellNote": "A large positive weight for a class means: images that activate this cell strongly get points for that class.",
       "normTitle": "Size of the weights by epoch",
@@ -1089,7 +1091,11 @@
       "batchLossTitle": "Loss per batch",
       "batchLossChart": "Loss per batch ({{perEpoch}} batches per epoch)",
       "batchAxis": "batch {{n}}",
-      "batchLossNote": "A jagged line: each batch holds different images, so the loss goes up and down, but the trend usually falls."
+      "batchLossNote": "A jagged line: each batch holds different images, so the loss goes up and down, but the trend usually falls.",
+      "topFeatures": "Features adding the most points (average over this class's images)",
+      "featureLabel": "Feature {{j}}: adds {{value}} points to {{cls}} on average",
+      "prototypes": "Images scored highest for \"{{cls}}\"",
+      "profileCaption": "1280 weights, sorted largest to smallest at the last epoch"
     }
   },
   "samples": {

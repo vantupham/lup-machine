@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import i18n from '@/i18n';
 import { FEATURE_MODEL_ID } from '@/core/ml/feature-model';
@@ -247,10 +247,18 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     await userEvent.click(within(map).getByRole('checkbox', { name: /phần thay đổi/ }));
     expect(within(map).getAllByRole('img', { name: /^Thay đổi của 1280 trọng số lớp/ })).toHaveLength(2);
 
-    // Ảnh giả: số 0 của vector = màu / 255 → lớp "Giấy" (màu sáng) có số 0 lớn nhất.
-    fireEvent.change(within(map).getByLabelText('Ô số (0 đến 1279)'), { target: { value: '0' } });
+    // Mỗi lớp: 6 đặc trưng cộng điểm nhiều nhất và 3 ảnh được chấm cao nhất.
+    const first = within(map).getByTestId('weight-class-0');
+    expect(within(first).getAllByRole('button', { name: /^Đặc trưng \d+: trung bình cộng/ })).toHaveLength(6);
+    expect(first.querySelectorAll('img').length).toBeGreaterThanOrEqual(6 + 3);
+    await userEvent.click(within(first).getAllByRole('button', { name: /^Đặc trưng \d+: trung bình cộng/ })[0]!);
+    expect(within(map).getByTestId('weight-cell')).toHaveTextContent(/Đặc trưng \d+: trọng số của từng lớp/);
+
+    // Chuyên sâu: gõ số đặc trưng. Ảnh giả: số 0 của vector = màu / 255 → lớp "Giấy" (màu sáng) có số 0 lớn nhất.
+    act(() => useModeStore.setState({ mode: 'expert' }));
+    fireEvent.change(within(map).getByLabelText('Đặc trưng số (0 đến 1279)'), { target: { value: '0' } });
     const cell = within(map).getByTestId('weight-cell');
-    expect(cell).toHaveTextContent('Ô 0: trọng số của từng lớp');
+    expect(cell).toHaveTextContent('Đặc trưng 0: trọng số của từng lớp');
     expect(within(cell).getAllByText(/^x\[0\] = 0,9/)).toHaveLength(3);
 
     await userEvent.click(within(map).getByText('Loss theo từng lô'));
