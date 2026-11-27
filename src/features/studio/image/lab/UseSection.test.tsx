@@ -112,6 +112,31 @@ describe('Bước 6: Sử dụng (Studio ảnh)', () => {
     expect(screen.getByText(/không lưu vào dự án/i)).toBeInTheDocument();
   });
 
+  test('Mã Python: chưa có ảnh thì nhắc; tải ảnh thì in xác suất từng lớp và câu trả lời như trên trang', async () => {
+    vi.mocked(codec.fileToStoredImage).mockResolvedValue(imageOf(240));
+    renderUse();
+    const code = screen.getByTestId('code-trace');
+    await userEvent.click(within(code).getByText('Mã Python'));
+    expect(within(code).getByText('Tải một ảnh lên để chạy mã với ảnh đó.')).toBeInTheDocument();
+    await userEvent.upload(screen.getByLabelText(/tải một ảnh lên để thử/i), new File(['x'], 'moi.jpg', { type: 'image/jpeg' }));
+    await screen.findByTestId('probe-verdict');
+    const jump = within(code).getByRole('button', { name: /Đến dòng in tiếp theo/ });
+    for (let i = 0; i < 3; i++) await userEvent.click(jump);
+    expect(within(code).getByTestId('code-trace-console').textContent).toMatch(/^Nhựa: \d+\.\d%\nGiấy: \d+\.\d%\nMáy đoán: Giấy$/);
+  });
+
+  test('Mã Python với ảnh phân vân: in "Máy chưa chắc"', async () => {
+    vi.mocked(codec.fileToStoredImage).mockResolvedValue(imageOf(128));
+    renderUse();
+    const code = screen.getByTestId('code-trace');
+    await userEvent.click(within(code).getByText('Mã Python'));
+    await userEvent.upload(screen.getByLabelText(/tải một ảnh lên để thử/i), new File(['x'], 'xam.jpg', { type: 'image/jpeg' }));
+    await screen.findByTestId('probe-uncertain');
+    const jump = within(code).getByRole('button', { name: /Đến dòng in tiếp theo/ });
+    for (let i = 0; i < 3; i++) await userEvent.click(jump);
+    expect(within(code).getByTestId('code-trace-console').textContent).toMatch(/Máy chưa chắc: cao nhất chỉ 5\d\.\d%$/);
+  });
+
   test('tệp không phải ảnh thì báo lỗi rõ ràng, không đoán', async () => {
     renderUse();
     const input = screen.getByLabelText(/tải một ảnh lên để thử/i);

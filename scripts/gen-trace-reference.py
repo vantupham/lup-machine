@@ -130,10 +130,51 @@ def represent_reference() -> None:
     write("represent.reference.json", {"input": {"features": features.tolist(), "splits": splits, "index": 2}, "output": output})
 
 
+def model_fixture() -> tuple[np.ndarray, np.ndarray]:
+    """Mô hình nhỏ cố định: 3 lớp, 4 chiều (float32 như trình duyệt)."""
+    weights = np.array([[np.cos(k * 2.1 + j * 0.8) for j in range(4)] for k in range(3)], dtype=np.float32)
+    bias = np.array([0.1, -0.2, 0.05], dtype=np.float32)
+    return weights, bias
+
+
+def evaluate_reference() -> None:
+    weights, bias = model_fixture()
+    xs = np.array([[np.sin(i * 0.9 + j * 1.4) * 2 for j in range(4)] for i in range(9)], dtype=np.float32)
+    ys = np.array([0, 1, 0, 1, 0, 1, 1, 0, 1], dtype=np.int64)  # lớp 2 không có ảnh: phải bỏ qua
+    output, _ = run(
+        "evaluate.py",
+        {"X": xs.astype(np.float64), "y": ys, "W": weights.astype(np.float64), "b": bias.astype(np.float64), "CLASS_NAMES": ["A", "B", "C"]},
+    )
+    write(
+        "evaluate.reference.json",
+        {"input": {"xs": xs.tolist(), "ys": ys.tolist(), "weights": weights.tolist(), "bias": bias.tolist()}, "output": output},
+    )
+
+
+def predict_reference() -> None:
+    weights, bias = model_fixture()
+    cases = []
+    for vector in ([1.5, -0.3, 0.8, 0.2], [0.05, 0.02, -0.04, 0.01]):  # một ảnh chắc chắn, một ảnh "chưa chắc"
+        x = np.array(vector, dtype=np.float32)
+        original = lup_helpers.mobilenet_v2
+        lup_helpers.mobilenet_v2 = lambda images, x=x: x.astype(np.float64)[None]
+        try:
+            output, _ = run(
+                "predict.py",
+                {"image": np.zeros((1, 1, 3)), "W": weights.astype(np.float64), "b": bias.astype(np.float64), "CLASS_NAMES": ["A", "B", "C"], "UNCERTAIN_BELOW": 0.6},
+            )
+        finally:
+            lup_helpers.mobilenet_v2 = original
+        cases.append({"vector": x.tolist(), "output": output})
+    write("predict.reference.json", {"weights": weights.tolist(), "bias": bias.tolist(), "cases": cases})
+
+
 def main() -> None:
     softmax_reference()
     data_check_reference()
     represent_reference()
+    evaluate_reference()
+    predict_reference()
 
 
 if __name__ == "__main__":
