@@ -4,6 +4,13 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Studio âm thanh và tư thế: Mã Python ở bước 3 và 6)
+
+- **Âm thanh, bước 3**: `audio_pool.py` gộp ảnh phổ mel (40 dải × 97 khung) của đoạn đang xem thành 160 số theo 4 phần thời gian. Ranh giới làm tròn như trình duyệt (`int(x + 0.5)`, vì `round()` của Python cho 48 ở 48,5).
+- **Tư thế, bước 3**: `pose_features.py` dời gốc tọa độ về giữa hông (cổ tay), chia cho chiều dài thân (lòng bàn tay), khớp không thấy rõ thành 0; tên khớp theo ngôn ngữ đang dùng, giống bảng tọa độ.
+- **Bước 6 (cả hai)**: `knn_predict.py` chạy với mẫu đang thử khi mô hình là k-NN (tư thế: ảnh tải lên, camera tắt). Hồi quy logistic có ghi chú. `knn_predict.py` dùng chung với Studio bảng số, nay in tên mẫu (`NAMES`).
+- Số đối chiếu Python (`sensor.reference.json`) cho cơ thể, bàn tay và âm thanh.
+
 ### Thêm (Studio bảng số: Mã Python ở bước 3 và 6)
 
 - **Bước 3**: `tabular_scale.py` chuẩn hóa các cột số của tập Huấn luyện (trung bình, độ lệch chuẩn, cột không đổi giữ nguyên), in giá trị dòng đầu trước / sau.

@@ -48,14 +48,15 @@ export function ScaleCode({ data }: { readonly data: PreparedData }) {
 
 const PROGRAMS = { tree: TREE_PREDICT_PROGRAM, knn: KNN_PREDICT_PROGRAM, 'knn-regression': KNN_PREDICT_PROGRAM, linear: LINEAR_PREDICT_PROGRAM, logistic: null } as const;
 
-function factoryFor(trained: TrainedModel, data: PreparedData, row: { raw: number[]; scaled: number[] }): TraceFactory | null {
+function factoryFor(trained: TrainedModel, data: PreparedData, row: { raw: number[]; scaled: number[] }, rowName: (n: number) => string): TraceFactory | null {
   switch (trained.kind) {
     case 'tree':
       return () => traceTreePredict({ x: row.raw, tree: trained.tree, features: data.featureNames, classNames: data.classNames });
     case 'knn':
     case 'knn-regression': {
       const task = trained.kind === 'knn' ? 'classification' : 'regression';
-      const input = { x: row.scaled, train: trained.train.scaled, ys: trained.train.y, rowNumbers: trained.train.rowNumbers, k: trained.k, task, classNames: data.classNames } as const;
+      const names = trained.train.rowNumbers.map((n) => rowName(n));
+      const input = { x: row.scaled, train: trained.train.scaled, ys: trained.train.y, names, k: trained.k, task, classNames: data.classNames } as const;
       return () => traceKnnPredict(input);
     }
     case 'linear':
@@ -71,8 +72,8 @@ export function PredictCode({ trained, data, row }: { readonly trained: TrainedM
   // Dòng đang thử là đối tượng mới sau mỗi lần vẽ: so theo giá trị để khung mã không bị đặt lại vô cớ.
   const rowKey = row ? JSON.stringify(row) : null;
   const create = useMemo(
-    () => (rowKey === null ? null : factoryFor(trained, data, JSON.parse(rowKey) as { raw: number[]; scaled: number[] })),
-    [trained, data, rowKey],
+    () => (rowKey === null ? null : factoryFor(trained, data, JSON.parse(rowKey) as { raw: number[]; scaled: number[] }, (n) => t('tabular.code.rowName', { n }))),
+    [trained, data, rowKey, t],
   );
   const program = PROGRAMS[trained.kind];
   if (!program) return <p className="text-sm text-muted">{t('tabular.code.logisticOnly')}</p>;

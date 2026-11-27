@@ -1,6 +1,6 @@
 /**
  * Vết chạy các chương trình Python của Studio bảng số: `tabular_scale.py` (bước 3: chuẩn hóa) và
- * dự đoán một dòng ở bước 6 bằng `tree_predict.py`, `knn_predict.py`, `linear_predict.py`.
+ * dự đoán một dòng ở bước 6 bằng `tree_predict.py`, `knn_predict.py` (dùng chung với âm thanh, tư thế), `linear_predict.py`.
  * Dùng đúng mô hình và bộ mã hóa của trang (src/core/tabular, src/core/algorithms), nên kết quả trùng trang.
  */
 import type { DecisionTree } from '@/core/algorithms/decision-tree';
@@ -132,7 +132,7 @@ const KNN = linesOf(KNN_PREDICT_PROGRAM, {
   distances: 'distances = np.sqrt(',
   nearest: 'nearest = np.argsort(',
   loop: 'for i in nearest',
-  print: 'print(f"dòng {ROWS[i]}',
+  print: 'print(f"{NAMES[i]}',
   ifTask: 'if TASK == "classification"',
   votes: 'votes = np.bincount(',
   printVotes: 'print(f"Phiếu',
@@ -145,14 +145,15 @@ export interface KnnPredictInput {
   readonly train: readonly (readonly number[])[];
   /** Lớp (phân loại) hoặc giá trị (hồi quy) của từng dòng Huấn luyện. */
   readonly ys: readonly number[];
-  readonly rowNumbers: readonly number[];
+  /** Tên từng mẫu Huấn luyện để in ("dòng 12", "Vỗ tay #3"). */
+  readonly names: readonly string[];
   readonly k: number;
   readonly task: 'classification' | 'regression';
   readonly classNames: readonly string[];
 }
 
 export function* traceKnnPredict(input: KnnPredictInput): Generator<TraceStep, void, void> {
-  const { x, train, ys, rowNumbers, k, task, classNames } = input;
+  const { x, train, ys, names: sampleNames, k, task, classNames } = input;
   yield step(KNN.inputs, {
     x: array(x, { shape: [x.length], size: SHOWN_ITEMS }),
     X_train: array(train[0] ?? [], { shape: [train.length, x.length], view: 'X_train[0]', size: SHOWN_ITEMS }),
@@ -170,7 +171,7 @@ export function* traceKnnPredict(input: KnnPredictInput): Generator<TraceStep, v
   yield step(KNN.nearest, { nearest: array(nearest, { shape: [nearest.length], isInt: true, size: k }) });
   for (const i of nearest) {
     yield step(KNN.loop, { i: scalar(i, true) });
-    yield step(KNN.print, {}, `dòng ${rowNumbers[i]}: khoảng cách ${pythonFixed(distances[i]!, 3)}`);
+    yield step(KNN.print, {}, `${sampleNames[i]}: khoảng cách ${pythonFixed(distances[i]!, 3)}`);
   }
   yield step(KNN.ifTask);
   if (task === 'classification') {

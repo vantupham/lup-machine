@@ -21,6 +21,14 @@ function render(repos: TestRepositories, projectId: string) {
 const SLOW_TEST_MS = 30_000;
 configure({ asyncUtilTimeout: 10_000 });
 
+/** Khung "Mã Python" của một chương trình; mở ra rồi chạy tới dòng in thứ `times`. */
+async function runCode(file: string, times: number): Promise<string[]> {
+  const code = document.querySelector<HTMLElement>(`[data-program="${file}"]`)!;
+  if (!code.hasAttribute('open')) await userEvent.click(within(code).getByText('Mã Python'));
+  for (let i = 0; i < times; i++) await userEvent.click(within(code).getByRole('button', { name: /Đến dòng in tiếp theo/ }));
+  return within(code).getByTestId('code-trace-console').textContent!.split(String.fromCharCode(10));
+}
+
 beforeEach(() => {
   // Các kiểm thử 6 bước dùng Chuyên sâu (chỉ có 6 bước); khối làm nhanh kiểm thử riêng ở Khám phá.
   useModeStore.setState({ mode: 'expert' });
@@ -43,18 +51,24 @@ describe('Studio âm thanh', () => {
     expect(screen.getByTestId('pooled-grid').querySelectorAll('rect')).toHaveLength(160);
     fireEvent.change(screen.getByLabelText('Khung thời gian'), { target: { value: '50' } });
     expect(screen.getByRole('img', { name: 'Phổ công suất của khung 51' })).toBeInTheDocument();
+    const pooled = await runCode('audio_pool.py', 4);
+    expect(pooled.map((l) => l.split(',')[0])).toEqual(['phần 1: khung 0 đến 23', 'phần 2: khung 24 đến 48', 'phần 3: khung 49 đến 72', 'phần 4: khung 73 đến 96']);
 
     await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
     expect(await screen.findByTestId('tabular-confusion')).toBeInTheDocument();
     expect(screen.getByTestId('studio-findings')).toHaveTextContent('Điểm đáng chú ý');
     for (const c of [0, 1, 2]) expect(screen.getByTestId(`importance-${c}`).querySelectorAll('rect')).toHaveLength(160);
     expect(screen.getByText('Thu 1 giây hoặc tải một tệp âm thanh để thử.')).toBeInTheDocument();
+    expect(screen.getByText(/Mã chạy từng dòng có cho k láng giềng/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('radio', { name: /k láng giềng/ }));
     expect(screen.getByText(/bấm Huấn luyện để cập nhật/)).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
     expect(await screen.findByText(/k-NN không học trọng số/)).toBeInTheDocument();
+    const knnCode = document.querySelector<HTMLElement>('[data-program="knn_predict.py"]')!;
+    await userEvent.click(within(knnCode).getByText('Mã Python'));
+    expect(within(knnCode).getByText('Thu hoặc tải một đoạn âm thanh để chạy mã với đoạn đó.')).toBeInTheDocument();
     // Nhật ký thí nghiệm: lần 2 đổi mô hình so với lần 1
     expect(await screen.findByText('Kết quả so với lần #1')).toBeInTheDocument();
     expect(within(screen.getByRole('table', { name: 'Nhật ký thí nghiệm' })).getByTestId('trial-row-2')).toHaveTextContent('mô hình: Hồi quy logistic → k-NN');

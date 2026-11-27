@@ -1,5 +1,6 @@
 /** Bước 4 Huấn luyện, 5 Đánh giá, 6 Sử dụng của Studio tư thế. */
 import { useCallback, useState } from 'react';
+import { VectorKnnCode } from '@/features/code-trace/VectorKnnCode';
 import type { VectorModel } from '@/features/studio/quick/useVectorModel';
 import { TrialBefore } from '@/features/trials/TrialBefore';
 import { TrialAfter } from '@/features/trials/TrialAfter';
@@ -78,41 +79,44 @@ function TryPose({ kind, trained, data }: { readonly kind: PoseKind; readonly tr
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      <div className="space-y-3">
-        <div className="flex flex-wrap gap-2">
-          <button type="button" className="btn btn-primary text-sm" onClick={() => setLive(!live)}>{live ? t('pose.data.cameraOff') : t('pose.use.live')}</button>
-          <label className="btn btn-ghost cursor-pointer text-sm">
-            {t('pose.data.upload')}
-            <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
-              const file = e.target.files?.[0];
-              e.target.value = '';
-              if (file) void upload(file);
-            }} />
-          </label>
-        </div>
-        {live && <PoseCamera kind={kind} onDetection={onDetection} jointValues={jointValues} />}
-        {!live && detection && <Skeleton kind={kind} keypoints={detection.keypoints} width={detection.width} height={detection.height} label={t('pose.camera.overlay')} jointValues={jointValues} testId="pose-try-skeleton" />}
-        {error && <p role="alert" className="text-sm text-danger">{error}</p>}
-        {!detection && <p className="text-sm text-muted">{t('pose.use.empty')}</p>}
-        {detection && !features && <p role="status" className="text-sm text-warning">{t(`pose.inspector.cannotNormalize.${kind}`)}</p>}
-      </div>
-      {prediction && (
-        <section aria-labelledby="pose-why-title" className="lab-card space-y-3 p-4">
-          <Prediction prediction={prediction} data={data} />
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 id="pose-why-title" className="font-semibold">{t('text.use.whyTitle')}</h3>
-            <ExactBadge label={t('playground.exact')} hint={t('pose.use.whyHint')} />
+    <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className="btn btn-primary text-sm" onClick={() => setLive(!live)}>{live ? t('pose.data.cameraOff') : t('pose.use.live')}</button>
+            <label className="btn btn-ghost cursor-pointer text-sm">
+              {t('pose.data.upload')}
+              <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
+                const file = e.target.files?.[0];
+                e.target.value = '';
+                if (file) void upload(file);
+              }} />
+            </label>
           </div>
-          {contribution ? (
-            <p className="text-xs text-muted">{t('pose.use.contributionHint', { cls: data.classNames[prediction.label], base: contribution.base.toFixed(3), total: contribution.total.toFixed(3) })}</p>
-          ) : (
-            <p className="text-sm" data-testid="pose-neighbors">
-              {t('pose.use.neighbors', { k: prediction.neighbors?.length ?? 0, labels: prediction.neighbors?.map((n) => data.classNames[data.train.ys[n.index] as number]).join(', ') })}
-            </p>
-          )}
-        </section>
-      )}
+          {live && <PoseCamera kind={kind} onDetection={onDetection} jointValues={jointValues} />}
+          {!live && detection && <Skeleton kind={kind} keypoints={detection.keypoints} width={detection.width} height={detection.height} label={t('pose.camera.overlay')} jointValues={jointValues} testId="pose-try-skeleton" />}
+          {error && <p role="alert" className="text-sm text-danger">{error}</p>}
+          {!detection && <p className="text-sm text-muted">{t('pose.use.empty')}</p>}
+          {detection && !features && <p role="status" className="text-sm text-warning">{t(`pose.inspector.cannotNormalize.${kind}`)}</p>}
+        </div>
+        {prediction && (
+          <section aria-labelledby="pose-why-title" className="lab-card space-y-3 p-4">
+            <Prediction prediction={prediction} data={data} />
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 id="pose-why-title" className="font-semibold">{t('text.use.whyTitle')}</h3>
+              <ExactBadge label={t('playground.exact')} hint={t('pose.use.whyHint')} />
+            </div>
+            {contribution ? (
+              <p className="text-xs text-muted">{t('pose.use.contributionHint', { cls: data.classNames[prediction.label], base: contribution.base.toFixed(3), total: contribution.total.toFixed(3) })}</p>
+            ) : (
+              <p className="text-sm" data-testid="pose-neighbors">
+                {t('pose.use.neighbors', { k: prediction.neighbors?.length ?? 0, labels: prediction.neighbors?.map((n) => data.classNames[data.train.ys[n.index] as number]).join(', ') })}
+              </p>
+            )}
+          </section>
+        )}
+      </div>
+      <VectorKnnCode trained={trained} data={data} encoded={live ? null : encoded} emptyHint={t('pose.code.empty')} />
     </div>
   );
 }

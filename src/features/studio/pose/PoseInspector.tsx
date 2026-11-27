@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { PoseFeaturesCode } from '@/features/code-trace/SensorCode';
 import { useTranslation } from 'react-i18next';
 import { keypointNames, MIN_KEYPOINT_SCORE, normalizationFrame, poseFeatures, unpackKeypoints, type PoseKind } from '@/core/pose/features';
 import { SelectField } from '@/features/playground/controls';
@@ -91,6 +92,7 @@ export function PoseInspector({ kind, classes, poses }: { readonly kind: PoseKin
         </table>
         <p className="mt-1 text-xs text-muted">{t('pose.inspector.tableHint', { min: MIN_KEYPOINT_SCORE })}</p>
       </div>
+      <PoseFeaturesCode kind={kind} keypoints={keypoints} canNormalize={features !== null} />
     </div>
   );
 }

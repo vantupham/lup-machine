@@ -1469,7 +1469,8 @@
     "code": {
       "noNumeric": "The table has no numeric column to standardise.",
       "invalidRow": "Fix the cells of the row being tried to run the code.",
-      "logisticOnly": "Line-by-line code is available for the decision tree, k-NN and linear regression. Logistic regression uses L-BFGS, too many operations to step through."
+      "logisticOnly": "Line-by-line code is available for the decision tree, k-NN and linear regression. Logistic regression uses L-BFGS, too many operations to step through.",
+      "rowName": "row {{n}}"
     }
   },
   "export": {
@@ -1736,6 +1737,9 @@
       "tryFile": "Try with an audio file",
       "tryFileShort": "Try a file",
       "play": "Play again"
+    },
+    "code": {
+      "empty": "Record or upload a clip to run the code on it."
     }
   },
   "pose": {
@@ -1929,6 +1933,10 @@
       "tryFile": "Try with an image",
       "tryFileShort": "Try an image",
       "noPose": "No clear pose in the frame yet."
+    },
+    "code": {
+      "empty": "Upload an image (with the camera off) to run the code on that pose.",
+      "cannotNormalize": "This sample lacks reliable joints to normalise."
     }
   },
   "theme": {
@@ -2114,7 +2122,9 @@
     "console": "Output (print)",
     "consoleEmpty": "Nothing printed yet.",
     "toNextPrint": "To next print",
-    "positionLine": "Line {{line}}"
+    "positionLine": "Line {{line}}",
+    "sampleName": "{{cls}} #{{n}}",
+    "knnOnly": "Line-by-line code is available for k nearest neighbours. Logistic regression uses L-BFGS, too many operations to step through."
   },
   "autosave": {
     "saving": "Saving…",

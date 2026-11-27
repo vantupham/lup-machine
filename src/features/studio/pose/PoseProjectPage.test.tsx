@@ -17,6 +17,14 @@ function render(repos: TestRepositories, projectId: string) {
   return renderWithRepositories(`/studio/${projectId}`, repos);
 }
 
+/** Khung "Mã Python" của một chương trình; mở ra rồi chạy tới dòng in thứ `times`. */
+async function runCode(file: string, times: number): Promise<string[]> {
+  const code = document.querySelector<HTMLElement>(`[data-program="${file}"]`)!;
+  if (!code.hasAttribute('open')) await userEvent.click(within(code).getByText('Mã Python'));
+  for (let i = 0; i < times; i++) await userEvent.click(within(code).getByRole('button', { name: /Đến dòng in tiếp theo/ }));
+  return within(code).getByTestId('code-trace-console').textContent!.split(String.fromCharCode(10));
+}
+
 beforeEach(() => {
   // Các kiểm thử 6 bước dùng Chuyên sâu (chỉ có 6 bước); khối làm nhanh kiểm thử riêng ở Khám phá.
   useModeStore.setState({ mode: 'expert' });
@@ -38,6 +46,9 @@ describe('Studio tư thế & bàn tay', () => {
     expect(within(table).getAllByRole('rowheader')).toHaveLength(17);
     expect(within(table).getByRole('rowheader', { name: 'vai trái' })).toBeInTheDocument();
     expect(screen.getByTestId('pose-normalized').querySelectorAll('circle')).toHaveLength(17);
+    const joints = await runCode('pose_features.py', 17);
+    expect(joints).toHaveLength(17);
+    expect(joints[5]).toMatch(/^vai trái: /);
 
     await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
     expect(await screen.findByTestId('tabular-confusion')).toBeInTheDocument();
@@ -49,6 +60,9 @@ describe('Studio tư thế & bàn tay', () => {
     await userEvent.click(screen.getByRole('radio', { name: /k láng giềng/ }));
     await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
     expect(await screen.findByText(/k-NN không học trọng số/)).toBeInTheDocument();
+    const knnCode = document.querySelector<HTMLElement>('[data-program="knn_predict.py"]')!;
+    await userEvent.click(within(knnCode).getByText('Mã Python'));
+    expect(within(knnCode).getByText('Tải một ảnh lên (camera đang tắt) để chạy mã với tư thế đó.')).toBeInTheDocument();
     // Nhật ký thí nghiệm: lần 2 đổi mô hình so với lần 1
     expect(await screen.findByText('Kết quả so với lần #1')).toBeInTheDocument();
     expect(within(screen.getByRole('table', { name: 'Nhật ký thí nghiệm' })).getByTestId('trial-row-2')).toHaveTextContent('mô hình: Hồi quy logistic → k-NN');
