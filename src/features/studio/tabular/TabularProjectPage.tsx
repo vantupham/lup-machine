@@ -21,6 +21,7 @@ import { DataSection } from './DataSection';
 import { EvaluateSection } from './EvaluateSection';
 import { ModelSection } from './ModelSection';
 import { RepresentSection } from './RepresentSection';
+import { ScaleCode } from './TabularCodePanels';
 import { SetupSection } from './SetupSection';
 import { initialConfig, isConfigValid } from './tabular-config';
 import { findTabularSample, type TabularSampleId } from './tabular-samples';
@@ -143,6 +144,7 @@ export function TabularProjectPage({ projectId }: { readonly projectId: string }
         <>
           <Step n={3} id="tab-step-represent" notebook="represent" title={t('tabular.steps.represent')}>
             <RepresentSection data={data} />
+            <ScaleCode data={data} />
           </Step>
           <Step n={4} id="tab-step-train" notebook="train" title={t('tabular.steps.train')} done={current !== null}>
             {trialSetup && current === null && <TrialBefore log={trialLog} current={trialSetup} canGuess={canGuess} />}

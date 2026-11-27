@@ -1465,6 +1465,11 @@
       "tryNext": "Dòng Kiểm tra tiếp theo",
       "rowActual": "Dòng {{row}}: {{target}} thật là {{actual}}.",
       "predictedValue": "Máy đoán {{value}}"
+    },
+    "code": {
+      "noNumeric": "Bảng chưa có cột số nào để chuẩn hóa.",
+      "invalidRow": "Sửa các ô của dòng đang thử cho hợp lệ để chạy mã.",
+      "logisticOnly": "Mã chạy từng dòng có cho cây quyết định, k-NN và hồi quy tuyến tính. Hồi quy logistic dùng L-BFGS, quá nhiều phép tính để chạy từng dòng."
     }
   },
   "export": {

@@ -208,6 +208,53 @@ def text_reference() -> None:
     )
 
 
+def tabular_reference() -> None:
+    """Studio bảng số: chuẩn hóa, và dự đoán một dòng bằng cây quyết định, k-NN, hồi quy tuyến tính."""
+    columns = ["Chiều dài", "Cân nặng", "Không đổi"]
+    rows = np.array([[39.1, 3750, 5], [46.5, 4200, 5], [50.0, 5400, 5], [36.7, 3450, 5], [45.2, 4800, 5]], dtype=np.float64)
+    scale_out, _ = run("tabular_scale.py", {"X": rows.copy(), "COLUMNS": columns})
+
+    tree = [
+        {"split": {"feature": 0, "threshold": 42.35, "left": 1, "right": 2}, "counts": [2, 2, 1]},
+        {"split": None, "counts": [2, 0, 0]},
+        {"split": {"feature": 1, "threshold": 4500.0, "left": 3, "right": 4}, "counts": [0, 2, 1]},
+        {"split": None, "counts": [0, 2, 0]},
+        {"split": None, "counts": [0, 0, 1]},
+    ]
+    features = ["Chiều dài", "Cân nặng"]
+    classes = ["Adelie", "Chinstrap", "Gentoo"]
+    x_tree = [46.5, 4200.0]
+    tree_out, _ = run("tree_predict.py", {"x": x_tree, "tree": tree, "FEATURES": features, "CLASS_NAMES": classes})
+
+    x_train = np.array([[0.1, -0.5], [1.2, 0.3], [-0.7, 0.9], [0.4, 0.4], [-1.1, -1.0], [0.0, 0.2]])
+    labels = np.array([0, 1, 2, 1, 0, 2])
+    values = np.array([3.5, 4.25, 5.0, 4.0, 3.25, 4.75])
+    x_knn = np.array([0.2, 0.1])
+    rows_knn = [3, 5, 8, 9, 12, 14]
+    knn_cls, _ = run("knn_predict.py", {"x": x_knn, "X_train": x_train, "y_train": labels, "K": 3, "ROWS": rows_knn, "TASK": "classification", "CLASS_NAMES": classes})
+    knn_reg, _ = run("knn_predict.py", {"x": x_knn, "X_train": x_train, "y_train": values, "K": 3, "ROWS": rows_knn, "TASK": "regression", "CLASS_NAMES": []})
+
+    w, b, x_lin = [0.125, -2.5, 30.0], 1.75, [12.0, 0.4, 0.0]
+    linear_out, _ = run("linear_predict.py", {"x": x_lin, "w": w, "b": b, "FEATURES": columns})
+    write(
+        "tabular.reference.json",
+        {
+            "scale": {"rows": rows.tolist(), "columns": columns, "output": scale_out},
+            "tree": {"nodes": tree, "x": x_tree, "features": features, "classNames": classes, "output": tree_out},
+            "knn": {
+                "train": x_train.tolist(),
+                "labels": labels.tolist(),
+                "values": values.tolist(),
+                "x": x_knn.tolist(),
+                "rows": rows_knn,
+                "classification": knn_cls,
+                "regression": knn_reg,
+            },
+            "linear": {"w": w, "b": b, "x": x_lin, "features": columns, "output": linear_out},
+        },
+    )
+
+
 def main() -> None:
     softmax_reference()
     data_check_reference()
@@ -215,6 +262,7 @@ def main() -> None:
     evaluate_reference()
     predict_reference()
     text_reference()
+    tabular_reference()
 
 
 if __name__ == "__main__":

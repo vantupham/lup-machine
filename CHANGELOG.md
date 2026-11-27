@@ -4,6 +4,12 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Studio bảng số: Mã Python ở bước 3 và 6)
+
+- **Bước 3**: `tabular_scale.py` chuẩn hóa các cột số của tập Huấn luyện (trung bình, độ lệch chuẩn, cột không đổi giữ nguyên), in giá trị dòng đầu trước / sau.
+- **Bước 6**: chạy dự đoán dòng đang thử bằng đúng mô hình vừa huấn luyện: `tree_predict.py` (đi từng câu hỏi của cây tới lá), `knn_predict.py` (khoảng cách, K láng giềng, bỏ phiếu hoặc trung bình), `linear_predict.py` (cộng đóng góp từng cột). Hồi quy logistic (L-BFGS) không chạy từng dòng; trang nói rõ điều đó.
+- Số đối chiếu Python (`tabular.reference.json`) cho cả 4 chương trình, kể cả k-NN hồi quy và cột không đổi.
+
 ### Thêm (Studio văn bản: Mã Python ở bước 3, 4, 6)
 
 - **Bước 3**: `text_vectorize.py` chạy với câu đang xem: tách âm tiết (và cụm 2 âm tiết), đếm theo bộ từ vựng, idf, TF-IDF chia độ dài; dòng in trùng từng chữ với bảng TF-IDF bên cạnh.
