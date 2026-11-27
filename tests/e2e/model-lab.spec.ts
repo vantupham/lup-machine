@@ -85,6 +85,15 @@ test('quy trình đầy đủ với MobileNetV2 thật: dữ liệu → biểu d
   const testScore = Number((await page.getByTestId('score-test').textContent())?.replace(',', '.').replace(/[^\d.]/g, ''));
   expect(testScore).toBeGreaterThanOrEqual(75);
 
+  // Khung "Mã Python": chạy lại chương trình với vector MobileNet thật vừa tính.
+  const trace = page.getByTestId('code-trace');
+  await trace.getByText('Mã Python', { exact: true }).click();
+  await trace.getByRole('button', { name: /Chạy 1 dòng/ }).click();
+  await expect(trace.getByRole('region', { name: 'Biến' })).toContainText('X_train(16, 1280)');
+  await trace.getByRole('button', { name: /Đến hết epoch/ }).click();
+  await expect(trace.getByTestId('code-trace-console')).toHaveText(/^epoch 1: loss \d\.\d{3}, đúng \d+%$/);
+  await expect(trace.locator('li[aria-current="step"]')).toContainText('print(f"epoch');
+
   // Giai đoạn 3: tải notebook Colab chứa đặc trưng thật vừa tính trong trình duyệt.
   // Đặt NOTEBOOK_DIR để lưu lại rồi chạy thật bằng scripts/check-notebooks.py.
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Tải notebook (.ipynb)' }).click()]);

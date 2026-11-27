@@ -4,6 +4,13 @@
 
 ## [Chưa phát hành]
 
+### Thêm (khung "Mã Python" ở bước Huấn luyện của Studio ảnh)
+
+- **Bước 4 Huấn luyện có khung "Mã Python"** (thu gọn sẵn ở cả Khám phá và Chuyên sâu): chương trình numpy 27 dòng làm đúng việc trình duyệt vừa làm (khởi tạo trọng số, trộn, chia lô, softmax, loss, đạo hàm, Adam, chấm điểm mỗi epoch).
+- **Chạy từng dòng với số thật** của lần huấn luyện vừa rồi: dòng đang chạy được tô sáng; bảng Biến hiện kích thước và vài số đầu của mỗi biến, biến vừa đổi được tô màu; Màn hình hiện các dòng `print`. Nút Về đầu, Chạy 1 dòng, Chạy / Tạm dừng (3 tốc độ), Đến hết epoch. Huấn luyện lần mới thì khung bắt đầu lại.
+- **Đúng với Python thật**: vết chạy dùng chung hàm và dãy số ngẫu nhiên với `trainSoftmax` (trọng số trùng khớp tuyệt đối); `scripts/gen-trace-reference.py` chạy chính file `softmax_train.py` và ghi số đối chiếu, test so từng dòng in ra. Có thêm phần "Hàm hỗ trợ" (`lup_helpers.py`: mulberry32, Glorot, Fisher-Yates, Adam) cho cùng kết quả.
+- Phần dùng chung cho các bước và Studio sau: `src/core/trace` (chương trình, giá trị rút gọn, tô màu cú pháp Python tự viết), `src/features/code-trace` (`CodeTracePanel`, `useTracePlayer`).
+
 ### Thêm (khối "Dạy máy trong 3 bước" cho Studio văn bản và bảng số)
 
 - **Cả 5 Studio giờ đều có Khám phá / Chuyên sâu** và khối "Dạy máy trong 3 bước".

@@ -4,6 +4,8 @@ import type { EpochSnapshot, TrainOptions } from '@/core/ml/softmax-regression';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { imageNotebook } from '@/core/export/image-notebook';
 import { ColabExportPanel } from '@/features/export/ColabExportPanel';
+import { CodeTracePanel } from '@/features/code-trace/CodeTracePanel';
+import { HELPERS_PROGRAM, SOFTMAX_PROGRAM, traceSoftmaxTraining } from '@/core/trace/softmax-trace';
 import { version as appVersion } from '../../../../../package.json';
 import { EvaluateSection } from './EvaluateSection';
 import { ExperimentLog } from './ExperimentLog';
@@ -58,6 +60,13 @@ export function ModelLab({ projectName, classes, samples, improve }: ModelLabPro
           />
         )
       : undefined;
+  const hasRun = snapshots.length > 0;
+  /** Vết chạy mã Python với đúng dữ liệu và cài đặt của lần huấn luyện đang hiện. */
+  const createTrace = useMemo(() => {
+    if (!hasRun || !lastOptions || readiness.readiness !== 'ready') return null;
+    const { train, test } = readiness.data;
+    return () => traceSoftmaxTraining(train, test, lastOptions);
+  }, [hasRun, lastOptions, readiness]);
   const guessResult =
     training.status === 'done' && !isStale && lab.guess !== null && finalTest !== undefined ? { guess: lab.guess, actual: finalTest } : null;
 
@@ -94,6 +103,7 @@ export function ModelLab({ projectName, classes, samples, improve }: ModelLabPro
         }
         onStep={training.step}
         onFinish={training.finish}
+        codeTrace={<CodeTracePanel program={SOFTMAX_PROGRAM} helpers={HELPERS_PROGRAM} create={createTrace} />}
       />
       {isStale && <p role="status" className="text-sm text-warning"><RotateCcw /> {t('project.train.stale')}</p>}
       {lab.notice && (

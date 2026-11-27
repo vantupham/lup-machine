@@ -121,7 +121,7 @@ function validate(train: LabeledVectors, options: TrainOptions): void {
   if (!(Number.isInteger(options.batchSize) && options.batchSize > 0)) throw new RangeError('Batch size phải là số nguyên dương');
 }
 
-class AdamState {
+export class AdamState {
   private readonly m: Float64Array;
   private readonly v: Float64Array;
   private step = 0;
