@@ -7,11 +7,15 @@ import { NetworkMap } from './NetworkMap';
 import type { StoredImage } from '@/storage/db';
 import type { TrainingReadiness } from './lab-data';
 import type { TrainingSpeed, TrainingStatus } from './useTraining';
-import { ArrowRight, Info } from '@/ui/icons';
+import { ArrowRight, Info, Pause, Play } from '@/ui/icons';
+import { usePlayback } from '@/ui/usePlayback';
 import { StepNumber } from '@/ui/StepNumber';
 import { StepNotebook } from '@/features/notebook/StepNotebook';
 
 export const DEFAULT_TRAIN_OPTIONS: TrainOptions = { epochs: 50, learningRate: 0.001, batchSize: 16, seed: 42 };
+/** Cả lượt phát lại kéo dài chừng này (ms), mỗi epoch không nhanh hơn / chậm hơn giới hạn dưới đây. */
+const PLAYBACK_TOTAL_MS = 5000;
+const PLAYBACK_STEP_MS: readonly [number, number] = [40, 400];
 const LIMITS = { epochs: [1, 500], learningRate: [0.00001, 1], batchSize: [1, 256] } as const;
 const SPEEDS: readonly TrainingSpeed[] = ['normal', 'slow', 'step'];
 /** Chế độ Khám phá chọn số epoch theo 3 mức thay vì gõ số. */
@@ -229,12 +233,27 @@ function Charts({ snapshots, selectedEpoch, onSelectEpoch }: TrainSectionProps) 
         <LineChart title={t('project.train.chartAccuracy')} series={series((s) => s.train.accuracy * 100)} maxX={maxEpoch} yMax={100} markerX={selectedEpoch} />
         <LineChart title={t('project.train.chartLoss')} series={series((s) => s.train.loss)} maxX={maxEpoch} markerX={selectedEpoch} />
       </div>
-      <label className="block text-sm">
-        <span className="font-medium">{t('project.train.replay', { epoch: selectedEpoch ?? maxEpoch })}</span>
-        <input type="range" min={0} max={maxEpoch} value={selectedEpoch ?? maxEpoch} onChange={(e) => onSelectEpoch(Number(e.target.value))} className="mt-1 block w-full" />
-        <span className="text-xs text-muted">{t('project.train.replayHint')}</span>
-      </label>
+      <div className="flex items-end gap-3">
+        <PlayButton value={selectedEpoch ?? maxEpoch} max={maxEpoch} onChange={onSelectEpoch} />
+        <label className="block flex-1 text-sm">
+          <span className="font-medium">{t('project.train.replay', { epoch: selectedEpoch ?? maxEpoch })}</span>
+          <input type="range" min={0} max={maxEpoch} value={selectedEpoch ?? maxEpoch} onChange={(e) => onSelectEpoch(Number(e.target.value))} className="mt-1 block w-full" />
+        </label>
+      </div>
+      <p className="text-xs text-muted">{t('project.train.replayHint')}</p>
       <p className="text-xs text-muted"><Info /> {t('project.train.notSaved')}</p>
     </div>
+  );
+}
+
+/** Phát lại các epoch tự động: mọi biểu đồ và bản đồ trọng số chạy theo. */
+function PlayButton({ value, max, onChange }: { readonly value: number; readonly max: number; readonly onChange: (epoch: number) => void }) {
+  const { t } = useTranslation();
+  const stepMs = Math.min(PLAYBACK_STEP_MS[1], Math.max(PLAYBACK_STEP_MS[0], PLAYBACK_TOTAL_MS / Math.max(1, max)));
+  const { isPlaying, toggle } = usePlayback({ value, max, onChange, stepMs });
+  return (
+    <button type="button" className="btn btn-ghost" onClick={toggle} aria-pressed={isPlaying}>
+      {isPlaying ? <Pause /> : <Play />} {t(isPlaying ? 'project.train.pause' : 'project.train.play')}
+    </button>
   );
 }

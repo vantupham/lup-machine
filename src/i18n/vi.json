@@ -624,7 +624,9 @@
         "few": "Ít ({{n}})",
         "medium": "Vừa ({{n}})",
         "many": "Nhiều ({{n}})"
-      }
+      },
+      "play": "Phát",
+      "pause": "Dừng"
     },
     "evaluate": {
       "title": "Đánh giá",
@@ -1075,13 +1077,13 @@
     "weightMap": {
       "title": "Trọng số của tầng Dense (epoch {{epoch}})",
       "exactHint": "Đúng các trọng số đã lưu sau mỗi epoch, cùng thanh phát lại ở trên.",
-      "lead": "Mỗi lớp có 1280 trọng số, mỗi ô một trọng số. Kéo thanh phát lại để xem chúng hình thành.",
+      "lead": "Mỗi lớp có 1280 trọng số. Đây là những trọng số quyết định nhiều nhất.",
       "delta": "Chỉ hiện phần thay đổi so với epoch trước",
       "rowLabel": "1280 trọng số của lớp {{cls}}",
       "deltaLabel": "Thay đổi của 1280 trọng số lớp {{cls}} trong epoch này",
-      "colorNote": "Xanh: dương (ô bật mạnh thì điểm lớp tăng), cam: âm. Bấm một ô để xem ô đó là gì.",
-      "cell": "Ô số (0 đến {{max}})",
-      "cellTitle": "Ô {{j}}: trọng số của từng lớp",
+      "colorNote": "Xanh: dương, cộng điểm. Cam: âm, trừ điểm. Bấm một đặc trưng hay một thanh để xem chi tiết.",
+      "cell": "Đặc trưng số (0 đến {{max}})",
+      "cellTitle": "Đặc trưng {{j}}: trọng số của từng lớp",
       "topImages": "Ảnh Huấn luyện có số thứ {{j}} lớn nhất:",
       "cellNote": "Ô có trọng số dương lớn ở một lớp nghĩa là: ảnh nào bật mạnh ô này thì được cộng điểm cho lớp đó.",
       "normTitle": "Độ lớn trọng số theo epoch",
@@ -1089,7 +1091,11 @@
       "batchLossTitle": "Loss theo từng lô",
       "batchLossChart": "Loss từng lô ({{perEpoch}} lô mỗi epoch)",
       "batchAxis": "lô {{n}}",
-      "batchLossNote": "Đường răng cưa: mỗi lô có ảnh khác nhau nên loss lên xuống, nhưng xu hướng chung thường giảm dần."
+      "batchLossNote": "Đường răng cưa: mỗi lô có ảnh khác nhau nên loss lên xuống, nhưng xu hướng chung thường giảm dần.",
+      "topFeatures": "Đặc trưng cộng điểm nhiều nhất (trung bình trên ảnh của lớp)",
+      "featureLabel": "Đặc trưng {{j}}: trung bình cộng {{value}} điểm cho lớp {{cls}}",
+      "prototypes": "Ảnh được chấm điểm \"{{cls}}\" cao nhất",
+      "profileCaption": "1280 trọng số, xếp từ lớn đến nhỏ theo epoch cuối"
     }
   },
   "samples": {
