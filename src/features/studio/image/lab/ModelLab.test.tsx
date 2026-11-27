@@ -186,6 +186,26 @@ describe('Bước 4: Huấn luyện và bước 5: Đánh giá', () => {
     expect(screen.getByText('Không có ảnh nào ở ô này.')).toBeInTheDocument();
   });
 
+  test('bước 5: thanh "nhận ra đúng" theo lớp; mã Python chấm đúng tập đang xem như ma trận', async () => {
+    await seed({ confusingTest: true });
+    open();
+    await extractAll();
+    await trainToEnd();
+    const bars = screen.getByTestId('recall-bars');
+    expect(bars).toHaveTextContent('Mỗi lớp nhận ra đúng bao nhiêu (tập Kiểm tra)');
+    expect(bars).toHaveTextContent('Nhựa0/2 (0%)');
+    expect(bars).toHaveTextContent('Giấy2/2 (100%)');
+
+    const code = codePanel('evaluate.py');
+    await userEvent.click(within(code).getByText('Mã Python'));
+    const jump = within(code).getByRole('button', { name: /Đến dòng in tiếp theo/ });
+    for (let i = 0; i < 3; i++) await userEvent.click(jump);
+    expect(within(code).getByTestId('code-trace-console').textContent).toBe('đúng 2/4 ảnh (50.0%)\nNhựa: nhận ra 0/2 (0%)\nGiấy: nhận ra 2/2 (100%)');
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện', pressed: false }));
+    expect(screen.getByTestId('recall-bars')).toHaveTextContent('(tập Huấn luyện)');
+    expect(within(code).getByText('Bấm Chạy hoặc Chạy 1 dòng để bắt đầu.')).toBeInTheDocument();
+  });
+
   test('phát lại epoch 0: mô hình còn đoán bừa', async () => {
     await seed();
     open();

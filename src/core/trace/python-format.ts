@@ -15,9 +15,9 @@ export function pythonFixed(value: number, digits: number): string {
   return value.toFixed(digits);
 }
 
-/** Giống `f"{value:.0%}"`. */
-export function pythonPercent(value: number): string {
-  return `${pythonFixed(value * 100, 0)}%`;
+/** Giống `f"{value:.0%}"` (hoặc `.1%` khi digits = 1). */
+export function pythonPercent(value: number, digits = 0): string {
+  return `${pythonFixed(value * 100, digits)}%`;
 }
 
 /** Giống `str(list)` cho danh sách chuỗi ngắn: ['a', 'b']. Dài hơn `max` phần tử thì cắt bớt. */

@@ -652,7 +652,11 @@
       "support": "Images",
       "precisionHint": "Of the images predicted as this class, the share that is correct",
       "recallHint": "Of the images that truly belong to this class, the share found",
-      "na": "—"
+      "na": "—",
+      "recallTitle": "How much of each class is recognised ({{split}} set)",
+      "recallExactHint": "Read straight from the rows of the confusion matrix.",
+      "recallValue": "{{hit}}/{{support}} ({{percent}}%)",
+      "recallNote": "Short bars are classes the machine often gets wrong: see that row in the matrix."
     },
     "experiments": {
       "title": "Experiment log",
@@ -805,7 +809,9 @@
       "privacy": "Test images are processed on this device only and are not saved.",
       "rejected": "This file can't be used: {{reason}}.",
       "badImage": "Could not read this image. Try another JPEG or PNG.",
-      "frameError": "Couldn't analyze the image: {{message}}"
+      "frameError": "Couldn't analyze the image: {{message}}",
+      "codeEmpty": "Upload an image to run the code on it.",
+      "codeFreeze": "Press Freeze to run the code on the current frame."
     },
     "rename": {
       "button": "Rename",

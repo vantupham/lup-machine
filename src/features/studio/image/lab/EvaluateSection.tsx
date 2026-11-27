@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { confusionMatrix, perClassMetrics } from '@/core/ml/metrics';
 import type { EpochSnapshot } from '@/core/ml/softmax-regression';
@@ -14,6 +14,11 @@ import { FindingsPanel } from './FindingsPanel';
 import type { ImproveActions } from './improve-actions';
 import { ACCEPTED_IMAGE_TYPES } from '../image-file';
 import { Camera, ImageUp, Trash2 } from '@/ui/icons';
+import { ExactBadge } from '@/ui/ExactBadge';
+import { CodeTracePanel } from '@/features/code-trace/CodeTracePanel';
+import { HELPERS_PROGRAM } from '@/core/trace/helpers-program';
+import { EVALUATE_PROGRAM, traceEvaluate } from '@/core/trace/evaluate-trace';
+import { colorFor } from './class-style';
 
 /** Chênh lệch điểm Huấn luyện − Kiểm tra vượt ngưỡng này thì cảnh báo quá khớp. */
 export const OVERFIT_GAP = 0.15;
@@ -23,6 +28,8 @@ interface EvaluateSectionProps {
   readonly snapshot: EpochSnapshot | null;
   readonly samplesBySplit: Readonly<Record<Split, readonly SampleRecord[]>>;
   readonly predictions: ReadonlyMap<string, SamplePrediction>;
+  /** Vector đặc trưng của từng ảnh (để chạy mã Python chấm điểm với đúng số liệu). */
+  readonly features: ReadonlyMap<string, Float32Array>;
   /** Xem vì sao mô hình đoán một ảnh như vậy (mở ảnh đó ở bước 3). */
   readonly onInspect: (sample: SampleRecord) => void;
   readonly improve: ImproveActions;
@@ -33,19 +40,28 @@ type Cell = { readonly actual: number; readonly predicted: number } | null;
 /** id vùng ảnh của ô ma trận đang chọn (để cuộn tới khi bấm "Xem các ảnh này"). */
 const CELL_IMAGES_ID = 'confusion-cell-images';
 
-export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions, onInspect, improve }: EvaluateSectionProps) {
+export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions, features, onInspect, improve }: EvaluateSectionProps) {
   const { t, i18n } = useTranslation();
   const hasTest = Boolean(snapshot?.test);
   /** null: theo mặc định (Kiểm tra nếu có, không thì Huấn luyện). */
   const [chosenSplit, setChosenSplit] = useState<Split | null>(null);
   const split: Split = chosenSplit ?? (hasTest ? 'test' : 'train');
   const [cell, setCell] = useState<Cell>(null);
-  const scoredSamples = samplesBySplit[split].filter((s) => predictions.has(s.id));
+  const scoredSamples = useMemo(() => samplesBySplit[split].filter((s) => predictions.has(s.id)), [samplesBySplit, split, predictions]);
   const showCell = (actual: number, predicted: number) => {
     setCell({ actual, predicted });
     requestAnimationFrame(() => document.getElementById(CELL_IMAGES_ID)?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' }));
   };
   const pct = (v: number) => `${(v * 100).toLocaleString(i18n.language, { maximumFractionDigits: 1 })}%`;
+  const params = snapshot?.params ?? null;
+  /** Mã Python chấm đúng tập đang xem ở ma trận, với mô hình ở epoch đang xem. */
+  const createTrace = useMemo(() => {
+    if (!params || scoredSamples.length === 0) return null;
+    const xs = scoredSamples.map((s) => features.get(s.id)!);
+    const ys = scoredSamples.map((s) => predictions.get(s.id)!.actual);
+    const classNames = classes.map((c) => c.name);
+    return () => traceEvaluate({ xs, ys, params, classNames });
+  }, [params, scoredSamples, features, predictions, classes]);
 
   return (
     <section aria-labelledby="evaluate-title" className="space-y-4">
@@ -88,6 +104,13 @@ export function EvaluateSection({ classes, snapshot, samplesBySplit, predictions
           />
         </>
       )}
+      <CodeTracePanel
+        program={EVALUATE_PROGRAM}
+        helpers={HELPERS_PROGRAM}
+        create={createTrace}
+        emptyHint={t('codeTrace.needRun')}
+        jumpLabel={t('codeTrace.toNextPrint')}
+      />
       <StepNotebook step="evaluate" />
     </section>
   );
@@ -169,6 +192,7 @@ function ConfusionPanel({ classes, scored, predictions, split, onSplit, cell, on
             ))}
           </tbody>
         </table>
+        <RecallBars matrix={matrix} classes={classes} split={split} />
         {mode === 'expert' && <PerClassTable matrix={matrix} classes={classes} />}
       </div>
       {cell && (
@@ -275,5 +299,38 @@ function PerClassTable({ matrix, classes }: { matrix: number[][]; classes: reado
         ))}
       </tbody>
     </table>
+  );
+}
+
+/** Mỗi lớp: máy nhận ra đúng bao nhiêu ảnh của lớp đó (độ nhớ / recall), đọc thẳng từ hàng của ma trận. */
+function RecallBars({ matrix, classes, split }: { readonly matrix: number[][]; readonly classes: readonly ClassRecord[]; readonly split: Split }) {
+  const { t, i18n } = useTranslation();
+  return (
+    <figure className="max-w-md space-y-1.5 pt-2" data-testid="recall-bars">
+      <figcaption className="flex flex-wrap items-center gap-2 text-sm font-medium">
+        {t('project.evaluate.recallTitle', { split: t(`project.class.${split}`) })}
+        <ExactBadge label={t('playground.exact')} hint={t('project.evaluate.recallExactHint')} />
+      </figcaption>
+      <ul className="space-y-1">
+        {matrix.map((row, i) => {
+          const support = row.reduce((a, b) => a + b, 0);
+          const hit = row[i] ?? 0;
+          const share = support === 0 ? 0 : hit / support;
+          const percent = (share * 100).toLocaleString(i18n.language, { maximumFractionDigits: 0 });
+          return (
+            <li key={classes[i]!.id} className="grid grid-cols-[7rem_1fr_6rem] items-center gap-2 text-xs">
+              <span className="truncate"><ClassMarker index={i} className="mr-1" />{classes[i]!.name}</span>
+              <span className="h-3 overflow-hidden rounded-sm bg-rule" aria-hidden="true">
+                <span className="block h-full" style={{ width: `${share * 100}%`, backgroundColor: colorFor(i) }} />
+              </span>
+              <span className="text-right font-mono">
+                {support === 0 ? t('project.evaluate.na') : t('project.evaluate.recallValue', { hit, support, percent })}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="text-xs text-muted">{t('project.evaluate.recallNote')}</p>
+    </figure>
   );
 }

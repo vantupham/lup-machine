@@ -652,7 +652,11 @@
       "support": "Số ảnh",
       "precisionHint": "Trong các ảnh máy đoán là lớp này, bao nhiêu phần đúng",
       "recallHint": "Trong các ảnh thật sự thuộc lớp này, máy nhận ra bao nhiêu phần",
-      "na": "—"
+      "na": "—",
+      "recallTitle": "Mỗi lớp nhận ra đúng bao nhiêu (tập {{split}})",
+      "recallExactHint": "Đọc thẳng từ hàng của ma trận nhầm lẫn.",
+      "recallValue": "{{hit}}/{{support}} ({{percent}}%)",
+      "recallNote": "Thanh ngắn là lớp máy hay nhận nhầm: xem hàng của lớp đó trong ma trận."
     },
     "experiments": {
       "title": "Nhật ký thí nghiệm",
@@ -805,7 +809,9 @@
       "privacy": "Ảnh thử chỉ xử lý trên máy này, không lưu vào dự án.",
       "rejected": "Không dùng được tệp này: {{reason}}.",
       "badImage": "Không đọc được ảnh này. Thử một ảnh JPEG hoặc PNG khác.",
-      "frameError": "Không phân tích được ảnh: {{message}}"
+      "frameError": "Không phân tích được ảnh: {{message}}",
+      "codeEmpty": "Tải một ảnh lên để chạy mã với ảnh đó.",
+      "codeFreeze": "Bấm Dừng hình để chạy mã với khung hình đang thấy."
     },
     "rename": {
       "button": "Đổi tên",

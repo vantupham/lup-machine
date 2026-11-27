@@ -1,5 +1,5 @@
 /** Bước 6 Sử dụng của Studio ảnh: thử mô hình với ảnh MỚI từ webcam hoặc tệp, kèm giải thích. Ảnh thử không được lưu. */
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { SoftmaxParams } from '@/core/ml/softmax-regression';
 import type { ClassRecord, SampleRecord, StoredImage } from '@/storage/db';
@@ -11,12 +11,18 @@ import { analyzeImage } from './analyze-image';
 import type { ImageSubject } from './image-subject';
 import { LiveCamera } from './LiveCamera';
 import { PredictionExplainer } from './PredictionExplainer';
-import { predictProbe } from './probe';
+import { predictProbe, UNCERTAIN_BELOW } from './probe';
+
+/** Cạnh ảnh đưa vào MobileNetV2. */
+const IMAGE_SIDE = 224;
 import { ProbeMap, ProbeNeighbors } from './ProbeInsights';
 import { ProbeResult } from './ProbeResult';
 import { Camera, ImageUp, Lock, Pause, Play } from '@/ui/icons';
 import { StepNumber } from '@/ui/StepNumber';
 import { StepNotebook } from '@/features/notebook/StepNotebook';
+import { CodeTracePanel } from '@/features/code-trace/CodeTracePanel';
+import { HELPERS_PROGRAM } from '@/core/trace/helpers-program';
+import { PREDICT_PROGRAM, tracePredict } from '@/core/trace/evaluate-trace';
 
 type Source = 'none' | 'webcam' | 'upload';
 
@@ -120,6 +126,15 @@ function ProbeLab({ classes, samples, features, params, epoch }: ProbeLabProps) 
     }
   }
   const isStill = source === 'upload' || (source === 'webcam' && isPaused);
+  // Chỉ chạy mã với ảnh đứng yên: camera đang chạy thì mỗi khung hình là một ảnh mới.
+  const stillVector = isStill && prediction ? (probe?.vector ?? null) : null;
+  const createTrace = useMemo(
+    () =>
+      stillVector
+        ? () => tracePredict({ vector: stillVector, params, classNames: classes.map((c) => c.name), uncertainBelow: UNCERTAIN_BELOW, size: IMAGE_SIDE })
+        : null,
+    [stillVector, params, classes],
+  );
 
   return (
     <div className="space-y-6">
@@ -188,6 +203,13 @@ function ProbeLab({ classes, samples, features, params, epoch }: ProbeLabProps) 
           <PredictionExplainer sample={probe.subject} vector={probe.vector} classes={classes} params={params} showProbabilities={false} />
         </div>
       )}
+      <CodeTracePanel
+        program={PREDICT_PROGRAM}
+        helpers={HELPERS_PROGRAM}
+        create={createTrace}
+        emptyHint={t(source === 'webcam' ? 'project.use.codeFreeze' : 'project.use.codeEmpty')}
+        jumpLabel={t('codeTrace.toNextPrint')}
+      />
     </div>
   );
 }

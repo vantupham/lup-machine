@@ -4,6 +4,12 @@
 
 ## [Chưa phát hành]
 
+### Thêm (Studio ảnh, bước 5–6: nhận ra đúng theo lớp, Mã Python chấm điểm và dự đoán)
+
+- **Bước 5**: thanh "Mỗi lớp nhận ra đúng bao nhiêu" (cả Khám phá, đọc thẳng từ hàng ma trận, theo tập đang xem) và khung Mã Python `evaluate.py`: softmax mọi ảnh → argmax → số đúng → ma trận nhầm lẫn → độ nhớ từng lớp. Chấm đúng tập và epoch đang xem; bộ lá đậu thật in `đúng 13/18 ảnh (72.2%)`, khớp điểm Kiểm tra trên trang.
+- **Bước 6**: khung Mã Python `predict.py` cho ảnh tải lên hoặc khung hình đã Dừng hình: vector → logit → xác suất → "Máy đoán" hoặc "Máy chưa chắc" (dưới 60 %, giống trang).
+- Số đối chiếu Python cho `evaluate.py` (có lớp không có ảnh) và `predict.py` (một ảnh chắc chắn, một ảnh phân vân).
+
 ### Thêm (Studio ảnh, bước 1–3: soi kỹ dữ liệu, so sánh vector, Mã Python)
 
 - **Bước 1** có sơ đồ "Dữ liệu đi đâu" với số thật: N ảnh (mỗi ảnh 224 × 224 × 3 = 150 528 số) → k lớp → Huấn luyện / Kiểm tra.

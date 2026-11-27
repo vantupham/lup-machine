@@ -116,6 +116,7 @@ export function ModelLab({ projectName, classes, samples, improve }: ModelLabPro
         snapshot={snapshot}
         samplesBySplit={samplesBySplit}
         predictions={predictions}
+        features={lab.features}
         improve={improve}
         onInspect={(sample) => {
           setSelected(sample);
