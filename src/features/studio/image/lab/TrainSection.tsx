@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { EpochSnapshot, TrainOptions } from '@/core/ml/softmax-regression';
 import { useModeStore } from '@/ui/mode-store';
 import { LineChart } from './LineChart';
+import { NetworkMap } from './NetworkMap';
 import type { TrainingReadiness } from './lab-data';
 import type { TrainingSpeed, TrainingStatus } from './useTraining';
 import { ArrowRight, Info } from '@/ui/icons';
@@ -71,6 +72,8 @@ export function TrainSection(props: TrainSectionProps) {
           {mode === 'expert' ? t('project.train.leadExpert', { classes: props.numClasses }) : t('project.train.leadExplore')}
         </p>
       </div>
+
+      <NetworkMap numClasses={props.numClasses} isTraining={isActive} />
 
       {readiness.readiness !== 'ready' ? (
         <p className="text-sm text-warning">{t(readiness.readiness === 'need-features' ? 'project.train.needFeatures' : 'project.train.needClasses')}</p>

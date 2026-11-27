@@ -4,6 +4,12 @@
 
 ## [Chưa phát hành]
 
+### Thêm (bước 4 Huấn luyện của Studio ảnh: sơ đồ mạng từng tầng)
+
+- **Sơ đồ "Mạng gồm những gì"** ở đầu bước 4: ảnh 224 × 224 × 3 → 19 khối MobileNetV2 (ô vuông nhỏ dần theo kích thước, số kênh tăng tới 1280) → trung bình 7 × 7 → **Dense (đang học)** → softmax. Câu tóm tắt: 155 tầng, 410 208 số học sẵn trên ImageNet và đóng băng; huấn luyện chỉ chỉnh 1280 × k + k số của tầng cuối.
+- Bấm một khối: các loại tầng bên trong (Conv2D, DepthwiseConv2D, BatchNormalization, ReLU, Add, ZeroPadding2D) kèm lời giải thích, kích thước đầu ra, số tham số (bao nhiêu là thống kê chuẩn hóa), gợi ý xem bản đồ đặc trưng ở bước 3; Chuyên sâu hiện tên từng tầng. Bấm Dense: công thức logit và đếm trọng số.
+- Mọi con số đọc từ `public/models/mobilenet-v2-035/model.json` bằng `scripts/build-network-summary.py`; test so lại với tệp mô hình (đổi mô hình mà quên chạy lại script thì test báo).
+
 ### Thêm (Studio âm thanh và tư thế: Mã Python ở bước 3 và 6)
 
 - **Âm thanh, bước 3**: `audio_pool.py` gộp ảnh phổ mel (40 dải × 97 khung) của đoạn đang xem thành 160 số theo 4 phần thời gian. Ranh giới làm tròn như trình duyệt (`int(x + 0.5)`, vì `round()` của Python cho 48 ở 48,5).

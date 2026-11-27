@@ -1004,6 +1004,37 @@
       "formula": "độ giống = a·b / (|a| × |b|) = {{dot}} / ({{na}} × {{nb}}) = {{sim}}",
       "note": "1 là cùng hướng, 0 là không liên quan. Ô đậm cùng chỗ thì độ giống cao.",
       "codeEmpty": "Chọn một chấm trên bản đồ để chạy mã với ảnh đó."
+    },
+    "network": {
+      "title": "Mạng gồm những gì",
+      "exactHint": "Đọc thẳng từ tệp mô hình MobileNetV2 trang đang dùng.",
+      "summary": "MobileNetV2 có {{layers}} tầng với {{frozen}} số đã học sẵn trên bộ ảnh ImageNet, giữ nguyên (đóng băng). Huấn luyện chỉ chỉnh {{trainable}} số của tầng cuối.",
+      "input": "Ảnh",
+      "pool": "Trung bình 7 × 7",
+      "dense": "Dense (đang học)",
+      "denseTraining": "Dense (đang chỉnh…)",
+      "output": "{{count}} xác suất",
+      "blocks": {
+        "stem": "Đầu",
+        "block": "Khối {{n}}",
+        "head": "Cuối"
+      },
+      "blockLabel": "{{name}}: đầu ra {{shape}}, đóng băng",
+      "blockTitle": "{{name}}: đầu ra {{shape}}",
+      "blockParams": "{{params}} số đã học sẵn (trong đó {{stats}} là thống kê chuẩn hóa).",
+      "frozenNote": "Đóng băng: các số này không đổi khi bạn huấn luyện.",
+      "featureMapHint": "Xem bản đồ đặc trưng của tầng {{layer}} ở bước 3 (chế độ Chuyên sâu).",
+      "denseTitle": "Tầng Dense: phần duy nhất đang học",
+      "denseCount": "{{dim}} × {{k}} = {{weights}} trọng số + {{bias}} độ lệch = {{total}} số.",
+      "denseNote": "Mỗi lô ảnh, máy chỉnh tất cả các số này một chút để loss giảm.",
+      "kinds": {
+        "ZeroPadding2D": "thêm viền số 0 quanh ảnh",
+        "Conv2D": "tích chập: trượt bộ lọc để tìm nét, rồi trộn các kênh",
+        "DepthwiseConv2D": "tích chập riêng từng kênh (nhẹ hơn)",
+        "BatchNormalization": "chuẩn hóa: đưa các số về cùng thang",
+        "ReLU": "giữ số dương, số âm thành 0",
+        "Add": "lối tắt: cộng đầu vào khối vào đầu ra"
+      }
     }
   },
   "samples": {

@@ -1,0 +1,521 @@
+{
+ "modelId": "mobilenet-v2-035",
+ "inputShape": [
+  224,
+  224,
+  3
+ ],
+ "totalLayers": 155,
+ "totalParams": 410208,
+ "blocks": [
+  {
+   "id": "Conv1",
+   "layers": {
+    "ZeroPadding2D": 1,
+    "Conv2D": 1,
+    "BatchNormalization": 1,
+    "ReLU": 1
+   },
+   "layerNames": [
+    "Conv1_pad",
+    "Conv1",
+    "bn_Conv1",
+    "Conv1_relu"
+   ],
+   "outShape": [
+    112,
+    112,
+    16
+   ],
+   "params": 496,
+   "statParams": 32
+  },
+  {
+   "id": "block_0",
+   "layers": {
+    "DepthwiseConv2D": 1,
+    "BatchNormalization": 2,
+    "ReLU": 1,
+    "Conv2D": 1
+   },
+   "layerNames": [
+    "expanded_conv_depthwise",
+    "expanded_conv_depthwise_BN",
+    "expanded_conv_depthwise_relu",
+    "expanded_conv_project",
+    "expanded_conv_project_BN"
+   ],
+   "outShape": [
+    112,
+    112,
+    8
+   ],
+   "params": 368,
+   "statParams": 48
+  },
+  {
+   "id": "block_1",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "ZeroPadding2D": 1,
+    "DepthwiseConv2D": 1
+   },
+   "layerNames": [
+    "block_1_expand",
+    "block_1_expand_BN",
+    "block_1_expand_relu",
+    "block_1_pad",
+    "block_1_depthwise",
+    "block_1_depthwise_BN",
+    "block_1_depthwise_relu",
+    "block_1_project",
+    "block_1_project_BN"
+   ],
+   "outShape": [
+    56,
+    56,
+    8
+   ],
+   "params": 1616,
+   "statParams": 208
+  },
+  {
+   "id": "block_2",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_2_expand",
+    "block_2_expand_BN",
+    "block_2_expand_relu",
+    "block_2_depthwise",
+    "block_2_depthwise_BN",
+    "block_2_depthwise_relu",
+    "block_2_project",
+    "block_2_project_BN",
+    "block_2_add"
+   ],
+   "outShape": [
+    56,
+    56,
+    8
+   ],
+   "params": 1616,
+   "statParams": 208
+  },
+  {
+   "id": "block_3",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "ZeroPadding2D": 1,
+    "DepthwiseConv2D": 1
+   },
+   "layerNames": [
+    "block_3_expand",
+    "block_3_expand_BN",
+    "block_3_expand_relu",
+    "block_3_pad",
+    "block_3_depthwise",
+    "block_3_depthwise_BN",
+    "block_3_depthwise_relu",
+    "block_3_project",
+    "block_3_project_BN"
+   ],
+   "outShape": [
+    28,
+    28,
+    16
+   ],
+   "params": 2032,
+   "statParams": 224
+  },
+  {
+   "id": "block_4",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_4_expand",
+    "block_4_expand_BN",
+    "block_4_expand_relu",
+    "block_4_depthwise",
+    "block_4_depthwise_BN",
+    "block_4_depthwise_relu",
+    "block_4_project",
+    "block_4_project_BN",
+    "block_4_add"
+   ],
+   "outShape": [
+    28,
+    28,
+    16
+   ],
+   "params": 4768,
+   "statParams": 416
+  },
+  {
+   "id": "block_5",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_5_expand",
+    "block_5_expand_BN",
+    "block_5_expand_relu",
+    "block_5_depthwise",
+    "block_5_depthwise_BN",
+    "block_5_depthwise_relu",
+    "block_5_project",
+    "block_5_project_BN",
+    "block_5_add"
+   ],
+   "outShape": [
+    28,
+    28,
+    16
+   ],
+   "params": 4768,
+   "statParams": 416
+  },
+  {
+   "id": "block_6",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "ZeroPadding2D": 1,
+    "DepthwiseConv2D": 1
+   },
+   "layerNames": [
+    "block_6_expand",
+    "block_6_expand_BN",
+    "block_6_expand_relu",
+    "block_6_pad",
+    "block_6_depthwise",
+    "block_6_depthwise_BN",
+    "block_6_depthwise_relu",
+    "block_6_project",
+    "block_6_project_BN"
+   ],
+   "outShape": [
+    14,
+    14,
+    24
+   ],
+   "params": 5568,
+   "statParams": 432
+  },
+  {
+   "id": "block_7",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_7_expand",
+    "block_7_expand_BN",
+    "block_7_expand_relu",
+    "block_7_depthwise",
+    "block_7_depthwise_BN",
+    "block_7_depthwise_relu",
+    "block_7_project",
+    "block_7_project_BN",
+    "block_7_add"
+   ],
+   "outShape": [
+    14,
+    14,
+    24
+   ],
+   "params": 9456,
+   "statParams": 624
+  },
+  {
+   "id": "block_8",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_8_expand",
+    "block_8_expand_BN",
+    "block_8_expand_relu",
+    "block_8_depthwise",
+    "block_8_depthwise_BN",
+    "block_8_depthwise_relu",
+    "block_8_project",
+    "block_8_project_BN",
+    "block_8_add"
+   ],
+   "outShape": [
+    14,
+    14,
+    24
+   ],
+   "params": 9456,
+   "statParams": 624
+  },
+  {
+   "id": "block_9",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_9_expand",
+    "block_9_expand_BN",
+    "block_9_expand_relu",
+    "block_9_depthwise",
+    "block_9_depthwise_BN",
+    "block_9_depthwise_relu",
+    "block_9_project",
+    "block_9_project_BN",
+    "block_9_add"
+   ],
+   "outShape": [
+    14,
+    14,
+    24
+   ],
+   "params": 9456,
+   "statParams": 624
+  },
+  {
+   "id": "block_10",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1
+   },
+   "layerNames": [
+    "block_10_expand",
+    "block_10_expand_BN",
+    "block_10_expand_relu",
+    "block_10_depthwise",
+    "block_10_depthwise_BN",
+    "block_10_depthwise_relu",
+    "block_10_project",
+    "block_10_project_BN"
+   ],
+   "outShape": [
+    14,
+    14,
+    32
+   ],
+   "params": 10640,
+   "statParams": 640
+  },
+  {
+   "id": "block_11",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_11_expand",
+    "block_11_expand_BN",
+    "block_11_expand_relu",
+    "block_11_depthwise",
+    "block_11_depthwise_BN",
+    "block_11_depthwise_relu",
+    "block_11_project",
+    "block_11_project_BN",
+    "block_11_add"
+   ],
+   "outShape": [
+    14,
+    14,
+    32
+   ],
+   "params": 15680,
+   "statParams": 832
+  },
+  {
+   "id": "block_12",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_12_expand",
+    "block_12_expand_BN",
+    "block_12_expand_relu",
+    "block_12_depthwise",
+    "block_12_depthwise_BN",
+    "block_12_depthwise_relu",
+    "block_12_project",
+    "block_12_project_BN",
+    "block_12_add"
+   ],
+   "outShape": [
+    14,
+    14,
+    32
+   ],
+   "params": 15680,
+   "statParams": 832
+  },
+  {
+   "id": "block_13",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "ZeroPadding2D": 1,
+    "DepthwiseConv2D": 1
+   },
+   "layerNames": [
+    "block_13_expand",
+    "block_13_expand_BN",
+    "block_13_expand_relu",
+    "block_13_pad",
+    "block_13_depthwise",
+    "block_13_depthwise_BN",
+    "block_13_depthwise_relu",
+    "block_13_project",
+    "block_13_project_BN"
+   ],
+   "outShape": [
+    7,
+    7,
+    56
+   ],
+   "params": 20384,
+   "statParams": 880
+  },
+  {
+   "id": "block_14",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_14_expand",
+    "block_14_expand_BN",
+    "block_14_expand_relu",
+    "block_14_depthwise",
+    "block_14_depthwise_BN",
+    "block_14_depthwise_relu",
+    "block_14_project",
+    "block_14_project_BN",
+    "block_14_add"
+   ],
+   "outShape": [
+    7,
+    7,
+    56
+   ],
+   "params": 43568,
+   "statParams": 1456
+  },
+  {
+   "id": "block_15",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1,
+    "Add": 1
+   },
+   "layerNames": [
+    "block_15_expand",
+    "block_15_expand_BN",
+    "block_15_expand_relu",
+    "block_15_depthwise",
+    "block_15_depthwise_BN",
+    "block_15_depthwise_relu",
+    "block_15_project",
+    "block_15_project_BN",
+    "block_15_add"
+   ],
+   "outShape": [
+    7,
+    7,
+    56
+   ],
+   "params": 43568,
+   "statParams": 1456
+  },
+  {
+   "id": "block_16",
+   "layers": {
+    "Conv2D": 2,
+    "BatchNormalization": 3,
+    "ReLU": 2,
+    "DepthwiseConv2D": 1
+   },
+   "layerNames": [
+    "block_16_expand",
+    "block_16_expand_BN",
+    "block_16_expand_relu",
+    "block_16_depthwise",
+    "block_16_depthwise_BN",
+    "block_16_depthwise_relu",
+    "block_16_project",
+    "block_16_project_BN"
+   ],
+   "outShape": [
+    7,
+    7,
+    112
+   ],
+   "params": 62608,
+   "statParams": 1568
+  },
+  {
+   "id": "Conv_1",
+   "layers": {
+    "Conv2D": 1,
+    "BatchNormalization": 1,
+    "ReLU": 1
+   },
+   "layerNames": [
+    "Conv_1",
+    "Conv_1_bn",
+    "out_relu"
+   ],
+   "outShape": [
+    7,
+    7,
+    1280
+   ],
+   "params": 148480,
+   "statParams": 2560
+  }
+ ]
+}
