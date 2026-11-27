@@ -2351,5 +2351,80 @@
       "listTitle": "Nodes in the order the machine built them"
     },
     "audioFeature": "band {{band}}, part {{part}}"
+  },
+  "lecture": {
+    "unknown": "unknown",
+    "image": {
+      "titles": {
+        "title": "Introduction",
+        "data": "Data",
+        "data-check": "Data check",
+        "network": "Images into numbers",
+        "training": "Training",
+        "evaluation": "Evaluation",
+        "experiments": "Experiments",
+        "limits": "Limits",
+        "summary": "Summary"
+      },
+      "title": {
+        "intro": "The project {{name}} teaches a computer to tell {{count}} image classes apart: {{classes}}.",
+        "goal": "This video shows how the computer learned from the project's own data."
+      },
+      "data": {
+        "total": "The project has {{total}} images: {{train}} for training and {{test}} for testing.",
+        "perClass": "{{name}}: {{train}} training images, {{test}} test images.",
+        "imbalance": "{{big}} has {{ratio}} times as many images as {{small}}, so the model may lean towards it.",
+        "noTest": "There are no test images yet, so we cannot tell how well it handles new images.",
+        "why": "Test images are like an exam: the computer never sees them while learning."
+      },
+      "check": {
+        "ok": "The image check found no near duplicates and no background shortcut.",
+        "leak": "{{count}} pairs of test images nearly match training images, so the test score may be too high.",
+        "same": "{{count}} pairs of near-duplicate images sit in the same split and add little.",
+        "shortcut": "Background brightness alone separates {{a}} and {{b}} for {{percent}} of training images. The model may learn the background instead of the object."
+      },
+      "network": {
+        "features": "Each image goes through {{model}}, a network already trained on many images, and becomes {{dim}} feature numbers.",
+        "frozen": "This part of the network stays fixed.",
+        "head": "Only the last layer learns: {{params}} weights linking {{dim}} features to {{classes}} classes.",
+        "size": "{{model}} has {{layers}} layers with {{params}} pre-trained parameters.",
+        "softmax": "The last layer adds up the features by weight, then softmax turns the totals into class probabilities."
+      },
+      "training": {
+        "setup": "In training run {{number}}, the computer looked at all training images {{epochs}} times.",
+        "setupExpert": "Training run {{number}} used {{epochs}} epochs with learning rate {{lr}}.",
+        "loss": "Training loss fell from {{from}} to {{to}}.",
+        "accuracy": "It got {{train}} of training images and {{test}} of test images right.",
+        "trainOnly": "It got {{train}} of training images right.",
+        "gap": "The two scores differ by {{gap}} points: it remembers seen images better than it recognises new ones.",
+        "guess": "Before training, the predicted test score was {{guess}}."
+      },
+      "evaluation": {
+        "result": "Out of {{total}} test images, it got {{correct}} right.",
+        "allCorrect": "It made no mistakes. Ask whether these images are hard and varied enough.",
+        "topConfusion": "Most common mistake: {{count}} of {{support}} {{actual}} images were labelled {{predicted}}.",
+        "weakestClass": "The hardest class is {{name}}: only {{percent}} recognised, often confused with {{other}}.",
+        "confidentMistakes": "{{count}} wrong answers still had confidence of {{percent}} or more.",
+        "smallSet": "With only {{total}} test images, each image moves the score by {{step}} points."
+      },
+      "experiments": {
+        "count": "The project was trained {{count}} times.",
+        "change": "From the first run to the last, the test score went from {{first}} to {{last}}.",
+        "best": "The best test score was {{best}}, in run {{number}}.",
+        "conclusion": "Conclusion written after the last run: {{text}}"
+      },
+      "limits": {
+        "closedSet": "The model only knows these {{count}} classes. Shown something completely different, it still picks one of them.",
+        "cardLimitations": "The project team noted it often fails when: {{text}}",
+        "cardMisuse": "It should not be used to: {{text}}",
+        "human": "When a result affects other people, a person should check it."
+      },
+      "summary": {
+        "result": "In short, the model got {{test}} of test images right.",
+        "improve": "To improve, add more varied {{actual}} images and check whether it still confuses them with {{predicted}}.",
+        "harder": "Next step: try harder images, taken in other places and other light.",
+        "question": "Question for the class: in real use, which images will the model meet that it has never seen?"
+      }
+    }
   }
 }

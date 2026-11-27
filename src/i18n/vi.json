@@ -2351,5 +2351,80 @@
       "listTitle": "Danh sách nút theo thứ tự máy dựng"
     },
     "audioFeature": "dải {{band}}, phần {{part}}"
+  },
+  "lecture": {
+    "unknown": "không rõ",
+    "image": {
+      "titles": {
+        "title": "Giới thiệu",
+        "data": "Dữ liệu",
+        "data-check": "Soi kỹ dữ liệu",
+        "network": "Biến ảnh thành số",
+        "training": "Huấn luyện",
+        "evaluation": "Đánh giá",
+        "experiments": "Các lần thử",
+        "limits": "Giới hạn",
+        "summary": "Tóm lại"
+      },
+      "title": {
+        "intro": "Dự án {{name}} dạy máy phân biệt {{count}} lớp ảnh: {{classes}}.",
+        "goal": "Video này kể lại máy đã học từ chính dữ liệu của dự án như thế nào."
+      },
+      "data": {
+        "total": "Dự án có {{total}} ảnh: {{train}} ảnh để huấn luyện, {{test}} ảnh để kiểm tra.",
+        "perClass": "{{name}}: {{train}} ảnh huấn luyện, {{test}} ảnh kiểm tra.",
+        "imbalance": "{{big}} nhiều ảnh gấp {{ratio}} lần {{small}}, máy dễ nghiêng về lớp nhiều ảnh.",
+        "noTest": "Chưa có ảnh kiểm tra nên chưa biết máy làm bài mới tốt đến đâu.",
+        "why": "Ảnh kiểm tra giống đề thi: máy không được nhìn thấy chúng khi học."
+      },
+      "check": {
+        "ok": "Soi kỹ từng ảnh không thấy ảnh gần trùng hay lối tắt nền.",
+        "leak": "Có {{count}} cặp ảnh kiểm tra gần trùng ảnh huấn luyện, nên điểm kiểm tra có thể cao giả.",
+        "same": "Có {{count}} cặp ảnh gần trùng trong cùng một tập, chúng ít giúp máy học thêm.",
+        "shortcut": "Chỉ nhìn độ sáng nền đã phân biệt {{a}} và {{b}} đúng {{percent}} ảnh huấn luyện. Máy có thể học nền thay vì vật."
+      },
+      "network": {
+        "features": "Mỗi ảnh đi qua {{model}}, một mạng đã học sẵn từ rất nhiều ảnh, để thành {{dim}} con số đặc trưng.",
+        "frozen": "Phần mạng này giữ nguyên, không học thêm.",
+        "head": "Máy chỉ học tầng cuối: {{params}} trọng số nối {{dim}} đặc trưng với {{classes}} lớp.",
+        "size": "{{model}} có {{layers}} tầng với {{params}} tham số đã học sẵn.",
+        "softmax": "Tầng cuối cộng các đặc trưng theo trọng số, rồi dùng hàm softmax đổi thành xác suất của từng lớp."
+      },
+      "training": {
+        "setup": "Ở lần huấn luyện thứ {{number}}, máy xem hết các ảnh huấn luyện {{epochs}} lần.",
+        "setupExpert": "Lần huấn luyện thứ {{number}} chạy {{epochs}} epoch với tốc độ học {{lr}}.",
+        "loss": "Sai số trên tập huấn luyện giảm từ {{from}} xuống {{to}}.",
+        "accuracy": "Máy đoán đúng {{train}} ảnh huấn luyện và {{test}} ảnh kiểm tra.",
+        "trainOnly": "Máy đoán đúng {{train}} ảnh huấn luyện.",
+        "gap": "Hai điểm chênh nhau {{gap}} điểm: máy nhớ ảnh đã học tốt hơn là nhận ra ảnh mới.",
+        "guess": "Trước khi chạy, dự đoán điểm kiểm tra là {{guess}}."
+      },
+      "evaluation": {
+        "result": "Trên {{total}} ảnh kiểm tra, máy đoán đúng {{correct}} ảnh.",
+        "allCorrect": "Máy không nhầm ảnh nào. Cần tự hỏi các ảnh này đã đủ khó và đủ đa dạng chưa.",
+        "topConfusion": "Hay nhầm nhất: {{count}} trên {{support}} ảnh {{actual}} bị đoán là {{predicted}}.",
+        "weakestClass": "Lớp khó nhất là {{name}}: máy chỉ nhận ra {{percent}} số ảnh, hay nhầm sang {{other}}.",
+        "confidentMistakes": "Có {{count}} ảnh máy đoán sai mà vẫn tin từ {{percent}} trở lên.",
+        "smallSet": "Chỉ có {{total}} ảnh kiểm tra nên mỗi ảnh làm điểm đổi {{step}} điểm."
+      },
+      "experiments": {
+        "count": "Dự án đã huấn luyện {{count}} lần.",
+        "change": "Từ lần đầu đến lần cuối, điểm kiểm tra đổi từ {{first}} thành {{last}}.",
+        "best": "Điểm kiểm tra cao nhất là {{best}}, ở lần thứ {{number}}.",
+        "conclusion": "Kết luận ghi lại sau lần cuối: {{text}}"
+      },
+      "limits": {
+        "closedSet": "Mô hình chỉ biết {{count}} lớp này. Gặp ảnh khác hẳn, nó vẫn chọn một trong các lớp đó.",
+        "cardLimitations": "Nhóm làm dự án ghi rằng mô hình dễ sai khi: {{text}}",
+        "cardMisuse": "Không nên dùng mô hình để: {{text}}",
+        "human": "Khi kết quả ảnh hưởng đến người khác, con người cần kiểm tra lại."
+      },
+      "summary": {
+        "result": "Tóm lại, mô hình đoán đúng {{test}} ảnh kiểm tra.",
+        "improve": "Muốn tốt hơn, thêm ảnh {{actual}} đa dạng hơn rồi xem máy còn nhầm sang {{predicted}} không.",
+        "harder": "Bước tiếp theo: thử với ảnh khó hơn, chụp ở nơi khác và ánh sáng khác.",
+        "question": "Câu hỏi cho cả lớp: khi dùng thật, mô hình sẽ gặp những ảnh nào nó chưa từng thấy?"
+      }
+    }
   }
 }
