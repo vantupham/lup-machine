@@ -230,9 +230,9 @@ def tabular_reference() -> None:
     labels = np.array([0, 1, 2, 1, 0, 2])
     values = np.array([3.5, 4.25, 5.0, 4.0, 3.25, 4.75])
     x_knn = np.array([0.2, 0.1])
-    rows_knn = [3, 5, 8, 9, 12, 14]
-    knn_cls, _ = run("knn_predict.py", {"x": x_knn, "X_train": x_train, "y_train": labels, "K": 3, "ROWS": rows_knn, "TASK": "classification", "CLASS_NAMES": classes})
-    knn_reg, _ = run("knn_predict.py", {"x": x_knn, "X_train": x_train, "y_train": values, "K": 3, "ROWS": rows_knn, "TASK": "regression", "CLASS_NAMES": []})
+    rows_knn = [f"dòng {n}" for n in (3, 5, 8, 9, 12, 14)]
+    knn_cls, _ = run("knn_predict.py", {"x": x_knn, "X_train": x_train, "y_train": labels, "K": 3, "NAMES": rows_knn, "TASK": "classification", "CLASS_NAMES": classes})
+    knn_reg, _ = run("knn_predict.py", {"x": x_knn, "X_train": x_train, "y_train": values, "K": 3, "NAMES": rows_knn, "TASK": "regression", "CLASS_NAMES": []})
 
     w, b, x_lin = [0.125, -2.5, 30.0], 1.75, [12.0, 0.4, 0.0]
     linear_out, _ = run("linear_predict.py", {"x": x_lin, "w": w, "b": b, "FEATURES": columns})
@@ -255,6 +255,26 @@ def tabular_reference() -> None:
     )
 
 
+def sensor_reference() -> None:
+    """Studio tư thế (chuẩn hóa tọa độ khớp) và Studio âm thanh (gộp ảnh phổ mel thành 4 phần)."""
+    names = [f"khớp {i}" for i in range(17)]
+    body = [[100 + 7 * i, 50 + 23 * i, 0.2 if i in (1, 3, 15) else 0.9] for i in range(17)]  # vài khớp không thấy rõ (không phải vai, hông)
+    hand_names = [f"điểm {i}" for i in range(21)]
+    hand = [[200 + 3 * i, 300 - 5 * i, 0.8] for i in range(21)]
+    body_out, _ = run("pose_features.py", {"keypoints": body, "KIND": "body", "NAMES": names, "MIN_SCORE": 0.3})
+    hand_out, _ = run("pose_features.py", {"keypoints": hand, "KIND": "hand", "NAMES": hand_names, "MIN_SCORE": 0.3})
+    db = np.array([[np.sin(m * 0.3 + t * 0.11) * 20 - 40 - m for t in range(97)] for m in range(40)])
+    audio_out, _ = run("audio_pool.py", {"db": db, "SEGMENTS": 4})
+    write(
+        "sensor.reference.json",
+        {
+            "body": {"keypoints": body, "names": names, "output": body_out},
+            "hand": {"keypoints": hand, "names": hand_names, "output": hand_out},
+            "audio": {"db": db.tolist(), "output": audio_out},
+        },
+    )
+
+
 def main() -> None:
     softmax_reference()
     data_check_reference()
@@ -263,6 +283,7 @@ def main() -> None:
     predict_reference()
     text_reference()
     tabular_reference()
+    sensor_reference()
 
 
 if __name__ == "__main__":

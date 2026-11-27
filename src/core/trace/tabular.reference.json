@@ -158,12 +158,12 @@
       0.1
     ],
     "rows": [
-      3,
-      5,
-      8,
-      9,
-      12,
-      14
+      "dòng 3",
+      "dòng 5",
+      "dòng 8",
+      "dòng 9",
+      "dòng 12",
+      "dòng 14"
     ],
     "classification": [
       "dòng 14: khoảng cách 0.224",

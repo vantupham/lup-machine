@@ -1469,7 +1469,8 @@
     "code": {
       "noNumeric": "Bảng chưa có cột số nào để chuẩn hóa.",
       "invalidRow": "Sửa các ô của dòng đang thử cho hợp lệ để chạy mã.",
-      "logisticOnly": "Mã chạy từng dòng có cho cây quyết định, k-NN và hồi quy tuyến tính. Hồi quy logistic dùng L-BFGS, quá nhiều phép tính để chạy từng dòng."
+      "logisticOnly": "Mã chạy từng dòng có cho cây quyết định, k-NN và hồi quy tuyến tính. Hồi quy logistic dùng L-BFGS, quá nhiều phép tính để chạy từng dòng.",
+      "rowName": "dòng {{n}}"
     }
   },
   "export": {
@@ -1736,6 +1737,9 @@
       "tryFile": "Thử với một tệp âm thanh",
       "tryFileShort": "Thử tệp",
       "play": "Nghe lại"
+    },
+    "code": {
+      "empty": "Thu hoặc tải một đoạn âm thanh để chạy mã với đoạn đó."
     }
   },
   "pose": {
@@ -1929,6 +1933,10 @@
       "tryFile": "Thử với một ảnh",
       "tryFileShort": "Thử ảnh",
       "noPose": "Chưa thấy rõ tư thế trong khung hình."
+    },
+    "code": {
+      "empty": "Tải một ảnh lên (camera đang tắt) để chạy mã với tư thế đó.",
+      "cannotNormalize": "Mẫu này không đủ khớp tin cậy để chuẩn hóa."
     }
   },
   "theme": {
@@ -2114,7 +2122,9 @@
     "console": "Màn hình (print)",
     "consoleEmpty": "Chưa in dòng nào.",
     "toNextPrint": "Đến dòng in tiếp theo",
-    "positionLine": "Dòng {{line}}"
+    "positionLine": "Dòng {{line}}",
+    "sampleName": "{{cls}} #{{n}}",
+    "knnOnly": "Mã chạy từng dòng có cho k láng giềng. Hồi quy logistic dùng L-BFGS, quá nhiều phép tính để chạy từng dòng."
   },
   "autosave": {
     "saving": "Đang lưu…",

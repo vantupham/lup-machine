@@ -1,5 +1,6 @@
 /** Bước 4 Huấn luyện, 5 Đánh giá, 6 Sử dụng của Studio âm thanh. */
 import { useState } from 'react';
+import { VectorKnnCode } from '@/features/code-trace/VectorKnnCode';
 import { useTranslation } from 'react-i18next';
 import { contributionMap, encodeVector, importanceMap, predictVector, type VectorData, type TrainedVectorModel } from '@/core/ml/vector-classifier';
 import { audioFeatures, fitClip } from '@/core/audio/features';
@@ -57,81 +58,84 @@ function TryClip({ trained, data, trainSamples }: { readonly trained: TrainedVec
   const contribution = encoded ? contributionMap(trained, encoded.scaled, c) : null;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      <div className="space-y-3">
-        <div className="flex flex-wrap gap-2">
-          <button type="button" className="btn btn-primary text-sm" disabled={busy} onClick={() => void take(async () => (await recordClip(1.5)).result)}>
-            {busy ? t('audio.data.recording') : t('audio.data.record')}
-          </button>
-          <label className="btn btn-ghost cursor-pointer text-sm">
-            {t('audio.data.upload')}
-            <input type="file" accept="audio/*" className="sr-only" onChange={(e) => {
-              const file = e.target.files?.[0];
-              e.target.value = '';
-              if (file) void take(() => decodeAudioFile(file));
-            }} />
-          </label>
-          {signal && <button type="button" className="btn btn-ghost text-sm" onClick={() => playClip(signal)}>{t('audio.use.play')}</button>}
-        </div>
-        {error && <p role="alert" className="text-sm text-danger">{error}</p>}
-        {!signal && <p className="text-sm text-muted">{t('audio.use.empty')}</p>}
-        {signal && prediction && (
-          <>
-            <Waveform samples={signal} label={t('audio.inspector.waveLabel')} />
-            <p className="text-lg" data-testid="audio-prediction">
-              <ClassMarker index={prediction.label} className="mr-1" />
-              {t('tabular.use.predictedClass', { cls: data.classNames[prediction.label] })}
-            </p>
-            <ul className="space-y-1">
-              {prediction.proba.map((p, k) => (
-                <li key={k} className="grid grid-cols-[8rem_1fr_3.5rem] items-center gap-2 text-xs">
-                  <span>{data.classNames[k]}</span>
-                  <span className="h-2 rounded" style={{ width: `${p * 100}%`, backgroundColor: colorFor(k) }} />
-                  <span className="text-right font-mono">{(p * 100).toFixed(1)}%</span>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-      {signal && prediction && (
-        <section aria-labelledby="audio-why-title" className="lab-card space-y-3 p-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 id="audio-why-title" className="font-semibold">{t('text.use.whyTitle')}</h3>
-            <ExactBadge label={t('playground.exact')} hint={t('audio.use.whyHint')} />
+    <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className="btn btn-primary text-sm" disabled={busy} onClick={() => void take(async () => (await recordClip(1.5)).result)}>
+              {busy ? t('audio.data.recording') : t('audio.data.record')}
+            </button>
+            <label className="btn btn-ghost cursor-pointer text-sm">
+              {t('audio.data.upload')}
+              <input type="file" accept="audio/*" className="sr-only" onChange={(e) => {
+                const file = e.target.files?.[0];
+                e.target.value = '';
+                if (file) void take(() => decodeAudioFile(file));
+              }} />
+            </label>
+            {signal && <button type="button" className="btn btn-ghost text-sm" onClick={() => playClip(signal)}>{t('audio.use.play')}</button>}
           </div>
-          {contribution ? (
+          {error && <p role="alert" className="text-sm text-danger">{error}</p>}
+          {!signal && <p className="text-sm text-muted">{t('audio.use.empty')}</p>}
+          {signal && prediction && (
             <>
-              <SelectField
-                label={t('text.use.explainFor')}
-                value={explainFor}
-                onChange={setExplainFor}
-                options={[{ value: 'predicted', label: t('text.use.predictedOption', { cls: data.classNames[prediction.label] }) }, ...data.classNames.map((n, k) => ({ value: String(k), label: n }))]}
-              />
-              <FeatureGrid values={contribution.cells} diverging label={t('audio.use.contributionLabel')} testId="audio-contribution" />
-              <p className="text-xs text-muted">{t('audio.use.contributionHint', { cls: data.classNames[c], base: contribution.base.toFixed(3), total: contribution.total.toFixed(3) })}</p>
-            </>
-          ) : (
-            <>
-              <p className="text-sm">{t('tabular.use.neighbors', { k: prediction.neighbors?.length ?? 0 })}</p>
-              <ul className="space-y-1 text-sm" data-testid="audio-neighbors">
-                {prediction.neighbors?.map((n) => {
-                  const id = data.train.ids[n.index] as string;
-                  const samples = trainSamples(id);
-                  return (
-                    <li key={n.index} className="flex items-center gap-2">
-                      <button type="button" className="btn btn-ghost px-2 py-0.5 text-xs" aria-label={t('audio.use.playNeighbour')} disabled={!samples} onClick={() => samples && playClip(samples)}><Play /></button>
-                      <span>{data.classNames[data.train.ys[n.index] as number]}</span>
-                      <span className="font-mono text-xs text-muted">{t('audio.use.distance', { d: n.distance.toFixed(1) })}</span>
-                    </li>
-                  );
-                })}
+              <Waveform samples={signal} label={t('audio.inspector.waveLabel')} />
+              <p className="text-lg" data-testid="audio-prediction">
+                <ClassMarker index={prediction.label} className="mr-1" />
+                {t('tabular.use.predictedClass', { cls: data.classNames[prediction.label] })}
+              </p>
+              <ul className="space-y-1">
+                {prediction.proba.map((p, k) => (
+                  <li key={k} className="grid grid-cols-[8rem_1fr_3.5rem] items-center gap-2 text-xs">
+                    <span>{data.classNames[k]}</span>
+                    <span className="h-2 rounded" style={{ width: `${p * 100}%`, backgroundColor: colorFor(k) }} />
+                    <span className="text-right font-mono">{(p * 100).toFixed(1)}%</span>
+                  </li>
+                ))}
               </ul>
-              <p className="text-xs text-muted">{t('audio.use.knnHint')}</p>
             </>
           )}
-        </section>
-      )}
+        </div>
+        {signal && prediction && (
+          <section aria-labelledby="audio-why-title" className="lab-card space-y-3 p-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 id="audio-why-title" className="font-semibold">{t('text.use.whyTitle')}</h3>
+              <ExactBadge label={t('playground.exact')} hint={t('audio.use.whyHint')} />
+            </div>
+            {contribution ? (
+              <>
+                <SelectField
+                  label={t('text.use.explainFor')}
+                  value={explainFor}
+                  onChange={setExplainFor}
+                  options={[{ value: 'predicted', label: t('text.use.predictedOption', { cls: data.classNames[prediction.label] }) }, ...data.classNames.map((n, k) => ({ value: String(k), label: n }))]}
+                />
+                <FeatureGrid values={contribution.cells} diverging label={t('audio.use.contributionLabel')} testId="audio-contribution" />
+                <p className="text-xs text-muted">{t('audio.use.contributionHint', { cls: data.classNames[c], base: contribution.base.toFixed(3), total: contribution.total.toFixed(3) })}</p>
+              </>
+            ) : (
+              <>
+                <p className="text-sm">{t('tabular.use.neighbors', { k: prediction.neighbors?.length ?? 0 })}</p>
+                <ul className="space-y-1 text-sm" data-testid="audio-neighbors">
+                  {prediction.neighbors?.map((n) => {
+                    const id = data.train.ids[n.index] as string;
+                    const samples = trainSamples(id);
+                    return (
+                      <li key={n.index} className="flex items-center gap-2">
+                        <button type="button" className="btn btn-ghost px-2 py-0.5 text-xs" aria-label={t('audio.use.playNeighbour')} disabled={!samples} onClick={() => samples && playClip(samples)}><Play /></button>
+                        <span>{data.classNames[data.train.ys[n.index] as number]}</span>
+                        <span className="font-mono text-xs text-muted">{t('audio.use.distance', { d: n.distance.toFixed(1) })}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <p className="text-xs text-muted">{t('audio.use.knnHint')}</p>
+              </>
+            )}
+          </section>
+        )}
+      </div>
+      <VectorKnnCode trained={trained} data={data} encoded={encoded} emptyHint={t('audio.code.empty')} />
     </div>
   );
 }

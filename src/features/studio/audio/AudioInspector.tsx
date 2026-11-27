@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { AudioPoolCode } from '@/features/code-trace/SensorCode';
 import { useTranslation } from 'react-i18next';
 import { AUDIO, FRAME_COUNT, logMelSpectrogram, melBandCenters, poolFeatures, segmentBounds } from '@/core/audio/features';
 import { framePower, hannWindow } from '@/core/audio/spectral';
@@ -67,6 +68,7 @@ export function AudioInspector({ classes, clips }: { readonly classes: readonly 
           <p className="text-xs text-muted">{t('audio.inspector.poolHint', { segments: AUDIO.timeSegments, bands: AUDIO.nMels, total: pooled.length })}</p>
         </section>
       </div>
+      <AudioPoolCode db={db} />
     </div>
   );
 }
