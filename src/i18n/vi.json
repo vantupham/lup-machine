@@ -1067,12 +1067,17 @@
       "errorText": "Sai lệch = xác suất − đáp án. Lớp đúng \"{{cls}}\" âm (cần tăng), các lớp khác dương (cần giảm).",
       "gradientText": "Hướng chỉnh trọng số của lớp \"{{cls}}\": sai lệch × 1280 số, lấy trung bình cả {{count}} ảnh trong lô.",
       "gradientLabel": "Gradient của 1280 trọng số lớp {{cls}}",
-      "colorNote": "Xanh: dương, cam: âm. Ô càng đậm, số càng lớn.",
+      "colorNote": "Xếp từ lớn đến nhỏ. Xanh: dương, cam: âm.",
       "updateText": "Adam bước ngược hướng gradient một bước nhỏ (tốc độ học {{lr}}). Mức thay đổi thật của trọng số lớp \"{{cls}}\":",
       "deltaLabel": "Mức thay đổi của 1280 trọng số lớp {{cls}}",
       "beforeAfter": "Xác suất lớp đúng của ảnh này: {{before}}% → {{after}}%; loss: {{lossBefore}} → {{lossAfter}}.",
       "batchNote": "Máy chỉnh theo cả lô, nên có ảnh tốt lên, có ảnh chưa.",
-      "pythonLine": "Mã Python dòng {{n}}:"
+      "pythonLine": "Mã Python dòng {{n}}:",
+      "autoplay": "Tự chạy các chặng",
+      "autoplayStop": "Dừng",
+      "inputTop": "{{n}} số lớn nhất trong 1280 số (cột cao: số lớn). Có {{zeros}} số bằng 0.",
+      "shiftNote": "Xác suất mỗi lớp của ảnh này trước (vạch) và sau bước cập nhật (thanh):",
+      "adamNote": "Bước đầu, Adam dịch mỗi trọng số gần bằng tốc độ học nên các thanh gần bằng nhau. Về sau bước dịch nhỏ dần."
     },
     "weightMap": {
       "title": "Trọng số của tầng Dense (epoch {{epoch}})",

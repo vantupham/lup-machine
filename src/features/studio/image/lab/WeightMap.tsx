@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FEATURE_DIM } from '@/core/ml/feature-model';
 import type { EpochSnapshot, LabeledVectors, SoftmaxParams, TrainOptions } from '@/core/ml/softmax-regression';
 import { batchesPerEpoch, batchLosses } from '@/core/ml/train-step';
-import { classContributions, rankOrder, rowDelta, topActivating, topScoring, updateNorms, weightNorms, weightRow } from '@/core/ml/weight-stats';
+import { classContributions, maxAbs, rankOrder, rowDelta, topActivating, topScoring, updateNorms, weightNorms, weightRow } from '@/core/ml/weight-stats';
 import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { ClassMarker } from '@/ui/ClassMarker';
 import { ExactBadge } from '@/ui/ExactBadge';
@@ -168,12 +168,6 @@ function ClassWeights({ k, name, current, previous, final, train, samples, selec
       />
     </article>
   );
-}
-
-function maxAbs(values: ArrayLike<number>): number {
-  let max = 0;
-  for (let i = 0; i < values.length; i++) max = Math.max(max, Math.abs(values[i] as number));
-  return max;
 }
 
 function FeatureThumb({ sample }: { readonly sample: SampleRecord | undefined }) {

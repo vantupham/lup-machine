@@ -1,7 +1,7 @@
 import reference from '@/core/trace/softmax-trace.reference.json';
 import { lossAndGradient, trainSoftmax, type LabeledVectors } from './softmax-regression';
 import { batchesPerEpoch, batchLosses, replayBatch } from './train-step';
-import { cellAt, classContributions, rankOrder, rowDelta, topActivating, topScoring, updateNorms, weightNorms, weightRow } from './weight-stats';
+import { cellAt, classContributions, maxAbs, rankOrder, rowDelta, topActivating, topScoring, updateNorms, weightNorms, weightRow } from './weight-stats';
 
 const train: LabeledVectors = { xs: reference.input.xs.map((r) => Float32Array.from(r)), ys: reference.input.ys };
 const options = reference.input.options;
@@ -78,6 +78,11 @@ describe('đọc trọng số theo nghĩa: đặc trưng nào cộng điểm, �
       { index: 3, score: expect.closeTo(11.9, 5) },
       { index: 2, score: expect.closeTo(6.15, 5) },
     ]);
+  });
+
+  test('giá trị tuyệt đối lớn nhất', () => {
+    expect(maxAbs([0.5, -2, 1])).toBe(2);
+    expect(maxAbs([])).toBe(0);
   });
 
   test('thứ tự từ lớn đến nhỏ (bằng nhau thì số thứ tự nhỏ trước)', () => {

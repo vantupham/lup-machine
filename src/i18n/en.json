@@ -1067,12 +1067,17 @@
       "errorText": "Error = probability − answer. The true class \"{{cls}}\" is negative (should rise), the others positive (should fall).",
       "gradientText": "Direction to adjust the weights of \"{{cls}}\": error × the 1280 numbers, averaged over all {{count}} images of the batch.",
       "gradientLabel": "Gradient of the 1280 weights of {{cls}}",
-      "colorNote": "Blue: positive, orange: negative. Darker cells mean larger numbers.",
+      "colorNote": "Sorted largest to smallest. Blue: positive, orange: negative.",
       "updateText": "Adam takes a small step against the gradient (learning rate {{lr}}). Actual change of the weights of \"{{cls}}\":",
       "deltaLabel": "Change of the 1280 weights of {{cls}}",
       "beforeAfter": "Probability of the true class for this image: {{before}}% → {{after}}%; loss: {{lossBefore}} → {{lossAfter}}.",
       "batchNote": "The machine adjusts for the whole batch, so some images improve and some do not yet.",
-      "pythonLine": "Python code line {{n}}:"
+      "pythonLine": "Python code line {{n}}:",
+      "autoplay": "Play the stages",
+      "autoplayStop": "Stop",
+      "inputTop": "The {{n}} largest of 1280 numbers (tall bar: large number). {{zeros}} numbers are 0.",
+      "shiftNote": "Probability of each class for this image before (line) and after the update (bar):",
+      "adamNote": "In the first steps, Adam moves each weight by about the learning rate, so bars are nearly equal. Later the steps shrink."
     },
     "weightMap": {
       "title": "Weights of the Dense layer (epoch {{epoch}})",
