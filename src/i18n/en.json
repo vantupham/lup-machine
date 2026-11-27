@@ -1465,6 +1465,11 @@
       "tryNext": "Next test row",
       "rowActual": "Row {{row}}: the real {{target}} is {{actual}}.",
       "predictedValue": "Prediction: {{value}}"
+    },
+    "code": {
+      "noNumeric": "The table has no numeric column to standardise.",
+      "invalidRow": "Fix the cells of the row being tried to run the code.",
+      "logisticOnly": "Line-by-line code is available for the decision tree, k-NN and linear regression. Logistic regression uses L-BFGS, too many operations to step through."
     }
   },
   "export": {

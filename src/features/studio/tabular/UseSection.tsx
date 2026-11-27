@@ -5,6 +5,7 @@ import { contributions, logisticRowScores, predictRow, type TrainedModel } from 
 import { encodeCells, type FeatureEncoder, type PreparedData } from '@/core/tabular/prepare';
 import { colorFor } from '@/features/studio/image/lab/class-style';
 import { ClassMarker } from '@/ui/ClassMarker';
+import { PredictCode } from './TabularCodePanels';
 
 /** Mỗi lời giải thích chỉ liệt kê các đóng góp lớn nhất để học sinh dễ đọc. */
 const TOP_CONTRIBUTIONS = 4;
@@ -101,65 +102,68 @@ export function UseSection({ trained, data }: { readonly trained: TrainedModel; 
   const prediction = row ? predictRow(trained, row) : null;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-      <form className="grid content-start gap-3 sm:grid-cols-2" aria-label={t('tabular.use.formLabel')} onSubmit={(e) => e.preventDefault()}>
-        {data.encoders.map((e, i) => (
-          <label key={e.name} htmlFor={`${formId}-${i}`} className="text-sm font-medium">
-            {e.name}
-            {e.kind === 'numeric' ? (
-              <input
-                id={`${formId}-${i}`}
-                inputMode="decimal"
-                value={values[i]}
-                onChange={(ev) => setCells(values.map((v, j) => (j === i ? ev.target.value : v)))}
-                className="mt-1 w-full rounded border border-rule bg-paper px-2 py-1 font-mono"
-              />
-            ) : (
-              <select
-                id={`${formId}-${i}`}
-                value={values[i]}
-                onChange={(ev) => setCells(values.map((v, j) => (j === i ? ev.target.value : v)))}
-                className="mt-1 w-full rounded border border-rule bg-surface px-2 py-1"
-              >
-                {e.categories.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-            )}
-          </label>
-        ))}
-      </form>
+    <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+        <form className="grid content-start gap-3 sm:grid-cols-2" aria-label={t('tabular.use.formLabel')} onSubmit={(e) => e.preventDefault()}>
+          {data.encoders.map((e, i) => (
+            <label key={e.name} htmlFor={`${formId}-${i}`} className="text-sm font-medium">
+              {e.name}
+              {e.kind === 'numeric' ? (
+                <input
+                  id={`${formId}-${i}`}
+                  inputMode="decimal"
+                  value={values[i]}
+                  onChange={(ev) => setCells(values.map((v, j) => (j === i ? ev.target.value : v)))}
+                  className="mt-1 w-full rounded border border-rule bg-paper px-2 py-1 font-mono"
+                />
+              ) : (
+                <select
+                  id={`${formId}-${i}`}
+                  value={values[i]}
+                  onChange={(ev) => setCells(values.map((v, j) => (j === i ? ev.target.value : v)))}
+                  className="mt-1 w-full rounded border border-rule bg-surface px-2 py-1"
+                >
+                  {e.categories.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              )}
+            </label>
+          ))}
+        </form>
 
-      <section aria-labelledby={`${formId}-result`} className="lab-card space-y-3 p-4" aria-live="polite">
-        <h3 id={`${formId}-result`} className="font-semibold">{t('tabular.use.resultTitle')}</h3>
-        {!row || !prediction ? (
-          <p role="alert" className="text-sm text-danger">{t('tabular.use.invalid')}</p>
-        ) : (
-          <>
-            {data.task === 'classification' ? (
-              <>
+        <section aria-labelledby={`${formId}-result`} className="lab-card space-y-3 p-4" aria-live="polite">
+          <h3 id={`${formId}-result`} className="font-semibold">{t('tabular.use.resultTitle')}</h3>
+          {!row || !prediction ? (
+            <p role="alert" className="text-sm text-danger">{t('tabular.use.invalid')}</p>
+          ) : (
+            <>
+              {data.task === 'classification' ? (
+                <>
+                  <p className="text-lg" data-testid="tabular-prediction">
+                    <ClassMarker index={prediction.value} className="mr-1" />
+                    {t('tabular.use.predictedClass', { cls: data.classNames[prediction.value] })}
+                  </p>
+                  <ul className="space-y-1">
+                    {(prediction.proba ?? []).map((p, k) => (
+                      <li key={k} className="grid grid-cols-[8rem_1fr_3.5rem] items-center gap-2 text-xs">
+                        <span>{data.classNames[k]}</span>
+                        <span className="h-2 rounded" style={{ width: `${p * 100}%`, backgroundColor: colorFor(k) }} />
+                        <span className="text-right font-mono">{(p * 100).toFixed(1)}%</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
                 <p className="text-lg" data-testid="tabular-prediction">
-                  <ClassMarker index={prediction.value} className="mr-1" />
-                  {t('tabular.use.predictedClass', { cls: data.classNames[prediction.value] })}
+                  {t('tabular.use.predictedValue', { target: data.target, value: Number(prediction.value.toFixed(2)).toLocaleString('vi') })}
                 </p>
-                <ul className="space-y-1">
-                  {(prediction.proba ?? []).map((p, k) => (
-                    <li key={k} className="grid grid-cols-[8rem_1fr_3.5rem] items-center gap-2 text-xs">
-                      <span>{data.classNames[k]}</span>
-                      <span className="h-2 rounded" style={{ width: `${p * 100}%`, backgroundColor: colorFor(k) }} />
-                      <span className="text-right font-mono">{(p * 100).toFixed(1)}%</span>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <p className="text-lg" data-testid="tabular-prediction">
-                {t('tabular.use.predictedValue', { target: data.target, value: Number(prediction.value.toFixed(2)).toLocaleString('vi') })}
-              </p>
-            )}
-            <h4 className="text-sm font-medium">{t('tabular.use.why')}</h4>
-            <Explanation trained={trained} data={data} row={row} />
-          </>
-        )}
-      </section>
+              )}
+              <h4 className="text-sm font-medium">{t('tabular.use.why')}</h4>
+              <Explanation trained={trained} data={data} row={row} />
+            </>
+          )}
+        </section>
+      </div>
+      <PredictCode trained={trained} data={data} row={row} />
     </div>
   );
 }

@@ -1,0 +1,205 @@
+{
+  "scale": {
+    "rows": [
+      [
+        39.1,
+        3750.0,
+        5.0
+      ],
+      [
+        46.5,
+        4200.0,
+        5.0
+      ],
+      [
+        50.0,
+        5400.0,
+        5.0
+      ],
+      [
+        36.7,
+        3450.0,
+        5.0
+      ],
+      [
+        45.2,
+        4800.0,
+        5.0
+      ]
+    ],
+    "columns": [
+      "Chiều dài",
+      "Cân nặng",
+      "Không đổi"
+    ],
+    "output": [
+      "Chiều dài: trung bình 43.50, lệch chuẩn 4.89, dòng đầu 39.10 → -0.90",
+      "Cân nặng: trung bình 4320.00, lệch chuẩn 706.12, dòng đầu 3750.00 → -0.81",
+      "Không đổi: trung bình 5.00, lệch chuẩn 1.00, dòng đầu 5.00 → 0.00"
+    ]
+  },
+  "tree": {
+    "nodes": [
+      {
+        "split": {
+          "feature": 0,
+          "threshold": 42.35,
+          "left": 1,
+          "right": 2
+        },
+        "counts": [
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "split": null,
+        "counts": [
+          2,
+          0,
+          0
+        ]
+      },
+      {
+        "split": {
+          "feature": 1,
+          "threshold": 4500.0,
+          "left": 3,
+          "right": 4
+        },
+        "counts": [
+          0,
+          2,
+          1
+        ]
+      },
+      {
+        "split": null,
+        "counts": [
+          0,
+          2,
+          0
+        ]
+      },
+      {
+        "split": null,
+        "counts": [
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "x": [
+      46.5,
+      4200.0
+    ],
+    "features": [
+      "Chiều dài",
+      "Cân nặng"
+    ],
+    "classNames": [
+      "Adelie",
+      "Chinstrap",
+      "Gentoo"
+    ],
+    "output": [
+      "Chiều dài = 46.50 > 42.350",
+      "Cân nặng = 4200.00 <= 4500.000",
+      "Lá 3: [0, 2, 0] → Máy đoán: Chinstrap"
+    ]
+  },
+  "knn": {
+    "train": [
+      [
+        0.1,
+        -0.5
+      ],
+      [
+        1.2,
+        0.3
+      ],
+      [
+        -0.7,
+        0.9
+      ],
+      [
+        0.4,
+        0.4
+      ],
+      [
+        -1.1,
+        -1.0
+      ],
+      [
+        0.0,
+        0.2
+      ]
+    ],
+    "labels": [
+      0,
+      1,
+      2,
+      1,
+      0,
+      2
+    ],
+    "values": [
+      3.5,
+      4.25,
+      5.0,
+      4.0,
+      3.25,
+      4.75
+    ],
+    "x": [
+      0.2,
+      0.1
+    ],
+    "rows": [
+      3,
+      5,
+      8,
+      9,
+      12,
+      14
+    ],
+    "classification": [
+      "dòng 14: khoảng cách 0.224",
+      "dòng 9: khoảng cách 0.361",
+      "dòng 3: khoảng cách 0.608",
+      "Phiếu: [1, 1, 1] → Máy đoán: Adelie"
+    ],
+    "regression": [
+      "dòng 14: khoảng cách 0.224",
+      "dòng 9: khoảng cách 0.361",
+      "dòng 3: khoảng cách 0.608",
+      "Máy đoán: trung bình 3 láng giềng = 4.08"
+    ]
+  },
+  "linear": {
+    "w": [
+      0.125,
+      -2.5,
+      30.0
+    ],
+    "b": 1.75,
+    "x": [
+      12.0,
+      0.4,
+      0.0
+    ],
+    "features": [
+      "Chiều dài",
+      "Cân nặng",
+      "Không đổi"
+    ],
+    "output": [
+      "Chiều dài: 0.125 × 12.00 = +1.500",
+      "Cân nặng: -2.500 × 0.40 = -1.000",
+      "Không đổi: 30.000 × 0.00 = +0.000",
+      "Máy đoán: 1.750 + các đóng góp = 2.25"
+    ]
+  }
+}

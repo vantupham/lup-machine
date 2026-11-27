@@ -50,6 +50,39 @@ describe('Studio dữ liệu bảng', () => {
     expect(screen.getByRole('button', { name: 'Tải notebook (.ipynb)' })).toBeEnabled();
   });
 
+  test('Mã Python: chuẩn hóa các cột số; đi theo cây và k-NN cho dòng đang thử, cùng câu trả lời với trang', async () => {
+    const { repos, projectId } = await setup();
+    render(repos, projectId);
+    await userEvent.click(await screen.findByRole('button', { name: /Hoa diên vĩ/ }));
+    await screen.findByTestId('table-size');
+    const panel = (file: string) => document.querySelector<HTMLElement>(`[data-program="${file}"]`)!;
+    const run = async (file: string, times: number) => {
+      const code = panel(file);
+      if (!code.hasAttribute('open')) await userEvent.click(within(code).getByText('Mã Python'));
+      for (let i = 0; i < times; i++) await userEvent.click(within(code).getByRole('button', { name: /Đến dòng in tiếp theo/ }));
+      return within(code).getByTestId('code-trace-console').textContent!.split('\n');
+    };
+
+    expect((await run('tabular_scale.py', 1))[0]).toMatch(/^Dài đài hoa \(cm\): trung bình \d+\.\d{2}, lệch chuẩn \d+\.\d{2}, dòng đầu \d+\.\d{2} → -?\d+\.\d{2}$/);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
+    await screen.findByText('Đã huấn luyện (lần 1).');
+    fireEvent.change(screen.getByLabelText('Dài cánh hoa (cm)'), { target: { value: '1,4' } });
+    fireEvent.change(screen.getByLabelText('Rộng cánh hoa (cm)'), { target: { value: '0.2' } });
+    const treeLines = await run('tree_predict.py', 6);
+    expect(treeLines.at(-1)).toMatch(/→ Máy đoán: setosa$/);
+
+    await userEvent.click(screen.getByRole('radio', { name: /k láng giềng/ }));
+    await userEvent.click(screen.getByRole('button', { name: 'Huấn luyện' }));
+    await screen.findByText('Đã huấn luyện (lần 2).');
+    fireEvent.change(screen.getByLabelText('Dài cánh hoa (cm)'), { target: { value: '1,4' } });
+    fireEvent.change(screen.getByLabelText('Rộng cánh hoa (cm)'), { target: { value: '0.2' } });
+    const knnLines = await run('knn_predict.py', 6);
+    expect(knnLines).toHaveLength(6);
+    expect(knnLines.at(-1)).toMatch(/^Phiếu: \[5, 0, 0\] → Máy đoán: setosa$/);
+    expect(screen.getByTestId('tabular-prediction')).toHaveTextContent('Máy đoán: setosa');
+  });
+
   test('Penguins: báo dòng thiếu và mất cân bằng; đổi sang hồi quy cân nặng có phương trình', async () => {
     const { repos, projectId } = await setup();
     render(repos, projectId);
