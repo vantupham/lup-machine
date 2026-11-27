@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { fitLogisticHistory, predictLogisticProba, type LogisticIterate } from '@/core/algorithms/logistic-regression';
 import { ExactBadge } from '@/ui/ExactBadge';
@@ -16,6 +16,8 @@ export interface LogisticGrowthProps {
   readonly c: number;
   readonly classNames: readonly string[];
   readonly featureNames: readonly string[];
+  /** Vẽ một hàng trọng số theo hình dạng tự nhiên của dữ liệu (phổ âm, khung xương, từ). `cls`: lớp mà hàng này nghiêng về. */
+  readonly renderRow?: ((row: readonly number[], cls: number, title: string) => ReactNode) | undefined;
 }
 
 /** Bước 4 (hồi quy logistic): phát lại từng vòng lặp L-BFGS. Chỉ tính khi mở mục này (huấn luyện lại một lần). */
@@ -41,7 +43,7 @@ function accuracyOf(history: readonly LogisticIterate[], xs: LogisticGrowthProps
   });
 }
 
-function LogisticHistory({ xs, ys, numClasses, c, classNames, featureNames }: LogisticGrowthProps) {
+function LogisticHistory({ xs, ys, numClasses, c, classNames, featureNames, renderRow }: LogisticGrowthProps) {
   const { t, i18n } = useTranslation();
   const { history } = useMemo(() => fitLogisticHistory(xs, ys, numClasses, { c }), [xs, ys, numClasses, c]);
   const accuracy = useMemo(() => accuracyOf(history, xs, ys), [history, xs, ys]);
@@ -70,7 +72,10 @@ function LogisticHistory({ xs, ys, numClasses, c, classNames, featureNames }: Lo
       <p data-testid="logistic-iterate">{t('growth.logistic.status', { n: shown, objective: fmt(it.objective), accuracy: fmt(accuracy[shown]! * 100, 1) })}</p>
       <div className="grid gap-4 md:grid-cols-2">
         {it.model.weights.map((row, k) => (
-          <FeatureBars key={k} title={rowNames[k] ?? ''} weights={row} featureNames={featureNames} />
+          <div key={k} className="space-y-2">
+            <FeatureBars title={rowNames[k] ?? ''} weights={row} featureNames={featureNames} />
+            {renderRow && <div data-testid={`logistic-shape-${k}`}>{renderRow(row, numClasses === 2 ? 1 : k, rowNames[k] ?? '')}</div>}
+          </div>
         ))}
       </div>
       <p className="text-xs text-muted">{t('growth.logistic.note')}</p>

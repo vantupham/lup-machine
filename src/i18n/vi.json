@@ -2322,7 +2322,13 @@
       "slider": "Vòng lặp {{n}} / {{max}}",
       "status": "Vòng {{n}}: hàm mục tiêu {{objective}}, đúng {{accuracy}}% tập Huấn luyện.",
       "towards": "Nghiêng về {{cls}} (dương) hay lớp kia (âm)",
-      "note": "Mỗi vòng, L-BFGS đi một bước theo hướng làm hàm mục tiêu giảm, dựa trên vài bước trước đó."
+      "note": "Mỗi vòng, L-BFGS đi một bước theo hướng làm hàm mục tiêu giảm, dựa trên vài bước trước đó.",
+      "wordsTowards": "Từ kéo về phía này (chữ to: trọng số lớn)",
+      "wordsAway": "Từ đẩy ra xa",
+      "audioShape": "Trọng số trên ảnh phổ: {{title}}",
+      "audioShapeNote": "Mỗi ô là một dải tần (dọc) ở một phần đoạn âm (ngang). Xanh: dương, cam: âm.",
+      "poseShape": "Trọng số trên khung xương: {{title}}",
+      "poseShapeNote": "Chấm to: khớp có trọng số x, y lớn."
     },
     "tree": {
       "title": "Xem cây mọc từng nút",
@@ -2334,7 +2340,15 @@
       "leaf": "lá, đoán {{cls}}",
       "searchTitle": "Nút {{id}}: {{count}} ngưỡng đã thử ở cột {{feature}}",
       "searchLabel": "Mức giảm tạp chất của {{count}} ngưỡng",
-      "searchNote": "Thử ngưỡng từ {{lo}} đến {{hi}}. Chấm cam: ngưỡng {{threshold}} giảm tạp chất nhiều nhất ({{improvement}})."
+      "searchNote": "Thử ngưỡng từ {{lo}} đến {{hi}}. Chấm cam: ngưỡng {{threshold}} giảm tạp chất nhiều nhất ({{improvement}}).",
+      "diagramLabel": "Sơ đồ cây: {{count}} nút đã dựng",
+      "nodeLabel": "Sơ đồ, nút {{id}} ({{samples}} dòng): {{text}}",
+      "yes": "đúng",
+      "no": "sai",
+      "rows": "Nút {{id}} · {{n}} dòng",
+      "pending": "chưa dựng",
+      "legend": "Màu các lớp",
+      "listTitle": "Danh sách nút theo thứ tự máy dựng"
     },
     "audioFeature": "dải {{band}}, phần {{part}}"
   }
