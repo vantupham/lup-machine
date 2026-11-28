@@ -119,14 +119,15 @@ test('nút Video bài giảng chỉ bật sau khi huấn luyện; xem trước 1
   await expect(dialog.getByText(/^Đã thu 1\/\d+ cảnh\./)).toBeVisible();
   await expect(dialog.getByText(/Video có giọng đã thu ở 1\/\d+ cảnh\./)).toBeVisible();
 
-  // Xuất lại: tệp có dải âm thanh AAC.
+  // Xuất lại: tệp có dải âm thanh (AAC, hoặc Opus khi trình duyệt không có AAC).
   const voicedDownload = page.waitForEvent('download', { timeout: 180_000 });
   await expect(dialog.getByRole('button', { name: 'Xuất video' })).toBeEnabled({ timeout: 30_000 });
   await dialog.getByRole('button', { name: 'Xuất video' }).click();
   const voiced = new Input({ source: new FilePathSource(await (await voicedDownload).path()), formats: ALL_FORMATS });
   const audioTrack = await voiced.getPrimaryAudioTrack();
-  expect(audioTrack?.codec).toBe('aac');
-  console.warn(`[video có giọng] ${(await voiced.computeDuration()).toFixed(2)} s, giọng cảnh 1: ${voiceSeconds} s`);
+  // Chrome/Edge có bộ mã hóa AAC; Chromium bản Linux (CI) thì không, ứng dụng tự dùng Opus trong MP4.
+  expect(['aac', 'opus']).toContain(audioTrack?.codec);
+  console.warn(`[video có giọng] ${(await voiced.computeDuration()).toFixed(2)} s, âm thanh ${audioTrack?.codec}, giọng cảnh 1: ${voiceSeconds} s`);
   voiced.dispose();
 
   // Đóng rồi mở lại: bản thu vẫn còn (lưu trên máy).
