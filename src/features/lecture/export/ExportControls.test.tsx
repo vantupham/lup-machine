@@ -34,6 +34,7 @@ function job() {
     timeline: buildTimeline(script, '16:9', [[90]]),
     burnSubtitles: true,
     env: { t: i18n.getFixedT('vi'), language: 'vi', layout: frameLayout('16:9'), thumbs: new Map() },
+    narration: null,
   };
 }
 

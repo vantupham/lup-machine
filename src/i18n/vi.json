@@ -2460,7 +2460,6 @@
       "pause": "Dừng",
       "seek": "Vị trí trong video",
       "time": "{{current}} / {{total}}",
-      "scenes": "Lời giảng từng cảnh",
       "downloadSrt": "Tải phụ đề .srt",
       "downloadVtt": "Tải phụ đề .vtt",
       "noEvaluation": "Chưa có mô hình đang mở nên bỏ cảnh Đánh giá. Huấn luyện lại để có cảnh này.",
@@ -2478,7 +2477,30 @@
       "exportUnsupported": "Trình duyệt này không tạo được video. Dùng Chrome hoặc Edge bản mới.",
       "silentNote": "Video chưa có lời đọc, chỉ có hình và phụ đề.",
       "progress": "Tiến độ dựng video",
-      "exportHidden": "Tab bị ẩn trong lúc ghi nên video sẽ đứng hình. Mở lại tab này rồi xuất lại."
+      "exportHidden": "Tab bị ẩn trong lúc ghi nên video sẽ đứng hình. Mở lại tab này rồi xuất lại.",
+      "voicedNote": "Video có giọng đã thu ở {{done}}/{{total}} cảnh. Cảnh chưa thu chỉ có phụ đề."
+    },
+    "voice": {
+      "title": "Lời giảng và giọng đọc",
+      "lead": "Bấm Thu giọng rồi đọc lời của cảnh. Đọc xong thì bấm Dừng.",
+      "record": "Thu giọng",
+      "rerecord": "Thu lại",
+      "recordAria": "Thu giọng cảnh {{scene}}",
+      "stop": "Dừng ({{seconds}} giây)",
+      "saving": "Đang lưu bản thu",
+      "recorded": "Đã thu {{seconds}} giây",
+      "changed": "Lời đã đổi sau khi thu. Nên thu lại cảnh này.",
+      "removeAria": "Xóa bản thu cảnh {{scene}}",
+      "listen": "Nghe lại cảnh {{scene}}",
+      "denied": "Không dùng được micro. Cho phép trang dùng micro rồi thử lại.",
+      "failed": "Không thu được giọng: {{message}}",
+      "use": "Dùng giọng đã thu trong video",
+      "count": "Đã thu {{done}}/{{total}} cảnh.",
+      "localNote": "Giọng thu chỉ lưu trên máy này, không có trong tệp dự án.",
+      "loadError": "Không đọc được giọng đã thu: {{message}}",
+      "missing": "Không tìm thấy micro. Cắm micro rồi thử lại.",
+      "recordingNow": "Đang thu giọng cảnh {{scene}}.",
+      "skipped": "Có {{count}} bản thu bị hỏng nên bị bỏ qua. Thu lại các cảnh đó."
     }
   }
 }

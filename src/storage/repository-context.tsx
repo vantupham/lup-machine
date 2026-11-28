@@ -11,6 +11,7 @@ import type { AssignmentRepository } from './repositories/assignment-repository'
 import type { SubmissionRepository } from './repositories/submission-repository';
 import type { NotebookRepository } from './repositories/notebook-repository';
 import type { TrialRepository } from './repositories/trial-repository';
+import type { LectureVoiceRepository } from './repositories/lecture-voice-repository';
 
 export interface Repositories {
   readonly projects: ProjectRepository;
@@ -25,6 +26,7 @@ export interface Repositories {
   readonly submissions: SubmissionRepository;
   readonly notebook: NotebookRepository;
   readonly trials: TrialRepository;
+  readonly lectureVoices: LectureVoiceRepository;
 }
 
 const RepositoriesContext = createContext<Repositories | null>(null);

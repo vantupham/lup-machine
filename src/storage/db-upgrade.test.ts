@@ -27,7 +27,8 @@ describe('nâng cấp cơ sở dữ liệu', () => {
     await db.notes.put({ projectId: 'p1', step: 'data', text: 'Có 1 lớp', updatedAt: '2026-11-25T00:00:00.000Z' });
     expect(await db.notes.where('projectId').equals('p1').count()).toBe(1);
     expect(await db.trials.count()).toBe(0);
-    expect(db.verno).toBe(12);
+    expect(await db.lectureVoices.count()).toBe(0);
+    expect(db.verno).toBe(13);
     await db.delete();
   });
 });

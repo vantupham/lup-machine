@@ -177,6 +177,19 @@ export interface SubmissionRecord {
   readonly grade: Grade;
 }
 
+/** Giọng thu cho video bài giảng (chỉ trên máy này, không vào tệp .lup). Khóa: [projectId+key], key = "mức:cảnh". */
+export interface LectureVoiceRecord {
+  readonly projectId: string;
+  readonly key: string;
+  readonly level: 'explore' | 'expert';
+  readonly sceneId: string;
+  readonly audio: ArrayBuffer;
+  readonly mime: string;
+  readonly duration: number;
+  readonly text: string;
+  readonly createdAt: string;
+}
+
 /** Dự án đầy đủ của một bài nộp (có thể kèm nhiều ảnh): bảng riêng, chỉ đọc khi giáo viên mở. */
 export interface SubmissionProjectRecord {
   readonly id: string;
@@ -201,6 +214,7 @@ export class LupDatabase extends Dexie {
   submissionProjects!: EntityTable<SubmissionProjectRecord, 'id'>;
   notes!: Dexie.Table<NoteRecord, [string, string]>;
   trials!: EntityTable<TrialRecord, 'id'>;
+  lectureVoices!: Dexie.Table<LectureVoiceRecord, [string, string]>;
 
   constructor(name: string = DEFAULT_DB_NAME) {
     super(name);
@@ -319,6 +333,23 @@ export class LupDatabase extends Dexie {
       submissionProjects: 'id',
       notes: '[projectId+step], projectId',
       trials: 'id, projectId',
+    });
+    this.version(13).stores({
+      projects: 'id, updatedAt',
+      classes: 'id, projectId',
+      samples: 'id, projectId, classId',
+      features: '[sampleId+modelId], sampleId, projectId',
+      runs: 'id, projectId',
+      dataTables: 'projectId',
+      audioClips: 'id, projectId, classId',
+      poseSamples: 'id, projectId, classId',
+      modelCards: 'projectId',
+      assignments: 'projectId',
+      submissions: 'id, assignmentId, [assignmentId+studentKey]',
+      submissionProjects: 'id',
+      notes: '[projectId+step], projectId',
+      trials: 'id, projectId',
+      lectureVoices: '[projectId+key], projectId',
     });
   }
 }

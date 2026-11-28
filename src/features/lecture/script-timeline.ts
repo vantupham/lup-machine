@@ -28,6 +28,25 @@ export function spokenWeight(text: string, language: string): number {
   return countWords(spoken) + percents * 2;
 }
 
+/**
+ * Thời lượng từng câu khi có giọng thu: cảnh đã thu dài đúng bằng bản thu (`recorded[cảnh]` giây),
+ * các câu chia phần còn lại sau khoảng nghỉ theo độ dài đọc; cảnh chưa thu thì ước lượng.
+ */
+export function lineSecondsWithVoices(script: LectureScript, recorded: readonly (number | null | undefined)[]): number[][] {
+  return script.scenes.map((scene, s) => {
+    const estimates = scene.lines.map((line) => estimateSpeechSeconds(line.spoken));
+    const total = recorded[s];
+    if (total === null || total === undefined || !(total > 0)) return estimates;
+    const gaps = Math.max(0, scene.lines.length - 1) * LINE_GAP;
+    const available = Math.max(total - gaps, MIN_LINE_SECONDS * scene.lines.length);
+    const weight = estimates.reduce((sum, e) => sum + e, 0);
+    return estimates.map((e) => (weight > 0 ? (available * e) / weight : available / scene.lines.length));
+  });
+}
+
+/** Câu ngắn nhất khi bản thu quá ngắn so với số câu. */
+const MIN_LINE_SECONDS = 0.2;
+
 export interface SceneTime {
   readonly id: SceneId;
   readonly start: number;

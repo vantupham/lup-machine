@@ -2460,7 +2460,6 @@
       "pause": "Pause",
       "seek": "Position in video",
       "time": "{{current}} / {{total}}",
-      "scenes": "Narration per scene",
       "downloadSrt": "Download .srt subtitles",
       "downloadVtt": "Download .vtt subtitles",
       "noEvaluation": "No model is open, so the Evaluation scene is skipped. Train again to include it.",
@@ -2478,7 +2477,30 @@
       "exportUnsupported": "This browser cannot create videos. Use a recent Chrome or Edge.",
       "silentNote": "The video has no narration yet, only pictures and subtitles.",
       "progress": "Video build progress",
-      "exportHidden": "The tab was hidden during recording, so the video would freeze. Return to this tab and export again."
+      "exportHidden": "The tab was hidden during recording, so the video would freeze. Return to this tab and export again.",
+      "voicedNote": "The video uses recorded voice in {{done}}/{{total}} scenes. Other scenes have subtitles only."
+    },
+    "voice": {
+      "title": "Narration and voice",
+      "lead": "Press Record and read the scene's narration. Press Stop when done.",
+      "record": "Record",
+      "rerecord": "Record again",
+      "recordAria": "Record voice for scene {{scene}}",
+      "stop": "Stop ({{seconds}} s)",
+      "saving": "Saving recording",
+      "recorded": "Recorded {{seconds}} s",
+      "changed": "The narration changed after recording. Record this scene again.",
+      "removeAria": "Delete recording for scene {{scene}}",
+      "listen": "Play back scene {{scene}}",
+      "denied": "The microphone is not available. Allow this page to use it and try again.",
+      "failed": "Could not record: {{message}}",
+      "use": "Use the recorded voice in the video",
+      "count": "{{done}}/{{total}} scenes recorded.",
+      "localNote": "Recordings stay on this device and are not in the project file.",
+      "loadError": "Could not read the recordings: {{message}}",
+      "missing": "No microphone found. Connect one and try again.",
+      "recordingNow": "Recording scene {{scene}}.",
+      "skipped": "{{count}} recordings are damaged and were skipped. Record those scenes again."
     }
   }
 }
