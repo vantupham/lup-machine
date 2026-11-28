@@ -11,7 +11,7 @@ const script: LectureScript = {
   level: 'explore',
   scenes: [
     { id: 'title', title: 'Giới thiệu', lines: [{ display: 'Xin chào các em.', spoken: 'Xin chào các em.' }], visual: { kind: 'title', projectName: 'Lá đậu', classNames: ['A'] } },
-    { id: 'summary', title: 'Tóm lại', lines: [{ display: 'Hết bài.', spoken: 'Hết bài.' }], visual: { kind: 'summary', testAccuracy: 0.5 } },
+    { id: 'summary', title: 'Tóm lại', lines: [{ display: 'Hết bài.', spoken: 'Hết bài.' }], visual: { kind: 'summary', score: { split: 'test', accuracy: 0.5 }, confusion: null } },
   ],
 };
 

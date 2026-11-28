@@ -2364,7 +2364,8 @@
         "evaluation": "Evaluation",
         "experiments": "Experiments",
         "limits": "Limits",
-        "summary": "Summary"
+        "summary": "Summary",
+        "outro": "The end"
       },
       "title": {
         "intro": "The project {{name}} teaches a computer to tell {{count}} image classes apart: {{classes}}.",
@@ -2423,7 +2424,8 @@
         "result": "In short, the model got {{test}} of test images right.",
         "improve": "To improve, add more varied {{actual}} images and check whether it still confuses them with {{predicted}}.",
         "harder": "Next step: try harder images, taken in other places and other light.",
-        "question": "Question for the class: in real use, which images will the model meet that it has never seen?"
+        "question": "Question for the class: in real use, which images will the model meet that it has never seen?",
+        "resultTrain": "In short, the model got {{train}} of training images right. Add test images to see how it handles new ones."
       }
     },
     "canvas": {
@@ -2440,7 +2442,17 @@
       "predicted": "Predicted",
       "run": "Run {{n}}",
       "unknownImage": "Something different",
-      "summaryLabel": "of test images correct"
+      "summaryLabel": "of test images correct",
+      "summaryResult": "Result",
+      "summaryImprove": "To improve",
+      "summaryQuestion": "Question for the class",
+      "summaryTrainLabel": "of training images correct",
+      "noScore": "No score yet",
+      "confusedAs": "often labelled as",
+      "harder": "Try harder images, taken in other places and other light.",
+      "question": "In real use, which images will the model meet that it has never seen?",
+      "outro": "Train your own AI model at LUP Machine",
+      "outroUrl": "https://vantupham.github.io/lup-machine"
     },
     "panel": {
       "open": "Lecture video",

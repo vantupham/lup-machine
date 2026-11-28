@@ -78,7 +78,9 @@ function announcement(t: TFunction, script: LectureScript, recorder: RecorderSta
 /** Lời giảng từng cảnh kèm nút thu giọng; giọng thu chỉ lưu trên máy này. */
 export function VoiceScenes(props: VoiceScenesProps) {
   const { t } = useTranslation();
-  const done = props.script.scenes.filter((s) => props.voices.has(s.id)).length;
+  // Cảnh không có lời (cảnh kết) không cần thu giọng.
+  const spoken = props.script.scenes.filter((s) => s.lines.length > 0);
+  const done = spoken.filter((s) => props.voices.has(s.id)).length;
   return (
     <section aria-labelledby="lecture-voice-title" className="space-y-3">
       <div>
@@ -87,14 +89,14 @@ export function VoiceScenes(props: VoiceScenesProps) {
         </h3>
         <p className="text-sm text-muted">{t('lecture.voice.lead')}</p>
         <p className="text-sm text-muted">
-          {t('lecture.voice.count', { done, total: props.script.scenes.length })} {t('lecture.voice.localNote')}
+          {t('lecture.voice.count', { done, total: spoken.length })} {t('lecture.voice.localNote')}
         </p>
         <p role="status" aria-live="polite" className="sr-only">
           {announcement(t, props.script, props.recorder)}
         </p>
       </div>
       <ol className="space-y-3">
-        {props.script.scenes.map((scene) => (
+        {spoken.map((scene) => (
           <SceneRow key={scene.id} scene={scene} voice={props.voices.get(scene.id)} recorder={props.recorder} onRecord={props.onRecord} onStop={props.onStop} onRemove={props.onRemove} />
         ))}
       </ol>

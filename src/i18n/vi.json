@@ -2364,7 +2364,8 @@
         "evaluation": "Đánh giá",
         "experiments": "Các lần thử",
         "limits": "Giới hạn",
-        "summary": "Tóm lại"
+        "summary": "Tóm lại",
+        "outro": "Kết thúc"
       },
       "title": {
         "intro": "Dự án {{name}} dạy máy phân biệt {{count}} lớp ảnh: {{classes}}.",
@@ -2423,7 +2424,8 @@
         "result": "Tóm lại, mô hình đoán đúng {{test}} ảnh kiểm tra.",
         "improve": "Muốn tốt hơn, thêm ảnh {{actual}} đa dạng hơn rồi xem máy còn nhầm sang {{predicted}} không.",
         "harder": "Bước tiếp theo: thử với ảnh khó hơn, chụp ở nơi khác và ánh sáng khác.",
-        "question": "Câu hỏi cho cả lớp: khi dùng thật, mô hình sẽ gặp những ảnh nào nó chưa từng thấy?"
+        "question": "Câu hỏi cho cả lớp: khi dùng thật, mô hình sẽ gặp những ảnh nào nó chưa từng thấy?",
+        "resultTrain": "Tóm lại, mô hình đoán đúng {{train}} ảnh huấn luyện. Cần thêm ảnh kiểm tra để biết nó làm bài mới ra sao."
       }
     },
     "canvas": {
@@ -2440,7 +2442,17 @@
       "predicted": "Máy đoán",
       "run": "Lần {{n}}",
       "unknownImage": "Ảnh khác hẳn",
-      "summaryLabel": "ảnh Kiểm tra đoán đúng"
+      "summaryLabel": "ảnh Kiểm tra đoán đúng",
+      "summaryResult": "Kết quả",
+      "summaryImprove": "Cần cải thiện",
+      "summaryQuestion": "Câu hỏi cho cả lớp",
+      "summaryTrainLabel": "ảnh Huấn luyện đoán đúng",
+      "noScore": "Chưa có điểm",
+      "confusedAs": "hay bị đoán là",
+      "harder": "Thử ảnh khó hơn, chụp ở nơi khác và ánh sáng khác.",
+      "question": "Khi dùng thật, mô hình sẽ gặp những ảnh nào nó chưa từng thấy?",
+      "outro": "Trải nghiệm huấn luyện mô hình AI tại LUP Machine",
+      "outroUrl": "https://vantupham.github.io/lup-machine"
     },
     "panel": {
       "open": "Video bài giảng",

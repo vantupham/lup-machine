@@ -3,7 +3,7 @@ import type { LectureScene, LectureScript, SceneVisual } from '../lecture-script
 import type { LectureTimeline } from '../script-timeline';
 import { drawLines, fitOneLine, font, wrapToWidth, type Ctx } from './canvas-text';
 import { VIDEO_COLORS as C } from './palette';
-import { paintData, paintDataCheck, paintLimits, paintSummary, paintTitle } from './paint-basic';
+import { paintData, paintDataCheck, paintLimits, paintOutro, paintSummary, paintTitle } from './paint-basic';
 import { paintEvaluation, paintExperiments, paintNetwork, paintTraining } from './paint-charts';
 import type { PaintEnv } from './paint-env';
 import type { Rect } from './frame-layout';
@@ -53,6 +53,8 @@ function paintVisual(ctx: Ctx, visual: SceneVisual, rect: Rect, progress: number
       return paintLimits(ctx, visual, rect, progress, env);
     case 'summary':
       return paintSummary(ctx, visual, rect, progress, env);
+    case 'outro':
+      return paintOutro(ctx, visual, rect, progress, env);
   }
 }
 
@@ -105,11 +107,13 @@ export function renderFrame(ctx: Ctx, input: FrameInput, env: PaintEnv): void {
     const { index, progress } = sceneAt(input.timeline, input.time);
     const scene = input.script.scenes[index];
     if (scene) {
-      paintHeader(ctx, scene, index, input.script.scenes.length, env);
+      // Cảnh kết chiếm cả khung, không có thanh tiêu đề cảnh.
+      const isOutro = scene.visual.kind === 'outro';
+      if (!isOutro) paintHeader(ctx, scene, index, input.script.scenes.length, env);
       ctx.save();
       try {
         ctx.textAlign = 'left';
-        paintVisual(ctx, scene.visual, visual, progress, env);
+        paintVisual(ctx, scene.visual, isOutro ? { x: 0, y: 0, w: size.width, h: size.height } : visual, progress, env);
       } finally {
         ctx.restore();
       }

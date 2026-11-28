@@ -5,6 +5,8 @@ import type { AspectRatio, LectureScript, SceneId } from './lecture-script';
 /** Nghỉ giữa hai câu trong cùng cảnh và giữa hai cảnh (giây). */
 export const LINE_GAP = 0.25;
 export const SCENE_GAP = 0.6;
+/** Cảnh không có lời đọc (cảnh kết) hiện trong chừng này giây. */
+export const SILENT_SCENE_SECONDS = 3.5;
 /** Số dòng tối đa của một đoạn phụ đề. */
 export const CUE_LINES = 2;
 
@@ -36,7 +38,7 @@ export function lineSecondsWithVoices(script: LectureScript, recorded: readonly 
   return script.scenes.map((scene, s) => {
     const estimates = scene.lines.map((line) => estimateSpeechSeconds(line.spoken));
     const total = recorded[s];
-    if (total === null || total === undefined || !(total > 0)) return estimates;
+    if (scene.lines.length === 0 || total === null || total === undefined || !(total > 0)) return estimates;
     const gaps = Math.max(0, scene.lines.length - 1) * LINE_GAP;
     const available = Math.max(total - gaps, MIN_LINE_SECONDS * scene.lines.length);
     const weight = estimates.reduce((sum, e) => sum + e, 0);
@@ -75,6 +77,7 @@ export function buildTimeline(script: LectureScript, aspect: AspectRatio, lineSe
     if (lineSeconds && seconds?.length !== scene.lines.length) throw new RangeError(`Cảnh ${scene.id}: số thời lượng không khớp số câu`);
     if (s > 0) clock += SCENE_GAP;
     const start = clock;
+    if (scene.lines.length === 0) clock += SILENT_SCENE_SECONDS;
     scene.lines.forEach((line, l) => {
       if (l > 0) clock += LINE_GAP;
       const duration = seconds?.[l] ?? estimateSpeechSeconds(line.spoken);
