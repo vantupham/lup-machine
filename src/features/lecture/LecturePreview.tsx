@@ -14,6 +14,8 @@ interface LecturePreviewProps {
   readonly thumbs: ReadonlyMap<number, readonly CanvasImageSource[]>;
   /** Trạng thái tải ảnh thu nhỏ (ghi lên canvas để kiểm thử chờ được). */
   readonly thumbsPhase: 'loading' | 'ready' | 'error';
+  /** Dải lời đọc đã trộn (null: xem trước không tiếng). */
+  readonly narration?: AudioBuffer | null;
 }
 
 function clock(seconds: number): string {
@@ -22,7 +24,7 @@ function clock(seconds: number): string {
 }
 
 /** Xem trước video ngay trên canvas: cùng hàm vẽ với lúc xuất tệp, nên xem sao xuất vậy. */
-export function LecturePreview({ script, timeline, aspect, burnSubtitles, thumbs, thumbsPhase }: LecturePreviewProps) {
+export function LecturePreview({ script, timeline, aspect, burnSubtitles, thumbs, thumbsPhase, narration = null }: LecturePreviewProps) {
   const { t, i18n } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [time, setTime] = useState(0);
@@ -33,9 +35,13 @@ export function LecturePreview({ script, timeline, aspect, burnSubtitles, thumbs
   /** Chạy tới cuối video thì coi như đã dừng (suy ra, không cần đặt lại state). */
   const isRunning = isPlaying && !isAtEnd;
   const durationRef = useRef(timeline.duration);
+  const timeRef = useRef(shownTime);
   useEffect(() => {
     durationRef.current = timeline.duration;
-  }, [timeline.duration]);
+    timeRef.current = shownTime;
+  }, [timeline.duration, shownTime]);
+  const audioCtx = useRef<AudioContext | null>(null);
+  useEffect(() => () => void audioCtx.current?.close().catch(() => undefined), []);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
@@ -47,11 +53,25 @@ export function LecturePreview({ script, timeline, aspect, burnSubtitles, thumbs
     if (!isRunning) return;
     let frame = 0;
     let last = performance.now();
+    // Có lời đọc: phát từ vị trí hiện tại, và lấy đồng hồ âm thanh làm chuẩn để hình khớp tiếng.
+    const offset = timeRef.current;
+    let voice: { readonly ctx: AudioContext; readonly source: AudioBufferSourceNode; readonly startedAt: number } | null = null;
+    if (narration && typeof AudioContext !== 'undefined' && offset < narration.duration) {
+      const ctx = audioCtx.current ?? new AudioContext();
+      audioCtx.current = ctx;
+      void ctx.resume().catch(() => undefined);
+      const source = ctx.createBufferSource();
+      source.buffer = narration;
+      source.connect(ctx.destination);
+      source.start(0, offset);
+      voice = { ctx, source, startedAt: ctx.currentTime };
+    }
     const tick = (now: number) => {
       const dt = (now - last) / 1000;
       last = now;
       setTime((prev) => {
-        const next = Math.min(prev + dt, durationRef.current);
+        const raw = voice ? offset + (voice.ctx.currentTime - voice.startedAt) : prev + dt;
+        const next = Math.min(raw, durationRef.current);
         // Hết video: dừng hẳn, để đổi khổ hay mức chi tiết (video dài ra) không tự phát tiếp.
         if (next >= durationRef.current) queueMicrotask(() => setIsPlaying(false));
         return next;
@@ -59,8 +79,15 @@ export function LecturePreview({ script, timeline, aspect, burnSubtitles, thumbs
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [isRunning, timeline.duration]);
+    return () => {
+      cancelAnimationFrame(frame);
+      try {
+        voice?.source.stop();
+      } catch {
+        // Nguồn đã tự dừng khi hết bản thu.
+      }
+    };
+  }, [isRunning, timeline.duration, narration]);
 
   const togglePlay = () => {
     if (isRunning) {

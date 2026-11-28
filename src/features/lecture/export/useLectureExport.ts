@@ -22,6 +22,8 @@ export interface ExportJob {
   readonly timeline: LectureTimeline;
   readonly burnSubtitles: boolean;
   readonly env: PaintEnv;
+  /** Dải lời đọc đã trộn (null: video không lời). */
+  readonly narration: AudioBuffer | null;
 }
 
 type Exporter = typeof import('./export-video.browser');
@@ -33,6 +35,7 @@ async function runExport(exporter: Exporter, job: ExportJob, signal: AbortSignal
     timeline: job.timeline,
     burnSubtitles: job.burnSubtitles,
     env: job.env,
+    narration: job.narration,
     signal,
     onProgress: (progress) => report(progress, isRealtime),
   });

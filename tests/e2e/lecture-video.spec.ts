@@ -52,7 +52,7 @@ test('nút Video bài giảng chỉ bật sau khi huấn luyện; xem trước 1
   await expect(canvas).toHaveAttribute('data-thumbs', 'ready', { timeout: 60_000 });
 
   // Lời giảng lấy số thật của dự án: 90 ảnh, 3 lớp; có cảnh Đánh giá vì mô hình đang mở.
-  await dialog.getByText('Lời giảng từng cảnh').click();
+  await expect(dialog.getByRole('region', { name: 'Lời giảng và giọng đọc' })).toBeVisible();
   await expect(dialog.getByText(/Dự án có 90 ảnh/)).toBeVisible();
   await expect(dialog.getByRole('heading', { name: 'Đánh giá' })).toBeVisible();
   await expect(dialog.getByText(/Trên \d+ ảnh kiểm tra, máy đoán đúng \d+ ảnh\./)).toBeVisible();
@@ -104,9 +104,37 @@ test('nút Video bài giảng chỉ bật sau khi huấn luyện; xem trước 1
   expect(seconds).toBeGreaterThanOrEqual(m! * 60 + s!);
   expect(seconds).toBeLessThan(m! * 60 + s! + 1.05);
   console.warn(`[video] ${video.suggestedFilename()}: ${seconds.toFixed(2)} s`);
+  expect(await input.getPrimaryAudioTrack()).toBeNull();
   input.dispose();
 
+  // Thu giọng cảnh Giới thiệu bằng micro giả của Chromium (tiếng bíp), khoảng 2,5 giây.
+  await page.context().grantPermissions(['camera', 'microphone']);
+  await dialog.getByRole('button', { name: 'Thu giọng cảnh Giới thiệu' }).click();
+  await page.waitForTimeout(2_500);
+  await dialog.getByRole('button', { name: /^Dừng \(\d+ giây\)$/ }).click();
+  const recorded = dialog.getByText(/^Đã thu \d+(,\d)? giây$/);
+  await expect(recorded).toBeVisible({ timeout: 20_000 });
+  const voiceSeconds = Number((await recorded.textContent())!.replace(/[^\d,]/g, '').replace(',', '.'));
+  expect(voiceSeconds).toBeGreaterThan(1.5);
+  await expect(dialog.getByText(/^Đã thu 1\/\d+ cảnh\./)).toBeVisible();
+  await expect(dialog.getByText(/Video có giọng đã thu ở 1\/\d+ cảnh\./)).toBeVisible();
+
+  // Xuất lại: tệp có dải âm thanh (AAC, hoặc Opus khi trình duyệt không có AAC).
+  const voicedDownload = page.waitForEvent('download', { timeout: 180_000 });
+  await expect(dialog.getByRole('button', { name: 'Xuất video' })).toBeEnabled({ timeout: 30_000 });
+  await dialog.getByRole('button', { name: 'Xuất video' }).click();
+  const voiced = new Input({ source: new FilePathSource(await (await voicedDownload).path()), formats: ALL_FORMATS });
+  const audioTrack = await voiced.getPrimaryAudioTrack();
+  // Chrome/Edge có bộ mã hóa AAC; Chromium bản Linux (CI) thì không, ứng dụng tự dùng Opus trong MP4.
+  expect(['aac', 'opus']).toContain(audioTrack?.codec);
+  console.warn(`[video có giọng] ${(await voiced.computeDuration()).toFixed(2)} s, âm thanh ${audioTrack?.codec}, giọng cảnh 1: ${voiceSeconds} s`);
+  voiced.dispose();
+
+  // Đóng rồi mở lại: bản thu vẫn còn (lưu trên máy).
   await dialog.getByRole('button', { name: 'Đóng' }).click();
   await expect(dialog).toBeHidden();
+  await page.getByRole('button', { name: 'Video bài giảng' }).click();
+  await expect(dialog.getByText(/^Đã thu 1\/\d+ cảnh\./)).toBeVisible({ timeout: 20_000 });
+  await dialog.getByRole('button', { name: 'Đóng' }).click();
   expect(errors).toEqual([]);
 });

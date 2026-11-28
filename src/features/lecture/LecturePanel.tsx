@@ -6,12 +6,13 @@ import type { ClassRecord, SampleRecord } from '@/storage/db';
 import { Dialog } from '@/ui/Dialog';
 import { downloadText } from '@/ui/download';
 import { Download } from '@/ui/icons';
-import type { AspectRatio, LectureLevel, LectureScript } from './lecture-script';
+import type { AspectRatio, LectureLevel } from './lecture-script';
 import { LecturePreview } from './LecturePreview';
-import { buildTimeline } from './script-timeline';
 import { useImageLecture } from './useImageLecture';
 import { ExportControls } from './export/ExportControls';
 import { frameLayout } from './render/frame-layout';
+import { useLectureNarration } from './voice/useLectureNarration';
+import { VoiceScenes } from './voice/VoiceScenes';
 
 interface LecturePanelProps {
   readonly projectId: string;
@@ -45,27 +46,6 @@ function Choice<V extends string>({ legend, name, value, options, onChange }: Ch
   );
 }
 
-function SceneList({ script }: { readonly script: LectureScript }) {
-  const { t } = useTranslation();
-  return (
-    <details className="rounded border border-rule bg-surface p-3">
-      <summary className="cursor-pointer font-semibold">{t('lecture.panel.scenes')}</summary>
-      <ol className="mt-3 space-y-3">
-        {script.scenes.map((scene) => (
-          <li key={scene.id}>
-            <h3 className="font-semibold">{scene.title}</h3>
-            <ul className="list-disc space-y-1 pl-5 text-sm">
-              {scene.lines.map((line, i) => (
-                <li key={i}>{line.display}</li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ol>
-    </details>
-  );
-}
-
 /** Hộp thoại "Video bài giảng" của dự án ảnh: chọn khổ, mức chi tiết, xem trước, tải phụ đề. */
 export function LecturePanel({ projectId, projectName, classes, samples, onClose }: LecturePanelProps) {
   const { t, i18n } = useTranslation();
@@ -73,11 +53,13 @@ export function LecturePanel({ projectId, projectName, classes, samples, onClose
   const [level, setLevel] = useState<LectureLevel>('explore');
   const [burnSubtitles, setBurnSubtitles] = useState(true);
   const [includeStudentWriting, setIncludeStudentWriting] = useState(false);
+  const [useVoice, setUseVoice] = useState(true);
   const lecture = useImageLecture(projectId, projectName, classes, samples, { level, includeStudentWriting });
-  const timeline = useMemo(() => (lecture.script ? buildTimeline(lecture.script, aspect) : null), [lecture.script, aspect]);
+  const voice = useLectureNarration(projectId, level, lecture.script, aspect, useVoice);
+  const timeline = voice.timeline;
   const env = useMemo(() => ({ t, language: i18n.language, layout: frameLayout(aspect), thumbs: lecture.thumbs }), [t, i18n.language, aspect, lecture.thumbs]);
   /** Chờ ảnh thu nhỏ và soi kỹ xong để video xuất ra có đủ cảnh, đủ ảnh. */
-  const isReadyToExport = lecture.thumbsPhase !== 'loading' && lecture.deepStatus.phase !== 'running';
+  const isReadyToExport = lecture.thumbsPhase !== 'loading' && lecture.deepStatus.phase !== 'running' && !voice.isPreparing && (voice.recorder.phase === 'idle' || voice.recorder.phase === 'error');
 
   const download = (kind: 'srt' | 'vtt') => {
     if (!timeline) return;
@@ -118,6 +100,10 @@ export function LecturePanel({ projectId, projectName, classes, samples, onClose
               <input type="checkbox" checked={includeStudentWriting} onChange={(e) => setIncludeStudentWriting(e.target.checked)} />
               {t('lecture.panel.studentWriting')}
             </label>
+            <label className="flex items-center gap-1.5">
+              <input type="checkbox" checked={useVoice} onChange={(e) => setUseVoice(e.target.checked)} />
+              {t('lecture.voice.use')}
+            </label>
           </div>
         </div>
 
@@ -126,12 +112,17 @@ export function LecturePanel({ projectId, projectName, classes, samples, onClose
           {lecture.deepError && <p className="text-danger">{t('lecture.panel.checkError', { message: lecture.deepError })}</p>}
           {!lecture.hasEvaluation && <p className="text-muted">{t('lecture.panel.noEvaluation')}</p>}
           {lecture.thumbsFailed && <p className="text-muted">{t('lecture.panel.thumbsError')}</p>}
+          {voice.voicesError && <p className="text-danger">{t('lecture.voice.loadError', { message: voice.voicesError })}</p>}
+          {voice.skippedVoices > 0 && <p className="text-danger">{t('lecture.voice.skipped', { count: voice.skippedVoices })}</p>}
         </div>
 
         {lecture.script && timeline && (
           <>
-            <LecturePreview script={lecture.script} timeline={timeline} aspect={aspect} burnSubtitles={burnSubtitles} thumbs={lecture.thumbs} thumbsPhase={lecture.thumbsPhase} />
-            <ExportControls job={{ projectName, aspect, script: lecture.script, timeline, burnSubtitles, env }} isReady={isReadyToExport} />
+            <LecturePreview script={lecture.script} timeline={timeline} aspect={aspect} burnSubtitles={burnSubtitles} thumbs={lecture.thumbs} thumbsPhase={lecture.thumbsPhase} narration={voice.narration} />
+            <ExportControls job={{ projectName, aspect, script: lecture.script, timeline, burnSubtitles, env, narration: voice.narration }} isReady={isReadyToExport} />
+            <p className="text-sm text-muted">
+              {voice.voicedScenes > 0 ? t('lecture.panel.voicedNote', { done: voice.voicedScenes, total: lecture.script.scenes.length }) : t('lecture.panel.silentNote')}
+            </p>
             <div className="flex flex-wrap gap-2">
               <button type="button" className="btn btn-ghost" onClick={() => download('srt')}>
                 <Download /> {t('lecture.panel.downloadSrt')}
@@ -141,7 +132,7 @@ export function LecturePanel({ projectId, projectName, classes, samples, onClose
               </button>
             </div>
             <p className="text-sm text-muted">{t('lecture.panel.privacyNote')}</p>
-            <SceneList script={lecture.script} />
+            <VoiceScenes script={lecture.script} voices={voice.voices} recorder={voice.recorder} onRecord={voice.record} onStop={voice.stop} onRemove={voice.remove} />
           </>
         )}
       </div>

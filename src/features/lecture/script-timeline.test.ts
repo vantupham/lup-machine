@@ -1,5 +1,5 @@
 import { estimateSpeechSeconds } from '@/core/lecture/subtitles';
-import { buildTimeline, CUE_LINES, LINE_GAP, SCENE_GAP, spokenWeight, subtitleLineChars } from './script-timeline';
+import { buildTimeline, CUE_LINES, LINE_GAP, lineSecondsWithVoices, SCENE_GAP, spokenWeight, subtitleLineChars } from './script-timeline';
 import type { LectureScript } from './lecture-script';
 
 const script: LectureScript = {
@@ -70,6 +70,22 @@ describe('buildTimeline', () => {
     const last = timeline.cues.at(-1)!;
     expect(last.end).toBeCloseTo(timeline.duration, 9);
     for (let i = 1; i < timeline.cues.length; i++) expect(timeline.cues[i]!.start).toBeGreaterThanOrEqual(timeline.cues[i - 1]!.end - 1e-9);
+  });
+
+  test('có giọng thu: cảnh dài đúng bằng bản thu, cảnh chưa thu thì ước lượng', () => {
+    const seconds = lineSecondsWithVoices(script, [9, null]);
+    const timeline = buildTimeline(script, '16:9', seconds);
+    expect(timeline.scenes[0]!.end - timeline.scenes[0]!.start).toBeCloseTo(9, 9);
+    expect(seconds[1]).toEqual([estimateSpeechSeconds(script.scenes[1]!.lines[0]!.spoken)]);
+    // Hai câu chia theo độ dài đọc.
+    const [a, b] = seconds[0]!;
+    const [ea, eb] = script.scenes[0]!.lines.map((l) => estimateSpeechSeconds(l.spoken));
+    expect(a! / b!).toBeCloseTo(ea! / eb!, 9);
+  });
+
+  test('bản thu quá ngắn so với khoảng nghỉ: câu vẫn có thời lượng dương', () => {
+    const seconds = lineSecondsWithVoices(script, [0.1, 3]);
+    for (const s of seconds.flat()) expect(s).toBeGreaterThan(0);
   });
 
   test('từ chối số thời lượng không khớp số câu', () => {

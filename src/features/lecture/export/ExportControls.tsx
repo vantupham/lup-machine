@@ -61,7 +61,6 @@ export function ExportControls({ job, isReady }: ExportControlsProps) {
       <p role="status" aria-live="polite" className={`text-sm ${message?.isAlert ? 'text-danger' : ''}`}>
         {message?.text}
       </p>
-      <p className="text-sm text-muted">{t('lecture.panel.silentNote')}</p>
       {isRunning && state.isRealtime && <p className="text-sm text-muted">{t('lecture.panel.realtimeNote', { minutes })}</p>}
     </div>
   );
