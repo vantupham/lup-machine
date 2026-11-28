@@ -2425,6 +2425,50 @@
         "harder": "Bước tiếp theo: thử với ảnh khó hơn, chụp ở nơi khác và ánh sáng khác.",
         "question": "Câu hỏi cho cả lớp: khi dùng thật, mô hình sẽ gặp những ảnh nào nó chưa từng thấy?"
       }
+    },
+    "canvas": {
+      "brand": "Video bài giảng LUP Machine",
+      "train": "Huấn luyện",
+      "test": "Kiểm tra",
+      "leakPairs": "cặp ảnh Kiểm tra gần trùng ảnh Huấn luyện",
+      "samePairs": "cặp ảnh gần trùng trong cùng một tập",
+      "shortcut": "ảnh Huấn luyện đoán đúng chỉ nhờ độ sáng nền",
+      "none": "Không",
+      "frozen": "MobileNetV2 giữ nguyên ({{layers}} tầng)",
+      "learns": "Tầng cuối học {{params}} trọng số",
+      "epochs": "{{count}} epoch",
+      "predicted": "Máy đoán",
+      "run": "Lần {{n}}",
+      "unknownImage": "Ảnh khác hẳn",
+      "summaryLabel": "ảnh Kiểm tra đoán đúng"
+    },
+    "panel": {
+      "open": "Video bài giảng",
+      "openHint": "Huấn luyện ít nhất một lần để tạo video.",
+      "title": "Video bài giảng",
+      "lead": "Dựng từ dữ liệu thật của dự án. Xem trước rồi tải phụ đề.",
+      "close": "Đóng",
+      "aspect": "Khổ hình",
+      "landscape": "16:9 (máy chiếu)",
+      "portrait": "9:16 (điện thoại)",
+      "level": "Mức chi tiết",
+      "explore": "Khám phá",
+      "expert": "Chuyên gia",
+      "burn": "In phụ đề lên hình",
+      "studentWriting": "Đưa kết luận và thẻ mô hình học sinh viết vào video",
+      "play": "Phát",
+      "pause": "Dừng",
+      "seek": "Vị trí trong video",
+      "time": "{{current}} / {{total}}",
+      "scenes": "Lời giảng từng cảnh",
+      "downloadSrt": "Tải phụ đề .srt",
+      "downloadVtt": "Tải phụ đề .vtt",
+      "noEvaluation": "Chưa có mô hình đang mở nên bỏ cảnh Đánh giá. Huấn luyện lại để có cảnh này.",
+      "checking": "Đang soi kỹ dữ liệu: {{done}}/{{total}} ảnh",
+      "checkError": "Không soi kỹ được dữ liệu nên bỏ cảnh này: {{message}}",
+      "thumbsError": "Không làm mờ được khuôn mặt nên video không kèm ảnh.",
+      "privacyNote": "Video có thể chứa ảnh của học sinh. Hỏi ý kiến trước khi chia sẻ.",
+      "preview": "Xem trước video bài giảng, cảnh {{scene}}"
     }
   }
 }

@@ -2425,6 +2425,50 @@
         "harder": "Next step: try harder images, taken in other places and other light.",
         "question": "Question for the class: in real use, which images will the model meet that it has never seen?"
       }
+    },
+    "canvas": {
+      "brand": "LUP Machine lecture video",
+      "train": "Training",
+      "test": "Test",
+      "leakPairs": "test images nearly matching training images",
+      "samePairs": "near-duplicate pairs in the same split",
+      "shortcut": "training images separated by background brightness alone",
+      "none": "None",
+      "frozen": "MobileNetV2 stays fixed ({{layers}} layers)",
+      "learns": "The last layer learns {{params}} weights",
+      "epochs": "{{count}} epochs",
+      "predicted": "Predicted",
+      "run": "Run {{n}}",
+      "unknownImage": "Something different",
+      "summaryLabel": "of test images correct"
+    },
+    "panel": {
+      "open": "Lecture video",
+      "openHint": "Train at least once to make a video.",
+      "title": "Lecture video",
+      "lead": "Built from the project's real data. Preview it, then download subtitles.",
+      "close": "Close",
+      "aspect": "Format",
+      "landscape": "16:9 (projector)",
+      "portrait": "9:16 (phone)",
+      "level": "Detail",
+      "explore": "Explore",
+      "expert": "Expert",
+      "burn": "Burn subtitles into the picture",
+      "studentWriting": "Include the students' conclusion and model card",
+      "play": "Play",
+      "pause": "Pause",
+      "seek": "Position in video",
+      "time": "{{current}} / {{total}}",
+      "scenes": "Narration per scene",
+      "downloadSrt": "Download .srt subtitles",
+      "downloadVtt": "Download .vtt subtitles",
+      "noEvaluation": "No model is open, so the Evaluation scene is skipped. Train again to include it.",
+      "checking": "Checking data: {{done}}/{{total}} images",
+      "checkError": "Could not check the data, so this scene is skipped: {{message}}",
+      "thumbsError": "Faces could not be blurred, so the video has no photos.",
+      "privacyNote": "The video may show students' photos. Ask before sharing it.",
+      "preview": "Lecture video preview, scene {{scene}}"
     }
   }
 }
