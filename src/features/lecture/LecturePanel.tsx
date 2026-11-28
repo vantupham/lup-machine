@@ -121,7 +121,7 @@ export function LecturePanel({ projectId, projectName, classes, samples, onClose
             <LecturePreview script={lecture.script} timeline={timeline} aspect={aspect} burnSubtitles={burnSubtitles} thumbs={lecture.thumbs} thumbsPhase={lecture.thumbsPhase} narration={voice.narration} />
             <ExportControls job={{ projectName, aspect, script: lecture.script, timeline, burnSubtitles, env, narration: voice.narration }} isReady={isReadyToExport} />
             <p className="text-sm text-muted">
-              {voice.voicedScenes > 0 ? t('lecture.panel.voicedNote', { done: voice.voicedScenes, total: lecture.script.scenes.length }) : t('lecture.panel.silentNote')}
+              {voice.voicedScenes > 0 ? t('lecture.panel.voicedNote', { done: voice.voicedScenes, total: lecture.script.scenes.filter((s) => s.lines.length > 0).length }) : t('lecture.panel.silentNote')}
             </p>
             <div className="flex flex-wrap gap-2">
               <button type="button" className="btn btn-ghost" onClick={() => download('srt')}>

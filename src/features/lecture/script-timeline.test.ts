@@ -1,5 +1,5 @@
 import { estimateSpeechSeconds } from '@/core/lecture/subtitles';
-import { buildTimeline, CUE_LINES, LINE_GAP, lineSecondsWithVoices, SCENE_GAP, spokenWeight, subtitleLineChars } from './script-timeline';
+import { buildTimeline, CUE_LINES, LINE_GAP, lineSecondsWithVoices, SCENE_GAP, SILENT_SCENE_SECONDS, spokenWeight, subtitleLineChars } from './script-timeline';
 import type { LectureScript } from './lecture-script';
 
 const script: LectureScript = {
@@ -19,7 +19,7 @@ const script: LectureScript = {
       id: 'summary',
       title: 'Tóm lại',
       lines: [{ display: 'Tóm lại, mô hình đoán đúng 72,2% ảnh kiểm tra.', spoken: 'Tóm lại, mô hình đoán đúng bảy mươi hai phẩy hai phần trăm ảnh kiểm tra.' }],
-      visual: { kind: 'summary', testAccuracy: 0.722 },
+      visual: { kind: 'summary', score: { split: 'test', accuracy: 0.722 }, confusion: null },
     },
   ],
 };
@@ -86,6 +86,20 @@ describe('buildTimeline', () => {
   test('bản thu quá ngắn so với khoảng nghỉ: câu vẫn có thời lượng dương', () => {
     const seconds = lineSecondsWithVoices(script, [0.1, 3]);
     for (const s of seconds.flat()) expect(s).toBeGreaterThan(0);
+  });
+
+  test('cảnh không có lời (cảnh kết) vẫn hiện một khoảng cố định, không có phụ đề', () => {
+    const withOutro: LectureScript = {
+      ...script,
+      scenes: [...script.scenes, { id: 'outro', title: 'Kết thúc', lines: [], visual: { kind: 'outro' } }],
+    };
+    const plain = buildTimeline(script, '16:9');
+    const timeline = buildTimeline(withOutro, '16:9');
+    const outro = timeline.scenes.at(-1)!;
+    expect(outro.end - outro.start).toBeCloseTo(SILENT_SCENE_SECONDS, 9);
+    expect(timeline.cues).toEqual(plain.cues);
+    expect(lineSecondsWithVoices(withOutro, [null, null, null]).at(-1)).toEqual([]);
+    expect(buildTimeline(withOutro, '16:9', lineSecondsWithVoices(withOutro, [5, null, null])).scenes.at(-1)!.end).toBeGreaterThan(5);
   });
 
   test('từ chối số thời lượng không khớp số câu', () => {

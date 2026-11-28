@@ -11,7 +11,7 @@ export interface NarrationLine {
   readonly spoken: string;
 }
 
-export type SceneId = 'title' | 'data' | 'data-check' | 'network' | 'training' | 'evaluation' | 'experiments' | 'limits' | 'summary';
+export type SceneId = 'title' | 'data' | 'data-check' | 'network' | 'training' | 'evaluation' | 'experiments' | 'limits' | 'summary' | 'outro';
 
 export interface ClassCount {
   readonly name: string;
@@ -29,7 +29,15 @@ export type SceneVisual =
   | { readonly kind: 'evaluation'; readonly classNames: readonly string[]; readonly matrix: readonly (readonly number[])[]; readonly findings: readonly Finding[] }
   | { readonly kind: 'experiments'; readonly runs: readonly { readonly number: number; readonly testAccuracy: number | null }[] }
   | { readonly kind: 'limits'; readonly classNames: readonly string[] }
-  | { readonly kind: 'summary'; readonly testAccuracy: number | null };
+  | {
+      readonly kind: 'summary';
+      /** Điểm để tổng kết: ưu tiên Kiểm tra, không có ảnh Kiểm tra thì Huấn luyện. */
+      readonly score: { readonly split: 'test' | 'train'; readonly accuracy: number } | null;
+      /** Cặp lớp hay nhầm nhất trên tập Kiểm tra (null: không nhầm hoặc chưa đánh giá). */
+      readonly confusion: { readonly actual: string; readonly predicted: string } | null;
+    }
+  /** Cảnh kết: dòng chữ giới thiệu LUP Machine, không có lời đọc. */
+  | { readonly kind: 'outro' };
 
 export interface LectureScene {
   readonly id: SceneId;

@@ -13,7 +13,8 @@ export function wrapToWidth(ctx: Ctx, text: string, maxWidth: number): string[] 
   const lines: string[] = [];
   for (const paragraph of text.split('\n')) {
     let current = '';
-    for (const word of paragraph.split(/\s+/).filter(Boolean)) {
+    // Chỉ ngắt ở dấu cách thường: dấu cách không ngắt ("LUP Machine") giữ hai chữ trên cùng một dòng.
+    for (const word of paragraph.split(/ +/).filter(Boolean)) {
       const joined = current ? `${current} ${word}` : word;
       if (current && ctx.measureText(joined).width > maxWidth) {
         lines.push(current);

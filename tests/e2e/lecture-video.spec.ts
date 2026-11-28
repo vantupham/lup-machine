@@ -78,12 +78,12 @@ test('nút Video bài giảng chỉ bật sau khi huấn luyện; xem trước 1
     await dialog.getByRole('slider', { name: 'Vị trí trong video' }).fill(String(seconds));
     await page.locator('canvas[data-aspect]').screenshot({ path: `${shots}/${name}.png` });
   };
-  for (const s of [2, 12, 30, 45, 60, 75, 90, 105]) await shoot(`lecture-16x9-${s}`, s);
+  for (const s of [2, 12, 30, 45, 60, 75, 90, 120]) await shoot(`lecture-16x9-${s}`, s);
 
   await dialog.getByRole('radio', { name: '9:16 (điện thoại)' }).check();
   await expect(dialog.locator('canvas[data-aspect="9:16"]')).toHaveAttribute('height', '1280');
   expect(await canvasColors(page)).toBeGreaterThan(3);
-  for (const s of [2, 12, 30, 60, 90]) await shoot(`lecture-9x16-${s}`, s);
+  for (const s of [2, 12, 30, 60, 90, 120]) await shoot(`lecture-9x16-${s}`, s);
 
   // Xuất video thật (WebCodecs H.264 trong Chromium) rồi đọc lại tệp MP4 bằng mediabunny.
   await dialog.getByRole('radio', { name: '16:9 (máy chiếu)' }).check();

@@ -133,13 +133,14 @@ describe('renderFrame', () => {
   test.each(['16:9', '9:16'] as const)('%s: vẽ được mọi cảnh ở đầu, giữa, cuối, toạ độ luôn hữu hạn', (aspect) => {
     const s = script();
     const timeline = buildTimeline(s, aspect);
-    expect(s.scenes.map((x) => x.visual.kind)).toEqual(['title', 'data', 'data-check', 'network', 'training', 'evaluation', 'experiments', 'limits', 'summary']);
+    expect(s.scenes.map((x) => x.visual.kind)).toEqual(['title', 'data', 'data-check', 'network', 'training', 'evaluation', 'experiments', 'limits', 'summary', 'outro']);
     for (const scene of timeline.scenes) {
       for (const f of [0, 0.5, 1]) {
         const { ctx, texts, badCoords } = fakeContext();
         renderFrame(ctx, { script: s, timeline, time: scene.start + (scene.end - scene.start) * f, burnSubtitles: true }, env(aspect));
         expect(badCoords).toEqual([]);
-        expect(texts.some((x) => x.text === s.scenes[timeline.scenes.indexOf(scene)]!.title)).toBe(true);
+        const shown = s.scenes[timeline.scenes.indexOf(scene)]!;
+        if (shown.id !== 'outro') expect(texts.some((x) => x.text === shown.title)).toBe(true);
       }
     }
   });
@@ -156,6 +157,34 @@ describe('renderFrame', () => {
     const off = fakeContext();
     renderFrame(off.ctx, { script: s, timeline, time, burnSubtitles: false }, env('16:9'));
     expect(off.texts.length).toBeLessThan(on.texts.length);
+  });
+
+  test('cảnh Tóm lại vẽ ba thẻ: kết quả, cần cải thiện (cặp lớp hay nhầm), câu hỏi', () => {
+    const s = script();
+    const timeline = buildTimeline(s, '16:9');
+    const index = s.scenes.findIndex((x) => x.id === 'summary');
+    const { ctx, texts } = fakeContext();
+    renderFrame(ctx, { script: s, timeline, time: timeline.scenes[index]!.end, burnSubtitles: false }, env('16:9'));
+    const all = texts.map((x) => x.text).join(' | ');
+    expect(all).toContain('Kết quả');
+    expect(all).toContain('Cần cải thiện');
+    expect(all).toContain('Câu hỏi cho cả lớp');
+    expect(all).toContain('Gỉ sắt');
+  });
+
+  test('cảnh kết: dòng chữ LUP Machine, không có thanh tiêu đề cảnh', () => {
+    const s = script();
+    const timeline = buildTimeline(s, '9:16');
+    const last = timeline.scenes.at(-1)!;
+    const { ctx, texts, badCoords } = fakeContext();
+    renderFrame(ctx, { script: s, timeline, time: last.end, burnSubtitles: true }, env('9:16'));
+    expect(badCoords).toEqual([]);
+    const all = texts.map((x) => x.text).join(' ');
+    expect(all).toContain('Trải nghiệm huấn luyện mô hình AI');
+    expect(all).toContain('https://vantupham.github.io/lup-machine');
+    // "LUP Machine" luôn nằm trọn trên một dòng (dấu cách không ngắt).
+    expect(texts.some((x) => x.text.endsWith(`LUP${String.fromCharCode(0xa0)}Machine`))).toBe(true);
+    expect(texts.some((x) => x.text === s.scenes.at(-1)!.title)).toBe(false);
   });
 
   test('cảnh Đánh giá vẽ đủ ô ma trận với số đếm thật', () => {

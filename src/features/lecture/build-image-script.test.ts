@@ -72,12 +72,12 @@ describe('buildImageLecture', () => {
 
   test('đủ các cảnh theo thứ tự khi có dữ liệu cho từng cảnh', () => {
     const script = buildImageLecture(vi, 'vi', baseInput());
-    expect(sceneIds(script!)).toEqual(['title', 'data', 'data-check', 'network', 'training', 'evaluation', 'experiments', 'limits', 'summary']);
+    expect(sceneIds(script!)).toEqual(['title', 'data', 'data-check', 'network', 'training', 'evaluation', 'experiments', 'limits', 'summary', 'outro']);
   });
 
   test('bỏ cảnh Kiểm tra dữ liệu khi chưa soi, bỏ cảnh Thí nghiệm khi mới chạy một lần, bỏ Đánh giá khi không có dự đoán', () => {
     const script = buildImageLecture(vi, 'vi', baseInput({ dataChecks: null, runs: [run(1, 0.722)], evaluation: null }));
-    expect(sceneIds(script!)).toEqual(['title', 'data', 'network', 'training', 'limits', 'summary']);
+    expect(sceneIds(script!)).toEqual(['title', 'data', 'network', 'training', 'limits', 'summary', 'outro']);
   });
 
   test('không còn biến {{...}} chưa điền, ở cả hai ngôn ngữ và hai mức', () => {
@@ -151,6 +151,21 @@ describe('buildImageLecture', () => {
     const expert = lines(buildImageLecture(vi, 'vi', baseInput({ level: 'expert' }))!, 'network');
     expect(expert.length).toBeGreaterThan(explore);
     expect(expert.map((l) => l.display).join(' ')).toContain('155');
+  });
+
+  test('cảnh Tóm lại luôn có nội dung: điểm, cặp lớp hay nhầm, kể cả khi không có ảnh Kiểm tra', () => {
+    const withTest = buildImageLecture(vi, 'vi', baseInput())!.scenes.find((s) => s.id === 'summary')!;
+    expect(withTest.visual).toEqual({ kind: 'summary', score: { split: 'test', accuracy: 0.722 }, confusion: { actual: 'Gỉ sắt', predicted: 'Đốm góc' } });
+
+    const noTest = buildImageLecture(vi, 'vi', baseInput({ runs: [run(1, null)], evaluation: null }))!.scenes.find((s) => s.id === 'summary')!;
+    expect(noTest.visual).toEqual({ kind: 'summary', score: { split: 'train', accuracy: 0.95 }, confusion: null });
+    expect(noTest.lines.map((l) => l.display).join(' ')).toContain('95%');
+  });
+
+  test('cảnh kết không có lời đọc (không cần thu giọng), đứng cuối video', () => {
+    const script = buildImageLecture(vi, 'vi', baseInput())!;
+    const outro = script.scenes.at(-1)!;
+    expect(outro).toMatchObject({ id: 'outro', lines: [], visual: { kind: 'outro' } });
   });
 
   test('cảnh mang theo số liệu để dựng hình', () => {

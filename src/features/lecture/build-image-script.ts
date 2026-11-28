@@ -236,20 +236,28 @@ function limitsScene(ctx: Ctx): LectureScene {
 function summaryScene(ctx: Ctx): LectureScene {
   const { f, findings, run } = ctx;
   const test = lastMetrics(run)?.testAccuracy ?? null;
+  const train = lastMetrics(run)?.trainAccuracy ?? null;
   const confusion = findings.find((x) => x.code === 'top-confusion');
   const name = (i: number) => ctx.input.classNames[i] ?? '';
+  const score = test !== null ? { split: 'test' as const, accuracy: test } : train !== null ? { split: 'train' as const, accuracy: train } : null;
   return scene(
     ctx,
     'summary',
     [
       test !== null && f.line(`${K}.summary.result`, { test: f.percent(test) }),
+      test === null && train !== null && f.line(`${K}.summary.resultTrain`, { train: f.percent(train) }),
       confusion
         ? f.line(`${K}.summary.improve`, { actual: name(confusion.actual), predicted: name(confusion.predicted) })
         : f.line(`${K}.summary.harder`),
       f.line(`${K}.summary.question`),
     ],
-    { kind: 'summary', testAccuracy: test },
+    { kind: 'summary', score, confusion: confusion ? { actual: name(confusion.actual), predicted: name(confusion.predicted) } : null },
   );
+}
+
+/** Cảnh kết không có lời: chỉ hình (dòng chữ LUP Machine), hiện một khoảng cố định ở cuối video. */
+function outroScene(ctx: Ctx): LectureScene {
+  return scene(ctx, 'outro', [], { kind: 'outro' });
 }
 
 /** Dựng kịch bản bài giảng từ dữ liệu thật của một dự án ảnh. Trả null khi chưa huấn luyện lần nào. */
@@ -275,6 +283,7 @@ export function buildImageLecture(t: TFunction, language: string, input: ImageLe
     experimentsScene(ctx),
     limitsScene(ctx),
     summaryScene(ctx),
+    outroScene(ctx),
   ].filter((s): s is LectureScene => s !== null);
   return { language, level: input.level, scenes };
 }

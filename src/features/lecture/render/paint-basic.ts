@@ -202,20 +202,128 @@ export const paintLimits: Painter<'limits'> = (ctx, visual, rect, progress, env)
   ctx.textAlign = 'left';
 };
 
+type SummaryVisual = Parameters<Painter<'summary'>>[1];
+type Fonts = FrameLayout['fonts'];
+
+/** Thẻ tổng kết: nền sáng, vạch màu ở đầu, tiêu đề nhỏ; trả về vùng nội dung bên dưới tiêu đề. */
+function drawSummaryCard(ctx: CanvasRenderingContext2D, card: Rect, heading: string, accent: string, fonts: Fonts): Rect {
+  ctx.fillStyle = C.surface;
+  ctx.strokeStyle = C.rule;
+  ctx.lineWidth = 2;
+  ctx.fillRect(card.x, card.y, card.w, card.h);
+  ctx.strokeRect(card.x, card.y, card.w, card.h);
+  ctx.fillStyle = accent;
+  ctx.fillRect(card.x, card.y, card.w, Math.max(4, fonts.small * 0.25));
+  ctx.font = font(fonts.small, 700);
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  const pad = fonts.small;
+  ctx.fillText(fitOneLine(ctx, heading, card.w - pad * 2), card.x + pad, card.y + pad);
+  const top = card.y + pad * 2.6;
+  return { x: card.x + pad, y: top, w: card.w - pad * 2, h: card.y + card.h - pad - top };
+}
+
+/** Chữ nhiều dòng căn giữa trong vùng, cỡ chữ tự thu nhỏ cho vừa chiều cao. */
+function drawCentered(ctx: CanvasRenderingContext2D, text: string, area: Rect, size: number, weight: 400 | 600 | 700, color: string, y?: number): number {
+  let fontSize = size;
+  let lines: string[] = [];
+  for (; fontSize > 10; fontSize -= 2) {
+    ctx.font = font(fontSize, weight);
+    lines = wrapToWidth(ctx, text, area.w);
+    if (lines.length * fontSize * 1.3 <= area.h) break;
+  }
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  const lineH = fontSize * 1.3;
+  const top = y ?? area.y + (area.h - lines.length * lineH) / 2;
+  return drawLines(ctx, lines, area.x + area.w / 2, top, lineH);
+}
+
+function paintScore(ctx: CanvasRenderingContext2D, visual: SummaryVisual, area: Rect, env: Parameters<Painter<'summary'>>[4]): void {
+  const { fonts } = env.layout;
+  if (!visual.score) {
+    drawCentered(ctx, env.t(`${K}.noScore`), area, fonts.body, 600, C.muted);
+    return;
+  }
+  const big = Math.round(Math.min(fonts.hero * 0.9, area.w * 0.28, area.h * 0.45));
+  ctx.font = font(big, 700);
+  ctx.fillStyle = visual.score.split === 'test' ? C.primary : C.warning;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  const top = area.y + Math.max(0, (area.h - big * 1.2 - fonts.small * 3) / 2);
+  ctx.fillText(formatPercent(env, visual.score.accuracy), area.x + area.w / 2, top);
+  const label = env.t(visual.score.split === 'test' ? `${K}.summaryLabel` : `${K}.summaryTrainLabel`);
+  drawCentered(ctx, label, { ...area, y: top + big * 1.2, h: fonts.small * 3 }, fonts.small, 400, C.ink, top + big * 1.25);
+}
+
+function paintImprove(ctx: CanvasRenderingContext2D, visual: SummaryVisual, area: Rect, env: Parameters<Painter<'summary'>>[4]): void {
+  const { fonts } = env.layout;
+  if (!visual.confusion) {
+    drawCentered(ctx, env.t(`${K}.harder`), area, fonts.body, 400, C.ink);
+    return;
+  }
+  // Lớp thật → "hay bị đoán là" → lớp máy đoán: ba dòng giữa thẻ.
+  const name = Math.round(Math.min(fonts.title, area.h * 0.22));
+  const rowH = name * 1.5;
+  const top = area.y + Math.max(0, (area.h - rowH * 2 - fonts.small * 2) / 2);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.font = font(name, 700);
+  ctx.fillStyle = C.ink;
+  ctx.fillText(fitOneLine(ctx, visual.confusion.actual, area.w), area.x + area.w / 2, top);
+  ctx.font = font(fonts.small);
+  ctx.fillStyle = C.danger;
+  ctx.fillText(env.t(`${K}.confusedAs`), area.x + area.w / 2, top + rowH);
+  ctx.font = font(name, 700);
+  ctx.fillStyle = C.ink;
+  ctx.fillText(fitOneLine(ctx, visual.confusion.predicted, area.w), area.x + area.w / 2, top + rowH + fonts.small * 2);
+}
+
+/** Tóm lại: ba thẻ (kết quả, cần cải thiện, câu hỏi) luôn có nội dung, kể cả khi chưa có ảnh Kiểm tra. */
 export const paintSummary: Painter<'summary'> = (ctx, visual, rect, progress, env) => {
   const { fonts } = env.layout;
+  const isRow = rect.w > rect.h;
+  const gap = fonts.body;
+  const w = isRow ? (rect.w - gap * 2) / 3 : rect.w;
+  const h = isRow ? rect.h : (rect.h - gap * 2) / 3;
+  const cards = [
+    { heading: `${K}.summaryResult`, accent: C.primary, paint: paintScore },
+    { heading: `${K}.summaryImprove`, accent: C.danger, paint: paintImprove },
+    { heading: `${K}.summaryQuestion`, accent: C.accent, paint: (c: CanvasRenderingContext2D, _v: SummaryVisual, area: Rect) => void drawCentered(c, env.t(`${K}.question`), area, fonts.body, 600, C.ink) },
+  ];
+  cards.forEach((card, i) => {
+    ctx.globalAlpha = ease(progress, i * 0.08, 0.16 + i * 0.08);
+    const box = { x: isRow ? rect.x + i * (w + gap) : rect.x, y: isRow ? rect.y : rect.y + i * (h + gap), w, h };
+    const area = drawSummaryCard(ctx, box, env.t(card.heading), card.accent, fonts);
+    card.paint(ctx, visual, area, env);
+  });
+  ctx.globalAlpha = 1;
+  ctx.textAlign = 'left';
+};
+
+/** Cảnh kết: dòng chữ mời trải nghiệm LUP Machine giữa khung, kèm địa chỉ trang. */
+export const paintOutro: Painter<'outro'> = (ctx, _visual, rect, progress, env) => {
+  const { fonts } = env.layout;
+  ctx.globalAlpha = ease(progress, 0, 0.3);
+  const area = { x: rect.x + rect.w * 0.08, y: rect.y, w: rect.w * 0.84, h: rect.h };
+  ctx.font = font(Math.round(fonts.title * 1.4), 700, DISPLAY);
+  const lines = wrapToWidth(ctx, env.t(`${K}.outro`), area.w);
+  const lineH = fonts.title * 1.9;
+  const blockH = lines.length * lineH + fonts.body * 3;
+  const top = area.y + (area.h - blockH) / 2;
+  ctx.fillStyle = C.primary;
+  ctx.fillRect(area.x + area.w / 2 - fonts.title, top - fonts.body * 1.5, fonts.title * 2, Math.max(4, fonts.small * 0.3));
   ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  const cx = rect.x + rect.w / 2;
-  ctx.globalAlpha = ease(progress, 0, 0.25);
-  if (visual.testAccuracy !== null) {
-    ctx.fillStyle = C.primary;
-    ctx.font = font(Math.round(fonts.hero * 1.2), 700);
-    ctx.fillText(formatPercent(env, visual.testAccuracy), cx, rect.y + rect.h * 0.4);
-    ctx.fillStyle = C.ink;
-    ctx.font = font(fonts.body);
-    ctx.fillText(env.t(`${K}.summaryLabel`), cx, rect.y + rect.h * 0.4 + fonts.hero * 0.9);
-  }
+  ctx.fillStyle = C.ink;
+  const below = drawLines(ctx, lines, area.x + area.w / 2, top, lineH);
+  // Link đầy đủ: thu nhỏ chữ cho vừa bề ngang khung dọc, không cắt mất ký tự nào.
+  const url = env.t(`${K}.outroUrl`);
+  let urlSize = fonts.body;
+  ctx.font = font(urlSize, 600);
+  while (urlSize > 12 && ctx.measureText(url).width > area.w) ctx.font = font(--urlSize, 600);
+  ctx.fillStyle = C.primary;
+  ctx.textBaseline = 'top';
+  ctx.fillText(url, area.x + area.w / 2, below + fonts.body);
   ctx.globalAlpha = 1;
   ctx.textAlign = 'left';
 };
