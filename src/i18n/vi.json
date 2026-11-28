@@ -2468,7 +2468,17 @@
       "checkError": "Không soi kỹ được dữ liệu nên bỏ cảnh này: {{message}}",
       "thumbsError": "Không làm mờ được khuôn mặt nên video không kèm ảnh.",
       "privacyNote": "Video có thể chứa ảnh của học sinh. Hỏi ý kiến trước khi chia sẻ.",
-      "preview": "Xem trước video bài giảng, cảnh {{scene}}"
+      "preview": "Xem trước video bài giảng, cảnh {{scene}}",
+      "export": "Xuất video",
+      "exporting": "Đang dựng video: {{percent}}%",
+      "realtimeNote": "Trình duyệt này ghi video theo thời gian thực nên mất khoảng {{minutes}} phút. Giữ nguyên tab này trong lúc ghi.",
+      "cancel": "Hủy",
+      "exportDone": "Đã tạo {{name}} ({{size}} MB).",
+      "exportError": "Không xuất được video: {{message}}",
+      "exportUnsupported": "Trình duyệt này không tạo được video. Dùng Chrome hoặc Edge bản mới.",
+      "silentNote": "Video chưa có lời đọc, chỉ có hình và phụ đề.",
+      "progress": "Tiến độ dựng video",
+      "exportHidden": "Tab bị ẩn trong lúc ghi nên video sẽ đứng hình. Mở lại tab này rồi xuất lại."
     }
   }
 }

@@ -2468,7 +2468,17 @@
       "checkError": "Could not check the data, so this scene is skipped: {{message}}",
       "thumbsError": "Faces could not be blurred, so the video has no photos.",
       "privacyNote": "The video may show students' photos. Ask before sharing it.",
-      "preview": "Lecture video preview, scene {{scene}}"
+      "preview": "Lecture video preview, scene {{scene}}",
+      "export": "Export video",
+      "exporting": "Building video: {{percent}}%",
+      "realtimeNote": "This browser records in real time, so it takes about {{minutes}} minutes. Keep this tab open while recording.",
+      "cancel": "Cancel",
+      "exportDone": "Created {{name}} ({{size}} MB).",
+      "exportError": "Could not export the video: {{message}}",
+      "exportUnsupported": "This browser cannot create videos. Use a recent Chrome or Edge.",
+      "silentNote": "The video has no narration yet, only pictures and subtitles.",
+      "progress": "Video build progress",
+      "exportHidden": "The tab was hidden during recording, so the video would freeze. Return to this tab and export again."
     }
   }
 }

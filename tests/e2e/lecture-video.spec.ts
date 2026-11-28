@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { ALL_FORMATS, FilePathSource, Input } from 'mediabunny';
 
 /** Video bài giảng: dựng từ dữ liệu thật của dự án lá đậu sau khi huấn luyện bằng MobileNetV2 thật. */
 
@@ -32,7 +33,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('nút Video bài giảng chỉ bật sau khi huấn luyện; xem trước 16:9 và 9:16, tải phụ đề', async ({ page }) => {
-  test.setTimeout(300_000);
+  test.setTimeout(480_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
 
@@ -83,6 +84,27 @@ test('nút Video bài giảng chỉ bật sau khi huấn luyện; xem trước 1
   await expect(dialog.locator('canvas[data-aspect="9:16"]')).toHaveAttribute('height', '1280');
   expect(await canvasColors(page)).toBeGreaterThan(3);
   for (const s of [2, 12, 30, 60, 90]) await shoot(`lecture-9x16-${s}`, s);
+
+  // Xuất video thật (WebCodecs H.264 trong Chromium) rồi đọc lại tệp MP4 bằng mediabunny.
+  await dialog.getByRole('radio', { name: '16:9 (máy chiếu)' }).check();
+  const exportDownload = page.waitForEvent('download', { timeout: 180_000 });
+  await dialog.getByRole('button', { name: 'Xuất video' }).click();
+  const video = await exportDownload;
+  expect(video.suggestedFilename()).toMatch(/-bai-giang-16x9\.mp4$/);
+  await expect(dialog.getByText(/Đã tạo .*\.mp4 \([\d,]+ MB\)\./)).toBeVisible();
+  const input = new Input({ source: new FilePathSource(await video.path()), formats: ALL_FORMATS });
+  const track = await input.getPrimaryVideoTrack();
+  expect(track?.codec).toBe('avc');
+  expect(track?.displayWidth).toBe(1280);
+  expect(track?.displayHeight).toBe(720);
+  const seconds = await input.computeDuration();
+  const shown = await dialog.getByText(/^\d+:\d{2} \/ \d+:\d{2}$/).textContent();
+  const [m, s] = (shown ?? '').split(' / ')[1]!.split(':').map(Number);
+  // Thời lượng tệp khớp thời lượng xem trước (đồng hồ làm tròn xuống giây, khung cuối dài 1/30 giây).
+  expect(seconds).toBeGreaterThanOrEqual(m! * 60 + s!);
+  expect(seconds).toBeLessThan(m! * 60 + s! + 1.05);
+  console.warn(`[video] ${video.suggestedFilename()}: ${seconds.toFixed(2)} s`);
+  input.dispose();
 
   await dialog.getByRole('button', { name: 'Đóng' }).click();
   await expect(dialog).toBeHidden();

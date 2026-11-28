@@ -10,6 +10,8 @@ import type { AspectRatio, LectureLevel, LectureScript } from './lecture-script'
 import { LecturePreview } from './LecturePreview';
 import { buildTimeline } from './script-timeline';
 import { useImageLecture } from './useImageLecture';
+import { ExportControls } from './export/ExportControls';
+import { frameLayout } from './render/frame-layout';
 
 interface LecturePanelProps {
   readonly projectId: string;
@@ -66,13 +68,16 @@ function SceneList({ script }: { readonly script: LectureScript }) {
 
 /** Hộp thoại "Video bài giảng" của dự án ảnh: chọn khổ, mức chi tiết, xem trước, tải phụ đề. */
 export function LecturePanel({ projectId, projectName, classes, samples, onClose }: LecturePanelProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [aspect, setAspect] = useState<AspectRatio>('16:9');
   const [level, setLevel] = useState<LectureLevel>('explore');
   const [burnSubtitles, setBurnSubtitles] = useState(true);
   const [includeStudentWriting, setIncludeStudentWriting] = useState(false);
   const lecture = useImageLecture(projectId, projectName, classes, samples, { level, includeStudentWriting });
   const timeline = useMemo(() => (lecture.script ? buildTimeline(lecture.script, aspect) : null), [lecture.script, aspect]);
+  const env = useMemo(() => ({ t, language: i18n.language, layout: frameLayout(aspect), thumbs: lecture.thumbs }), [t, i18n.language, aspect, lecture.thumbs]);
+  /** Chờ ảnh thu nhỏ và soi kỹ xong để video xuất ra có đủ cảnh, đủ ảnh. */
+  const isReadyToExport = lecture.thumbsPhase !== 'loading' && lecture.deepStatus.phase !== 'running';
 
   const download = (kind: 'srt' | 'vtt') => {
     if (!timeline) return;
@@ -117,7 +122,7 @@ export function LecturePanel({ projectId, projectName, classes, samples, onClose
         </div>
 
         <div className="space-y-1 text-sm" aria-live="polite">
-          {lecture.deepStatus.phase === 'running' && <p role="status">{t('lecture.panel.checking', { done: lecture.deepStatus.done, total: lecture.deepStatus.total })}</p>}
+          {lecture.deepStatus.phase === 'running' && <p>{t('lecture.panel.checking', { done: lecture.deepStatus.done, total: lecture.deepStatus.total })}</p>}
           {lecture.deepError && <p className="text-danger">{t('lecture.panel.checkError', { message: lecture.deepError })}</p>}
           {!lecture.hasEvaluation && <p className="text-muted">{t('lecture.panel.noEvaluation')}</p>}
           {lecture.thumbsFailed && <p className="text-muted">{t('lecture.panel.thumbsError')}</p>}
@@ -126,6 +131,7 @@ export function LecturePanel({ projectId, projectName, classes, samples, onClose
         {lecture.script && timeline && (
           <>
             <LecturePreview script={lecture.script} timeline={timeline} aspect={aspect} burnSubtitles={burnSubtitles} thumbs={lecture.thumbs} thumbsPhase={lecture.thumbsPhase} />
+            <ExportControls job={{ projectName, aspect, script: lecture.script, timeline, burnSubtitles, env }} isReady={isReadyToExport} />
             <div className="flex flex-wrap gap-2">
               <button type="button" className="btn btn-ghost" onClick={() => download('srt')}>
                 <Download /> {t('lecture.panel.downloadSrt')}
