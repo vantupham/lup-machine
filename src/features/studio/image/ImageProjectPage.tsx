@@ -26,6 +26,7 @@ import { useModeSwitch } from '@/ui/mode-store';
 import { StepDetails } from '@/features/studio/StepDetails';
 import { Plus } from '@/ui/icons';
 import { NotebookPrintLink } from '@/features/notebook/NotebookPrintLink';
+import { LectureButton } from '@/features/lecture/LectureButton';
 import { ModelCardLink } from '@/features/model-card/ModelCardLink';
 import { AssignmentBanner } from '@/features/classroom/AssignmentBanner';
 import { BackLink } from '@/ui/BackLink';
@@ -224,6 +225,7 @@ function ProjectWorkspace({ projectId, projectName, classes, samples, reload }: 
         <div className="flex flex-wrap gap-2">
           <ModelCardLink projectId={projectId} />
           <NotebookPrintLink projectId={projectId} />
+          <LectureButton projectId={projectId} projectName={projectName} classes={classes} samples={samples} />
         </div>
       </header>
 
